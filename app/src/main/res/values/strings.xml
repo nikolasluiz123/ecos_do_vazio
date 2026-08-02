@@ -5,4 +5,16 @@
     <string name="error_dialog_title">Erro</string>
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processando</string>
+
+    <string name="warrior_class_name">Guerreiro</string>
+    <string name="warrior_class_description">Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.</string>
+
+    <string name="mage_class_name">Mago</string>
+    <string name="mage_class_description">Mestre em feitiços e ataques à distância, veste armaduras leves de tecido. É extremamente versátil, podendo seguir o caminho da destruição ou da vida.</string>
+
+    <string name="archer_class_name">Arqueiro</string>
+    <string name="archer_class_description">Combatente ágil com foco em ataques à distância utilizando projéteis, iniciando sua jornada com arco e flecha. Suas táticas e equipamentos mudam drasticamente de acordo com sua evolução.</string>
+    <string name="my_heroes_title">Seus Heróis</string>
+    <string name="heroes_selection_text">O abismo aguarda. Escolha quem descerá na escuridão ou forje uma nova alma para enfrentar as provações.</string>
+    <string name="new_hero_label">NOVO HERÓI</string>
 </resources>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Echoes of the Void</string>
+
+    <string name="error_unexpected">An unexpected error occurred. Please try again.</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_ok">OK</string>
+    <string name="processing">Processing</string>
+
+    <string name="warrior_class_name">Warrior</string>
+    <string name="warrior_class_description">Melee combat specialist, acting on the front line equipped with heavy armor. The protection level and playstyle vary according to the chosen path.</string>
+
+    <string name="mage_class_name">Mage</string>
+    <string name="mage_class_description">Master of spells and ranged attacks, wearing light cloth armor. Extremely versatile, being able to follow the path of destruction or life.</string>
+
+    <string name="archer_class_name">Archer</string>
+    <string name="archer_class_description">Agile combatant focused on ranged attacks using projectiles, starting their journey with bow and arrow. Their tactics and equipment change drastically according to their evolution.</string>
+    <string name="my_heroes_title">Your Heroes</string>
+    <string name="heroes_selection_text">The abyss awaits. Choose who will descend into the darkness or forge a new soul to face the trials.</string>
+    <string name="new_hero_label">NEW HERO</string>
+</resources>

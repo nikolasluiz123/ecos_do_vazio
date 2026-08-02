@@ -4,6 +4,7 @@ import android.app.Application
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.LoadingManager
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.SnackbarManager
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class AppViewModel @Inject constructor(
     private val application: Application,
     private val snackbarManager: SnackbarManager,
+    private val initializeDatabaseUseCase: InitializeDatabaseUseCase,
     loadingManager: LoadingManager,
 ) : CommonViewModel() {
 
@@ -29,6 +31,7 @@ class AppViewModel @Inject constructor(
 
     init {
         launch {
+            initializeDatabaseUseCase()
             _isInitializing.value = false
         }
     }

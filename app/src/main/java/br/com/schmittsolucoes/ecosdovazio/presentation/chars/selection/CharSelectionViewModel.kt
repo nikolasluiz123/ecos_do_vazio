@@ -41,4 +41,8 @@ class CharSelectionViewModel @Inject constructor(
         _errorMessage.value = message
     }
 
+    fun onDismissErrorDialog() {
+        _errorMessage.value = null
+    }
+
 }
