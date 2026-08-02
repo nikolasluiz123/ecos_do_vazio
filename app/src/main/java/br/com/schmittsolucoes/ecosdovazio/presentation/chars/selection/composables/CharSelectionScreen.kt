@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,11 +45,15 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PrimaryTextColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 
 @Composable
-fun CharSelectionScreen(viewModel: CharSelectionViewModel) {
+fun CharSelectionScreen(
+    viewModel: CharSelectionViewModel,
+    windowWidthSizeClass: WindowWidthSizeClass
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     CharSelectionScreen(
         state = state,
+        windowWidthSizeClass = windowWidthSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog
     )
 }
@@ -55,8 +61,15 @@ fun CharSelectionScreen(viewModel: CharSelectionViewModel) {
 @Composable
 fun CharSelectionScreen(
     state: CharSelectionUIState = CharSelectionUIState(),
+    windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {}
 ) {
+    val columns = when (windowWidthSizeClass) {
+        WindowWidthSizeClass.Compact -> 2
+        WindowWidthSizeClass.Medium -> 3
+        else -> 3
+    }
+
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -74,47 +87,49 @@ fun CharSelectionScreen(
                 )
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columns),
+                contentPadding = PaddingValues(24.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
-                Spacer(modifier = Modifier.height(18.dp))
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.height(18.dp))
 
-                Text(
-                    text = stringResource(R.string.my_heroes_title),
-                    style = MaterialTheme.typography.displayMedium.copy(
-                        fontFamily = FontFamily.Serif,
-                        fontWeight = FontWeight.Bold,
-                        color = PrimaryTextColor
-                    )
-                )
+                        Text(
+                            text = stringResource(R.string.my_heroes_title),
+                            style = MaterialTheme.typography.displayMedium.copy(
+                                fontFamily = FontFamily.Serif,
+                                fontWeight = FontWeight.Bold,
+                                color = PrimaryTextColor
+                            )
+                        )
 
-                HeroSelectionDivider(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .width(180.dp)
-                )
+                        HeroSelectionDivider(
+                            modifier = Modifier
+                                .padding(vertical = 16.dp)
+                                .width(180.dp)
+                        )
 
-                Text(
-                    text = stringResource(R.string.heroes_selection_text),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 40.dp),
-                    color = SecondaryTextColor
-                )
+                        Text(
+                            text = stringResource(R.string.heroes_selection_text),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 40.dp),
+                            color = SecondaryTextColor
+                        )
 
-                Spacer(modifier = Modifier.height(18.dp))
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(6) {
-                        HeroSlot()
+                        Spacer(modifier = Modifier.height(18.dp))
                     }
+                }
+
+                items(6) {
+                    HeroSlot()
                 }
             }
 

@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
@@ -35,16 +38,18 @@ private const val NEW_CHAR_ROUNDED_CORNER_SHAPE = 8
 fun HeroSlot() {
     Box(
         modifier = Modifier
+            .widthIn(max = 200.dp)
+            .fillMaxWidth()
             .aspectRatio(0.9f)
             .shadow(4.dp, RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
+            .clip(RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
             .background(
                 Brush.linearGradient(
                     colors = listOf(
                         HeroSlotBackgroundTop,
                         HeroSlotBackgroundBottom
                     )
-                ),
-                RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp)
+                )
             )
             .border(
                 width = 1.dp,

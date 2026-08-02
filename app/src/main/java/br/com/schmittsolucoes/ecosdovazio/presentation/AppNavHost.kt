@@ -1,7 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
@@ -9,14 +9,15 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigatio
 
 @Composable
 fun AppNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    windowSizeClass: WindowSizeClass,
 ) {
     NavHost(
         navController = navController,
         startDestination = CharSelectionRoute,
-        modifier = modifier
     ) {
-        charSelectionScreen()
+        charSelectionScreen(
+            windowSizeClass = windowSizeClass
+        )
     }
 }
