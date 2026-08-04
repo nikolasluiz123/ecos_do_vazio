@@ -51,16 +51,6 @@ fun ClassSelectionScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            OrangeForDetails.copy(alpha = 0.08f),
-                            OrangeForDetails.copy(alpha = 0.06f),
-                            OrangeForDetails.copy(alpha = 0.04f),
-                            Color.Transparent
-                        )
-                    )
-                )
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {

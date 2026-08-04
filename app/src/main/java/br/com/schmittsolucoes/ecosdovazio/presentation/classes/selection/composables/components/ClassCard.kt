@@ -4,12 +4,13 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -39,6 +41,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.ButtonContainer
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOutline
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 
 @Composable
@@ -55,66 +58,77 @@ fun ClassCard(
         shape = ShapeDefaults.Medium,
         border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.2f))
     ) {
-        Column(
+        BoxWithConstraints(
             modifier = Modifier
                 .padding(12.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(id = classModel.presentationDrawableId),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 100.dp, max = 280.dp)
-                    .weight(1f)
-                    .clip(ShapeDefaults.Small),
-                contentScale = ContentScale.Crop
-            )
+            val showVisualElements = maxHeight > 320.dp
 
-            ClassSelectionDivider(
-                modifier = Modifier
-                    .padding(vertical = 12.dp)
-                    .widthIn(max = 200.dp)
-            )
-
-            Text(
-                text = classModel.name,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                    color = Highlight
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = classModel.description,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = SecondaryTextColor,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            ElevatedButton(
-                onClick = { onSelect(classModel.id) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .height(50.dp),
-                shape = RectangleShape,
-                border = BorderStroke(1.dp, HighlightOutline),
-                colors = ButtonDefaults.elevatedButtonColors(
-                    contentColor = Highlight,
-                    containerColor = ButtonContainer
-                )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                if (showVisualElements) {
+                    Image(
+                        painter = painterResource(id = classModel.presentationDrawableId),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .clip(ShapeDefaults.Small),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    ClassSelectionDivider(
+                        modifier = Modifier
+                            .padding(vertical = 12.dp)
+                            .widthIn(max = 200.dp)
+                    )
+                }
+
                 Text(
-                    text = stringResource(id = R.string.select_button).uppercase(),
+                    text = classModel.name,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontFamily = FontFamily.Serif,
+                        fontWeight = FontWeight.Bold,
+                        color = Highlight
+                    ),
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = classModel.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = SecondaryTextColor,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                if (!showVisualElements) {
+                    Spacer(modifier = Modifier.weight(1f))
+                } else {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                ElevatedButton(
+                    onClick = { onSelect(classModel.id) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .height(50.dp),
+                    shape = RectangleShape,
+                    border = BorderStroke(1.dp, HighlightOutline),
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        contentColor = Highlight,
+                        containerColor = ButtonContainer
+                    )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.select_button).uppercase(),
+                    )
+                }
             }
         }
     }
