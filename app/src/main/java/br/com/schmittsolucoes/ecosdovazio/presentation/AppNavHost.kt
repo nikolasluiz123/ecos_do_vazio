@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.charSelectionScreen
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.classSelectionScreen
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.navigateToClassSelection
 
 @Composable
 fun AppNavHost(
@@ -17,6 +19,11 @@ fun AppNavHost(
         startDestination = CharSelectionRoute,
     ) {
         charSelectionScreen(
+            windowSizeClass = windowSizeClass,
+            onNavigateToClassSelection = navController::navigateToClassSelection
+        )
+
+        classSelectionScreen(
             windowSizeClass = windowSizeClass
         )
     }

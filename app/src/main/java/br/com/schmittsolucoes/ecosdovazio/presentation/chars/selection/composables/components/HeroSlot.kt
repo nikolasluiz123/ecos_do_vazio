@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,9 @@ private const val ROUNDED_CORNER_SHAPE = 4
 private const val NEW_CHAR_ROUNDED_CORNER_SHAPE = 8
 
 @Composable
-fun HeroSlot() {
+fun HeroSlot(
+    onClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .widthIn(max = 200.dp)
@@ -43,6 +46,7 @@ fun HeroSlot() {
             .aspectRatio(0.9f)
             .shadow(4.dp, RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
             .clip(RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
+            .clickable(onClick = onClick)
             .background(
                 Brush.linearGradient(
                     colors = listOf(

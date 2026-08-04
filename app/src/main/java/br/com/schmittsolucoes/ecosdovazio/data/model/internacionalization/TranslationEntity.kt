@@ -3,12 +3,20 @@ package br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.Index
 import br.com.schmittsolucoes.ecosdovazio.data.model.UniqueEntity
 
 @Entity(
     tableName = "translations",
+    primaryKeys = ["id", "language_id"],
+    indices = [Index("id"), Index("language_id")],
     foreignKeys = [
+        ForeignKey(
+            entity = TranslationIdentifierEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["id"],
+            onDelete = ForeignKey.CASCADE
+        ),
         ForeignKey(
             entity = LanguageEntity::class,
             parentColumns = ["id"],
@@ -18,10 +26,9 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.UniqueEntity
     ]
 )
 data class TranslationEntity(
-    @PrimaryKey
     override val id: String,
 
-    @ColumnInfo("language_id", index = true)
+    @ColumnInfo("language_id")
     val languageId: String,
 
     @ColumnInfo("translated_text")

@@ -1,20 +1,21 @@
 <resources>
-    <string name="app_name">Ecos do Vazio</string>
+    <string name="app_name">Echoes of the Void</string>
 
-    <string name="error_unexpected">Ocorreu um erro inesperado. Tente novamente.</string>
-    <string name="error_dialog_title">Erro</string>
+    <string name="error_unexpected">An unexpected error occurred. Please try again.</string>
+    <string name="error_dialog_title">Error</string>
     <string name="error_dialog_ok">OK</string>
-    <string name="processing">Processando</string>
+    <string name="processing">Processing</string>
 
-    <string name="warrior_class_name">Guerreiro</string>
-    <string name="warrior_class_description">Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.</string>
+    <string name="warrior_class_name">Warrior</string>
+    <string name="warrior_class_description">Melee combat specialist, acting on the front line equipped with heavy armor. The protection level and playstyle vary according to the chosen path.</string>
 
-    <string name="mage_class_name">Mago</string>
-    <string name="mage_class_description">Mestre em feitiços e ataques à distância, veste armaduras leves de tecido. É extremamente versátil, podendo seguir o caminho da destruição ou da vida.</string>
+    <string name="mage_class_name">Mage</string>
+    <string name="mage_class_description">Master of spells and ranged attacks, wearing light cloth armor. Extremely versatile, being able to follow the path of destruction or life.</string>
 
-    <string name="archer_class_name">Arqueiro</string>
-    <string name="archer_class_description">Combatente ágil com foco em ataques à distância utilizando projéteis, iniciando sua jornada com arco e flecha. Suas táticas e equipamentos mudam drasticamente de acordo com sua evolução.</string>
-    <string name="my_heroes_title">Seus Heróis</string>
-    <string name="heroes_selection_text">O abismo aguarda. Escolha quem descerá na escuridão ou forje uma nova alma para enfrentar as provações.</string>
-    <string name="new_hero_label">NOVO HERÓI</string>
+    <string name="archer_class_name">Archer</string>
+    <string name="archer_class_description">Agile combatant focused on ranged attacks using projectiles, starting their journey with bow and arrow. Their tactics and equipment change drastically according to their evolution.</string>
+    <string name="my_heroes_title">Your Heroes</string>
+    <string name="heroes_selection_text">The abyss awaits. Choose who will descend into the darkness or forge a new soul to face the trials.</string>
+    <string name="new_hero_label">NEW HERO</string>
+    <string name="select_button">Select</string>
 </resources>

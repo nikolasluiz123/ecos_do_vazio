@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationIdentifierEntity
 
 @Entity(
     tableName = "specializations",
@@ -16,13 +16,13 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.Transl
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = TranslationEntity::class,
+            entity = TranslationIdentifierEntity::class,
             parentColumns = ["id"],
             childColumns = ["name_translation_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = TranslationEntity::class,
+            entity = TranslationIdentifierEntity::class,
             parentColumns = ["id"],
             childColumns = ["description_translation_id"],
             onDelete = ForeignKey.CASCADE

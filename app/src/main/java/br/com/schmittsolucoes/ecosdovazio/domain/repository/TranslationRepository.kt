@@ -4,5 +4,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.internacionalization.Tran
 
 interface TranslationRepository {
     suspend fun save(translations: List<Translation>)
+    suspend fun saveIdentifiers(identifiers: List<String>)
     suspend fun getExistsTranslation(): Boolean
 }

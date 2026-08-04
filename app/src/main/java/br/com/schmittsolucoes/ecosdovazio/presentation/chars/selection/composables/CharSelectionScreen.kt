@@ -47,13 +47,15 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 @Composable
 fun CharSelectionScreen(
     viewModel: CharSelectionViewModel,
-    windowWidthSizeClass: WindowWidthSizeClass
+    windowWidthSizeClass: WindowWidthSizeClass,
+    onNavigateToClassSelection: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     CharSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
+        onNavigateToClassSelection = onNavigateToClassSelection,
         onDismissErrorDialog = viewModel::onDismissErrorDialog
     )
 }
@@ -62,6 +64,7 @@ fun CharSelectionScreen(
 fun CharSelectionScreen(
     state: CharSelectionUIState = CharSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    onNavigateToClassSelection: () -> Unit = {},
     onDismissErrorDialog: () -> Unit = {}
 ) {
     val columns = when (windowWidthSizeClass) {
@@ -129,7 +132,9 @@ fun CharSelectionScreen(
                 }
 
                 items(6) {
-                    HeroSlot()
+                    HeroSlot(
+                        onClick = onNavigateToClassSelection
+                    )
                 }
             }
 

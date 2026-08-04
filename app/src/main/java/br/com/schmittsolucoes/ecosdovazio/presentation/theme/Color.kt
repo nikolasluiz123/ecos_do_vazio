@@ -9,6 +9,9 @@ val backgroundDark = Color(0xFF121416)
 
 val strokeColorDark = Color(0xFF564334)
 val orangeForDetailsDark = Color(0xFFFF8C00)
+val highlightDark = Color(0xFFFFB77D)
+val highlightOutlineDark = Color(0xFFA48C7A)
+val buttonContainerDark = Color(0xFF282A2C)
 val newCharacterButtonBackgroundDark = Color(0xB30C0E10)
 val heroSlotBackgroundTopDark = Color(0xFF1E2022)
 val heroSlotBackgroundBottomDark = Color(0xFF0C0E10)
@@ -17,6 +20,9 @@ val backgroundLight = Color(0xFFECECE6)
 
 val strokeColorLight = Color(0xFFA48C7A)
 val orangeForDetailsLight = Color(0xFFE08216)
+val highlightLight = Color(0xFF904D00)
+val highlightOutlineLight = Color(0xFFA48C7A)
+val buttonContainerLight = Color(0xFFFFFFFF)
 val newCharacterButtonBackgroundLight = Color(0xB3E8E8E8)
 val heroSlotBackgroundTopLight = Color(0xFFFFFFFF)
 val heroSlotBackgroundBottomLight = Color(0xFFD8D8D0)
@@ -24,6 +30,18 @@ val heroSlotBackgroundBottomLight = Color(0xFFD8D8D0)
 @get:Composable
 val OrangeForDetails: Color
     get() = if (isSystemInDarkTheme()) orangeForDetailsDark else orangeForDetailsLight
+
+@get:Composable
+val Highlight: Color
+    get() = if (isSystemInDarkTheme()) highlightDark else highlightLight
+
+@get:Composable
+val HighlightOutline: Color
+    get() = if (isSystemInDarkTheme()) highlightOutlineDark else highlightOutlineLight
+
+@get:Composable
+val ButtonContainer: Color
+    get() = if (isSystemInDarkTheme()) buttonContainerDark else buttonContainerLight
 
 @get:Composable
 val DividerColor: Color

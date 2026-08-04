@@ -10,16 +10,17 @@ import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserRoomDAO
 import br.com.schmittsolucoes.ecosdovazio.data.model.CharEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.ClassEntity
-import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.LanguageEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.SpecializationEntity
-import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.UserEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.LanguageEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationIdentifierEntity
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         UserEntity::class, CharEntity::class, ClassEntity::class, SpecializationEntity::class,
-        LanguageEntity::class, TranslationEntity::class
+        LanguageEntity::class, TranslationEntity::class, TranslationIdentifierEntity::class
     ],
     exportSchema = true
 )

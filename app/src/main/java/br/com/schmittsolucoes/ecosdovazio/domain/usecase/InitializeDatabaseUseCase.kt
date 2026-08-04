@@ -4,6 +4,12 @@ import android.content.Context
 import android.content.res.Configuration
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
+import br.com.schmittsolucoes.ecosdovazio.data.provider.ARCHER_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
@@ -63,6 +69,9 @@ class InitializeDatabaseUseCase(
 
     private suspend fun initializeTranslations(languages: List<Language>) {
         if (!translationRepository.getExistsTranslation()) {
+            val identifiers = TranslationIdentifier.entries.map { it.name }
+            translationRepository.saveIdentifiers(identifiers)
+
             val translations = mutableListOf<Translation>()
 
             languages.forEach { language ->
@@ -114,8 +123,8 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.WARRIOR_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.WARRIOR_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.WARRIOR,
-                battleImageName = "classe_guerreiro_16_9",
-                presentationImageName = "classe_guerreiro"
+                battleImageName = BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY,
+                presentationImageName = WARRIOR_CLASS_IMAGE_KEY
             )
 
             val mage = Class(
@@ -123,8 +132,8 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.MAGE_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.MAGE_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.MAGE,
-                battleImageName = "classe_mago_16_9",
-                presentationImageName = "classe_mago"
+                battleImageName = BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY,
+                presentationImageName = MAGE_CLASS_IMAGE_KEY
             )
 
             val archer = Class(
@@ -132,8 +141,8 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.ARCHER_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.ARCHER_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.ARCHER,
-                battleImageName = "classe_arqueiro_16_9",
-                presentationImageName = "classe_arqueiro"
+                battleImageName = BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY,
+                presentationImageName = ARCHER_CLASS_IMAGE_KEY
             )
 
             val classes = listOf(warrior, mage, archer)

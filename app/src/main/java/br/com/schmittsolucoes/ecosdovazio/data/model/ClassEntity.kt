@@ -4,20 +4,20 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationIdentifierEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 
 @Entity(
     tableName = "classes",
     foreignKeys = [
         ForeignKey(
-            entity = TranslationEntity::class,
+            entity = TranslationIdentifierEntity::class,
             parentColumns = ["id"],
             childColumns = ["name_translation_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = TranslationEntity::class,
+            entity = TranslationIdentifierEntity::class,
             parentColumns = ["id"],
             childColumns = ["description_translation_id"],
             onDelete = ForeignKey.CASCADE

@@ -11,8 +11,6 @@ import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.specialization.SpecializationLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.transaction.RoomDatabaseTransaction
-import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.resources.AndroidResourcesLocalDataSource
-import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.resources.ResourcesLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,10 +68,5 @@ object LocalDataAccessModule {
     @Provides
     fun provideTranslationLocalDataSource(db: AppDatabase): TranslationLocalDataSource {
         return db.translationDao()
-    }
-
-    @Provides
-    fun provideResourcesLocalDataSource(): ResourcesLocalDataSource {
-        return AndroidResourcesLocalDataSource()
     }
 }

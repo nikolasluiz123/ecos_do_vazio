@@ -8,6 +8,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import dagger.Module
 import dagger.Provides
@@ -41,4 +42,13 @@ object UseCaseModule {
             transaction = transaction
         )
     }
+
+    @Provides
+    fun provideClassesQueryUseCase(
+        classRepository: ClassRepository,
+        languageProvider: LanguageProvider
+    ): ClassesQueryUseCase = ClassesQueryUseCase(
+        classRepository = classRepository,
+        languageProvider = languageProvider
+    )
 }
