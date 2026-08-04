@@ -3,8 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.compos
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
@@ -24,11 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +40,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.ButtonContainer
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOutline
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
+import coil.compose.SubcomposeAsyncImage
 
 @Composable
 fun ClassCard(
@@ -70,14 +69,26 @@ fun ClassCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (showVisualElements) {
-                    Image(
-                        painter = painterResource(id = classModel.presentationDrawableId),
+                    SubcomposeAsyncImage(
+                        model = classModel.presentationDrawableId,
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                             .clip(ShapeDefaults.Small),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        filterQuality = FilterQuality.Medium,
+                        loading = {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = Highlight,
+                                    strokeWidth = 2.dp
+                                )
+                            }
+                        }
                     )
 
                     ClassSelectionDivider(

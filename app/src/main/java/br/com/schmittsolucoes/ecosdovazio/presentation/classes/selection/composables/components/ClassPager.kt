@@ -41,8 +41,8 @@ fun ClassPager(
     ) {
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 24.dp),
-            pageSpacing = 24.dp,
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+            pageSpacing = 12.dp,
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) { page ->
@@ -56,7 +56,7 @@ fun ClassPager(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 32.dp),
+                .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
