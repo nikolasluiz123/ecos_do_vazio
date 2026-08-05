@@ -4,11 +4,13 @@ import android.content.Context
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.IdentifierProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import dagger.Module
 import dagger.Provides
@@ -50,5 +52,16 @@ object UseCaseModule {
     ): ClassesQueryUseCase = ClassesQueryUseCase(
         classRepository = classRepository,
         languageProvider = languageProvider
+    )
+
+    @Provides
+    fun provideCreateNewUserCharUseCase(
+        userRepository: UserRepository,
+        charRepository: CharRepository,
+        identifierProvider: IdentifierProvider
+    ): CreateNewUserCharUseCase = CreateNewUserCharUseCase(
+        userRepository = userRepository,
+        charRepository = charRepository,
+        identifierProvider = identifierProvider
     )
 }

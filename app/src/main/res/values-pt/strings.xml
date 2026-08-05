@@ -2,6 +2,10 @@
     <string name="app_name">Ecos do Vazio</string>
 
     <string name="error_unexpected">Ocorreu um erro inesperado. Tente novamente.</string>
+    <string name="char_error_class_required">Por favor, selecione uma classe.</string>
+    <string name="char_error_name_required">O nome é obrigatório.</string>
+    <string name="char_error_duplicated_name">O nome \"%s\" já está em uso.</string>
+    <string name="char_error_name_too_long">O nome é muito longo (máximo de %d caracteres).</string>
     <string name="error_dialog_title">Erro</string>
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processando</string>

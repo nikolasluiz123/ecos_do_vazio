@@ -36,9 +36,8 @@ fun ClassSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onConfirmName = { classId, name ->
-            // Logic to save the character could go here
-        }
+        onSelectClass = viewModel::onSelectClass,
+        onConfirmName = viewModel::onConfirmName
     )
 }
 
@@ -47,10 +46,10 @@ fun ClassSelectionScreen(
     state: ClassSelectionUIState = ClassSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {},
-    onConfirmName: (String, String) -> Unit = { _, _ -> }
+    onSelectClass: (String) -> Unit = {},
+    onConfirmName: (String) -> Unit = {}
 ) {
     var showNamingBottomSheet by remember { mutableStateOf(false) }
-    var selectedClassId by remember { mutableStateOf<String?>(null) }
 
     val isCompact = windowWidthSizeClass == WindowWidthSizeClass.Compact
 
@@ -65,7 +64,7 @@ fun ClassSelectionScreen(
                 ClassPager(
                     classes = state.classes,
                     onSelectClass = {
-                        selectedClassId = it
+                        onSelectClass(it)
                         showNamingBottomSheet = true
                     },
                     modifier = Modifier.fillMaxSize()
@@ -74,7 +73,7 @@ fun ClassSelectionScreen(
                 ClassList(
                     classes = state.classes,
                     onSelectClass = {
-                        selectedClassId = it
+                        onSelectClass(it)
                         showNamingBottomSheet = true
                     },
                     modifier = Modifier.fillMaxSize()
@@ -94,9 +93,7 @@ fun ClassSelectionScreen(
         CharNamingBottomSheet(
             onDismissRequest = { showNamingBottomSheet = false },
             onConfirm = { name ->
-                selectedClassId?.let { classId ->
-                    onConfirmName(classId, name)
-                }
+                onConfirmName(name)
                 showNamingBottomSheet = false
             }
         )

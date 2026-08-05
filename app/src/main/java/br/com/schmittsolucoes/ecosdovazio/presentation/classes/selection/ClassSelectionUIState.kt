@@ -4,5 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.C
 
 data class ClassSelectionUIState(
     val classes: List<ClassSelectionUIModel> = emptyList(),
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val selectedClassId: String? = null,
+    val charName: String? = null
 )

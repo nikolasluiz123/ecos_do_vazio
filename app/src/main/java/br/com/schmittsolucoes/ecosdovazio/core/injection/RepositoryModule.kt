@@ -1,9 +1,11 @@
 package br.com.schmittsolucoes.ecosdovazio.core.injection
 
+import br.com.schmittsolucoes.ecosdovazio.data.repository.CharRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.ClassRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.LanguageRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.TranslationRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.UserRepositoryImpl
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
@@ -41,4 +43,10 @@ abstract class RepositoryModule {
     abstract fun bindTranslationRepository(
         translationRepositoryImpl: TranslationRepositoryImpl
     ): TranslationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCharRepository(
+        charRepositoryImpl: CharRepositoryImpl
+    ): CharRepository
 }

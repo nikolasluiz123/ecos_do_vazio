@@ -5,4 +5,5 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.UserEntity
 
 interface UserLocalDataSource: EntityLocalDataSource<UserEntity> {
     suspend fun getExistsUser(): Boolean
+    suspend fun getFirstUser(): UserEntity
 }

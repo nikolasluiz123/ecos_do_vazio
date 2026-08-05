@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository
 
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
@@ -15,5 +16,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getExistsUser(): Boolean {
         return userLocalDataSource.getExistsUser()
+    }
+
+    override suspend fun getFirstUser(): User {
+        return userLocalDataSource.getFirstUser().toDomain()
     }
 }

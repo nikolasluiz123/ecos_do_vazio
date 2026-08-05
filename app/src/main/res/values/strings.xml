@@ -2,6 +2,10 @@
     <string name="app_name">Echoes of the Void</string>
 
     <string name="error_unexpected">An unexpected error occurred. Please try again.</string>
+    <string name="char_error_class_required">Please select a class.</string>
+    <string name="char_error_name_required">A name is required.</string>
+    <string name="char_error_duplicated_name">The name \"%s\" is already in use.</string>
+    <string name="char_error_name_too_long">The name is too long (maximum %d characters).</string>
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processing</string>
