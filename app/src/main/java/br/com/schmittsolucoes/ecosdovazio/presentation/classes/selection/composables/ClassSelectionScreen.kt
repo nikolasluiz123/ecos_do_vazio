@@ -2,7 +2,6 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.compos
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,19 +9,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.CharNamingBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.ClassList
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.ClassPager
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 
 @Composable
 fun ClassSelectionScreen(
@@ -34,7 +35,10 @@ fun ClassSelectionScreen(
     ClassSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
-        onDismissErrorDialog = viewModel::onDismissErrorDialog
+        onDismissErrorDialog = viewModel::onDismissErrorDialog,
+        onConfirmName = { classId, name ->
+            // Logic to save the character could go here
+        }
     )
 }
 
@@ -43,8 +47,11 @@ fun ClassSelectionScreen(
     state: ClassSelectionUIState = ClassSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {},
-    onSelectClass: (String) -> Unit = {}
+    onConfirmName: (String, String) -> Unit = { _, _ -> }
 ) {
+    var showNamingBottomSheet by remember { mutableStateOf(false) }
+    var selectedClassId by remember { mutableStateOf<String?>(null) }
+
     val isCompact = windowWidthSizeClass == WindowWidthSizeClass.Compact
 
     Scaffold { paddingValues ->
@@ -57,13 +64,19 @@ fun ClassSelectionScreen(
             if (isCompact) {
                 ClassPager(
                     classes = state.classes,
-                    onSelectClass = onSelectClass,
+                    onSelectClass = {
+                        selectedClassId = it
+                        showNamingBottomSheet = true
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
                 ClassList(
                     classes = state.classes,
-                    onSelectClass = onSelectClass,
+                    onSelectClass = {
+                        selectedClassId = it
+                        showNamingBottomSheet = true
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -76,6 +89,18 @@ fun ClassSelectionScreen(
             }
         }
     }
+
+    if (showNamingBottomSheet) {
+        CharNamingBottomSheet(
+            onDismissRequest = { showNamingBottomSheet = false },
+            onConfirm = { name ->
+                selectedClassId?.let { classId ->
+                    onConfirmName(classId, name)
+                }
+                showNamingBottomSheet = false
+            }
+        )
+    }
 }
 
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO)
@@ -85,13 +110,13 @@ fun ClassSelectionScreenPreviewLight() {
         ClassSelectionScreen(
             state = ClassSelectionUIState(
                 classes = listOf(
-                    br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel(
+                    ClassSelectionUIModel(
                         id = "1",
                         name = "Guerreiro",
                         description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",
                         presentationDrawableId = android.R.drawable.ic_menu_gallery
                     ),
-                    br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel(
+                    ClassSelectionUIModel(
                         id = "2",
                         name = "Mago",
                         description = "Mestre em feitiços e ataques à distância, veste armaduras leves de tecido.",
@@ -110,7 +135,7 @@ fun ClassSelectionScreenPreviewDark() {
         ClassSelectionScreen(
             state = ClassSelectionUIState(
                 classes = listOf(
-                    br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel(
+                    ClassSelectionUIModel(
                         id = "1",
                         name = "Guerreiro",
                         description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",

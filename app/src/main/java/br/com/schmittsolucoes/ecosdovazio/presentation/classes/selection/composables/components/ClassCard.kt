@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -26,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -36,10 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.ButtonContainer
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighlightedElevatedButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOutline
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 import coil.compose.SubcomposeAsyncImage
 
@@ -123,23 +119,13 @@ fun ClassCard(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                ElevatedButton(
+                FilledHighlightedElevatedButton(
+                    text = stringResource(id = R.string.select_button),
                     onClick = { onSelect(classModel.id) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .height(50.dp),
-                    shape = RectangleShape,
-                    border = BorderStroke(1.dp, HighlightOutline),
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        contentColor = Highlight,
-                        containerColor = ButtonContainer
-                    )
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.select_button).uppercase(),
-                    )
-                }
+                )
             }
         }
     }

@@ -18,4 +18,7 @@
     <string name="heroes_selection_text">The abyss awaits. Choose who will descend into the darkness or forge a new soul to face the trials.</string>
     <string name="new_hero_label">NEW HERO</string>
     <string name="select_button">Select</string>
+    <string name="char_selection_how_will_it_be_recognized">HOW WILL YOU BE RECOGNIZED?</string>
+    <string name="char_selection_name_placeholder">Hero\'s Name</string>
+    <string name="confirm_button">CONFIRM</string>
 </resources>

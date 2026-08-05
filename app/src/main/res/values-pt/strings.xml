@@ -18,4 +18,7 @@
     <string name="heroes_selection_text">O abismo aguarda. Escolha quem descerá na escuridão ou forje uma nova alma para enfrentar as provações.</string>
     <string name="new_hero_label">NOVO HERÓI</string>
     <string name="select_button">Selecionar</string>
+    <string name="char_selection_how_will_it_be_recognized">COMO SERÁ RECONHECIDO?</string>
+    <string name="char_selection_name_placeholder">Nome do Herói</string>
+    <string name="confirm_button">CONFIRMAR</string>
 </resources>
