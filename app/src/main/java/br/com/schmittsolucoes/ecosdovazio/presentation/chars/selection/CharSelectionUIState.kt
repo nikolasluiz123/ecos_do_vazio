@@ -4,5 +4,5 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.Cha
 
 data class CharSelectionUIState(
     val errorMessage: String? = null,
-    val chars: List<CharSelectionUIModel> = emptyList()
+    val chars: List<CharSelectionUIModel> = List(6) { CharSelectionUIModel(isLoading = true) }
 )

@@ -57,7 +57,7 @@ fun HeroSlot(
             .aspectRatio(0.9f)
             .shadow(4.dp, RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
             .clip(RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp))
-            .clickable { onClick(charModel) }
+            .clickable(enabled = !charModel.isLoading) { onClick(charModel) }
             .background(
                 Brush.linearGradient(
                     colors = listOf(
@@ -73,71 +73,92 @@ fun HeroSlot(
             ),
         contentAlignment = Alignment.Center
     ) {
-        charModel.presentationImage?.let { image ->
-            SubcomposeAsyncImage(
-                model = image,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-                filterQuality = FilterQuality.Medium,
-                loading = {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = Highlight,
-                            strokeWidth = 2.dp
-                        )
-                    }
-                }
+        if (charModel.isLoading) {
+            CircularProgressIndicator(
+                color = Highlight,
+                strokeWidth = 2.dp
             )
-        }
-
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = if (charModel.name == null) Arrangement.Center else Arrangement.Bottom
-        ) {
-            if (charModel.name == null) {
-                Box(
-                    modifier = Modifier
-                        .size(56.dp)
-                        .border(
-                            width = 1.dp,
-                            color = HeroButtonStrokeColor,
-                            shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
-                        )
-                        .background(
-                            color = NewCharacterButtonBackground,
-                            shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = HeroButtonStrokeColor,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
+        } else {
+            charModel.presentationImage?.let { image ->
+                HeroImage(image)
             }
 
-            Text(
-                text = charModel.name ?: stringResource(R.string.new_hero_label),
-                style = MaterialTheme.typography.labelMedium,
-                color = if (charModel.name != null) Color.LightGray else HeroButtonStrokeColor,
-                modifier = if (charModel.name != null) {
-                    Modifier
-                        .padding(8.dp)
-                        .background(color = pictureTextHighlightBackground)
-                        .padding(12.dp, 4.dp)
-                } else {
-                    Modifier
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = if (charModel.name == null) Arrangement.Center else Arrangement.Bottom
+            ) {
+                if (charModel.name == null) {
+                    AddHeroIcon()
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
-            )
+
+                HeroName(charModel)
+            }
         }
     }
+}
+
+@Composable
+private fun HeroImage(image: Int) {
+    SubcomposeAsyncImage(
+        model = image,
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop,
+        filterQuality = FilterQuality.Medium,
+        loading = {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Highlight,
+                    strokeWidth = 2.dp
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun AddHeroIcon() {
+    Box(
+        modifier = Modifier
+            .size(56.dp)
+            .border(
+                width = 1.dp,
+                color = HeroButtonStrokeColor,
+                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
+            )
+            .background(
+                color = NewCharacterButtonBackground,
+                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = null,
+            tint = HeroButtonStrokeColor,
+            modifier = Modifier.size(28.dp)
+        )
+    }
+}
+
+@Composable
+private fun HeroName(charModel: CharSelectionUIModel) {
+    Text(
+        text = charModel.name ?: stringResource(R.string.new_hero_label),
+        style = MaterialTheme.typography.labelMedium,
+        color = if (charModel.name != null) Color.LightGray else HeroButtonStrokeColor,
+        modifier = if (charModel.name != null) {
+            Modifier
+                .padding(8.dp)
+                .background(color = pictureTextHighlightBackground)
+                .padding(12.dp, 4.dp)
+        } else {
+            Modifier
+        }
+    )
 }
