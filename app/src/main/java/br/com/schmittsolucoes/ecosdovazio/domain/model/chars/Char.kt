@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.domain.model
+package br.com.schmittsolucoes.ecosdovazio.domain.model.chars
 
 data class Char(
     val id: String,

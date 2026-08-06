@@ -1,7 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.Class
-import br.com.schmittsolucoes.ecosdovazio.domain.model.ClassSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 
 import kotlinx.coroutines.flow.Flow
 

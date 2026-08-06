@@ -3,10 +3,10 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.domain.model.ClassSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.CreateNewUserCharUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS

@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.domain.model
+package br.com.schmittsolucoes.ecosdovazio.domain.model.classes
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier

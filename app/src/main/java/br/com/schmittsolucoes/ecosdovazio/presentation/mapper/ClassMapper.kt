@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.ClassSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
 
 fun ClassSelection.toUIModel(presentationDrawableId: Int): ClassSelectionUIModel {

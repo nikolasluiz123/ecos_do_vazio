@@ -10,8 +10,8 @@ import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_MAGE_CLASS_
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_IMAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.domain.model.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.internacionalization.Language

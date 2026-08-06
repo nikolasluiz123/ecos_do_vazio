@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.domain.model
+package br.com.schmittsolucoes.ecosdovazio.domain.model.classes
 
 data class ClassSelection(
     val id: String,

@@ -19,7 +19,6 @@ val heroSlotBackgroundTopDark = Color(0xFF1E2022)
 val heroSlotBackgroundBottomDark = Color(0xFF0C0E10)
 
 val backgroundLight = Color(0xFFECECE6)
-
 val strokeColorLight = Color(0xFFA48C7A)
 val orangeForDetailsLight = Color(0xFFE08216)
 val highlightLight = Color(0xFF904D00)
@@ -30,6 +29,8 @@ val buttonContainerLight = Color(0xFFB34E00)
 val newCharacterButtonBackgroundLight = Color(0xB3E8E8E8)
 val heroSlotBackgroundTopLight = Color(0xFFFFFFFF)
 val heroSlotBackgroundBottomLight = Color(0xFFD8D8D0)
+
+val pictureTextHighlightBackground = Color(0x99000000)
 
 @get:Composable
 val OrangeForDetails: Color

@@ -3,29 +3,47 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.CharSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CharSelectionViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
+    private val userCharsQueryUseCase: UserCharsQueryUseCase,
+    private val resourcesProvider: ResourcesProvider
 ): CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
 
+    private val _chars = flow {
+        emitAll(userCharsQueryUseCase())
+    }.map { chars ->
+        mapCharSelectionToUIModel(chars)
+    }
+
     val uiState: StateFlow<CharSelectionUIState> = combine(
-        _errorMessage
-    ) { errorMessage ->
+        _errorMessage,
+        _chars
+    ) { errorMessage, chars ->
         CharSelectionUIState(
-            errorMessage = errorMessage.firstOrNull()
+            errorMessage = errorMessage,
+            chars = chars
         )
     }.stateIn(
         scope = viewModelScope,
@@ -45,4 +63,11 @@ class CharSelectionViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
+    private fun mapCharSelectionToUIModel(chars: List<CharSelection>): List<CharSelectionUIModel> {
+        return chars.map { char ->
+            char.toUIModel(
+                presentationDrawableId = char.presentationImageName?.let(resourcesProvider::getClassImage)
+            )
+        }
+    }
 }

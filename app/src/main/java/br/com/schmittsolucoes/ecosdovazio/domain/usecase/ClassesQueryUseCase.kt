@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.ClassSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import kotlinx.coroutines.flow.Flow

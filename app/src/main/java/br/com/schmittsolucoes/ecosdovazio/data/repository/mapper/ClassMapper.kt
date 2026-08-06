@@ -2,8 +2,8 @@ package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.ClassEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.ClassSelectionTuple
-import br.com.schmittsolucoes.ecosdovazio.domain.model.Class
-import br.com.schmittsolucoes.ecosdovazio.domain.model.ClassSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
+import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 
 fun Class.toEntity() = ClassEntity(

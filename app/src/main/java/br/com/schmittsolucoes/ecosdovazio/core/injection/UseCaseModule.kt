@@ -10,8 +10,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,5 +64,14 @@ object UseCaseModule {
         userRepository = userRepository,
         charRepository = charRepository,
         identifierProvider = identifierProvider
+    )
+
+    @Provides
+    fun provideUserCharsQueryUseCase(
+        charRepository: CharRepository,
+        userRepository: UserRepository
+    ): UserCharsQueryUseCase = UserCharsQueryUseCase(
+        charRepository = charRepository,
+        userRepository = userRepository
     )
 }
