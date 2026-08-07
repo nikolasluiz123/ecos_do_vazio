@@ -3,9 +3,11 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val backgroundDark = Color(0xFF121416)
+val surfaceDark = Color(0xFF0C0E10)
 
 val strokeColorDark = Color(0xFF564334)
 val orangeForDetailsDark = Color(0xFFFF8C00)
@@ -14,11 +16,16 @@ val highlightOutlineDark = Color(0xFFA48C7A)
 val highlightedTextFieldBackgroundDark = Color(0xFF0C0E10)
 val highlightedTextFieldTextDark = Color(0xFFDDC1AE)
 val buttonContainerDark = Color(0xFF282A2C)
+val topBarTitleDark = Color(0xFFFFB77D)
+val topBarSubtitleDark = Color(0xFFDDC1AE)
+val topBarIconsDark = Color(0xFFDDC1AE)
 val newCharacterButtonBackgroundDark = Color(0xB30C0E10)
 val heroSlotBackgroundTopDark = Color(0xFF1E2022)
 val heroSlotBackgroundBottomDark = Color(0xFF0C0E10)
 
 val backgroundLight = Color(0xFFECECE6)
+val surfaceLight = Color(0xFFF5F5F5)
+
 val strokeColorLight = Color(0xFFA48C7A)
 val orangeForDetailsLight = Color(0xFFE08216)
 val highlightLight = Color(0xFF904D00)
@@ -26,6 +33,9 @@ val highlightOutlineLight = Color(0xFFA48C7A)
 val highlightedTextFieldBackgroundLight = Color(0xFFF8F9FA)
 val highlightedTextFieldTextLight = Color(0xFF3D1B00)
 val buttonContainerLight = Color(0xFFB34E00)
+val topBarTitleLight = Color(0xFFB34E00)
+val topBarSubtitleLight = Color(0xFF49454F)
+val topBarIconsLight = Color(0xFF49454F)
 val newCharacterButtonBackgroundLight = Color(0xB3E8E8E8)
 val heroSlotBackgroundTopLight = Color(0xFFFFFFFF)
 val heroSlotBackgroundBottomLight = Color(0xFFD8D8D0)
@@ -85,9 +95,39 @@ val HighlightedTextFieldBorder: Color
     get() = if (isSystemInDarkTheme()) highlightDark else highlightLight
 
 @get:Composable
+val BackgroundGradient: Brush
+    get() = if (isSystemInDarkTheme()) {
+        Brush.radialGradient(
+            colors = listOf(
+                Color(0xCC1E2022),
+                Color(0xFF121416)
+            )
+        )
+    } else {
+        Brush.radialGradient(
+            colors = listOf(
+                Color(0xCCFFFFFF),
+                Color(0xFFF5F5F5)
+            )
+        )
+    }
+
+@get:Composable
 val PrimaryTextColor: Color
     get() = MaterialTheme.colorScheme.onBackground
 
 @get:Composable
 val SecondaryTextColor: Color
     get() = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+
+@get:Composable
+val TopBarTitle: Color
+    get() = if (isSystemInDarkTheme()) topBarTitleDark else topBarTitleLight
+
+@get:Composable
+val TopBarSubtitle: Color
+    get() = if (isSystemInDarkTheme()) topBarSubtitleDark else topBarSubtitleLight
+
+@get:Composable
+val TopBarIcons: Color
+    get() = if (isSystemInDarkTheme()) topBarIconsDark else topBarIconsLight

@@ -35,6 +35,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,6 +51,9 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.components.LoadingOverlay
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.TopBarIcons
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.TopBarSubtitle
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.TopBarTitle
 import coil.compose.SubcomposeAsyncImage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -157,36 +162,56 @@ private fun AppTopBar(
     isVisible: Boolean
 ) {
     if (isVisible) {
-        TopAppBar(
-            title = {
-                Column {
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    uiState.charHeader?.name?.let { charName ->
-                        Text(
-                            text = charName,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+        Surface(
+            shadowElevation = 4.dp,
+            tonalElevation = 8.dp
+        ) {
+            Column {
+                TopAppBar(
+                    title = {
+                        TopBarCustomTitle(uiState)
+                    },
+                    navigationIcon = {
+                        CharProfileImage(
+                            imageRes = uiState.profileImageRes,
+                            modifier = Modifier.padding(start = 16.dp, end = 12.dp)
+                        )
+                    },
+                    actions = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_settings_20dp),
+                            contentDescription = stringResource(R.string.settings_label),
+                            modifier = Modifier.padding(end = 16.dp),
+                            tint = TopBarIcons
                         )
                     }
-                }
-            },
-            navigationIcon = {
-                CharProfileImage(
-                    imageRes = uiState.profileImageRes,
-                    modifier = Modifier.padding(start = 16.dp, end = 12.dp)
-                )
-            },
-            actions = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_settings_20dp),
-                    contentDescription = stringResource(R.string.settings_label),
-                    modifier = Modifier.padding(end = 16.dp)
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun TopBarCustomTitle(uiState: AppUIState) {
+    Column {
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            ),
+            color = TopBarTitle
         )
+        uiState.charHeader?.name?.let { charName ->
+            Text(
+                text = charName,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily.Serif
+                ),
+                color = TopBarSubtitle
+            )
+        }
     }
 }
 
