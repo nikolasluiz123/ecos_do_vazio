@@ -2,12 +2,14 @@ package br.com.schmittsolucoes.ecosdovazio.core.injection
 
 import br.com.schmittsolucoes.ecosdovazio.data.repository.CharRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.ClassRepositoryImpl
+import br.com.schmittsolucoes.ecosdovazio.data.repository.DataStorePreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.data.repository.LanguageRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.TranslationRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.data.repository.UserRepositoryImpl
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import dagger.Binds
@@ -49,4 +51,10 @@ abstract class RepositoryModule {
     abstract fun bindCharRepository(
         charRepositoryImpl: CharRepositoryImpl
     ): CharRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPreferencesRepository(
+        preferencesRepositoryImpl: DataStorePreferencesRepository
+    ): PreferencesRepository
 }

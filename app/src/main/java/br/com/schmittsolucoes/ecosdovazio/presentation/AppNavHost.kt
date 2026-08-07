@@ -8,23 +8,29 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigatio
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.charSelectionScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.classSelectionScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.navigateToClassSelection
+import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.homeScreen
+import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.navigateToHome
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     windowSizeClass: WindowSizeClass,
+    startDestination: Any = CharSelectionRoute,
 ) {
     NavHost(
         navController = navController,
-        startDestination = CharSelectionRoute,
+        startDestination = startDestination,
     ) {
         charSelectionScreen(
             windowSizeClass = windowSizeClass,
-            onNavigateToClassSelection = navController::navigateToClassSelection
+            onNavigateToClassSelection = navController::navigateToClassSelection,
+            onNavigateToHome = navController::navigateToHome
         )
 
         classSelectionScreen(
             windowSizeClass = windowSizeClass
         )
+
+        homeScreen()
     }
 }

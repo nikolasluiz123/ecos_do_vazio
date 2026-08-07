@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,14 +50,24 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 fun CharSelectionScreen(
     viewModel: CharSelectionViewModel,
     windowWidthSizeClass: WindowWidthSizeClass,
-    onNavigateToClassSelection: () -> Unit
+    onNavigateToClassSelection: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val navigateToHome by viewModel.navigateToHome.collectAsStateWithLifecycle()
+
+    LaunchedEffect(navigateToHome) {
+        if (navigateToHome) {
+            onNavigateToHome()
+            viewModel.onNavigatedToHome()
+        }
+    }
 
     CharSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
         onNavigateToClassSelection = onNavigateToClassSelection,
+        onCharSelected = viewModel::onCharSelected,
         onDismissErrorDialog = viewModel::onDismissErrorDialog
     )
 }
@@ -66,6 +77,7 @@ fun CharSelectionScreen(
     state: CharSelectionUIState = CharSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onNavigateToClassSelection: () -> Unit = {},
+    onCharSelected: (String) -> Unit = {},
     onDismissErrorDialog: () -> Unit = {}
 ) {
     val columns = when (windowWidthSizeClass) {
@@ -138,6 +150,8 @@ fun CharSelectionScreen(
                         onClick = {
                             if (it.id == null) {
                                 onNavigateToClassSelection()
+                            } else {
+                                onCharSelected(it.id)
                             }
                         }
                     )

@@ -7,12 +7,15 @@ import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,6 +75,24 @@ object UseCaseModule {
         userRepository: UserRepository
     ): UserCharsQueryUseCase = UserCharsQueryUseCase(
         charRepository = charRepository,
+        userRepository = userRepository
+    )
+
+    @Provides
+    fun provideSelectCharUseCase(
+        preferencesRepository: PreferencesRepository,
+        userRepository: UserRepository
+    ): SelectCharUseCase = SelectCharUseCase(
+        preferencesRepository = preferencesRepository,
+        userRepository = userRepository
+    )
+
+    @Provides
+    fun provideUnselectCharUseCase(
+        preferencesRepository: PreferencesRepository,
+        userRepository: UserRepository
+    ): UnselectCharUseCase = UnselectCharUseCase(
+        preferencesRepository = preferencesRepository,
         userRepository = userRepository
     )
 }

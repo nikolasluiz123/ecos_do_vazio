@@ -1,6 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.core.injection
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.AppDatabase
@@ -11,6 +14,8 @@ import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.specialization.SpecializationLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.transaction.RoomDatabaseTransaction
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.preferences.DataStorePreferencesLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.preferences.PreferencesLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +26,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalDataAccessModule {
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+    @Provides
+    @Singleton
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.dataStore
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesLocalDataSource(dataStore: DataStore<Preferences>): PreferencesLocalDataSource {
+        return DataStorePreferencesLocalDataSource(dataStore)
+    }
 
     @Provides
     @Singleton

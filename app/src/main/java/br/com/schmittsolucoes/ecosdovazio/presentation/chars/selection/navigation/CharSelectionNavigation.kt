@@ -11,7 +11,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composabl
 
 fun NavGraphBuilder.charSelectionScreen(
     windowSizeClass: WindowSizeClass,
-    onNavigateToClassSelection: () -> Unit
+    onNavigateToClassSelection: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
     composable<CharSelectionRoute> {
         val viewModel = hiltViewModel<CharSelectionViewModel>()
@@ -19,7 +20,8 @@ fun NavGraphBuilder.charSelectionScreen(
         CharSelectionScreen(
             viewModel = viewModel,
             windowWidthSizeClass = windowSizeClass.widthSizeClass,
-            onNavigateToClassSelection = onNavigateToClassSelection
+            onNavigateToClassSelection = onNavigateToClassSelection,
+            onNavigateToHome = onNavigateToHome
         )
     }
 }

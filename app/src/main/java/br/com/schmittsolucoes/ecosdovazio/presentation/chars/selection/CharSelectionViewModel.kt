@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.CharSelectionUIModel
@@ -26,8 +27,12 @@ import javax.inject.Inject
 class CharSelectionViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val userCharsQueryUseCase: UserCharsQueryUseCase,
+    private val selectCharUseCase: SelectCharUseCase,
     private val resourcesProvider: ResourcesProvider
 ): CommonViewModel() {
+
+    private val _navigateToHome = MutableStateFlow(false)
+    val navigateToHome: StateFlow<Boolean> = _navigateToHome
 
     private val _errorMessage = MutableStateFlow<String?>(null)
 
@@ -61,6 +66,17 @@ class CharSelectionViewModel @Inject constructor(
 
     fun onDismissErrorDialog() {
         _errorMessage.value = null
+    }
+
+    fun onCharSelected(charId: String) {
+        launch {
+            selectCharUseCase(charId)
+            _navigateToHome.value = true
+        }
+    }
+
+    fun onNavigatedToHome() {
+        _navigateToHome.value = false
     }
 
     private fun mapCharSelectionToUIModel(chars: List<CharSelection>): List<CharSelectionUIModel> {

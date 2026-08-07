@@ -48,6 +48,8 @@ class MainActivity : ComponentActivity() {
             val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
             val loadingMessage by viewModel.loadingMessage.collectAsStateWithLifecycle()
             val snackbarMessage by viewModel.snackbarMessage.collectAsStateWithLifecycle()
+            val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
+            val isInitializing by viewModel.isInitializing.collectAsStateWithLifecycle()
 
             val snackbarHostState = remember { SnackbarHostState() }
 
@@ -66,10 +68,13 @@ class MainActivity : ComponentActivity() {
                         App(
                             snackbarHostState = snackbarHostState,
                         ) {
-                            AppNavHost(
-                                navController = navController,
-                                windowSizeClass = windowSizeClass
-                            )
+                            if (!isInitializing) {
+                                AppNavHost(
+                                    navController = navController,
+                                    windowSizeClass = windowSizeClass,
+                                    startDestination = startDestination
+                                )
+                            }
 
                             appErrorMessage?.let { message ->
                                 ErrorDialog(
