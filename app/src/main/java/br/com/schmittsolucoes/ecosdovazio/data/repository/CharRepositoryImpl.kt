@@ -4,6 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharHeader
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import kotlinx.coroutines.flow.Flow
@@ -25,5 +26,9 @@ class CharRepositoryImpl @Inject constructor(
         return charLocalDataSource.getUserChars(userId).map { tuples ->
             tuples.map { it.toDomain() }
         }
+    }
+
+    override fun getCharHeader(charId: String): Flow<CharHeader?> {
+        return charLocalDataSource.getCharHeader(charId).map { it?.toDomain() }
     }
 }

@@ -1,8 +1,10 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.CharEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharHeaderTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharSelectionTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharHeader
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
 
 fun Char.toEntity(): CharEntity {
@@ -29,5 +31,12 @@ fun CharSelectionTuple.toDomain(): CharSelection {
         id = id,
         name = name,
         presentationImageName = presentationImageName
+    )
+}
+
+fun CharHeaderTuple.toDomain(): CharHeader {
+    return CharHeader(
+        name = name,
+        profileImageName = profileImageName
     )
 }

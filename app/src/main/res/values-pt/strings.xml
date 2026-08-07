@@ -9,6 +9,7 @@
     <string name="error_dialog_title">Erro</string>
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processando</string>
+    <string name="settings_label">Configurações</string>
 
     <string name="warrior_class_name">Guerreiro</string>
     <string name="warrior_class_description">Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.</string>
