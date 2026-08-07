@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.compos
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composa
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.ClassPager
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
@@ -57,6 +59,7 @@ fun ClassSelectionScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(BackgroundGradient)
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {

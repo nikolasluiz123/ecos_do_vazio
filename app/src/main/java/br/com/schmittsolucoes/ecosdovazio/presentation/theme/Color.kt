@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 
 val backgroundDark = Color(0xFF121416)
 val surfaceDark = Color(0xFF0C0E10)
+val surfaceContainerHighestDark = Color(0xFF1E2022)
 
 val strokeColorDark = Color(0xFF564334)
 val orangeForDetailsDark = Color(0xFFFF8C00)
@@ -25,6 +26,7 @@ val heroSlotBackgroundBottomDark = Color(0xFF0C0E10)
 
 val backgroundLight = Color(0xFFECECE6)
 val surfaceLight = Color(0xFFF5F5F5)
+val surfaceContainerHighestLight = Color(0xFFFFFFFF)
 
 val strokeColorLight = Color(0xFFA48C7A)
 val orangeForDetailsLight = Color(0xFFE08216)

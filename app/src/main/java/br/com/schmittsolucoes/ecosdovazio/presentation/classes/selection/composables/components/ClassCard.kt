@@ -47,9 +47,6 @@ fun ClassCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-        ),
         shape = ShapeDefaults.Medium,
         border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.2f))
     ) {

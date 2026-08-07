@@ -41,6 +41,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.CharSelec
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSelectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSlot
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PrimaryTextColor
@@ -90,17 +91,7 @@ fun CharSelectionScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            OrangeForDetails.copy(alpha = 0.06f),
-                            OrangeForDetails.copy(alpha = 0.05f),
-                            OrangeForDetails.copy(alpha = 0.04f),
-                            OrangeForDetails.copy(alpha = 0.03f),
-                            Color.Transparent
-                        )
-                    )
-                )
+                .background(BackgroundGradient)
                 .padding(paddingValues)
         ) {
             LazyVerticalGrid(

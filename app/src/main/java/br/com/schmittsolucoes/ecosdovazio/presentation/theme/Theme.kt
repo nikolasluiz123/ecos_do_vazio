@@ -9,11 +9,13 @@ import androidx.compose.runtime.Composable
 private val DarkColorScheme = darkColorScheme(
     background = backgroundDark,
     surface = surfaceDark,
+    surfaceContainerHighest = surfaceContainerHighestDark
 )
 
 private val LightColorScheme = lightColorScheme(
     background = backgroundLight,
     surface = surfaceLight,
+    surfaceContainerHighest = surfaceContainerHighestLight
 )
 
 @Composable
