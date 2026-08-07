@@ -11,15 +11,16 @@ fun Class.toEntity() = ClassEntity(
     nameTranslationId = nameTranslationId.name,
     descriptionTranslationId = descriptionTranslationId.name,
     classCategory = classCategory,
-    battleImageName = battleImageName,
-    presentationImageName = presentationImageName,
-    incrementStrength = incrementStrength,
-    incrementDexterity = incrementDexterity,
-    incrementIntelligence = incrementIntelligence,
-    incrementPhysicalResistance = incrementPhysicalResistance,
-    incrementMagicResistance = incrementMagicResistance,
-    incrementVitality = incrementVitality,
-    incrementAgility = incrementAgility
+    battleImageName = images.battleImageName,
+    presentationImageName = images.presentationImageName,
+    profileImageName = images.profileImageName,
+    incrementStrength = attributes.incrementStrength,
+    incrementDexterity = attributes.incrementDexterity,
+    incrementIntelligence = attributes.incrementIntelligence,
+    incrementPhysicalResistance = attributes.incrementPhysicalResistance,
+    incrementMagicResistance = attributes.incrementMagicResistance,
+    incrementVitality = attributes.incrementVitality,
+    incrementAgility = attributes.incrementAgility
 )
 
 fun ClassEntity.toDomain() = Class(
@@ -27,15 +28,20 @@ fun ClassEntity.toDomain() = Class(
     nameTranslationId = TranslationIdentifier.valueOf(nameTranslationId),
     descriptionTranslationId = TranslationIdentifier.valueOf(descriptionTranslationId),
     classCategory = classCategory,
-    battleImageName = battleImageName,
-    presentationImageName = presentationImageName,
-    incrementStrength = incrementStrength,
-    incrementDexterity = incrementDexterity,
-    incrementIntelligence = incrementIntelligence,
-    incrementPhysicalResistance = incrementPhysicalResistance,
-    incrementMagicResistance = incrementMagicResistance,
-    incrementVitality = incrementVitality,
-    incrementAgility = incrementAgility
+    images = Class.Images(
+        battleImageName = battleImageName,
+        presentationImageName = presentationImageName,
+        profileImageName = profileImageName
+    ),
+    attributes = Class.Attributes(
+        incrementStrength = incrementStrength,
+        incrementDexterity = incrementDexterity,
+        incrementIntelligence = incrementIntelligence,
+        incrementPhysicalResistance = incrementPhysicalResistance,
+        incrementMagicResistance = incrementMagicResistance,
+        incrementVitality = incrementVitality,
+        incrementAgility = incrementAgility
+    )
 )
 
 fun ClassSelectionTuple.toDomain(): ClassSelection = ClassSelection(

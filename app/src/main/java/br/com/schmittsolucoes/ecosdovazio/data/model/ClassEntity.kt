@@ -43,6 +43,9 @@ data class ClassEntity(
     @ColumnInfo("presentation_image_name")
     val presentationImageName: String,
 
+    @ColumnInfo("profile_image_name")
+    val profileImageName: String,
+
     @ColumnInfo("increment_strength")
     val incrementStrength: Long = 0,
 

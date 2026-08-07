@@ -5,11 +5,14 @@ import android.content.res.Configuration
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ARCHER_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.ARCHER_CLASS_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
@@ -123,8 +126,12 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.WARRIOR_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.WARRIOR_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.WARRIOR,
-                battleImageName = BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY,
-                presentationImageName = WARRIOR_CLASS_IMAGE_KEY
+                images = Class.Images(
+                    battleImageName = BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY,
+                    presentationImageName = WARRIOR_CLASS_IMAGE_KEY,
+                    profileImageName = WARRIOR_CLASS_PROFILE_IMAGE_KEY
+                ),
+                attributes = Class.Attributes()
             )
 
             val mage = Class(
@@ -132,8 +139,12 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.MAGE_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.MAGE_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.MAGE,
-                battleImageName = BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY,
-                presentationImageName = MAGE_CLASS_IMAGE_KEY
+                images = Class.Images(
+                    battleImageName = BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY,
+                    presentationImageName = MAGE_CLASS_IMAGE_KEY,
+                    profileImageName = MAGE_CLASS_PROFILE_IMAGE_KEY
+                ),
+                attributes = Class.Attributes()
             )
 
             val archer = Class(
@@ -141,8 +152,12 @@ class InitializeDatabaseUseCase(
                 nameTranslationId = TranslationIdentifier.ARCHER_CLASS_NAME,
                 descriptionTranslationId = TranslationIdentifier.ARCHER_CLASS_DESCRIPTION,
                 classCategory = ClassCategory.ARCHER,
-                battleImageName = BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY,
-                presentationImageName = ARCHER_CLASS_IMAGE_KEY
+                images = Class.Images(
+                    battleImageName = BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY,
+                    presentationImageName = ARCHER_CLASS_IMAGE_KEY,
+                    profileImageName = ARCHER_CLASS_PROFILE_IMAGE_KEY
+                ),
+                attributes = Class.Attributes()
             )
 
             val classes = listOf(warrior, mage, archer)

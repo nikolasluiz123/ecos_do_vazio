@@ -8,13 +8,22 @@ data class Class(
     val nameTranslationId: TranslationIdentifier,
     val descriptionTranslationId: TranslationIdentifier,
     val classCategory: ClassCategory,
-    val battleImageName: String,
-    val presentationImageName: String,
-    val incrementStrength: Long = 0,
-    val incrementDexterity: Long = 0,
-    val incrementIntelligence: Long = 0,
-    val incrementPhysicalResistance: Long = 0,
-    val incrementMagicResistance: Long = 0,
-    val incrementVitality: Long = 0,
-    val incrementAgility: Long = 0,
-)
+    val images: Images,
+    val attributes: Attributes
+) {
+    data class Images(
+        val battleImageName: String,
+        val presentationImageName: String,
+        val profileImageName: String,
+    )
+
+    data class Attributes(
+        val incrementStrength: Long = 0,
+        val incrementDexterity: Long = 0,
+        val incrementIntelligence: Long = 0,
+        val incrementPhysicalResistance: Long = 0,
+        val incrementMagicResistance: Long = 0,
+        val incrementVitality: Long = 0,
+        val incrementAgility: Long = 0,
+    )
+}
