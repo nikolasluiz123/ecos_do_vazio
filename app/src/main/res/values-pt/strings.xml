@@ -26,4 +26,8 @@
     <string name="char_selection_how_will_it_be_recognized">COMO SERÁ RECONHECIDO?</string>
     <string name="char_selection_name_placeholder">Nome do Herói</string>
     <string name="confirm_button">CONFIRMAR</string>
+
+    <string name="bottom_menu_home">Início</string>
+    <string name="bottom_menu_char">Personagem</string>
+    <string name="bottom_menu_history">História</string>
 </resources>

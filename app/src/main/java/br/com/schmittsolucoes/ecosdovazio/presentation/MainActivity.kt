@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -44,10 +48,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.CharRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.navigateToChar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.ClassSelectionRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.LoadingOverlay
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.HistoryRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.navigateToHistory
+import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.navigateToHome
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
@@ -134,12 +144,24 @@ fun App(
             !currentRoute.contains(CharSelectionRoute::class.qualifiedName.orEmpty()) &&
             !currentRoute.contains(ClassSelectionRoute::class.qualifiedName.orEmpty())
 
+    val showBottomBar = currentRoute != null && (
+            currentRoute.contains(HomeRoute::class.qualifiedName.orEmpty()) ||
+                    currentRoute.contains(CharRoute::class.qualifiedName.orEmpty()) ||
+                    currentRoute.contains(HistoryRoute::class.qualifiedName.orEmpty())
+            )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppTopBar(
                 uiState = uiState,
                 isVisible = showTopBar
+            )
+        },
+        bottomBar = {
+            AppBottomBar(
+                navController = navController,
+                isVisible = showBottomBar
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -153,6 +175,54 @@ fun App(
             content()
         }
     }
+}
+
+@Composable
+private fun AppBottomBar(
+    navController: NavHostController,
+    isVisible: Boolean
+) {
+    if (isVisible) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+
+        NavigationBar(
+            tonalElevation = 8.dp
+        ) {
+            BottomBarItem.entries.forEach { item ->
+                val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            painter = painterResource(item.icon),
+                            contentDescription = stringResource(item.label)
+                        )
+                    },
+                    label = { Text(stringResource(item.label)) },
+                    selected = selected,
+                    onClick = {
+                        if (!selected) {
+                            when (item) {
+                                BottomBarItem.Home -> navController.navigateToHome()
+                                BottomBarItem.Char -> navController.navigateToChar()
+                                BottomBarItem.History -> navController.navigateToHistory()
+                            }
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
+private enum class BottomBarItem(
+    val route: Any,
+    @StringRes val label: Int,
+    @DrawableRes val icon: Int
+) {
+    Home(HomeRoute, R.string.bottom_menu_home, R.drawable.ic_home_16dp),
+    Char(CharRoute, R.string.bottom_menu_char, R.drawable.ic_char_16dp),
+    History(HistoryRoute, R.string.bottom_menu_history, R.drawable.ic_history_16dp)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
