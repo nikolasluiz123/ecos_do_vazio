@@ -266,7 +266,7 @@ private fun TopBarCustomTitle(uiState: AppUIState) {
     Column {
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = FontFamily.Serif
             ),
