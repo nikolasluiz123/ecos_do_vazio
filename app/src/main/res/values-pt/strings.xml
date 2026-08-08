@@ -30,4 +30,15 @@
     <string name="bottom_menu_home">Início</string>
     <string name="bottom_menu_char">Personagem</string>
     <string name="bottom_menu_history">História</string>
+
+    <string name="char_level_label">Nível %s</string>
+    <string name="char_xp_label">%1$s/%2$s XP</string>
+
+    <string name="char_status_title">Status</string>
+    <string name="char_status_hp">VIDA TOTAL</string>
+    <string name="char_status_damage">DANO BASE</string>
+    <string name="char_status_phys_res">RES. FÍSICA</string>
+    <string name="char_status_mag_res">RES. MÁGICA</string>
+    <string name="char_status_crit">CRÍTICO</string>
+    <string name="char_status_dodge">ESQUIVA</string>
 </resources>

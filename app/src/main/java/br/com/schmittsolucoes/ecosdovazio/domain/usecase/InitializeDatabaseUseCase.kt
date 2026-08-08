@@ -131,7 +131,13 @@ class InitializeDatabaseUseCase(
                     presentationImageName = WARRIOR_CLASS_IMAGE_KEY,
                     profileImageName = WARRIOR_CLASS_PROFILE_IMAGE_KEY
                 ),
-                attributes = Class.Attributes()
+                attributes = Class.Attributes(
+                    incrementStrength = 10,
+                    incrementDexterity = 4,
+                    incrementVitality = 2,
+                    incrementPhysicalResistance = 3,
+                    incrementMagicResistance = 1
+                )
             )
 
             val mage = Class(
@@ -144,7 +150,13 @@ class InitializeDatabaseUseCase(
                     presentationImageName = MAGE_CLASS_IMAGE_KEY,
                     profileImageName = MAGE_CLASS_PROFILE_IMAGE_KEY
                 ),
-                attributes = Class.Attributes()
+                attributes = Class.Attributes(
+                    incrementIntelligence = 10,
+                    incrementDexterity = 6,
+                    incrementVitality = 1,
+                    incrementPhysicalResistance = 1,
+                    incrementMagicResistance = 2
+                )
             )
 
             val archer = Class(
@@ -157,7 +169,13 @@ class InitializeDatabaseUseCase(
                     presentationImageName = ARCHER_CLASS_IMAGE_KEY,
                     profileImageName = ARCHER_CLASS_PROFILE_IMAGE_KEY
                 ),
-                attributes = Class.Attributes()
+                attributes = Class.Attributes(
+                    incrementDexterity = 10,
+                    incrementAgility = 5,
+                    incrementVitality = 1,
+                    incrementPhysicalResistance = 2,
+                    incrementMagicResistance = 2
+                )
             )
 
             val classes = listOf(warrior, mage, archer)
