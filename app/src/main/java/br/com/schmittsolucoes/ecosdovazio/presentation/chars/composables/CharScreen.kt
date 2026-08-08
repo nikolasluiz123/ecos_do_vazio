@@ -10,8 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,11 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharLevelInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
@@ -53,11 +56,14 @@ fun CharScreen(
     onDismissErrorDialog: () -> Unit = {}
 ) {
     Scaffold { paddingValues ->
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(BackgroundGradient)
+                .verticalScroll(scrollState)
                 .padding(16.dp),
         ) {
 
@@ -69,6 +75,12 @@ fun CharScreen(
 
             state.statusInfo?.let { statusInfo ->
                 CharStatus(statusInfo = statusInfo)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            state.attributesInfo?.let { attributesInfo ->
+                CharAttributes(attributes = attributesInfo)
             }
 
             state.errorMessage?.let { message ->
@@ -112,12 +124,8 @@ fun CharLevelInfo(
                 )
             )
         }
-        LinearProgressIndicator(
-            progress = { levelInfo.progress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp),
-            drawStopIndicator = { }
+        AttributeProgressBar(
+            progress = { levelInfo.progress }
         )
     }
 }
@@ -197,6 +205,80 @@ fun CharStatus(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun CharAttributes(
+    attributes: List<CharAttributesUIModel>
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(R.string.char_attributes_title),
+            style = MaterialTheme.typography.titleMedium.copy(
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            )
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            attributes.forEach { attribute ->
+                AttributeItem(attribute = attribute)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AttributeItem(
+    attribute: CharAttributesUIModel
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(getAttributeLabel(attribute.identifier)),
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontFamily = FontFamily.Serif
+                )
+            )
+            Text(
+                text = attribute.totalValue,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontFamily = FontFamily.Serif
+                )
+            )
+        }
+        AttributeProgressBar(
+            progress = { attribute.progress }
+        )
+    }
+}
+
+private fun getAttributeLabel(identifier: CharAttributes.AttributeIdentifier): Int {
+    return when (identifier) {
+        CharAttributes.AttributeIdentifier.STRENGTH -> R.string.char_attribute_strength
+        CharAttributes.AttributeIdentifier.DEXTERITY -> R.string.char_attribute_dexterity
+        CharAttributes.AttributeIdentifier.INTELLIGENCE -> R.string.char_attribute_intelligence
+        CharAttributes.AttributeIdentifier.PHYSICAL_RESISTANCE -> R.string.char_attribute_physical_resistance
+        CharAttributes.AttributeIdentifier.MAGIC_RESISTANCE -> R.string.char_attribute_magic_resistance
+        CharAttributes.AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
+        CharAttributes.AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
     }
 }
 

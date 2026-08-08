@@ -41,4 +41,13 @@
     <string name="char_status_mag_res">RES. MÁGICA</string>
     <string name="char_status_crit">CRÍTICO</string>
     <string name="char_status_dodge">ESQUIVA</string>
+
+    <string name="char_attributes_title">Meus Atributos</string>
+    <string name="char_attribute_strength">Força</string>
+    <string name="char_attribute_dexterity">Destreza</string>
+    <string name="char_attribute_intelligence">Inteligência</string>
+    <string name="char_attribute_physical_resistance">Resistência Física</string>
+    <string name="char_attribute_magic_resistance">Resistência Mágica</string>
+    <string name="char_attribute_vitality">Vitalidade</string>
+    <string name="char_attribute_agility">Agilidade</string>
 </resources>

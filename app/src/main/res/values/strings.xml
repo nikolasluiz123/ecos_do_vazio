@@ -41,4 +41,13 @@
     <string name="char_status_mag_res">MAGIC RESISTANCE</string>
     <string name="char_status_crit">CRITICAL</string>
     <string name="char_status_dodge">DODGE</string>
+
+    <string name="char_attributes_title">My Attributes</string>
+    <string name="char_attribute_strength">Strength</string>
+    <string name="char_attribute_dexterity">Dexterity</string>
+    <string name="char_attribute_intelligence">Intelligence</string>
+    <string name="char_attribute_physical_resistance">Physical Resistance</string>
+    <string name="char_attribute_magic_resistance">Magic Resistance</string>
+    <string name="char_attribute_vitality">Vitality</string>
+    <string name="char_attribute_agility">Agility</string>
 </resources>

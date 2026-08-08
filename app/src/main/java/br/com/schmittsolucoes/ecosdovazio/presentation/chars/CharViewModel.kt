@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.core.formatters.NumberFormatter
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharCriticalChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDodgeChanceUseCase
@@ -14,6 +16,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResis
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +37,8 @@ class CharViewModel @Inject constructor(
     getCharPhysicalResistanceUseCase: GetCharPhysicalResistanceUseCase,
     getCharMagicResistanceUseCase: GetCharMagicResistanceUseCase,
     getCharCriticalChanceUseCase: GetCharCriticalChanceUseCase,
-    getCharDodgeChanceUseCase: GetCharDodgeChanceUseCase
+    getCharDodgeChanceUseCase: GetCharDodgeChanceUseCase,
+    charAttributesQueryUseCase: CharAttributesQueryUseCase
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -47,7 +51,8 @@ class CharViewModel @Inject constructor(
         getCharPhysicalResistanceUseCase(),
         getCharMagicResistanceUseCase(),
         getCharCriticalChanceUseCase(),
-        getCharDodgeChanceUseCase()
+        getCharDodgeChanceUseCase(),
+        charAttributesQueryUseCase()
     ) { values ->
         val errorMessage = values[0] as String?
         val levelInfo = values[1] as CharLevelInfo
@@ -57,12 +62,14 @@ class CharViewModel @Inject constructor(
         val magRes = values[5] as Double
         val crit = values[6] as Double
         val dodge = values[7] as Double
+        val attributes = values[8] as CharAttributes?
 
-        val progress = getLevelProgress(levelInfo)
+        val levelProgress = getLevelProgress(levelInfo)
+        val attributesInfo = getAttributesInfo(attributes)
 
         CharUIState(
             errorMessage = errorMessage,
-            levelInfo = levelInfo.toUIModel(progress),
+            levelInfo = levelInfo.toUIModel(levelProgress),
             statusInfo = CharStatusUIModel(
                 hp = hp.toString(),
                 baseDamage = baseDamage.toString(),
@@ -70,7 +77,8 @@ class CharViewModel @Inject constructor(
                 magicResistance = NumberFormatter.formatPercentage(magRes),
                 criticalChance = NumberFormatter.formatPercentage(crit),
                 dodgeChance = NumberFormatter.formatPercentage(dodge)
-            )
+            ),
+            attributesInfo = attributesInfo
         )
     }.stateIn(
         scope = viewModelScope,
@@ -93,6 +101,24 @@ class CharViewModel @Inject constructor(
     private fun getLevelProgress(levelInfo: CharLevelInfo): Float {
         return if (levelInfo.nextLevelExperience > 0L) {
             levelInfo.experience.toFloat() / levelInfo.nextLevelExperience.toFloat()
+        } else {
+            0f
+        }
+    }
+
+    private fun getAttributesInfo(attributes: CharAttributes?): List<CharAttributesUIModel>? =
+        attributes?.attributes?.map { attr ->
+            val totalValue = attr.charValue + attr.classValue + attr.specializationValue
+            val attributeProgress = getAttributeProgress(attributes, totalValue)
+            attr.toUIModel(totalValue = totalValue, progress = attributeProgress)
+        }
+
+    private fun getAttributeProgress(
+        attributes: CharAttributes,
+        totalValue: Long
+    ): Float {
+        return if (attributes.maxAttributeValue > 0) {
+            totalValue.toFloat() / attributes.maxAttributeValue.toFloat()
         } else {
             0f
         }
