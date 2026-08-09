@@ -7,6 +7,7 @@ import br.com.schmittsolucoes.ecosdovazio.core.formatters.NumberFormatter
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharCriticalChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDodgeChanceUseCase
@@ -14,6 +15,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
@@ -38,7 +40,9 @@ class CharViewModel @Inject constructor(
     getCharMagicResistanceUseCase: GetCharMagicResistanceUseCase,
     getCharCriticalChanceUseCase: GetCharCriticalChanceUseCase,
     getCharDodgeChanceUseCase: GetCharDodgeChanceUseCase,
-    charAttributesQueryUseCase: CharAttributesQueryUseCase
+    charAttributesQueryUseCase: CharAttributesQueryUseCase,
+    getAvailableAttributesUseCase: GetAvailableAttributesUseCase,
+    private val incrementAttributeUseCase: IncrementAttributeUseCase
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -52,7 +56,8 @@ class CharViewModel @Inject constructor(
         getCharMagicResistanceUseCase(),
         getCharCriticalChanceUseCase(),
         getCharDodgeChanceUseCase(),
-        charAttributesQueryUseCase()
+        charAttributesQueryUseCase(),
+        getAvailableAttributesUseCase()
     ) { values ->
         val errorMessage = values[0] as String?
         val levelInfo = values[1] as CharLevelInfo
@@ -63,6 +68,7 @@ class CharViewModel @Inject constructor(
         val crit = values[6] as Double
         val dodge = values[7] as Double
         val attributes = values[8] as CharAttributes?
+        val availablePoints = values[9] as Long
 
         val levelProgress = getLevelProgress(levelInfo)
         val attributesInfo = getAttributesInfo(attributes)
@@ -78,7 +84,8 @@ class CharViewModel @Inject constructor(
                 criticalChance = NumberFormatter.formatPercentage(crit),
                 dodgeChance = NumberFormatter.formatPercentage(dodge)
             ),
-            attributesInfo = attributesInfo
+            attributesInfo = attributesInfo,
+            availablePoints = availablePoints
         )
     }.stateIn(
         scope = viewModelScope,
@@ -96,6 +103,12 @@ class CharViewModel @Inject constructor(
 
     fun onDismissErrorDialog() {
         _errorMessage.value = null
+    }
+
+    fun onIncrementAttribute(identifier: CharAttributes.AttributeIdentifier) {
+        launch {
+            incrementAttributeUseCase(identifier)
+        }
     }
 
     private fun getLevelProgress(levelInfo: CharLevelInfo): Float {

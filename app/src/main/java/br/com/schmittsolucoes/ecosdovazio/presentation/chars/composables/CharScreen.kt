@@ -10,14 +10,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -46,14 +52,16 @@ fun CharScreen(
 
     CharScreen(
         state = state,
-        onDismissErrorDialog = viewModel::onDismissErrorDialog
+        onDismissErrorDialog = viewModel::onDismissErrorDialog,
+        onIncrementAttribute = viewModel::onIncrementAttribute
     )
 }
 
 @Composable
 fun CharScreen(
     state: CharUIState = CharUIState(),
-    onDismissErrorDialog: () -> Unit = {}
+    onDismissErrorDialog: () -> Unit = {},
+    onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
 ) {
     Scaffold { paddingValues ->
         val scrollState = rememberScrollState()
@@ -80,7 +88,11 @@ fun CharScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             state.attributesInfo?.let { attributesInfo ->
-                CharAttributes(attributes = attributesInfo)
+                CharAttributes(
+                    attributes = attributesInfo,
+                    availablePoints = state.availablePoints,
+                    onIncrementAttribute = onIncrementAttribute
+                )
             }
 
             state.errorMessage?.let { message ->
@@ -210,7 +222,9 @@ fun CharStatus(
 
 @Composable
 fun CharAttributes(
-    attributes: List<CharAttributesUIModel>
+    attributes: List<CharAttributesUIModel>,
+    availablePoints: Long = 0,
+    onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -224,6 +238,17 @@ fun CharAttributes(
             )
         )
 
+        if (availablePoints > 0) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = stringResource(R.string.char_available_points, availablePoints),
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            )
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
 
         Column(
@@ -231,7 +256,11 @@ fun CharAttributes(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             attributes.forEach { attribute ->
-                AttributeItem(attribute = attribute)
+                AttributeItem(
+                    attribute = attribute,
+                    showIncrementButton = availablePoints > 0,
+                    onIncrement = { onIncrementAttribute(attribute.identifier) }
+                )
             }
         }
     }
@@ -239,34 +268,52 @@ fun CharAttributes(
 
 @Composable
 private fun AttributeItem(
-    attribute: CharAttributesUIModel
+    attribute: CharAttributesUIModel,
+    showIncrementButton: Boolean = false,
+    onIncrement: () -> Unit = {}
 ) {
-    Column(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalAlignment = Alignment.Bottom
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = stringResource(getAttributeLabel(attribute.identifier)),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(getAttributeLabel(attribute.identifier)),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontFamily = FontFamily.Serif
+                    )
                 )
-            )
-            Text(
-                text = attribute.totalValue,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
+                Text(
+                    text = attribute.totalValue,
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontFamily = FontFamily.Serif
+                    )
                 )
-            )
+            }
+
+            AttributeProgressBar(progress = { attribute.progress })
         }
-        AttributeProgressBar(
-            progress = { attribute.progress }
-        )
+
+        if (showIncrementButton) {
+            Spacer(modifier = Modifier.size(8.dp))
+
+            SmallFloatingActionButton(onClick = onIncrement) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                )
+            }
+        }
     }
 }
 

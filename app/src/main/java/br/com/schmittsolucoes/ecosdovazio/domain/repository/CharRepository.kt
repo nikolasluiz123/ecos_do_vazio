@@ -27,4 +27,5 @@ interface CharRepository {
     fun getCharLevelInfoData(charId: String, nextLevelExperience: Long): Flow<CharLevelInfo>
     fun getCharAttributesData(charId: String, maxAttributeValue: Long): Flow<CharAttributes>
     suspend fun getById(id: String): Char
+    suspend fun update(char: Char)
 }

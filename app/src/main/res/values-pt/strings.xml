@@ -50,4 +50,5 @@
     <string name="char_attribute_magic_resistance">Resistência Mágica</string>
     <string name="char_attribute_vitality">Vitalidade</string>
     <string name="char_attribute_agility">Agilidade</string>
+    <string name="char_available_points">Você possui %s pontos de atributos para distribuir</string>
 </resources>

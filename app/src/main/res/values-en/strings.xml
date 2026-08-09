@@ -50,4 +50,5 @@
     <string name="char_attribute_magic_resistance">Magic Resistance</string>
     <string name="char_attribute_vitality">Vitality</string>
     <string name="char_attribute_agility">Agility</string>
+    <string name="char_available_points">You have %s attribute points to distribute</string>
 </resources>

@@ -75,4 +75,8 @@ class CharRepositoryImpl @Inject constructor(
     override suspend fun getById(id: String): Char {
         return charLocalDataSource.getById(id).toDomain()
     }
+
+    override suspend fun update(char: Char) {
+        charLocalDataSource.update(listOf(char.toEntity()))
+    }
 }

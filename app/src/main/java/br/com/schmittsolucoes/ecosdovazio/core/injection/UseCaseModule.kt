@@ -24,6 +24,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoU
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
@@ -201,6 +202,17 @@ object UseCaseModule {
         userRepository: UserRepository
     ): GetAvailableAttributesUseCase = GetAvailableAttributesUseCase(
         getPointsCountByLevelUseCase = getPointsCountByLevelUseCase,
+        charRepository = charRepository,
+        preferencesRepository = preferencesRepository,
+        userRepository = userRepository
+    )
+
+    @Provides
+    fun provideIncrementAttributeUseCase(
+        charRepository: CharRepository,
+        preferencesRepository: PreferencesRepository,
+        userRepository: UserRepository
+    ): IncrementAttributeUseCase = IncrementAttributeUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository
