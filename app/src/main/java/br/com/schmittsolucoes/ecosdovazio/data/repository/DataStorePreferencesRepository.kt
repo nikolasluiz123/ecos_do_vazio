@@ -1,7 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository
 
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.preferences.PreferencesLocalDataSource
-import br.com.schmittsolucoes.ecosdovazio.data.model.UserPreferences
+import br.com.schmittsolucoes.ecosdovazio.domain.model.UserPreferences
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

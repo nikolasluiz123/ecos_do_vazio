@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.data.model
+package br.com.schmittsolucoes.ecosdovazio.domain.model
 
 import kotlinx.serialization.Serializable
 

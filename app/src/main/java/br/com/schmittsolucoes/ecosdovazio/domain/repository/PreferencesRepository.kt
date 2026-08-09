@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
-import br.com.schmittsolucoes.ecosdovazio.data.model.UserPreferences
+import br.com.schmittsolucoes.ecosdovazio.domain.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
