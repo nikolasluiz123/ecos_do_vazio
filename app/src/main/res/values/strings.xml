@@ -236,4 +236,7 @@
     <string name="threatening_roar_skill_description">A roar that improves ally performance or intimidates adversaries.</string>
     <string name="boss_strike_skill_name">Boss Strike</string>
     <string name="boss_strike_skill_description">The creature\'s final and most fatal attack.</string>
+
+    <string name="history_phase_status_finished">Finished</string>
+    <string name="history_phase_status_current">Current</string>
 </resources>

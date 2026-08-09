@@ -151,3 +151,7 @@ val TopBarSubtitle: Color
 @get:Composable
 val TopBarIcons: Color
     get() = if (isSystemInDarkTheme()) topBarIconsDark else topBarIconsLight
+
+@get:Composable
+val PhaseCardBorderColor: Color
+    get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight

@@ -236,4 +236,7 @@
     <string name="threatening_roar_skill_description">Um rugido que melhora o desempenho de aliados ou intimida adversários.</string>
     <string name="boss_strike_skill_name">Golpe do Chefe</string>
     <string name="boss_strike_skill_description">O ataque final e mais fatal da criatura.</string>
+
+    <string name="history_phase_status_finished">Concluído</string>
+    <string name="history_phase_status_current">Atual</string>
 </resources>

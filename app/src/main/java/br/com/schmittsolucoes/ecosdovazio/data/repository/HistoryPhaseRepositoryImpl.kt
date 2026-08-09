@@ -3,9 +3,14 @@ package br.com.schmittsolucoes.ecosdovazio.data.repository
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseMobLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HistoryPhaseRepositoryImpl @Inject constructor(
@@ -26,5 +31,15 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
 
         historyPhaseLocalDataSource.upsert(phaseEntities)
         historyPhaseMobLocalDataSource.upsert(mobEntities)
+    }
+
+    override fun getPhases(charId: String, languageTag: String): Flow<List<CharHistoryPhase>> {
+        return historyPhaseLocalDataSource.getPhases(charId, languageTag).map { list ->
+            list.map { it.toDomain("") }
+        }
+    }
+
+    override suspend fun getMobCategoryCountsPerPhase(): List<PhaseMobCategoryCount> {
+        return historyPhaseMobLocalDataSource.getMobCategoryCountsPerPhase().map { it.toDomain() }
     }
 }

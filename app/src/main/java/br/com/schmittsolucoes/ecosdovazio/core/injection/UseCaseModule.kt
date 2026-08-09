@@ -40,6 +40,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.crea
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateGuardianSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateWarriorClassUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.history.InitializeHistoryPhasesUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.InitializeMobsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateCaveOrcMobUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateGoblinHealerMobUseCase
@@ -226,6 +227,19 @@ object UseCaseModule {
             identifierProvider = identifierProvider
         )
     }
+
+    @Provides
+    fun provideHistoryPhasesQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        preferencesRepository: PreferencesRepository,
+        userRepository: UserRepository,
+        languageProvider: LanguageProvider
+    ): HistoryPhasesQueryUseCase = HistoryPhasesQueryUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        preferencesRepository = preferencesRepository,
+        userRepository = userRepository,
+        languageProvider = languageProvider
+    )
 
     @Provides
     fun provideClassesQueryUseCase(
