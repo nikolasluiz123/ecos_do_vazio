@@ -35,7 +35,7 @@ fun AppNavHost(
         )
 
         homeScreen()
-        charScreen()
+        charScreen(windowSizeClass = windowSizeClass)
         historyScreen()
     }
 }

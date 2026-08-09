@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,8 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,12 +50,14 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
 @Composable
 fun CharScreen(
-    viewModel: CharViewModel
+    viewModel: CharViewModel,
+    windowSizeClass: WindowSizeClass
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     CharScreen(
         state = state,
+        windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
         onIncrementAttribute = viewModel::onIncrementAttribute
     )
@@ -60,6 +66,7 @@ fun CharScreen(
 @Composable
 fun CharScreen(
     state: CharUIState = CharUIState(),
+    windowSizeClass: WindowSizeClass,
     onDismissErrorDialog: () -> Unit = {},
     onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
 ) {
@@ -82,7 +89,10 @@ fun CharScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             state.statusInfo?.let { statusInfo ->
-                CharStatus(statusInfo = statusInfo)
+                CharStatus(
+                    statusInfo = statusInfo,
+                    windowSizeClass = windowSizeClass
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -144,7 +154,8 @@ fun CharLevelInfo(
 
 @Composable
 fun CharStatus(
-    statusInfo: CharStatusUIModel
+    statusInfo: CharStatusUIModel,
+    windowSizeClass: WindowSizeClass
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -160,63 +171,45 @@ fun CharStatus(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Column(
+        val widthSizeClass = windowSizeClass.widthSizeClass
+
+        val statusItems = remember(statusInfo) {
+            listOf(
+                R.string.char_status_hp to statusInfo.hp,
+                R.string.char_status_damage to statusInfo.baseDamage,
+                R.string.char_status_phys_res to statusInfo.physicalResistance,
+                R.string.char_status_mag_res to statusInfo.magicResistance,
+                R.string.char_status_crit to statusInfo.criticalChance,
+                R.string.char_status_dodge to statusInfo.dodgeChance,
+            )
+        }
+
+        FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .border(1.dp, HeroButtonStrokeColor, RoundedCornerShape(8.dp))
                 .padding(16.dp),
+            maxItemsInEachRow = getMaxItemsEachRow(widthSizeClass),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            statusItems.forEach { (labelRes, value) ->
                 StatusItem(
-                    label = stringResource(R.string.char_status_hp),
-                    value = statusInfo.hp,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusItem(
-                    label = stringResource(R.string.char_status_damage),
-                    value = statusInfo.baseDamage,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                StatusItem(
-                    label = stringResource(R.string.char_status_phys_res),
-                    value = statusInfo.physicalResistance,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusItem(
-                    label = stringResource(R.string.char_status_mag_res),
-                    value = statusInfo.magicResistance,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                StatusItem(
-                    label = stringResource(R.string.char_status_crit),
-                    value = statusInfo.criticalChance,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusItem(
-                    label = stringResource(R.string.char_status_dodge),
-                    value = statusInfo.dodgeChance,
+                    label = stringResource(labelRes),
+                    value = value,
                     modifier = Modifier.weight(1f)
                 )
             }
         }
+    }
+}
+
+private fun getMaxItemsEachRow(widthSizeClass: WindowWidthSizeClass): Int {
+    return when (widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 2
+        else -> 3
     }
 }
 
