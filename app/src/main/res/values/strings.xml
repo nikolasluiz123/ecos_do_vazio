@@ -10,6 +10,7 @@
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processing</string>
     <string name="settings_label">Settings</string>
+    <string name="logout_label">Logout</string>
 
     <string name="warrior_class_name">Warrior</string>
     <string name="warrior_class_description">Melee combat specialist, acting on the front line equipped with heavy armor. The protection level and playstyle vary according to the chosen path.</string>

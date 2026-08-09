@@ -24,9 +24,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -58,9 +61,11 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.CharRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.navigateToChar
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.navigateToCharSelection
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.LoadingOverlay
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.HistoryRoute
@@ -106,11 +111,22 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val windowSizeClass = calculateWindowSizeClass(this)
 
+                    LaunchedEffect(Unit) {
+                        viewModel.logoutEvent.collect {
+                            navController.navigateToCharSelection(
+                                navOptions = navOptions {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            )
+                        }
+                    }
+
                     Box(modifier = Modifier.fillMaxSize()) {
                         App(
                             uiState = uiState,
                             navController = navController,
                             snackbarHostState = snackbarHostState,
+                            onLogout = viewModel::logout
                         ) {
                             if (!uiState.isInitializing) {
                                 AppNavHost(
@@ -144,6 +160,7 @@ fun App(
     uiState: AppUIState,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onLogout: () -> Unit = { },
     content: @Composable () -> Unit = { }
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -159,7 +176,10 @@ fun App(
                 enter = BarEnterTransition,
                 exit = BarExitTransition
             ) {
-                AppTopBar(uiState = uiState)
+                AppTopBar(
+                    uiState = uiState,
+                    onLogout = onLogout
+                )
             }
         },
         bottomBar = {
@@ -232,7 +252,8 @@ private enum class BottomBarItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppTopBar(
-    uiState: AppUIState
+    uiState: AppUIState,
+    onLogout: () -> Unit = { }
 ) {
     Surface(
         shadowElevation = 4.dp,
@@ -246,16 +267,25 @@ private fun AppTopBar(
                 navigationIcon = {
                     CharProfileImage(
                         imageRes = uiState.profileImageRes,
-                        modifier = Modifier.padding(start = 16.dp, end = 12.dp)
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                     )
                 },
                 actions = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_settings_20dp),
-                        contentDescription = stringResource(R.string.settings_label),
-                        modifier = Modifier.padding(end = 16.dp),
-                        tint = TopBarIcons
-                    )
+                    IconButton(onClick = onLogout) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                            contentDescription = stringResource(R.string.logout_label),
+                            tint = TopBarIcons
+                        )
+                    }
+
+                    IconButton(onClick = { }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_settings_20dp),
+                            contentDescription = stringResource(R.string.settings_label),
+                            tint = TopBarIcons
+                        )
+                    }
                 }
             )
         }
