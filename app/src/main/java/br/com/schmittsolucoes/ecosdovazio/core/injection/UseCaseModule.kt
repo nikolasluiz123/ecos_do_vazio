@@ -1,17 +1,19 @@
 package br.com.schmittsolucoes.ecosdovazio.core.injection
 
-import android.content.Context
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.IdentifierProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.ClassRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.LanguageRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.MobRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.SkillRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.repository.SpecializationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
@@ -26,12 +28,30 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalRe
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.InitializeClassesUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.archer.CreateArcherClassUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.archer.CreateBeastMasterSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.archer.CreateEngineerSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.mage.CreateFireMageSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.mage.CreateMageClassUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.mage.CreateWaterMageSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateGladiatorSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateGuardianSpecializationUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateWarriorClassUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.history.InitializeHistoryPhasesUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.InitializeMobsUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateCaveOrcMobUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateGoblinHealerMobUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateGoblinShamanMobUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateGoblinWarriorMobUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.translations.InitializeTranslationsUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.user.InitializeUserUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -39,25 +59,171 @@ import dagger.hilt.components.SingletonComponent
 object UseCaseModule {
 
     @Provides
-    fun provideInitializeDatabaseUseCase(
-        @ApplicationContext context: Context,
+    fun provideInitializeTranslationsUseCase(
         languageRepository: LanguageRepository,
         translationRepository: TranslationRepository,
-        userRepository: UserRepository,
+        languageProvider: LanguageProvider
+    ): InitializeTranslationsUseCase {
+        return InitializeTranslationsUseCase(
+            languageRepository = languageRepository,
+            translationRepository = translationRepository,
+            languageProvider = languageProvider
+        )
+    }
+
+    @Provides
+    fun provideInitializeClassesUseCase(
         classRepository: ClassRepository,
-        languageProvider: LanguageProvider,
-        identifierProvider: IdentifierProvider,
+        specializationRepository: SpecializationRepository,
+        skillRepository: SkillRepository,
+        createWarriorClassUseCase: CreateWarriorClassUseCase,
+        createGuardianSpecializationUseCase: CreateGuardianSpecializationUseCase,
+        createGladiatorSpecializationUseCase: CreateGladiatorSpecializationUseCase,
+        createMageClassUseCase: CreateMageClassUseCase,
+        createFireMageSpecializationUseCase: CreateFireMageSpecializationUseCase,
+        createWaterMageSpecializationUseCase: CreateWaterMageSpecializationUseCase,
+        createArcherClassUseCase: CreateArcherClassUseCase,
+        createEngineerSpecializationUseCase: CreateEngineerSpecializationUseCase,
+        createBeastMasterSpecializationUseCase: CreateBeastMasterSpecializationUseCase,
+    ): InitializeClassesUseCase {
+        return InitializeClassesUseCase(
+            classRepository = classRepository,
+            specializationRepository = specializationRepository,
+            skillRepository = skillRepository,
+            createWarriorClassUseCase = createWarriorClassUseCase,
+            createGuardianSpecializationUseCase = createGuardianSpecializationUseCase,
+            createGladiatorSpecializationUseCase = createGladiatorSpecializationUseCase,
+            createMageClassUseCase = createMageClassUseCase,
+            createFireMageSpecializationUseCase = createFireMageSpecializationUseCase,
+            createWaterMageSpecializationUseCase = createWaterMageSpecializationUseCase,
+            createArcherClassUseCase = createArcherClassUseCase,
+            createEngineerSpecializationUseCase = createEngineerSpecializationUseCase,
+            createBeastMasterSpecializationUseCase = createBeastMasterSpecializationUseCase,
+        )
+    }
+
+    @Provides
+    fun provideCreateWarriorClassUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateWarriorClassUseCase = CreateWarriorClassUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateGuardianSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateGuardianSpecializationUseCase = CreateGuardianSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateGladiatorSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateGladiatorSpecializationUseCase = CreateGladiatorSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateMageClassUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateMageClassUseCase = CreateMageClassUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateFireMageSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateFireMageSpecializationUseCase = CreateFireMageSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateWaterMageSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateWaterMageSpecializationUseCase = CreateWaterMageSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateArcherClassUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateArcherClassUseCase = CreateArcherClassUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateEngineerSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateEngineerSpecializationUseCase = CreateEngineerSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateBeastMasterSpecializationUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateBeastMasterSpecializationUseCase = CreateBeastMasterSpecializationUseCase(identifierProvider)
+
+    @Provides
+    fun provideInitializeMobsUseCase(
+        mobRepository: MobRepository,
+        skillRepository: SkillRepository,
+        createGoblinWarriorMobUseCase: CreateGoblinWarriorMobUseCase,
+        createGoblinShamanMobUseCase: CreateGoblinShamanMobUseCase,
+        createGoblinHealerMobUseCase: CreateGoblinHealerMobUseCase,
+        createCaveOrcMobUseCase: CreateCaveOrcMobUseCase
+    ): InitializeMobsUseCase {
+        return InitializeMobsUseCase(
+            mobRepository = mobRepository,
+            skillRepository = skillRepository,
+            createGoblinWarriorMobUseCase = createGoblinWarriorMobUseCase,
+            createGoblinShamanMobUseCase = createGoblinShamanMobUseCase,
+            createGoblinHealerMobUseCase = createGoblinHealerMobUseCase,
+            createCaveOrcMobUseCase = createCaveOrcMobUseCase
+        )
+    }
+
+    @Provides
+    fun provideCreateGoblinWarriorMobUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateGoblinWarriorMobUseCase = CreateGoblinWarriorMobUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateGoblinShamanMobUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateGoblinShamanMobUseCase = CreateGoblinShamanMobUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateGoblinHealerMobUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateGoblinHealerMobUseCase = CreateGoblinHealerMobUseCase(identifierProvider)
+
+    @Provides
+    fun provideCreateCaveOrcMobUseCase(
+        identifierProvider: IdentifierProvider
+    ): CreateCaveOrcMobUseCase = CreateCaveOrcMobUseCase(identifierProvider)
+
+    @Provides
+    fun provideInitializeUserUseCase(
+        userRepository: UserRepository,
+        identifierProvider: IdentifierProvider
+    ): InitializeUserUseCase {
+        return InitializeUserUseCase(
+            userRepository = userRepository,
+            identifierProvider = identifierProvider
+        )
+    }
+
+    @Provides
+    fun provideInitializeDatabaseUseCase(
+        initializeUserUseCase: InitializeUserUseCase,
+        initializeTranslationsUseCase: InitializeTranslationsUseCase,
+        initializeClassesUseCase: InitializeClassesUseCase,
+        initializeMobsUseCase: InitializeMobsUseCase,
+        initializeHistoryPhasesUseCase: InitializeHistoryPhasesUseCase,
         transaction: DatabaseTransaction
     ): InitializeDatabaseUseCase {
         return InitializeDatabaseUseCase(
-            context = context,
-            languageRepository = languageRepository,
-            translationRepository = translationRepository,
-            userRepository = userRepository,
-            classRepository = classRepository,
-            languageProvider = languageProvider,
-            identifierProvider = identifierProvider,
+            initializeUserUseCase = initializeUserUseCase,
+            initializeTranslationsUseCase = initializeTranslationsUseCase,
+            initializeClassesUseCase = initializeClassesUseCase,
+            initializeMobsUseCase = initializeMobsUseCase,
+            initializeHistoryPhasesUseCase = initializeHistoryPhasesUseCase,
             transaction = transaction
+        )
+    }
+
+    @Provides
+    fun provideInitializeHistoryPhasesUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        identifierProvider: IdentifierProvider
+    ): InitializeHistoryPhasesUseCase {
+        return InitializeHistoryPhasesUseCase(
+            historyPhaseRepository = historyPhaseRepository,
+            identifierProvider = identifierProvider
         )
     }
 

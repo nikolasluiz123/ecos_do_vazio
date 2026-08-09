@@ -8,4 +8,8 @@ class RoomDatabaseTransaction(private val db: RoomDatabase): DatabaseTransaction
     override suspend fun <T> run(block: suspend () -> T): T {
         return db.withTransaction(block)
     }
+
+    override fun isInTransaction(): Boolean {
+        return db.inTransaction()
+    }
 }

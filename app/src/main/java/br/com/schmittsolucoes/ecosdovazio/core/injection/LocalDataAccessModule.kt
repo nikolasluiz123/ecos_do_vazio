@@ -9,8 +9,13 @@ import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTran
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.AppDatabase
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.chars.CharLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.classes.ClassLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseInfoLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseMobLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.internacionalization.LanguageLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.internacionalization.TranslationLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.mobs.MobLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.skills.SkillLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.specialization.SpecializationLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.transaction.RoomDatabaseTransaction
@@ -87,5 +92,30 @@ object LocalDataAccessModule {
     @Provides
     fun provideTranslationLocalDataSource(db: AppDatabase): TranslationLocalDataSource {
         return db.translationDao()
+    }
+
+    @Provides
+    fun provideMobLocalDataSource(db: AppDatabase): MobLocalDataSource {
+        return db.mobDao()
+    }
+
+    @Provides
+    fun provideHistoryPhaseLocalDataSource(db: AppDatabase): HistoryPhaseLocalDataSource {
+        return db.historyPhaseDao()
+    }
+
+    @Provides
+    fun provideHistoryPhaseMobLocalDataSource(db: AppDatabase): HistoryPhaseMobLocalDataSource {
+        return db.historyPhaseMobDao()
+    }
+
+    @Provides
+    fun provideHistoryPhaseInfoLocalDataSource(db: AppDatabase): HistoryPhaseInfoLocalDataSource {
+        return db.historyPhaseInfoDao()
+    }
+
+    @Provides
+    fun provideSkillLocalDataSource(db: AppDatabase): SkillLocalDataSource {
+        return db.skillDao()
     }
 }

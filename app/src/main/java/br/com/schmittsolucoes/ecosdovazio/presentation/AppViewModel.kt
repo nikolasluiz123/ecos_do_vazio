@@ -9,8 +9,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharHeader
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,7 +78,7 @@ class AppViewModel @Inject constructor(
             if (preferences?.selectedCharId != null) {
                 _startDestination.value = MainGraph
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Se falhar, mantemos o startDestination padrão (CharSelectionRoute)
         }
     }
