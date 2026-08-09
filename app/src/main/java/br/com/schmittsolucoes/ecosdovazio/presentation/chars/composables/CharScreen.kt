@@ -101,6 +101,7 @@ fun CharScreen(
                 CharAttributes(
                     attributes = attributesInfo,
                     availablePoints = state.availablePoints,
+                    windowSizeClass = windowSizeClass,
                     onIncrementAttribute = onIncrementAttribute
                 )
             }
@@ -217,6 +218,7 @@ private fun getMaxItemsEachRow(widthSizeClass: WindowWidthSizeClass): Int {
 fun CharAttributes(
     attributes: List<CharAttributesUIModel>,
     availablePoints: Long = 0,
+    windowSizeClass: WindowSizeClass,
     onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
 ) {
     Column(
@@ -244,16 +246,28 @@ fun CharAttributes(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Column(
+        val widthSizeClass = windowSizeClass.widthSizeClass
+        val columns = if (widthSizeClass == WindowWidthSizeClass.Expanded) 2 else 1
+        val itemsInLastRow = attributes.size % columns
+        val spacersNeeded = if (itemsInLastRow > 0) columns - itemsInLastRow else 0
+
+        FlowRow(
             modifier = Modifier.fillMaxWidth(),
+            maxItemsInEachRow = columns,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             attributes.forEach { attribute ->
                 AttributeItem(
                     attribute = attribute,
+                    modifier = Modifier.weight(1f),
                     showIncrementButton = availablePoints > 0,
                     onIncrement = { onIncrementAttribute(attribute.identifier) }
                 )
+            }
+
+            repeat(spacersNeeded) {
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
@@ -262,11 +276,12 @@ fun CharAttributes(
 @Composable
 private fun AttributeItem(
     attribute: CharAttributesUIModel,
+    modifier: Modifier = Modifier,
     showIncrementButton: Boolean = false,
     onIncrement: () -> Unit = {}
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom
     ) {
         Column(
