@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.chars.CharRoomDAO
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.classes.ClassRoomDAO
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseInfoRoomDAO
@@ -13,6 +14,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.skills.SkillRoomDAO
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.specialization.SpecializationRoomDAO
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.user.UserRoomDAO
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.converter.Converters
 import br.com.schmittsolucoes.ecosdovazio.data.model.CharEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.ClassEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseEntity
@@ -27,7 +29,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.Transl
 import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationIdentifierEntity
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         UserEntity::class, CharEntity::class, ClassEntity::class, SpecializationEntity::class,
         LanguageEntity::class, TranslationEntity::class, TranslationIdentifierEntity::class,
@@ -36,6 +38,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.Transl
     ],
     exportSchema = true
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserRoomDAO
     abstract fun charDao(): CharRoomDAO

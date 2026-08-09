@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.Instant
 
 @Entity(
     tableName = "history_phase_info",
@@ -33,7 +34,7 @@ data class HistoryPhaseInfoEntity(
     val phaseId: String,
 
     @ColumnInfo("finished_at")
-    val finishedAt: Long? = null,
+    val finishedAt: Instant? = null,
 
     @ColumnInfo("try_number")
     val tryNumber: Long,
