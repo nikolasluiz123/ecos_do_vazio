@@ -7,6 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,14 +53,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.CharRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.navigateToChar
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.ClassSelectionRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.LoadingOverlay
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.HistoryRoute
@@ -138,31 +147,29 @@ fun App(
     content: @Composable () -> Unit = { }
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-    val showTopBar = currentRoute != null &&
-            !currentRoute.contains(CharSelectionRoute::class.qualifiedName.orEmpty()) &&
-            !currentRoute.contains(ClassSelectionRoute::class.qualifiedName.orEmpty())
-
-    val showBottomBar = currentRoute != null && (
-            currentRoute.contains(HomeRoute::class.qualifiedName.orEmpty()) ||
-                    currentRoute.contains(CharRoute::class.qualifiedName.orEmpty()) ||
-                    currentRoute.contains(HistoryRoute::class.qualifiedName.orEmpty())
-            )
+    val currentDestination = navBackStackEntry?.destination
+    val isMainGraph = currentDestination?.hierarchy?.any { it.hasRoute<MainGraph>() }
+        ?: (uiState.startDestination == MainGraph)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppTopBar(
-                uiState = uiState,
-                isVisible = showTopBar
-            )
+            AnimatedVisibility(
+                visible = isMainGraph,
+                enter = BarEnterTransition,
+                exit = BarExitTransition
+            ) {
+                AppTopBar(uiState = uiState)
+            }
         },
         bottomBar = {
-            AppBottomBar(
-                navController = navController,
-                isVisible = showBottomBar
-            )
+            AnimatedVisibility(
+                visible = isMainGraph,
+                enter = BarEnterTransition,
+                exit = BarExitTransition
+            ) {
+                AppBottomBar(navController = navController)
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
@@ -179,38 +186,35 @@ fun App(
 
 @Composable
 private fun AppBottomBar(
-    navController: NavHostController,
-    isVisible: Boolean
+    navController: NavHostController
 ) {
-    if (isVisible) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
-        NavigationBar(
-            tonalElevation = 8.dp
-        ) {
-            BottomBarItem.entries.forEach { item ->
-                val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
-                NavigationBarItem(
-                    icon = {
-                        Icon(
-                            painter = painterResource(item.icon),
-                            contentDescription = stringResource(item.label)
-                        )
-                    },
-                    label = { Text(stringResource(item.label)) },
-                    selected = selected,
-                    onClick = {
-                        if (!selected) {
-                            when (item) {
-                                BottomBarItem.Home -> navController.navigateToHome()
-                                BottomBarItem.Char -> navController.navigateToChar()
-                                BottomBarItem.History -> navController.navigateToHistory()
-                            }
+    NavigationBar(
+        tonalElevation = 8.dp
+    ) {
+        BottomBarItem.entries.forEach { item ->
+            val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(item.icon),
+                        contentDescription = stringResource(item.label)
+                    )
+                },
+                label = { Text(stringResource(item.label)) },
+                selected = selected,
+                onClick = {
+                    if (!selected) {
+                        when (item) {
+                            BottomBarItem.Home -> navController.navigateToHome()
+                            BottomBarItem.Char -> navController.navigateToChar()
+                            BottomBarItem.History -> navController.navigateToHistory()
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -228,35 +232,32 @@ private enum class BottomBarItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppTopBar(
-    uiState: AppUIState,
-    isVisible: Boolean
+    uiState: AppUIState
 ) {
-    if (isVisible) {
-        Surface(
-            shadowElevation = 4.dp,
-            tonalElevation = 8.dp
-        ) {
-            Column {
-                TopAppBar(
-                    title = {
-                        TopBarCustomTitle(uiState)
-                    },
-                    navigationIcon = {
-                        CharProfileImage(
-                            imageRes = uiState.profileImageRes,
-                            modifier = Modifier.padding(start = 16.dp, end = 12.dp)
-                        )
-                    },
-                    actions = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_settings_20dp),
-                            contentDescription = stringResource(R.string.settings_label),
-                            modifier = Modifier.padding(end = 16.dp),
-                            tint = TopBarIcons
-                        )
-                    }
-                )
-            }
+    Surface(
+        shadowElevation = 4.dp,
+        tonalElevation = 8.dp
+    ) {
+        Column {
+            TopAppBar(
+                title = {
+                    TopBarCustomTitle(uiState)
+                },
+                navigationIcon = {
+                    CharProfileImage(
+                        imageRes = uiState.profileImageRes,
+                        modifier = Modifier.padding(start = 16.dp, end = 12.dp)
+                    )
+                },
+                actions = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_settings_20dp),
+                        contentDescription = stringResource(R.string.settings_label),
+                        modifier = Modifier.padding(end = 16.dp),
+                        tint = TopBarIcons
+                    )
+                }
+            )
         }
     }
 }
@@ -316,3 +317,13 @@ private fun CharProfileImage(
         )
     }
 }
+
+private const val BAR_ANIMATION_DURATION = 600
+
+private val BarEnterTransition: EnterTransition =
+    fadeIn(animationSpec = tween(BAR_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            expandVertically(animationSpec = tween(BAR_ANIMATION_DURATION, easing = FastOutSlowInEasing))
+
+private val BarExitTransition: ExitTransition =
+    fadeOut(animationSpec = tween(BAR_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            shrinkVertically(animationSpec = tween(BAR_ANIMATION_DURATION, easing = FastOutSlowInEasing))

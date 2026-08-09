@@ -12,7 +12,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
-import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -77,7 +76,7 @@ class AppViewModel @Inject constructor(
             val preferences = preferencesRepository.getUserPreferences(user.id).firstOrNull()
 
             if (preferences?.selectedCharId != null) {
-                _startDestination.value = HomeRoute
+                _startDestination.value = MainGraph
             }
         } catch (e: Exception) {
             // Se falhar, mantemos o startDestination padrão (CharSelectionRoute)
