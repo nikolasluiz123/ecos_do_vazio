@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobType
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.InitializeMobsResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.InitializeMobsResult.InitializedMob
@@ -21,6 +22,23 @@ class InitializeMobsUseCase(
     private val createCaveOrcMobUseCase: CreateCaveOrcMobUseCase
 ) {
     suspend fun executeInternal(): InitializeMobsResult {
+        if (mobRepository.getExistsMob()) {
+            val allMobs = mobRepository.getAllMobs()
+
+            val initializedMobs = allMobs.mapNotNull { mob ->
+                val type = when (mob.nameTranslationId) {
+                    TranslationIdentifier.GOBLIN_WARRIOR_MOB_NAME -> MobType.GOBLIN_WARRIOR
+                    TranslationIdentifier.GOBLIN_SHAMAN_MOB_NAME -> MobType.GOBLIN_SHAMAN
+                    TranslationIdentifier.GOBLIN_HEALER_MOB_NAME -> MobType.GOBLIN_HEALER
+                    TranslationIdentifier.CAVE_ORC_MOB_NAME -> MobType.CAVE_ORC
+                    else -> null
+                }
+                type?.let { InitializedMob(mob.id, it) }
+            }
+
+            return InitializeMobsResult(initializedMobs)
+        }
+
         val mobs = mutableListOf<Mob>()
         val skills = mutableListOf<Skill>()
         val initializedMobs = mutableListOf<InitializedMob>()

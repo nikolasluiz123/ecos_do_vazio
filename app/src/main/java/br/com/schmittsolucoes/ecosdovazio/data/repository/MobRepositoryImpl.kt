@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository
 
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.mobs.MobLocalDataSource
+import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.MobRepository
@@ -12,5 +13,13 @@ class MobRepositoryImpl @Inject constructor(
     override suspend fun save(mobs: List<Mob>) {
         val mobEntities = mobs.map { it.toEntity() }
         mobLocalDataSource.upsert(mobEntities)
+    }
+
+    override suspend fun getExistsMob(): Boolean {
+        return mobLocalDataSource.getExistsMob()
+    }
+
+    override suspend fun getAllMobs(): List<Mob> {
+        return mobLocalDataSource.getAllMobs().map { it.toDomain() }
     }
 }

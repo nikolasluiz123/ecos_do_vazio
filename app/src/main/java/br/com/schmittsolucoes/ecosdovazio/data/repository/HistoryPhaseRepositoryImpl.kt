@@ -42,4 +42,8 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
     override suspend fun getMobCategoryCountsPerPhase(): List<PhaseMobCategoryCount> {
         return historyPhaseMobLocalDataSource.getMobCategoryCountsPerPhase().map { it.toDomain() }
     }
+
+    override suspend fun getExistsHistoryPhase(): Boolean {
+        return historyPhaseLocalDataSource.getExistsHistoryPhase()
+    }
 }

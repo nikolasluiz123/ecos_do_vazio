@@ -13,6 +13,10 @@ class InitializeHistoryPhasesUseCase(
     private val identifierProvider: IdentifierProvider
 ) {
     suspend fun executeInternal(mobsResult: InitializeMobsResult) {
+        if (historyPhaseRepository.getExistsHistoryPhase()) {
+            return
+        }
+
         val phases = listOf(
             buildPhase(
                 phaseNumber = 1,

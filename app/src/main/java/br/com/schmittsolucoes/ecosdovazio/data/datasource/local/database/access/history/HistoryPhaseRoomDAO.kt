@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HistoryPhaseRoomDAO : HistoryPhaseLocalDataSource, RoomLocalDataSource<HistoryPhaseEntity> {
 
+    @Query("select exists(select 1 from history_phases limit 1)")
+    override suspend fun getExistsHistoryPhase(): Boolean
+
     @Query("""
         select history_phases.id as phaseId, 
                coalesce(phase_name.translated_text, phase_name_default.translated_text) as phaseName, 

@@ -3,4 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.EntityLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.MobEntity
 
-interface MobLocalDataSource : EntityLocalDataSource<MobEntity>
+interface MobLocalDataSource : EntityLocalDataSource<MobEntity> {
+    suspend fun getExistsMob(): Boolean
+    suspend fun getAllMobs(): List<MobEntity>
+}

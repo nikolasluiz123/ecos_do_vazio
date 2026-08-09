@@ -9,4 +9,5 @@ interface HistoryPhaseRepository {
     suspend fun save(historyPhases: List<HistoryPhase>)
     fun getPhases(charId: String, languageTag: String): Flow<List<CharHistoryPhase>>
     suspend fun getMobCategoryCountsPerPhase(): List<PhaseMobCategoryCount>
+    suspend fun getExistsHistoryPhase(): Boolean
 }
