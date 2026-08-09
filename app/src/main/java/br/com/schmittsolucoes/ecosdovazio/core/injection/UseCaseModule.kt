@@ -74,11 +74,13 @@ object UseCaseModule {
     fun provideCreateNewUserCharUseCase(
         userRepository: UserRepository,
         charRepository: CharRepository,
-        identifierProvider: IdentifierProvider
+        identifierProvider: IdentifierProvider,
+        selectCharUseCase: SelectCharUseCase
     ): CreateNewUserCharUseCase = CreateNewUserCharUseCase(
         userRepository = userRepository,
         charRepository = charRepository,
-        identifierProvider = identifierProvider
+        identifierProvider = identifierProvider,
+        selectCharUseCase = selectCharUseCase
     )
 
     @Provides

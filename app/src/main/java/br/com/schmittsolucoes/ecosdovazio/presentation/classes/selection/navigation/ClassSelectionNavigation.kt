@@ -10,14 +10,16 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSe
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.ClassSelectionScreen
 
 fun NavGraphBuilder.classSelectionScreen(
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
+    onNavigateToHome: () -> Unit
 ) {
     composable<ClassSelectionRoute> {
         val viewModel = hiltViewModel<ClassSelectionViewModel>()
 
         ClassSelectionScreen(
             viewModel = viewModel,
-            windowWidthSizeClass = windowSizeClass.widthSizeClass
+            windowWidthSizeClass = windowSizeClass.widthSizeClass,
+            onNavigateToHome = onNavigateToHome
         )
     }
 }

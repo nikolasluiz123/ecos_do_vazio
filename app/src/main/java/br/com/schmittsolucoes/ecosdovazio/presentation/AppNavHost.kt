@@ -30,7 +30,8 @@ fun AppNavHost(
         )
 
         classSelectionScreen(
-            windowSizeClass = windowSizeClass
+            windowSizeClass = windowSizeClass,
+            onNavigateToHome = navController::navigateToHome
         )
 
         homeScreen()

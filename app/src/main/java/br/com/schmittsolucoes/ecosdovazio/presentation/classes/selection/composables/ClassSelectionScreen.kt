@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,9 +31,18 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 @Composable
 fun ClassSelectionScreen(
     viewModel: ClassSelectionViewModel,
-    windowWidthSizeClass: WindowWidthSizeClass
+    windowWidthSizeClass: WindowWidthSizeClass,
+    onNavigateToHome: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val navigateToHome by viewModel.navigateToHome.collectAsStateWithLifecycle()
+
+    LaunchedEffect(navigateToHome) {
+        if (navigateToHome) {
+            onNavigateToHome()
+            viewModel.onNavigatedToHome()
+        }
+    }
 
     ClassSelectionScreen(
         state = state,

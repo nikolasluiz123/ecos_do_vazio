@@ -5,10 +5,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.provider.IdentifierProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CreateNewUserCharUseCase(
+    private val selectCharUseCase: SelectCharUseCase,
     private val userRepository: UserRepository,
     private val charRepository: CharRepository,
     private val identifierProvider: IdentifierProvider
@@ -43,7 +45,11 @@ class CreateNewUserCharUseCase(
                 userId = user.id
             )
 
-            Result.success(charRepository.insert(char))
+            charRepository.insert(char)
+
+            selectCharUseCase(char.id)
+
+            Result.success(Unit)
         }
 
     companion object {

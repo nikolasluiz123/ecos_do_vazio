@@ -28,11 +28,14 @@ class ClassSelectionViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
     private val createNewUserCharUseCase: CreateNewUserCharUseCase,
     classesQueryUseCase: ClassesQueryUseCase
-): CommonViewModel() {
+) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _selectedClassId = MutableStateFlow<String?>(null)
     private val _charName = MutableStateFlow<String?>(null)
+
+    private val _navigateToHome = MutableStateFlow(false)
+    val navigateToHome: StateFlow<Boolean> = _navigateToHome
 
     private val _classes = classesQueryUseCase().map { list ->
         list.map { mapDomainToUIModel(it) }
@@ -65,8 +68,14 @@ class ClassSelectionViewModel @Inject constructor(
         return when (throwable) {
             is CharException.ClassSelectionRequired -> context.getString(R.string.char_error_class_required)
             is CharException.NameRequired -> context.getString(R.string.char_error_name_required)
-            is CharException.DuplicatedName -> context.getString(R.string.char_error_duplicated_name, throwable.name)
-            is CharException.NameTooLong -> context.getString(R.string.char_error_name_too_long, throwable.maxLength)
+            is CharException.DuplicatedName -> context.getString(
+                R.string.char_error_duplicated_name,
+                throwable.name
+            )
+            is CharException.NameTooLong -> context.getString(
+                R.string.char_error_name_too_long,
+                throwable.maxLength
+            )
             else -> context.getString(R.string.error_unexpected)
         }
     }
@@ -92,10 +101,14 @@ class ClassSelectionViewModel @Inject constructor(
                 charName = _charName.value
             )
 
-            result.onFailure {
-                onShowErrorDialog(getErrorMessageFrom(it))
-            }
+            result
+                .onSuccess { _navigateToHome.value = true }
+                .onFailure { onShowErrorDialog(getErrorMessageFrom(it)) }
         }
+    }
+
+    fun onNavigatedToHome() {
+        _navigateToHome.value = false
     }
 
 }
