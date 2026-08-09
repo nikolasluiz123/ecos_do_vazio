@@ -18,7 +18,7 @@ class GetCharHeaderUseCase @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<CharHeader?> {
         return flowOf(Unit).flatMapLatest {
-            val user = userRepository.getFirstUser()
+            val user = userRepository.getFirstUser() ?: return@flatMapLatest flowOf(null)
 
             preferencesRepository.getUserPreferences(user.id).flatMapLatest { preferences ->
                 preferences?.selectedCharId?.let { charId ->

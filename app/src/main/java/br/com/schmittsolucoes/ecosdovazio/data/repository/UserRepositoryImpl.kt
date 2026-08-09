@@ -18,7 +18,7 @@ class UserRepositoryImpl @Inject constructor(
         return userLocalDataSource.getExistsUser()
     }
 
-    override suspend fun getFirstUser(): User {
-        return userLocalDataSource.getFirstUser().toDomain()
+    override suspend fun getFirstUser(): User? {
+        return userLocalDataSource.getFirstUser()?.toDomain()
     }
 }

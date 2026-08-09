@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
@@ -57,7 +58,10 @@ class CharSelectionViewModel @Inject constructor(
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
-        return context.getString(R.string.error_unexpected)
+        return when (throwable) {
+            is UserException.UserNotFound -> context.getString(R.string.user_error_not_found)
+            else -> context.getString(R.string.error_unexpected)
+        }
     }
 
     override fun onShowErrorDialog(message: String) {

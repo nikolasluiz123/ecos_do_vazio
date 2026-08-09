@@ -10,6 +10,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
@@ -80,7 +81,7 @@ class AppViewModel @Inject constructor(
 
     private suspend fun checkInitialDestination() {
         try {
-            val user = userRepository.getFirstUser()
+            val user = userRepository.getFirstUser() ?: return
             val preferences = preferencesRepository.getUserPreferences(user.id).firstOrNull()
 
             if (preferences?.selectedCharId != null) {
@@ -92,7 +93,10 @@ class AppViewModel @Inject constructor(
     }
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
-        return application.getString(R.string.error_unexpected)
+        return when (throwable) {
+            is UserException.UserNotFound -> application.getString(R.string.user_error_not_found)
+            else -> application.getString(R.string.error_unexpected)
+        }
     }
 
     override fun onShowErrorDialog(message: String) {

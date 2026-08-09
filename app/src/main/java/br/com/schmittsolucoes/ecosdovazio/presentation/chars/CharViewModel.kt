@@ -16,6 +16,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoU
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
@@ -94,7 +95,10 @@ class CharViewModel @Inject constructor(
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
-        return context.getString(R.string.error_unexpected)
+        return when (throwable) {
+            is UserException.UserNotFound -> context.getString(R.string.user_error_not_found)
+            else -> context.getString(R.string.error_unexpected)
+        }
     }
 
     override fun onShowErrorDialog(message: String) {

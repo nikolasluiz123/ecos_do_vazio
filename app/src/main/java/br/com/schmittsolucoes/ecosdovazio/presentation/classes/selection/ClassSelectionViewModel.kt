@@ -8,6 +8,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
@@ -76,6 +77,7 @@ class ClassSelectionViewModel @Inject constructor(
                 R.string.char_error_name_too_long,
                 throwable.maxLength
             )
+            is UserException.UserNotFound -> context.getString(R.string.user_error_not_found)
             else -> context.getString(R.string.error_unexpected)
         }
     }

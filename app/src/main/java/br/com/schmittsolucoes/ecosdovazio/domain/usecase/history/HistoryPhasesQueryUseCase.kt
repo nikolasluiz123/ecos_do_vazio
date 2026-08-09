@@ -21,7 +21,13 @@ class HistoryPhasesQueryUseCase(
     private val languageProvider: LanguageProvider
 ) {
     operator fun invoke(): Flow<List<CharHistoryPhase>> = flow {
-        val userId = userRepository.getFirstUser().id
+        val userId = userRepository.getFirstUser()?.id
+
+        if (userId.isNullOrBlank()) {
+            emit(emptyList())
+            return@flow
+        }
+
         val charId = preferencesRepository.getUserPreferences(userId).first()?.selectedCharId
 
         if (charId.isNullOrBlank()) {

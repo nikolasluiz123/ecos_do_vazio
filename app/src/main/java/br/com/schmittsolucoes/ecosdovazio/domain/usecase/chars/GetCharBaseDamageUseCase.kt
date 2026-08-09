@@ -17,7 +17,13 @@ class GetCharBaseDamageUseCase(
     private val userRepository: UserRepository
 ) {
     operator fun invoke(): Flow<Long> = flow {
-        val userId = userRepository.getFirstUser().id
+        val userId = userRepository.getFirstUser()?.id
+
+        if (userId.isNullOrBlank()) {
+            emit(0)
+            return@flow
+        }
+
         val charId = preferencesRepository.getUserPreferences(userId).first()?.selectedCharId
 
         if (charId.isNullOrBlank()) {

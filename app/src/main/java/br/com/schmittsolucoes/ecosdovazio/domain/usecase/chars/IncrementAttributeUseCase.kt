@@ -4,6 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import kotlinx.coroutines.flow.first
 
 class IncrementAttributeUseCase(
@@ -12,7 +13,7 @@ class IncrementAttributeUseCase(
     private val userRepository: UserRepository,
 ) {
     suspend operator fun invoke(attributeIdentifier: CharAttributes.AttributeIdentifier) {
-        val userId = userRepository.getFirstUser().id
+        val userId = userRepository.getFirstUser()?.id ?: throw UserException.UserNotFound()
         val charId = preferencesRepository.getUserPreferences(userId).first()?.selectedCharId ?: return
 
         val char = charRepository.getById(charId)

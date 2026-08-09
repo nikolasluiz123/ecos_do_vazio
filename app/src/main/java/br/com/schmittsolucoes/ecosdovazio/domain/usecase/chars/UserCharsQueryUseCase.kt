@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -13,7 +14,7 @@ class UserCharsQueryUseCase(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): Flow<List<CharSelection>> = withContext(Dispatchers.IO) {
-        val userId = userRepository.getFirstUser().id
+        val userId = userRepository.getFirstUser()?.id ?: return@withContext flowOf(emptyList<CharSelection>())
 
         charRepository.getUserChars(userId).map { charsList ->
             if (charsList.size < MAX_CHARS_COUNT) {

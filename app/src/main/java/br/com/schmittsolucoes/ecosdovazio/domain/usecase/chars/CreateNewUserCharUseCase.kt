@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.provider.IdentifierProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,7 +19,7 @@ class CreateNewUserCharUseCase(
 
     suspend operator fun invoke(classId: String?, charName: String?): Result<Unit> =
         withContext(Dispatchers.IO) {
-            val user = userRepository.getFirstUser()
+            val user = userRepository.getFirstUser() ?: return@withContext Result.failure(UserException.UserNotFound())
 
             if (classId == null) {
                 return@withContext Result.failure(CharException.ClassSelectionRequired())

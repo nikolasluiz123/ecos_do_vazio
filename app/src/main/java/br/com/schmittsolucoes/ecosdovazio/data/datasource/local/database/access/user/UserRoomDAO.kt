@@ -12,5 +12,5 @@ interface UserRoomDAO: UserLocalDataSource, RoomLocalDataSource<UserEntity> {
     override suspend fun getExistsUser(): Boolean
 
     @Query("select * from users limit 1")
-    override suspend fun getFirstUser(): UserEntity
+    override suspend fun getFirstUser(): UserEntity?
 }

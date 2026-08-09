@@ -6,6 +6,7 @@
     <string name="char_error_name_required">A name is required.</string>
     <string name="char_error_duplicated_name">The name \"%s\" is already in use.</string>
     <string name="char_error_name_too_long">The name is too long (maximum %d characters).</string>
+    <string name="user_error_not_found">User not found. Please restart the app.</string>
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_ok">OK</string>
     <string name="processing">Processing</string>

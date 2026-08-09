@@ -15,7 +15,13 @@ class GetAvailableAttributesUseCase(
     private val userRepository: UserRepository,
 ) {
     operator fun invoke(): Flow<Long> = flow {
-        val userId = userRepository.getFirstUser().id
+        val userId = userRepository.getFirstUser()?.id
+
+        if (userId.isNullOrBlank()) {
+            emit(0L)
+            return@flow
+        }
+
         val charId = preferencesRepository.getUserPreferences(userId).first()?.selectedCharId
 
         if (charId.isNullOrBlank()) {
