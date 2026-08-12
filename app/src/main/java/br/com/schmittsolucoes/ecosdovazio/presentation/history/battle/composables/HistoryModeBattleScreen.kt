@@ -116,6 +116,13 @@ fun HistoryModeBattleScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             if (isExpanded) {
+                val enemyWeight = when (state.mobs.size) {
+                    1 -> 1f
+                    2 -> 1.5f
+                    3 -> 2f
+                    else -> 2.5f
+                }
+
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically
@@ -123,7 +130,7 @@ fun HistoryModeBattleScreen(
                     EnemySection(
                         mobs = state.mobs,
                         windowSizeClass = windowSizeClass,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(enemyWeight),
                         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
                     )
 
@@ -131,7 +138,7 @@ fun HistoryModeBattleScreen(
 
                     CharSection(
                         char = state.char,
-                        modifier = Modifier.weight(0.5f),
+                        modifier = Modifier.weight(1f),
                         alignment = Alignment.Center
                     )
                 }
