@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
@@ -68,7 +68,7 @@ fun CharScreen(
     state: CharUIState = CharUIState(),
     windowSizeClass: WindowSizeClass,
     onDismissErrorDialog: () -> Unit = {},
-    onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
+    onIncrementAttribute: (AttributeIdentifier) -> Unit = {}
 ) {
     Scaffold { paddingValues ->
         val scrollState = rememberScrollState()
@@ -219,7 +219,7 @@ fun CharAttributes(
     attributes: List<CharAttributesUIModel>,
     availablePoints: Long = 0,
     windowSizeClass: WindowSizeClass,
-    onIncrementAttribute: (CharAttributes.AttributeIdentifier) -> Unit = {}
+    onIncrementAttribute: (AttributeIdentifier) -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -325,15 +325,15 @@ private fun AttributeItem(
     }
 }
 
-private fun getAttributeLabel(identifier: CharAttributes.AttributeIdentifier): Int {
+private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
     return when (identifier) {
-        CharAttributes.AttributeIdentifier.STRENGTH -> R.string.char_attribute_strength
-        CharAttributes.AttributeIdentifier.DEXTERITY -> R.string.char_attribute_dexterity
-        CharAttributes.AttributeIdentifier.INTELLIGENCE -> R.string.char_attribute_intelligence
-        CharAttributes.AttributeIdentifier.PHYSICAL_RESISTANCE -> R.string.char_attribute_physical_resistance
-        CharAttributes.AttributeIdentifier.MAGIC_RESISTANCE -> R.string.char_attribute_magic_resistance
-        CharAttributes.AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
-        CharAttributes.AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
+        AttributeIdentifier.STRENGTH -> R.string.char_attribute_strength
+        AttributeIdentifier.DEXTERITY -> R.string.char_attribute_dexterity
+        AttributeIdentifier.INTELLIGENCE -> R.string.char_attribute_intelligence
+        AttributeIdentifier.PHYSICAL_RESISTANCE -> R.string.char_attribute_physical_resistance
+        AttributeIdentifier.MAGIC_RESISTANCE -> R.string.char_attribute_magic_resistance
+        AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
+        AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
     }
 }
 

@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access
 
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.EntityLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.CharEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.BattleCharTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharAttributesTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharBaseDamageDataTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharCriticalDataTuple
@@ -27,4 +28,5 @@ interface CharLocalDataSource: EntityLocalDataSource<CharEntity> {
     fun getCharAttributesDataTuple(charId: String): Flow<CharAttributesTuple>
     fun getCharLevelInfoDataTuple(charId: String): Flow<CharLevelInfoTuple>
     suspend fun getById(id: String): CharEntity
+    fun getBattleChar(charId: String): Flow<BattleCharTuple>
 }

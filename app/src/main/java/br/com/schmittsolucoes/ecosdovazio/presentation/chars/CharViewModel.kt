@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.core.formatters.NumberFormatter
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
@@ -109,7 +110,7 @@ class CharViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
-    fun onIncrementAttribute(identifier: CharAttributes.AttributeIdentifier) {
+    fun onIncrementAttribute(identifier: AttributeIdentifier) {
         launch {
             incrementAttributeUseCase(identifier)
         }

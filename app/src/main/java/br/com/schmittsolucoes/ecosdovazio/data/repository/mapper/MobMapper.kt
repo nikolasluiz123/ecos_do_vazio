@@ -1,7 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.MobEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.BattleMobTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
+import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 
 fun Mob.toEntity() = MobEntity(
@@ -23,6 +25,23 @@ fun MobEntity.toDomain() = Mob(
     id = id,
     nameTranslationId = TranslationIdentifier.valueOf(nameTranslationId),
     descriptionTranslationId = TranslationIdentifier.valueOf(descriptionTranslationId),
+    imageName = imageName,
+    mobCategory = mobCategory,
+    attributes = Mob.Attributes(
+        strength = strength,
+        dexterity = dexterity,
+        intelligence = intelligence,
+        physicalResistance = physicalResistance,
+        magicResistance = magicResistance,
+        vitality = vitality,
+        agility = agility
+    )
+)
+
+fun BattleMobTuple.toDomain() = BattleMob(
+    id = id,
+    name = name,
+    description = description,
     imageName = imageName,
     mobCategory = mobCategory,
     attributes = Mob.Attributes(

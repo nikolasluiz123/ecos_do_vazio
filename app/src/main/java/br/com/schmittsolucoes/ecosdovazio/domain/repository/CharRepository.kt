@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharBaseDamageData
@@ -26,6 +27,7 @@ interface CharRepository {
     fun getCharDodgeData(charId: String): Flow<CharDodgeData>
     fun getCharLevelInfoData(charId: String, nextLevelExperience: Long): Flow<CharLevelInfo>
     fun getCharAttributesData(charId: String, maxAttributeValue: Long): Flow<CharAttributes>
+    fun getBattleChar(charId: String): Flow<BattleChar>
     suspend fun getById(id: String): Char
     suspend fun update(char: Char)
 }

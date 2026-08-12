@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.data.repository
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.chars.CharLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharBaseDamageData
@@ -70,6 +71,10 @@ class CharRepositoryImpl @Inject constructor(
 
     override fun getCharAttributesData(charId: String, maxAttributeValue: Long): Flow<CharAttributes> {
         return charLocalDataSource.getCharAttributesDataTuple(charId).map { it.toDomain(maxAttributeValue) }
+    }
+
+    override fun getBattleChar(charId: String): Flow<BattleChar> {
+        return charLocalDataSource.getBattleChar(charId).map { it.toDomain() }
     }
 
     override suspend fun getById(id: String): Char {

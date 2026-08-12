@@ -8,6 +8,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
+import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -45,5 +46,15 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
 
     override suspend fun getExistsHistoryPhase(): Boolean {
         return historyPhaseLocalDataSource.getExistsHistoryPhase()
+    }
+
+    override fun getMobsFromPhase(phaseId: String, languageTag: String): Flow<List<BattleMob>> {
+        return historyPhaseMobLocalDataSource.getMobsFromPhase(phaseId, languageTag).map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun getById(id: String): HistoryPhase? {
+        return historyPhaseLocalDataSource.getById(id)?.toDomain(emptyList())
     }
 }

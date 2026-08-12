@@ -14,6 +14,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.SpecializationReposi
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobPointsCountByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
@@ -28,6 +34,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalRe
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.InitializeClassesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.archer.CreateArcherClassUseCase
@@ -40,7 +47,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.crea
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateGuardianSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior.CreateWarriorClassUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.history.InitializeHistoryPhasesUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.InitializeMobsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateCaveOrcMobUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create.CreateGoblinHealerMobUseCase
@@ -417,4 +423,56 @@ object UseCaseModule {
         preferencesRepository = preferencesRepository,
         userRepository = userRepository
     )
+
+    @Provides
+    fun provideMobsFromPhaseQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        getMobLevelUseCase: GetMobLevelUseCase,
+        getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase,
+        languageProvider: LanguageProvider
+    ): MobsFromPhaseQueryUseCase = MobsFromPhaseQueryUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        getMobLevelUseCase = getMobLevelUseCase,
+        getMobAttributesByLevelUseCase = getMobAttributesByLevelUseCase,
+        languageProvider = languageProvider
+    )
+
+    @Provides
+    fun provideGetMobLevelUseCase(
+        historyPhaseRepository: HistoryPhaseRepository
+    ): GetMobLevelUseCase = GetMobLevelUseCase(
+        historyPhaseRepository = historyPhaseRepository
+    )
+
+    @Provides
+    fun provideGetMobPointsCountByLevelUseCase(
+        getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase
+    ): GetMobPointsCountByLevelUseCase = GetMobPointsCountByLevelUseCase(
+        getPointsCountByLevelUseCase = getPointsCountByLevelUseCase
+    )
+
+    @Provides
+    fun provideGetMobAttributesByLevelUseCase(
+        getMobPointsCountByLevelUseCase: GetMobPointsCountByLevelUseCase
+    ): GetMobAttributesByLevelUseCase = GetMobAttributesByLevelUseCase(
+        getMobPointsCountByLevelUseCase = getMobPointsCountByLevelUseCase
+    )
+
+    @Provides
+    fun provideGetMobHPUseCase(): GetMobHPUseCase {
+        return GetMobHPUseCase()
+    }
+
+    @Provides
+    fun provideGetCharBattleUseCase(
+        userRepository: UserRepository,
+        charRepository: CharRepository,
+        preferencesRepository: PreferencesRepository
+    ): GetCharBattleUseCase {
+        return GetCharBattleUseCase(
+            userRepository = userRepository,
+            charRepository = charRepository,
+            preferencesRepository = preferencesRepository
+        )
+    }
 }

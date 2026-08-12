@@ -12,4 +12,7 @@ interface MobRoomDAO : MobLocalDataSource, RoomLocalDataSource<MobEntity> {
 
     @Query("select * from mobs")
     override suspend fun getAllMobs(): List<MobEntity>
+
+    @Query("select * from mobs where id = :id")
+    override suspend fun getById(id: String): MobEntity?
 }

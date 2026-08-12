@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.model.chars
 
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
+
 data class CharAttributes(
     val attributes: List<Attributes>,
     val maxAttributeValue: Long
@@ -10,14 +12,4 @@ data class CharAttributes(
         val classValue: Long,
         val specializationValue: Long,
     )
-
-    enum class AttributeIdentifier {
-        STRENGTH,
-        DEXTERITY,
-        INTELLIGENCE,
-        PHYSICAL_RESISTANCE,
-        MAGIC_RESISTANCE,
-        VITALITY,
-        AGILITY
-    }
 }

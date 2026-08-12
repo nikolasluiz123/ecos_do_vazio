@@ -13,6 +13,9 @@ interface HistoryPhaseRoomDAO : HistoryPhaseLocalDataSource, RoomLocalDataSource
     @Query("select exists(select 1 from history_phases limit 1)")
     override suspend fun getExistsHistoryPhase(): Boolean
 
+    @Query("select * from history_phases where id = :id")
+    override suspend fun getById(id: String): HistoryPhaseEntity?
+
     @Query("""
         select history_phases.id as phaseId, 
                coalesce(phase_name.translated_text, phase_name_default.translated_text) as phaseName, 

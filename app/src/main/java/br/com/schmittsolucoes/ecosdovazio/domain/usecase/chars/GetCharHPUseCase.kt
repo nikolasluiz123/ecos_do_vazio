@@ -32,26 +32,30 @@ class GetCharHPUseCase(
         }
 
         val healthFlow = charRepository.getCharHealthData(charId).map {
-            val baseValue = getBaseValue(it)
-            val multiplier = getMultiplier(it)
             val vitalityPoints = getVitalityPoints(it)
-
-            baseValue + (vitalityPoints * multiplier)
+            calculate(it.classCategory, vitalityPoints)
         }
 
         emitAll(healthFlow)
     }
 
-    private fun getBaseValue(data: CharHealthData): Long {
-        return when (data.classCategory) {
+    fun calculate(classCategory: ClassCategory, vitalityPoints: Long): Long {
+        val baseValue = getBaseValue(classCategory)
+        val multiplier = getMultiplier(classCategory)
+
+        return baseValue + (vitalityPoints * multiplier)
+    }
+
+    private fun getBaseValue(classCategory: ClassCategory): Long {
+        return when (classCategory) {
             ClassCategory.WARRIOR -> 100L
             ClassCategory.MAGE -> 60L
             ClassCategory.ARCHER -> 80L
         }
     }
 
-    private fun getMultiplier(data: CharHealthData): Long {
-        return when (data.classCategory) {
+    private fun getMultiplier(classCategory: ClassCategory): Long {
+        return when (classCategory) {
             ClassCategory.WARRIOR -> 10L
             ClassCategory.MAGE -> 4L
             ClassCategory.ARCHER -> 6L

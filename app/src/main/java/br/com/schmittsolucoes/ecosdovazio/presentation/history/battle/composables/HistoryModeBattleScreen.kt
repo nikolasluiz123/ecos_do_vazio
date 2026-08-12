@@ -1,0 +1,395 @@
+package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedEnd
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedStart
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarTrack
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
+import coil.compose.SubcomposeAsyncImage
+
+@Composable
+fun HistoryModeBattleScreen(
+    viewModel: HistoryModeBattleViewModel,
+    windowSizeClass: WindowSizeClass
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    HistoryModeBattleScreen(
+        state = state,
+        windowSizeClass = windowSizeClass,
+        onDismissErrorDialog = viewModel::onDismissErrorDialog
+    )
+}
+
+@Composable
+fun HistoryModeBattleScreen(
+    state: HistoryModeBattleUIState = HistoryModeBattleUIState(),
+    windowSizeClass: WindowSizeClass? = null,
+    onDismissErrorDialog: () -> Unit = {}
+) {
+    Scaffold { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(BackgroundGradient),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                EnemySection(
+                    mobs = state.mobs,
+                    windowSizeClass = windowSizeClass,
+                    modifier = Modifier.weight(1f)
+                )
+
+                CharSection(
+                    char = state.char,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            state.errorMessage?.let { message ->
+                ErrorDialog(
+                    message = message,
+                    onDismiss = onDismissErrorDialog
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EnemySection(
+    mobs: List<BattleMobUIModel>,
+    windowSizeClass: WindowSizeClass?,
+    modifier: Modifier = Modifier
+) {
+    if (mobs.isEmpty()) return
+
+    val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+
+    if (isExpanded) {
+        LazyRow(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(mobs) { mob ->
+                EnemyItem(
+                    mob = mob,
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
+        }
+    } else {
+        val pagerState = rememberPagerState { mobs.size }
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            pageSpacing = 8.dp
+        ) { page ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EnemyItem(
+                    mob = mobs[page],
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EnemyItem(
+    mob: BattleMobUIModel,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .wrapContentWidth()
+            .widthIn(min = 120.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .border(
+                width = 2.dp,
+                color = CharacterBattleStrokeColor,
+                shape = RoundedCornerShape(4.dp)
+            )
+    ) {
+        BattleAsyncImage(
+            model = mob.image,
+            contentDescription = mob.name,
+            modifier = Modifier.fillMaxHeight()
+        )
+
+        EnemyInfo(mob)
+    }
+}
+
+@Composable
+private fun CharSection(
+    char: BattleCharUIModel?,
+    modifier: Modifier = Modifier
+) {
+    if (char == null) return
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CharItem(
+            char = char,
+            modifier = Modifier.fillMaxHeight()
+        )
+    }
+}
+
+@Composable
+private fun CharItem(
+    char: BattleCharUIModel,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .wrapContentWidth()
+            .widthIn(min = 120.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .border(
+                width = 2.dp,
+                color = CharacterBattleStrokeColor,
+                shape = RoundedCornerShape(4.dp)
+            )
+    ) {
+        BattleAsyncImage(
+            model = char.battleImage,
+            contentDescription = char.name,
+            modifier = Modifier.fillMaxHeight()
+        )
+
+        CharInfo(char)
+    }
+}
+
+@Composable
+private fun BattleAsyncImage(
+    model: Any?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier
+) {
+    SubcomposeAsyncImage(
+        model = model,
+        contentDescription = contentDescription,
+        modifier = modifier,
+        contentScale = ContentScale.Fit,
+        filterQuality = FilterQuality.Medium,
+        loading = {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(0.75f, matchHeightConstraintsFirst = true),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Highlight,
+                    strokeWidth = 2.dp
+                )
+            }
+        },
+    )
+}
+
+@Composable
+private fun BoxScope.CharInfo(char: BattleCharUIModel) {
+    Column(
+        modifier = Modifier
+            .matchParentSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Nível ${char.level}",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            ),
+            color = HighlightOnImage
+        )
+
+        Text(
+            text = char.name,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            ),
+            color = OnSurfaceVariantOnImage
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        HealthBar(
+            actualHealth = char.actualHealth,
+            totalHealth = char.totalHealth,
+            progress = char.healthProgress
+        )
+    }
+}
+
+@Composable
+private fun BoxScope.EnemyInfo(mob: BattleMobUIModel) {
+    Column(
+        modifier = Modifier
+            .matchParentSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Nível ${mob.level}",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            ),
+            color = HighlightOnImage
+        )
+
+        Text(
+            text = mob.name,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Serif
+            ),
+            color = OnSurfaceVariantOnImage
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        HealthBar(
+            actualHealth = mob.actualHealth,
+            totalHealth = mob.totalHealth,
+            progress = mob.healthProgress
+        )
+    }
+}
+
+@Composable
+private fun HealthBar(
+    actualHealth: Long,
+    totalHealth: Long,
+    progress: Float,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(24.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(HealthBarTrack),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(progress.coerceIn(0f, 1f))
+                .fillMaxHeight()
+                .drawBehind {
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                HealthBarRedEnd,
+                                HealthBarRedStart
+                            ),
+                            startX = 0f,
+                            endX = size.width / progress.coerceAtLeast(0.01f)
+                        )
+                    )
+                }
+                .align(Alignment.CenterStart)
+        )
+
+        Text(
+            text = "$actualHealth / $totalHealth",
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Bold,
+                shadow = Shadow(
+                    color = Color.Black,
+                    offset = Offset(1f, 1f),
+                    blurRadius = 2f
+                )
+            ),
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
+    }
+}

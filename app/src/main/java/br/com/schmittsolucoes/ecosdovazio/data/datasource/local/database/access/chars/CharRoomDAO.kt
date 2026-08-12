@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.RoomLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.CharEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.BattleCharTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharAttributesTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharBaseDamageDataTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharCriticalDataTuple
@@ -164,4 +165,44 @@ interface CharRoomDAO: CharLocalDataSource, RoomLocalDataSource<CharEntity> {
 
     @Query("select * from chars where id = :id")
     override suspend fun getById(id: String): CharEntity
+
+    @Query("""
+        select chars.level as level, 
+               chars.name as name,
+               coalesce(specializations.battle_image_name, classes.battle_image_name) as battleImageName,
+               classes.class_category as classCategory,
+               
+               chars.strength as charStrength,
+               classes.increment_strength as classIncrementStrength,
+               specializations.increment_strength as specializationIncrementStrength,
+               
+               chars.dexterity as charDexterity,
+               classes.increment_dexterity as classIncrementDexterity,
+               specializations.increment_dexterity as specializationIncrementDexterity,
+               
+               chars.intelligence as charIntelligence,
+               classes.increment_intelligence as classIncrementIntelligence,
+               specializations.increment_intelligence as specializationIncrementIntelligence,
+               
+               chars.physical_resistance as charPhysicalResistance,
+               classes.increment_physical_resistance as classIncrementPhysicalResistance,
+               specializations.increment_physical_resistance as specializationIncrementPhysicalResistance,
+               
+               chars.magic_resistance as charMagicResistance,
+               classes.increment_magic_resistance as classIncrementMagicResistance,
+               specializations.increment_magic_resistance as specializationIncrementMagicResistance,
+               
+               chars.vitality as charVitality,
+               classes.increment_vitality as classIncrementVitality,
+               specializations.increment_vitality as specializationIncrementVitality,
+               
+               chars.agility as charAgility,
+               classes.increment_agility as classIncrementAgility,
+               specializations.increment_agility as specializationIncrementAgility
+        from chars
+        inner join classes on classes.id = chars.class_id
+        left join specializations on specializations.id = chars.specialization_id
+        where chars.id = :charId
+    """)
+    override fun getBattleChar(charId: String): Flow<BattleCharTuple>
 }

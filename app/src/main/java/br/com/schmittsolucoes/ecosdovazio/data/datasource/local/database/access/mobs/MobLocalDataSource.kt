@@ -6,4 +6,5 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.MobEntity
 interface MobLocalDataSource : EntityLocalDataSource<MobEntity> {
     suspend fun getExistsMob(): Boolean
     suspend fun getAllMobs(): List<MobEntity>
+    suspend fun getById(id: String): MobEntity?
 }

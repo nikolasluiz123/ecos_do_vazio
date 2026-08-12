@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface HistoryPhaseLocalDataSource : EntityLocalDataSource<HistoryPhaseEntity> {
     fun getPhases(charId: String, languageTag: String): Flow<List<CharHistoryPhaseTuple>>
     suspend fun getExistsHistoryPhase(): Boolean
+    suspend fun getById(id: String): HistoryPhaseEntity?
 }

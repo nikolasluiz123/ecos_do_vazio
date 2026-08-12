@@ -11,9 +11,14 @@ fun NavController.navigateToHistory() {
     navigate(HistoryRoute)
 }
 
-fun NavGraphBuilder.historyScreen() {
+fun NavGraphBuilder.historyScreen(
+    onNavigateToBattle: (String) -> Unit
+) {
     composable<HistoryRoute> {
         val viewModel = hiltViewModel<HistoryViewModel>()
-        HistoryScreen(viewModel = viewModel)
+        HistoryScreen(
+            viewModel = viewModel,
+            onPhaseClick = onNavigateToBattle
+        )
     }
 }

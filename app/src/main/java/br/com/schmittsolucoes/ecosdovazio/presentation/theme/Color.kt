@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 
 val backgroundDark = Color(0xFF121416)
 val surfaceDark = Color(0xFF0C0E10)
@@ -61,6 +62,11 @@ val heroSlotBackgroundTopLight = Color(0xFFFFFFFF)
 val heroSlotBackgroundBottomLight = Color(0xFFD8D8D0)
 
 val pictureTextHighlightBackground = Color(0x99000000)
+val HealthBarRedStart = Color(0xFFE53935)
+val HealthBarRedEnd = Color(0xFF7F0000)
+val HealthBarTrack = Color(0xFF121416)
+val HighlightOnImage = Color(0xFFFFB77D)
+val OnSurfaceVariantOnImage = Color(0xFFDDC1AE)
 
 @get:Composable
 val OrangeForDetails: Color
@@ -121,14 +127,16 @@ val BackgroundGradient: Brush
             colors = listOf(
                 Color(0xCC1E2022),
                 Color(0xFF121416)
-            )
+            ),
+            tileMode = TileMode.Mirror
         )
     } else {
         Brush.radialGradient(
             colors = listOf(
                 Color(0xCCFFFFFF),
                 Color(0xFFF5F5F5)
-            )
+            ),
+            tileMode = TileMode.Mirror
         )
     }
 
@@ -154,4 +162,8 @@ val TopBarIcons: Color
 
 @get:Composable
 val PhaseCardBorderColor: Color
+    get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight
+
+@get:Composable
+val CharacterBattleStrokeColor: Color
     get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight

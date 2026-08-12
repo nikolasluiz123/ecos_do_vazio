@@ -6,4 +6,5 @@ interface MobRepository {
     suspend fun save(mobs: List<Mob>)
     suspend fun getExistsMob(): Boolean
     suspend fun getAllMobs(): List<Mob>
+    suspend fun getById(id: String): Mob?
 }

@@ -22,4 +22,8 @@ class MobRepositoryImpl @Inject constructor(
     override suspend fun getAllMobs(): List<Mob> {
         return mobLocalDataSource.getAllMobs().map { it.toDomain() }
     }
+
+    override suspend fun getById(id: String): Mob? {
+        return mobLocalDataSource.getById(id)?.toDomain()
+    }
 }
