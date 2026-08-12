@@ -16,16 +16,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -55,6 +57,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -95,28 +98,59 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {}
 ) {
+    val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+
     Scaffold { paddingValues ->
+        val layoutDirection = LocalLayoutDirection.current
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .background(BackgroundGradient),
+                .background(BackgroundGradient)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateStartPadding(layoutDirection),
+                    end = if (isExpanded) 12.dp else paddingValues.calculateEndPadding(layoutDirection)
+                ),
             contentAlignment = Alignment.TopCenter
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                EnemySection(
-                    mobs = state.mobs,
-                    windowSizeClass = windowSizeClass,
-                    modifier = Modifier.weight(1f)
-                )
+            if (isExpanded) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    EnemySection(
+                        mobs = state.mobs,
+                        windowSizeClass = windowSizeClass,
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                    )
 
-                CharSection(
-                    char = state.char,
-                    modifier = Modifier.weight(1f)
-                )
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    CharSection(
+                        char = state.char,
+                        modifier = Modifier.weight(0.5f),
+                        alignment = Alignment.Center
+                    )
+                }
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    EnemySection(
+                        mobs = state.mobs,
+                        windowSizeClass = windowSizeClass,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    CharSection(
+                        char = state.char,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
+                }
             }
 
             state.errorMessage?.let { message ->
@@ -133,7 +167,8 @@ fun HistoryModeBattleScreen(
 private fun EnemySection(
     mobs: List<BattleMobUIModel>,
     windowSizeClass: WindowSizeClass?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp)
 ) {
     if (mobs.isEmpty()) return
 
@@ -141,33 +176,32 @@ private fun EnemySection(
 
     if (isExpanded) {
         LazyRow(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            modifier = modifier,
             contentPadding = PaddingValues(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = horizontalArrangement
         ) {
             items(mobs) { mob ->
                 EnemyItem(
                     mob = mob,
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 12.dp)
                 )
             }
         }
     } else {
         val pagerState = rememberPagerState { mobs.size }
 
-        Box(modifier = modifier.fillMaxWidth()) {
+        Box(modifier = modifier) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp),
-                pageSpacing = 8.dp
+                    .fillMaxWidth(),
             ) { page ->
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     EnemyItem(
@@ -182,7 +216,6 @@ private fun EnemySection(
                 isVisible = pagerState.canScrollBackward,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 8.dp)
             )
 
             PulsingArrow(
@@ -190,7 +223,6 @@ private fun EnemySection(
                 isVisible = pagerState.canScrollForward,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(end = 8.dp)
             )
         }
     }
@@ -203,8 +235,7 @@ private fun EnemyItem(
 ) {
     Box(
         modifier = modifier
-            .wrapContentWidth()
-            .widthIn(min = 120.dp)
+            .aspectRatio(0.60f)
             .clip(RoundedCornerShape(4.dp))
             .border(
                 width = 2.dp,
@@ -215,7 +246,7 @@ private fun EnemyItem(
         BattleAsyncImage(
             model = mob.image,
             contentDescription = mob.name,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxSize()
         )
 
         EnemyInfo(mob)
@@ -225,15 +256,15 @@ private fun EnemyItem(
 @Composable
 private fun CharSection(
     char: BattleCharUIModel?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center
 ) {
     if (char == null) return
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 8.dp),
-        contentAlignment = Alignment.Center
+            .padding(vertical = 12.dp),
+        contentAlignment = alignment
     ) {
         CharItem(
             char = char,
@@ -249,8 +280,7 @@ private fun CharItem(
 ) {
     Box(
         modifier = modifier
-            .wrapContentWidth()
-            .widthIn(min = 120.dp)
+            .aspectRatio(0.60f)
             .clip(RoundedCornerShape(4.dp))
             .border(
                 width = 2.dp,
@@ -261,7 +291,7 @@ private fun CharItem(
         BattleAsyncImage(
             model = char.battleImage,
             contentDescription = char.name,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxSize()
         )
 
         CharInfo(char)
@@ -278,13 +308,13 @@ private fun BattleAsyncImage(
         model = model,
         contentDescription = contentDescription,
         modifier = modifier,
-        contentScale = ContentScale.Fit,
+        contentScale = ContentScale.Crop,
         filterQuality = FilterQuality.Medium,
         loading = {
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .aspectRatio(0.75f, matchHeightConstraintsFirst = true),
+                    .aspectRatio(0.6f, matchHeightConstraintsFirst = true),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
