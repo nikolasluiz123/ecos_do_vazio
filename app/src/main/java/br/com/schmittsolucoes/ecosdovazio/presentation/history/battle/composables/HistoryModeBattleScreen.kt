@@ -119,43 +119,9 @@ fun HistoryModeBattleScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             if (useSideBySide) {
-                val enemyWeight = getEnemyWeight(isExpandedWidth, state)
-
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    EnemySection(
-                        mobs = state.mobs,
-                        windowSizeClass = windowSizeClass,
-                        modifier = Modifier.weight(enemyWeight),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-                    )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    CharSection(
-                        char = state.char,
-                        modifier = Modifier.weight(1f),
-                        alignment = Alignment.Center
-                    )
-                }
+                SideBySideLayout(isExpandedWidth, state, windowSizeClass)
             } else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    EnemySection(
-                        mobs = state.mobs,
-                        windowSizeClass = windowSizeClass,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    CharSection(
-                        char = state.char,
-                        modifier = Modifier.weight(1f).fillMaxWidth()
-                    )
-                }
+                StackLayout(state, windowSizeClass)
             }
 
             state.errorMessage?.let { message ->
@@ -165,6 +131,56 @@ fun HistoryModeBattleScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: WindowSizeClass?) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        EnemySection(
+            mobs = state.mobs,
+            windowSizeClass = windowSizeClass,
+            modifier = Modifier.weight(1f)
+        )
+
+        CharSection(
+            char = state.char,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun SideBySideLayout(
+    isExpandedWidth: Boolean,
+    state: HistoryModeBattleUIState,
+    windowSizeClass: WindowSizeClass
+) {
+    val enemyWeight = getEnemyWeight(isExpandedWidth, state)
+
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        EnemySection(
+            mobs = state.mobs,
+            windowSizeClass = windowSizeClass,
+            modifier = Modifier.weight(enemyWeight),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        CharSection(
+            char = state.char,
+            modifier = Modifier.weight(1f),
+            alignment = Alignment.Center
+        )
     }
 }
 
@@ -196,56 +212,73 @@ private fun EnemySection(
     val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
 
     if (isExpanded) {
-        LazyRow(
-            modifier = modifier,
-            contentPadding = PaddingValues(horizontal = 8.dp),
-            horizontalArrangement = horizontalArrangement
-        ) {
-            items(mobs) { mob ->
+        EnemyHorizontalList(modifier, horizontalArrangement, mobs)
+    } else {
+        EnemyHorizontalPager(mobs, modifier)
+    }
+}
+
+@Composable
+private fun EnemyHorizontalList(
+    modifier: Modifier,
+    horizontalArrangement: Arrangement.Horizontal,
+    mobs: List<BattleMobUIModel>
+) {
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        horizontalArrangement = horizontalArrangement
+    ) {
+        items(mobs) { mob ->
+            EnemyItem(
+                mob = mob,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(vertical = 12.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun EnemyHorizontalPager(
+    mobs: List<BattleMobUIModel>,
+    modifier: Modifier
+) {
+    val pagerState = rememberPagerState { mobs.size }
+
+    Box(modifier = modifier) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) { page ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 EnemyItem(
-                    mob = mob,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(vertical = 12.dp)
+                    mob = mobs[page],
+                    modifier = Modifier.fillMaxHeight()
                 )
             }
         }
-    } else {
-        val pagerState = rememberPagerState { mobs.size }
 
-        Box(modifier = modifier) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(vertical = 12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EnemyItem(
-                        mob = mobs[page],
-                        modifier = Modifier.fillMaxHeight()
-                    )
-                }
-            }
+        PulsingArrow(
+            icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+            isVisible = pagerState.canScrollBackward,
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+        )
 
-            PulsingArrow(
-                icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                isVisible = pagerState.canScrollBackward,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-            )
-
-            PulsingArrow(
-                icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                isVisible = pagerState.canScrollForward,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-            )
-        }
+        PulsingArrow(
+            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            isVisible = pagerState.canScrollForward,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+        )
     }
 }
 
