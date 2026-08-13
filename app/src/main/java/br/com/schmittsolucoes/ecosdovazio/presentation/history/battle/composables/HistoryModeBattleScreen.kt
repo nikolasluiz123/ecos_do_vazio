@@ -14,6 +14,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,9 +61,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
@@ -78,6 +82,21 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
 import coil.compose.SubcomposeAsyncImage
+
+private const val ITEM_ASPECT_RATIO = 0.60f
+private val ITEM_MAX_HEIGHT = 450.dp
+private val SECTION_PADDING_VERTICAL = 12.dp
+private val ITEM_SPACING = 8.dp
+private val SIDE_BY_SIDE_SPACING = 12.dp
+private val ITEM_CORNER_RADIUS = 4.dp
+private val ITEM_BORDER_WIDTH = 2.dp
+private val INFO_PADDING = 8.dp
+
+private const val WEIGHT_SINGLE_MOB = 1f
+private const val WEIGHT_TWO_MOBS = 1.5f
+private const val WEIGHT_THREE_MOBS = 2f
+private const val WEIGHT_MANY_MOBS = 2.5f
+private const val WEIGHT_DEFAULT = 1f
 
 @Composable
 fun HistoryModeBattleScreen(
@@ -114,7 +133,7 @@ fun HistoryModeBattleScreen(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = if (useSideBySide) 12.dp else paddingValues.calculateEndPadding(layoutDirection)
+                    end = if (useSideBySide) SIDE_BY_SIDE_SPACING else paddingValues.calculateEndPadding(layoutDirection)
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -171,10 +190,10 @@ private fun SideBySideLayout(
             mobs = state.mobs,
             windowSizeClass = windowSizeClass,
             modifier = Modifier.weight(enemyWeight),
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
 
         CharSection(
             char = state.char,
@@ -190,13 +209,13 @@ private fun getEnemyWeight(
 ): Float {
     return if (isExpandedWidth) {
         when (state.mobs.size) {
-            1 -> 1f
-            2 -> 1.5f
-            3 -> 2f
-            else -> 2.5f
+            1 -> WEIGHT_SINGLE_MOB
+            2 -> WEIGHT_TWO_MOBS
+            3 -> WEIGHT_THREE_MOBS
+            else -> WEIGHT_MANY_MOBS
         }
     } else {
-        1f
+        WEIGHT_DEFAULT
     }
 }
 
@@ -205,7 +224,7 @@ private fun EnemySection(
     mobs: List<BattleMobUIModel>,
     windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp)
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ITEM_SPACING)
 ) {
     if (mobs.isEmpty()) return
 
@@ -226,15 +245,16 @@ private fun EnemyHorizontalList(
 ) {
     LazyRow(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 8.dp),
+        contentPadding = PaddingValues(horizontal = ITEM_SPACING),
         horizontalArrangement = horizontalArrangement
     ) {
         items(mobs) { mob ->
             EnemyItem(
                 mob = mob,
                 modifier = Modifier
+                    .heightIn(max = ITEM_MAX_HEIGHT)
                     .fillMaxHeight()
-                    .padding(vertical = 12.dp)
+                    .padding(vertical = SECTION_PADDING_VERTICAL)
             )
         }
     }
@@ -255,13 +275,15 @@ private fun EnemyHorizontalPager(
         ) { page ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 12.dp),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 EnemyItem(
                     mob = mobs[page],
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .heightIn(max = ITEM_MAX_HEIGHT)
+                        .fillMaxHeight()
+                        .padding(vertical = SECTION_PADDING_VERTICAL)
                 )
             }
         }
@@ -287,14 +309,14 @@ private fun EnemyItem(
     mob: BattleMobUIModel,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    BoxWithConstraints(
         modifier = modifier
-            .aspectRatio(0.60f)
-            .clip(RoundedCornerShape(4.dp))
+            .aspectRatio(ITEM_ASPECT_RATIO)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
-                width = 2.dp,
+                width = ITEM_BORDER_WIDTH,
                 color = CharacterBattleStrokeColor,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
     ) {
         BattleAsyncImage(
@@ -303,7 +325,7 @@ private fun EnemyItem(
             modifier = Modifier.fillMaxSize()
         )
 
-        EnemyInfo(mob)
+        EnemyInfo(mob, maxWidth)
     }
 }
 
@@ -316,13 +338,15 @@ private fun CharSection(
     if (char == null) return
 
     Box(
-        modifier = modifier
-            .padding(vertical = 12.dp),
+        modifier = modifier,
         contentAlignment = alignment
     ) {
         CharItem(
             char = char,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier
+                .heightIn(max = ITEM_MAX_HEIGHT)
+                .fillMaxHeight()
+                .padding(vertical = SECTION_PADDING_VERTICAL)
         )
     }
 }
@@ -332,14 +356,14 @@ private fun CharItem(
     char: BattleCharUIModel,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    BoxWithConstraints(
         modifier = modifier
-            .aspectRatio(0.60f)
-            .clip(RoundedCornerShape(4.dp))
+            .aspectRatio(ITEM_ASPECT_RATIO)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
-                width = 2.dp,
+                width = ITEM_BORDER_WIDTH,
                 color = CharacterBattleStrokeColor,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
     ) {
         BattleAsyncImage(
@@ -348,7 +372,7 @@ private fun CharItem(
             modifier = Modifier.fillMaxSize()
         )
 
-        CharInfo(char)
+        CharInfo(char, maxWidth)
     }
 }
 
@@ -363,12 +387,12 @@ private fun BattleAsyncImage(
         contentDescription = contentDescription,
         modifier = modifier,
         contentScale = ContentScale.Crop,
-        filterQuality = FilterQuality.Medium,
+        filterQuality = FilterQuality.High,
         loading = {
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .aspectRatio(0.6f, matchHeightConstraintsFirst = true),
+                    .aspectRatio(ITEM_ASPECT_RATIO, matchHeightConstraintsFirst = true),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
@@ -381,11 +405,11 @@ private fun BattleAsyncImage(
 }
 
 @Composable
-private fun BoxScope.CharInfo(char: BattleCharUIModel) {
+private fun BoxScope.CharInfo(char: BattleCharUIModel, containerWidth: Dp) {
     Column(
         modifier = Modifier
             .matchParentSize()
-            .padding(8.dp),
+            .padding(INFO_PADDING),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -393,10 +417,7 @@ private fun BoxScope.CharInfo(char: BattleCharUIModel) {
             text = "Nível ${char.level}",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            ),
+            style = getLevelStyle(containerWidth),
             color = HighlightOnImage
         )
 
@@ -404,10 +425,7 @@ private fun BoxScope.CharInfo(char: BattleCharUIModel) {
             text = char.name,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            ),
+            style = getNameStyle(containerWidth),
             color = OnSurfaceVariantOnImage
         )
 
@@ -422,11 +440,11 @@ private fun BoxScope.CharInfo(char: BattleCharUIModel) {
 }
 
 @Composable
-private fun BoxScope.EnemyInfo(mob: BattleMobUIModel) {
+private fun BoxScope.EnemyInfo(mob: BattleMobUIModel, containerWidth: Dp) {
     Column(
         modifier = Modifier
             .matchParentSize()
-            .padding(8.dp),
+            .padding(INFO_PADDING),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -434,10 +452,7 @@ private fun BoxScope.EnemyInfo(mob: BattleMobUIModel) {
             text = "Nível ${mob.level}",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            ),
+            style = getLevelStyle(containerWidth),
             color = HighlightOnImage
         )
 
@@ -445,10 +460,7 @@ private fun BoxScope.EnemyInfo(mob: BattleMobUIModel) {
             text = mob.name,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            ),
+            style = getNameStyle(containerWidth),
             color = OnSurfaceVariantOnImage
         )
 
@@ -520,7 +532,7 @@ private fun HealthBar(
         modifier = modifier
             .fillMaxWidth()
             .height(24.dp)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .background(HealthBarTrack),
         contentAlignment = Alignment.Center
     ) {
@@ -557,4 +569,28 @@ private fun HealthBar(
             textAlign = TextAlign.Center
         )
     }
+}
+
+@Composable
+private fun getLevelStyle(containerWidth: Dp): TextStyle {
+    return when {
+        containerWidth >= 250.dp -> MaterialTheme.typography.titleLarge
+        containerWidth >= 180.dp -> MaterialTheme.typography.titleMedium
+        else -> MaterialTheme.typography.titleSmall
+    }.copy(
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Serif
+    )
+}
+
+@Composable
+private fun getNameStyle(containerWidth: Dp): TextStyle {
+    return when {
+        containerWidth >= 250.dp -> MaterialTheme.typography.titleMedium
+        containerWidth >= 180.dp -> MaterialTheme.typography.titleSmall
+        else -> MaterialTheme.typography.labelMedium
+    }.copy(
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Serif
+    )
 }
