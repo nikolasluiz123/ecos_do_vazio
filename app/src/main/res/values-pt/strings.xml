@@ -33,7 +33,7 @@
     <string name="bottom_menu_char">Personagem</string>
     <string name="bottom_menu_history">História</string>
 
-    <string name="char_level_label">Nível %s</string>
+    <string name="level_label">Nível %s</string>
     <string name="char_xp_label">%1$s/%2$s XP</string>
 
     <string name="char_status_title">Status</string>

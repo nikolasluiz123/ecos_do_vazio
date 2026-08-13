@@ -129,7 +129,7 @@ fun CharLevelInfo(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.char_level_label, levelInfo.level),
+                text = stringResource(R.string.level_label, levelInfo.level),
                 style = MaterialTheme.typography.labelLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontFamily = FontFamily.Serif

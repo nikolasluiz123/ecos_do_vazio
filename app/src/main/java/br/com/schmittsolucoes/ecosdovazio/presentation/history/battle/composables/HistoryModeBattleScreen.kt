@@ -1,48 +1,18 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -50,53 +20,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.CharSection
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedEnd
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedStart
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarTrack
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
-import coil.compose.SubcomposeAsyncImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
-private const val ITEM_ASPECT_RATIO = 0.60f
-private val ITEM_MAX_HEIGHT = 450.dp
-private val SECTION_PADDING_VERTICAL = 12.dp
-private val ITEM_SPACING = 8.dp
-private val SIDE_BY_SIDE_SPACING = 12.dp
-private val ITEM_CORNER_RADIUS = 4.dp
-private val ITEM_BORDER_WIDTH = 2.dp
-private val INFO_PADDING = 8.dp
+internal const val ITEM_ASPECT_RATIO = 0.60f
+internal val ITEM_MAX_HEIGHT = 450.dp
+internal val SECTION_PADDING_VERTICAL = 12.dp
+internal val ITEM_SPACING = 8.dp
+internal val SIDE_BY_SIDE_SPACING = 12.dp
+internal val ITEM_CORNER_RADIUS = 4.dp
+internal val ITEM_BORDER_WIDTH = 2.dp
+internal val INFO_PADDING = 8.dp
 
-private const val WEIGHT_SINGLE_MOB = 1f
-private const val WEIGHT_TWO_MOBS = 1.5f
-private const val WEIGHT_THREE_MOBS = 2f
-private const val WEIGHT_MANY_MOBS = 2.5f
-private const val WEIGHT_DEFAULT = 1f
+internal const val WEIGHT_SINGLE_MOB = 1f
+internal const val WEIGHT_TWO_MOBS = 1.5f
+internal const val WEIGHT_THREE_MOBS = 2f
+internal const val WEIGHT_MANY_MOBS = 2.5f
+internal const val WEIGHT_DEFAULT = 1f
 
 @Composable
 fun HistoryModeBattleScreen(
@@ -154,7 +104,7 @@ fun HistoryModeBattleScreen(
 }
 
 @Composable
-private fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: WindowSizeClass?) {
+internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: WindowSizeClass?) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -175,10 +125,10 @@ private fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Window
 }
 
 @Composable
-private fun SideBySideLayout(
+internal fun SideBySideLayout(
     isExpandedWidth: Boolean,
     state: HistoryModeBattleUIState,
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass?
 ) {
     val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
@@ -219,378 +169,36 @@ private fun getEnemyWeight(
     }
 }
 
+@Preview(showBackground = true, device = Devices.PHONE)
+@Preview(showBackground = true, device = Devices.PHONE, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun EnemySection(
-    mobs: List<BattleMobUIModel>,
-    windowSizeClass: WindowSizeClass?,
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ITEM_SPACING)
-) {
-    if (mobs.isEmpty()) return
-
-    val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
-
-    if (isExpanded) {
-        EnemyHorizontalList(modifier, horizontalArrangement, mobs)
-    } else {
-        EnemyHorizontalPager(mobs, modifier)
+private fun HistoryModeBattleScreenStackPreview() {
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiState
+        )
     }
 }
 
+@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape")
+@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun EnemyHorizontalList(
-    modifier: Modifier,
-    horizontalArrangement: Arrangement.Horizontal,
-    mobs: List<BattleMobUIModel>
-) {
-    LazyRow(
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = ITEM_SPACING),
-        horizontalArrangement = horizontalArrangement
-    ) {
-        items(mobs) { mob ->
-            EnemyItem(
-                mob = mob,
-                modifier = Modifier
-                    .heightIn(max = ITEM_MAX_HEIGHT)
-                    .fillMaxHeight()
-                    .padding(vertical = SECTION_PADDING_VERTICAL)
-            )
-        }
-    }
-}
-
-@Composable
-private fun EnemyHorizontalPager(
-    mobs: List<BattleMobUIModel>,
-    modifier: Modifier
-) {
-    val pagerState = rememberPagerState { mobs.size }
-
-    Box(modifier = modifier) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) { page ->
+private fun HistoryModeBattleScreenSideBySidePreview() {
+    EcosDoVazioTheme {
+        Scaffold { paddingValues ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .background(BackgroundGradient)
+                    .padding(paddingValues)
             ) {
-                EnemyItem(
-                    mob = mobs[page],
-                    modifier = Modifier
-                        .heightIn(max = ITEM_MAX_HEIGHT)
-                        .fillMaxHeight()
-                        .padding(vertical = SECTION_PADDING_VERTICAL)
+                SideBySideLayout(
+                    isExpandedWidth = true,
+                    state = HistoryModeBattlePreviewData.uiState,
+                    windowSizeClass = null
                 )
             }
         }
-
-        PulsingArrow(
-            icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-            isVisible = pagerState.canScrollBackward,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-        )
-
-        PulsingArrow(
-            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            isVisible = pagerState.canScrollForward,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-        )
     }
 }
 
-@Composable
-private fun EnemyItem(
-    mob: BattleMobUIModel,
-    modifier: Modifier = Modifier
-) {
-    BoxWithConstraints(
-        modifier = modifier
-            .aspectRatio(ITEM_ASPECT_RATIO)
-            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-            .border(
-                width = ITEM_BORDER_WIDTH,
-                color = CharacterBattleStrokeColor,
-                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
-            )
-    ) {
-        BattleAsyncImage(
-            model = mob.image,
-            contentDescription = mob.name,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        EnemyInfo(mob, maxWidth)
-    }
-}
-
-@Composable
-private fun CharSection(
-    char: BattleCharUIModel?,
-    modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center
-) {
-    if (char == null) return
-
-    Box(
-        modifier = modifier,
-        contentAlignment = alignment
-    ) {
-        CharItem(
-            char = char,
-            modifier = Modifier
-                .heightIn(max = ITEM_MAX_HEIGHT)
-                .fillMaxHeight()
-                .padding(vertical = SECTION_PADDING_VERTICAL)
-        )
-    }
-}
-
-@Composable
-private fun CharItem(
-    char: BattleCharUIModel,
-    modifier: Modifier = Modifier
-) {
-    BoxWithConstraints(
-        modifier = modifier
-            .aspectRatio(ITEM_ASPECT_RATIO)
-            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-            .border(
-                width = ITEM_BORDER_WIDTH,
-                color = CharacterBattleStrokeColor,
-                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
-            )
-    ) {
-        BattleAsyncImage(
-            model = char.battleImage,
-            contentDescription = char.name,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        CharInfo(char, maxWidth)
-    }
-}
-
-@Composable
-private fun BattleAsyncImage(
-    model: Any?,
-    contentDescription: String?,
-    modifier: Modifier = Modifier
-) {
-    SubcomposeAsyncImage(
-        model = model,
-        contentDescription = contentDescription,
-        modifier = modifier,
-        contentScale = ContentScale.Crop,
-        filterQuality = FilterQuality.High,
-        loading = {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(ITEM_ASPECT_RATIO, matchHeightConstraintsFirst = true),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(
-                    color = Highlight,
-                    strokeWidth = 2.dp
-                )
-            }
-        },
-    )
-}
-
-@Composable
-private fun BoxScope.CharInfo(char: BattleCharUIModel, containerWidth: Dp) {
-    Column(
-        modifier = Modifier
-            .matchParentSize()
-            .padding(INFO_PADDING),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Nível ${char.level}",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = getLevelStyle(containerWidth),
-            color = HighlightOnImage
-        )
-
-        Text(
-            text = char.name,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = getNameStyle(containerWidth),
-            color = OnSurfaceVariantOnImage
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        HealthBar(
-            actualHealth = char.actualHealth,
-            totalHealth = char.totalHealth,
-            progress = char.healthProgress
-        )
-    }
-}
-
-@Composable
-private fun BoxScope.EnemyInfo(mob: BattleMobUIModel, containerWidth: Dp) {
-    Column(
-        modifier = Modifier
-            .matchParentSize()
-            .padding(INFO_PADDING),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Nível ${mob.level}",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = getLevelStyle(containerWidth),
-            color = HighlightOnImage
-        )
-
-        Text(
-            text = mob.name,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = getNameStyle(containerWidth),
-            color = OnSurfaceVariantOnImage
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        HealthBar(
-            actualHealth = mob.actualHealth,
-            totalHealth = mob.totalHealth,
-            progress = mob.healthProgress
-        )
-    }
-}
-
-@Composable
-private fun PulsingArrow(
-    icon: ImageVector,
-    isVisible: Boolean,
-    modifier: Modifier = Modifier
-) {
-    val infiniteTransition = rememberInfiniteTransition(label = "PulsingArrow")
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.4f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "scale"
-    )
-    val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.4f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "alpha"
-    )
-
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn(),
-        exit = fadeOut(),
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Highlight,
-            modifier = Modifier
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    alpha = alpha
-                )
-                .size(32.dp)
-        )
-    }
-}
-
-@Composable
-private fun HealthBar(
-    actualHealth: Long,
-    totalHealth: Long,
-    progress: Float,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(24.dp)
-            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-            .background(HealthBarTrack),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(progress.coerceIn(0f, 1f))
-                .fillMaxHeight()
-                .drawBehind {
-                    drawRect(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                HealthBarRedEnd,
-                                HealthBarRedStart
-                            ),
-                            startX = 0f,
-                            endX = size.width / progress.coerceAtLeast(0.01f)
-                        )
-                    )
-                }
-                .align(Alignment.CenterStart)
-        )
-
-        Text(
-            text = "$actualHealth / $totalHealth",
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = FontWeight.Bold,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(1f, 1f),
-                    blurRadius = 2f
-                )
-            ),
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-private fun getLevelStyle(containerWidth: Dp): TextStyle {
-    return when {
-        containerWidth >= 250.dp -> MaterialTheme.typography.titleLarge
-        containerWidth >= 180.dp -> MaterialTheme.typography.titleMedium
-        else -> MaterialTheme.typography.titleSmall
-    }.copy(
-        fontWeight = FontWeight.SemiBold,
-        fontFamily = FontFamily.Serif
-    )
-}
-
-@Composable
-private fun getNameStyle(containerWidth: Dp): TextStyle {
-    return when {
-        containerWidth >= 250.dp -> MaterialTheme.typography.titleMedium
-        containerWidth >= 180.dp -> MaterialTheme.typography.titleSmall
-        else -> MaterialTheme.typography.labelMedium
-    }.copy(
-        fontWeight = FontWeight.SemiBold,
-        fontFamily = FontFamily.Serif
-    )
-}
