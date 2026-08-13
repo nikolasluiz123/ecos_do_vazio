@@ -41,6 +41,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -98,7 +99,9 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {}
 ) {
-    val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+    val isExpandedWidth = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+    val isCompactHeight = windowSizeClass?.heightSizeClass == WindowHeightSizeClass.Compact
+    val useSideBySide = isExpandedWidth || isCompactHeight
 
     Scaffold { paddingValues ->
         val layoutDirection = LocalLayoutDirection.current
@@ -111,17 +114,12 @@ fun HistoryModeBattleScreen(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = if (isExpanded) 12.dp else paddingValues.calculateEndPadding(layoutDirection)
+                    end = if (useSideBySide) 12.dp else paddingValues.calculateEndPadding(layoutDirection)
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
-            if (isExpanded) {
-                val enemyWeight = when (state.mobs.size) {
-                    1 -> 1f
-                    2 -> 1.5f
-                    3 -> 2f
-                    else -> 2.5f
-                }
+            if (useSideBySide) {
+                val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -167,6 +165,22 @@ fun HistoryModeBattleScreen(
                 )
             }
         }
+    }
+}
+
+private fun getEnemyWeight(
+    isExpandedWidth: Boolean,
+    state: HistoryModeBattleUIState
+): Float {
+    return if (isExpandedWidth) {
+        when (state.mobs.size) {
+            1 -> 1f
+            2 -> 1.5f
+            3 -> 2f
+            else -> 2.5f
+        }
+    } else {
+        1f
     }
 }
 
