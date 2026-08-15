@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +54,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PhaseCardBorderColor
 import coil.compose.SubcomposeAsyncImage
+
+private const val PHASE_IMAGE_SIZE = 200
 
 @Composable
 fun HistoryScreen(
@@ -147,7 +150,7 @@ private fun PhaseImage(
 ) {
     Box(
         modifier = Modifier
-            .size(200.dp)
+            .size(PHASE_IMAGE_SIZE.dp)
             .clip(RoundedCornerShape(8.dp))
             .border(4.dp, borderColor, RoundedCornerShape(8.dp))
             .then(if (!phase.isLocked) Modifier.clickable { onPhaseClick(phase.id) } else Modifier),
@@ -187,8 +190,7 @@ private fun PhaseInfoCard(phase: HistoryPhaseUIModel) {
         border = BorderStroke(1.dp, PhaseCardBorderColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 64.dp)
+            .width((PHASE_IMAGE_SIZE + 32).dp)
             .padding(top = 8.dp)
     ) {
         Column(
