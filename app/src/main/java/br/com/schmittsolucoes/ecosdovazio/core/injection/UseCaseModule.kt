@@ -489,12 +489,14 @@ object UseCaseModule {
         skillRepository: SkillRepository,
         userRepository: UserRepository,
         preferencesRepository: PreferencesRepository,
-        charRepository: CharRepository
+        charRepository: CharRepository,
+        languageProvider: LanguageProvider,
     ): CharDamageSkillsQueryUseCase = CharDamageSkillsQueryUseCase(
         skillRepository = skillRepository,
         userRepository = userRepository,
         preferencesRepository = preferencesRepository,
-        charRepository = charRepository
+        charRepository = charRepository,
+        languageProvider = languageProvider,
     )
 
     @Provides
@@ -502,12 +504,14 @@ object UseCaseModule {
         skillRepository: SkillRepository,
         userRepository: UserRepository,
         preferencesRepository: PreferencesRepository,
-        charRepository: CharRepository
+        charRepository: CharRepository,
+        languageProvider: LanguageProvider,
     ): CharBuffAndDebuffSkillsQueryUseCase = CharBuffAndDebuffSkillsQueryUseCase(
         skillRepository = skillRepository,
         userRepository = userRepository,
         preferencesRepository = preferencesRepository,
-        charRepository = charRepository
+        charRepository = charRepository,
+        languageProvider = languageProvider,
     )
 
     @Provides

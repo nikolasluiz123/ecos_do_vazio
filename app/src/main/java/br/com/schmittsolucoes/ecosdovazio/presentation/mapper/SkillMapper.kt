@@ -4,7 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 
 fun CharSkill.toUIModel(
-    imageName: Int,
+    image: Int,
     currentRefreshTime: Int,
     blocked: Boolean
 ): CharSkillUIModel {
@@ -14,7 +14,7 @@ fun CharSkill.toUIModel(
             name = name,
             description = description,
             refreshTime = refreshTime,
-            imageName = imageName,
+            image = image,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
             damage = damage
@@ -25,7 +25,7 @@ fun CharSkill.toUIModel(
             name = name,
             description = description,
             refreshTime = refreshTime,
-            imageName = imageName,
+            image = image,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
             damage = damage,
@@ -38,7 +38,7 @@ fun CharSkill.toUIModel(
             description = description,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
-            imageName = imageName,
+            image = image,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
             multiplier = multiplier,
@@ -51,7 +51,7 @@ fun CharSkill.toUIModel(
             description = description,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
-            imageName = imageName,
+            image = image,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
             multiplier = multiplier,

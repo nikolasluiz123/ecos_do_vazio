@@ -21,7 +21,8 @@ import coil.compose.SubcomposeAsyncImage
 internal fun BattleAsyncImage(
     model: Any?,
     contentDescription: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    filterQuality: FilterQuality = FilterQuality.High
 ) {
     if (LocalInspectionMode.current && model is Int) {
         Image(
@@ -36,7 +37,7 @@ internal fun BattleAsyncImage(
             contentDescription = contentDescription,
             modifier = modifier,
             contentScale = ContentScale.Crop,
-            filterQuality = FilterQuality.High,
+            filterQuality = filterQuality,
             loading = {
                 Box(
                     modifier = Modifier

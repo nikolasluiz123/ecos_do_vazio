@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SkillLocalDataSource : EntityLocalDataSource<SkillEntity> {
     fun getCharSkills(
+        languageTag: String,
         classId: String,
         specializationId: String?,
         categories: List<SkillCategory>

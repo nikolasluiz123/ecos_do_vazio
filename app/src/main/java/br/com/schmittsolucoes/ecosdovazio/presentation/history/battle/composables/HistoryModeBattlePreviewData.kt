@@ -79,7 +79,7 @@ object HistoryModeBattlePreviewData {
         name = "Golpe Pesado",
         description = "Um ataque que causa dano físico massivo.",
         refreshTime = 3,
-        imageName = R.drawable.skill_golpe_pesado,
+        image = R.drawable.skill_golpe_pesado,
         currentRefreshTime = 0,
         blocked = false,
         damage = 50
@@ -91,7 +91,7 @@ object HistoryModeBattlePreviewData {
         description = "Aumenta o dano causado por alguns turnos.",
         skillCategory = SkillCategory.OFFENSIVE_BUFF,
         refreshTime = 5,
-        imageName = R.drawable.skill_furia_de_batalha,
+        image = R.drawable.skill_furia_de_batalha,
         currentRefreshTime = 0,
         blocked = false,
         multiplier = 1.5,

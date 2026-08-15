@@ -9,6 +9,7 @@ interface SkillRepository {
     suspend fun save(skills: List<Skill>)
 
     fun getCharSkills(
+        languageTag: String,
         classId: String,
         specializationId: String?,
         categories: List<SkillCategory>

@@ -30,6 +30,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryMod
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.CharSection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.SkillsLazyHorizontalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.SkillsLazyVerticalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
@@ -37,7 +39,7 @@ internal const val ITEM_ASPECT_RATIO = 0.60f
 internal val ITEM_MAX_HEIGHT = 450.dp
 internal val SECTION_PADDING_VERTICAL = 12.dp
 internal val ITEM_SPACING = 8.dp
-internal val SIDE_BY_SIDE_SPACING = 12.dp
+internal val SIDE_BY_SIDE_SPACING = 0.dp
 internal val ITEM_CORNER_RADIUS = 4.dp
 internal val ITEM_BORDER_WIDTH = 2.dp
 internal val INFO_PADDING = 8.dp
@@ -105,21 +107,31 @@ fun HistoryModeBattleScreen(
 
 @Composable
 internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: WindowSizeClass?) {
-    Column(
+    Row(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EnemySection(
-            mobs = state.mobs,
-            windowSizeClass = windowSizeClass,
-            modifier = Modifier.weight(1f)
-        )
+        Column(
+            modifier = Modifier.fillMaxSize().weight(0.75f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            EnemySection(
+                mobs = state.mobs,
+                windowSizeClass = windowSizeClass,
+                modifier = Modifier.weight(1f)
+            )
 
-        CharSection(
-            char = state.char,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
+            CharSection(
+                char = state.char,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+        }
+
+        SkillsLazyVerticalGrid(
+            state = state,
+            windowSizeClass = windowSizeClass,
+            modifier = Modifier.fillMaxSize().weight(0.25f)
         )
     }
 }
@@ -132,23 +144,35 @@ internal fun SideBySideLayout(
 ) {
     val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
-        EnemySection(
-            mobs = state.mobs,
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(0.75f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            EnemySection(
+                mobs = state.mobs,
+                windowSizeClass = windowSizeClass,
+                modifier = Modifier.weight(enemyWeight),
+                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
+
+            CharSection(
+                char = state.char,
+                modifier = Modifier.weight(1f),
+                alignment = Alignment.Center
+            )
+        }
+
+        SkillsLazyHorizontalGrid(
+            state = state,
             windowSizeClass = windowSizeClass,
-            modifier = Modifier.weight(enemyWeight),
-            horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
-
-        CharSection(
-            char = state.char,
-            modifier = Modifier.weight(1f),
-            alignment = Alignment.Center
+            modifier = Modifier.fillMaxSize().weight(0.25f)
         )
     }
 }

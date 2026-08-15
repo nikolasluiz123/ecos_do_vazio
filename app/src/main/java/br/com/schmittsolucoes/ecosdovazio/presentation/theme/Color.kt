@@ -141,6 +141,26 @@ val BackgroundGradient: Brush
     }
 
 @get:Composable
+val SurfaceVariantGradient: Brush
+    get() = if (isSystemInDarkTheme()) {
+        Brush.radialGradient(
+            colors = listOf(
+                surfaceVariantDark.copy(alpha = 0.8f),
+                surfaceVariantDark
+            ),
+            tileMode = TileMode.Mirror
+        )
+    } else {
+        Brush.radialGradient(
+            colors = listOf(
+                surfaceVariantLight.copy(alpha = 0.8f),
+                surfaceVariantLight
+            ),
+            tileMode = TileMode.Mirror
+        )
+    }
+
+@get:Composable
 val PrimaryTextColor: Color
     get() = MaterialTheme.colorScheme.onBackground
 
@@ -166,4 +186,8 @@ val PhaseCardBorderColor: Color
 
 @get:Composable
 val CharacterBattleStrokeColor: Color
+    get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight
+
+@get:Composable
+val SkillBattleStrokeColor: Color
     get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight

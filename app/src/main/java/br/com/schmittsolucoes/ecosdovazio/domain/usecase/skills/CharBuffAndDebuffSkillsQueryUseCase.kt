@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.SkillRepository
@@ -15,7 +16,8 @@ class CharBuffAndDebuffSkillsQueryUseCase(
     private val skillRepository: SkillRepository,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val charRepository: CharRepository
+    private val charRepository: CharRepository,
+    private val languageProvider: LanguageProvider,
 ) {
     operator fun invoke(): Flow<List<CharSkill>> = flow {
         val userId = userRepository.getFirstUser()?.id ?: return@flow emit(emptyList())
@@ -23,6 +25,7 @@ class CharBuffAndDebuffSkillsQueryUseCase(
         val char = charRepository.getById(charId)
 
         val skillsFlow = skillRepository.getCharSkills(
+            languageTag = languageProvider.getDeviceTag(),
             classId = char.classId,
             specializationId = char.specializationId,
             categories = listOf(

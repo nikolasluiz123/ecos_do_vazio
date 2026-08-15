@@ -176,7 +176,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun mapCharSkillsToUIModel(battleChar: BattleChar, skills: List<CharSkill>): List<CharSkillUIModel> {
         return skills.map {
             it.toUIModel(
-                imageName = resourcesProvider.getSkillImage(it.imageName) ?: 0,
+                image = resourcesProvider.getSkillImage(it.imageName) ?: 0,
                 currentRefreshTime = 0,
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,
