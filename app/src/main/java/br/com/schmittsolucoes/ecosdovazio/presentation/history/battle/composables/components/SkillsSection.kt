@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -53,6 +55,8 @@ fun SkillsLazyVerticalGrid(
         else -> 3
     }
 
+    val pagerState = rememberPagerState(pageCount = { 2 })
+
     AnimatedVisibility(
         visible = !state.isLoading,
         enter = VerticalGridEnterTransition,
@@ -60,14 +64,23 @@ fun SkillsLazyVerticalGrid(
         modifier = modifier
     ) {
         SkillsSurface {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(columns),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
-                    SkillItem(skill = skill)
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top
+            ) { page ->
+                val skills = getSkillsList(page, state)
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(columns),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(skills) { skill ->
+                        SkillItem(skill = skill)
+                    }
                 }
             }
         }
@@ -86,6 +99,8 @@ fun SkillsLazyHorizontalGrid(
         else -> 3
     }
 
+    val pagerState = rememberPagerState(pageCount = { 2 })
+
     AnimatedVisibility(
         visible = !state.isLoading,
         enter = HorizontalGridEnterTransition,
@@ -93,18 +108,31 @@ fun SkillsLazyHorizontalGrid(
         modifier = modifier
     ) {
         SkillsSurface {
-            LazyHorizontalGrid(
-                rows = GridCells.Fixed(rows),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
-                    SkillItem(skill = skill)
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top
+            ) { page ->
+                val skills = getSkillsList(page, state)
+
+                LazyHorizontalGrid(
+                    rows = GridCells.Fixed(rows),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(skills) { skill ->
+                        SkillItem(skill = skill)
+                    }
                 }
             }
         }
     }
+}
+
+private fun getSkillsList(page: Int, state: HistoryModeBattleUIState): List<CharSkillUIModel> {
+    return if (page == 0) state.damageSkills else state.buffAndDebuffSkills
 }
 
 @Composable
