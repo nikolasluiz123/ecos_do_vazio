@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -12,12 +13,14 @@ fun NavController.navigateToHistory() {
 }
 
 fun NavGraphBuilder.historyScreen(
+    windowSizeClass: WindowSizeClass,
     onNavigateToBattle: (String) -> Unit
 ) {
     composable<HistoryRoute> {
         val viewModel = hiltViewModel<HistoryViewModel>()
         HistoryScreen(
             viewModel = viewModel,
+            windowSizeClass = windowSizeClass,
             onPhaseClick = onNavigateToBattle
         )
     }

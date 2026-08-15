@@ -46,6 +46,7 @@ fun AppNavHost(
             homeScreen()
             charScreen(windowSizeClass = windowSizeClass)
             historyScreen(
+                windowSizeClass = windowSizeClass,
                 onNavigateToBattle = navController::navigateToHistoryModeBattle
             )
         }
