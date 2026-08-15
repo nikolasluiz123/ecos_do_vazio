@@ -6,13 +6,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 class GetCharSkillBlockedUseCase {
     operator fun invoke(battleChar: BattleChar, skillRequiredAttributes: CharSkill.Attributes): Boolean {
         val skillRequirements = mapOf(
-            battleChar.strength.value to skillRequiredAttributes.requiredStrength,
-            battleChar.dexterity.value to skillRequiredAttributes.requiredDexterity,
-            battleChar.intelligence.value to skillRequiredAttributes.requiredIntelligence,
-            battleChar.physicalResistance.value to skillRequiredAttributes.requiredPhysicalResistance,
-            battleChar.magicResistance.value to skillRequiredAttributes.requiredMagicResistance,
-            battleChar.vitality.value to skillRequiredAttributes.requiredVitality,
-            battleChar.agility.value to skillRequiredAttributes.requiredAgility,
+            battleChar.strength.totalValue to skillRequiredAttributes.requiredStrength,
+            battleChar.dexterity.totalValue to skillRequiredAttributes.requiredDexterity,
+            battleChar.intelligence.totalValue to skillRequiredAttributes.requiredIntelligence,
+            battleChar.physicalResistance.totalValue to skillRequiredAttributes.requiredPhysicalResistance,
+            battleChar.magicResistance.totalValue to skillRequiredAttributes.requiredMagicResistance,
+            battleChar.vitality.totalValue to skillRequiredAttributes.requiredVitality,
+            battleChar.agility.totalValue to skillRequiredAttributes.requiredAgility,
         )
 
         return skillRequirements.any { (charValue, skillRequirement) ->

@@ -10,6 +10,7 @@ data class BattleMobUIModel(
     val description: String,
     @DrawableRes val image: Int,
     val mobCategory: MobCategory,
+    val multiplier: Double,
     val totalHealth: Long,
     val actualHealth: Long,
     val healthProgress: Float,

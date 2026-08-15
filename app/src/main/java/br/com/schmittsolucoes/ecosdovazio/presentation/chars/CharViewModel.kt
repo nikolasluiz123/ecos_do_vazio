@@ -126,9 +126,8 @@ class CharViewModel @Inject constructor(
 
     private fun getAttributesInfo(attributes: CharAttributes?): List<CharAttributesUIModel>? =
         attributes?.attributes?.map { attr ->
-            val totalValue = attr.charValue + attr.classValue + attr.specializationValue
-            val attributeProgress = getAttributeProgress(attributes, totalValue)
-            attr.toUIModel(totalValue = totalValue, progress = attributeProgress)
+            val attributeProgress = getAttributeProgress(attributes, attr.attribute.totalValue)
+            attr.toUIModel(progress = attributeProgress)
         }
 
     private fun getAttributeProgress(

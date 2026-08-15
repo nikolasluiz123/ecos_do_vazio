@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharHealthData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -32,7 +31,7 @@ class GetCharHPUseCase(
         }
 
         val healthFlow = charRepository.getCharHealthData(charId).map {
-            val vitalityPoints = getVitalityPoints(it)
+            val vitalityPoints = it.vitality.totalValue
             calculate(it.classCategory, vitalityPoints)
         }
 
@@ -60,9 +59,5 @@ class GetCharHPUseCase(
             ClassCategory.MAGE -> 4L
             ClassCategory.ARCHER -> 6L
         }
-    }
-
-    private fun getVitalityPoints(data: CharHealthData): Long {
-        return data.charVitality + data.classIncrementVitality + (data.specializationIncrementVitality ?: 0L)
     }
 }

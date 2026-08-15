@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharCriticalData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -34,7 +33,7 @@ class GetCharCriticalChanceUseCase(
         val criticalChanceFlow = charRepository.getCharCriticalData(charId).map {
             val factor = getFactor(it.classCategory)
             val maxChance = getMaxResistanceValue(it.classCategory)
-            val points = getPoints(it)
+            val points = it.dexterity.totalValue
             val chance = points * factor
 
             minOf(maxChance, chance)
@@ -58,9 +57,4 @@ class GetCharCriticalChanceUseCase(
             ClassCategory.ARCHER -> 0.6
         }
     }
-
-    private fun getPoints(data: CharCriticalData): Long {
-        return data.charDexterity + data.classIncrementDexterity + (data.specializationIncrementDexterity ?: 0L)
-    }
-
 }

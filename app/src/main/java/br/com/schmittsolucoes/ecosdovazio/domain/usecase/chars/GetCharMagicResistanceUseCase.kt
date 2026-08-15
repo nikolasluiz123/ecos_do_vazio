@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharMagicResistanceData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -35,7 +34,7 @@ class GetCharMagicResistanceUseCase(
         val resistanceFlow = charRepository.getCharMagicResistanceData(charId).map {
             val factor = getFactor(it.classCategory)
             val maxResistance = getMaxResistanceValue(it.classCategory)
-            val points = getPoints(it)
+            val points = it.magicResistance.totalValue
             val effectiveResistance = points * factor
             val calculatedResistance = (effectiveResistance / (MAGIC_RESISTANCE_SCALE_CONSTANT + effectiveResistance))
 
@@ -59,9 +58,5 @@ class GetCharMagicResistanceUseCase(
             ClassCategory.MAGE -> 0.75
             ClassCategory.ARCHER -> 0.5
         }
-    }
-
-    private fun getPoints(data: CharMagicResistanceData): Long {
-        return data.charMagicResistance + data.classIncrementMagicResistance + (data.specializationIncrementMagicResistance ?: 0L)
     }
 }

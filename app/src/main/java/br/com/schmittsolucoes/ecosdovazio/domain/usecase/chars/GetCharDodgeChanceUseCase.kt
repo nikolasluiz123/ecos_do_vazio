@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharDodgeData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -34,7 +33,7 @@ class GetCharDodgeChanceUseCase(
         val dodgeChanceFlow = charRepository.getCharDodgeData(charId).map {
             val factor = getFactor(it.classCategory)
             val maxChance = getMaxDodgeValue(it.classCategory)
-            val points = getPoints(it)
+            val points = it.agility.totalValue
             val chance = points * factor
 
             minOf(maxChance, chance)
@@ -58,9 +57,4 @@ class GetCharDodgeChanceUseCase(
             ClassCategory.ARCHER -> 0.45
         }
     }
-
-    private fun getPoints(data: CharDodgeData): Long {
-        return data.charAgility + data.classIncrementAgility + (data.specializationIncrementAgility ?: 0L)
-    }
-
 }

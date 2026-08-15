@@ -7,20 +7,11 @@ data class BattleChar(
     val name: String,
     val battleImageName: String,
     val classCategory: ClassCategory,
-    val strength: Attribute,
-    val dexterity: Attribute,
-    val intelligence: Attribute,
-    val physicalResistance: Attribute,
-    val magicResistance: Attribute,
-    val vitality: Attribute,
-    val agility: Attribute,
-) {
-    data class Attribute(
-        val charValue: Long,
-        val classValue: Long,
-        val specializationValue: Long?,
-    ) {
-        val value: Long
-            get() = charValue + classValue + (specializationValue ?: 0L)
-    }
-}
+    val strength: CharAttribute,
+    val dexterity: CharAttribute,
+    val intelligence: CharAttribute,
+    val physicalResistance: CharAttribute,
+    val magicResistance: CharAttribute,
+    val vitality: CharAttribute,
+    val agility: CharAttribute,
+)

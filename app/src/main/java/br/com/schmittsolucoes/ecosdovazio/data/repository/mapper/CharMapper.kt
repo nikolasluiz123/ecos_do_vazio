@@ -14,6 +14,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharPhysicalResistan
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharSelectionTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharBaseDamageData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharCriticalData
@@ -24,6 +25,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharMagicResistanceData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharPhysicalResistanceData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.IdentifiedCharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 
 fun Char.toEntity(): CharEntity {
@@ -82,29 +84,42 @@ fun CharHeaderTuple.toDomain(): CharHeader {
 fun CharHealthDataTuple.toDomain(): CharHealthData {
     return CharHealthData(
         classCategory = classCategory,
-        charVitality = charVitality,
-        classIncrementVitality = classIncrementVitality,
-        specializationIncrementVitality = specializationIncrementVitality
+        vitality = CharAttribute(
+            charValue = charVitality,
+            classValue = classIncrementVitality,
+            specializationValue = specializationIncrementVitality
+        )
     )
 }
 
 fun CharBaseDamageDataTuple.toDomain(): CharBaseDamageData {
     return CharBaseDamageData(
         classCategory = classCategory,
-        strength = CharBaseDamageData.DamageAttributes(
-            charValue = charStrength,
-            classValue = classIncrementStrength,
-            specializationValue = specializationIncrementStrength
-        ),
-        dexterity = CharBaseDamageData.DamageAttributes(
-            charValue = charDexterity,
-            classValue = classIncrementDexterity,
-            specializationValue = specializationIncrementDexterity
-        ),
-        intelligence = CharBaseDamageData.DamageAttributes(
-            charValue = charIntelligence,
-            classValue = classIncrementIntelligence,
-            specializationValue = specializationIncrementIntelligence
+        attributes = listOf(
+            IdentifiedCharAttribute(
+                id = AttributeIdentifier.STRENGTH,
+                attribute = CharAttribute(
+                    charValue = charStrength,
+                    classValue = classIncrementStrength,
+                    specializationValue = specializationIncrementStrength
+                )
+            ),
+            IdentifiedCharAttribute(
+                id = AttributeIdentifier.DEXTERITY,
+                attribute = CharAttribute(
+                    charValue = charDexterity,
+                    classValue = classIncrementDexterity,
+                    specializationValue = specializationIncrementDexterity
+                )
+            ),
+            IdentifiedCharAttribute(
+                id = AttributeIdentifier.INTELLIGENCE,
+                attribute = CharAttribute(
+                    charValue = charIntelligence,
+                    classValue = classIncrementIntelligence,
+                    specializationValue = specializationIncrementIntelligence
+                )
+            )
         )
     )
 }
@@ -112,36 +127,44 @@ fun CharBaseDamageDataTuple.toDomain(): CharBaseDamageData {
 fun CharPhysicalResistanceDataTuple.toDomain(): CharPhysicalResistanceData {
     return CharPhysicalResistanceData(
         classCategory = classCategory,
-        charPhysicalResistance = charPhysicalResistance,
-        classIncrementPhysicalResistance = classIncrementPhysicalResistance,
-        specializationIncrementPhysicalResistance = specializationIncrementPhysicalResistance
+        physicalResistance = CharAttribute(
+            charValue = charPhysicalResistance,
+            classValue = classIncrementPhysicalResistance,
+            specializationValue = specializationIncrementPhysicalResistance
+        )
     )
 }
 
 fun CharMagicResistanceDataTuple.toDomain(): CharMagicResistanceData {
     return CharMagicResistanceData(
         classCategory = classCategory,
-        charMagicResistance = charMagicResistance,
-        classIncrementMagicResistance = classIncrementMagicResistance,
-        specializationIncrementMagicResistance = specializationIncrementMagicResistance
+        magicResistance = CharAttribute(
+            charValue = charMagicResistance,
+            classValue = classIncrementMagicResistance,
+            specializationValue = specializationIncrementMagicResistance
+        )
     )
 }
 
 fun CharCriticalDataTuple.toDomain(): CharCriticalData {
     return CharCriticalData(
         classCategory = classCategory,
-        charDexterity = charDexterity,
-        classIncrementDexterity = classIncrementDexterity,
-        specializationIncrementDexterity = specializationIncrementDexterity
+        dexterity = CharAttribute(
+            charValue = charDexterity,
+            classValue = classIncrementDexterity,
+            specializationValue = specializationIncrementDexterity
+        )
     )
 }
 
 fun CharDodgeDataTuple.toDomain(): CharDodgeData {
     return CharDodgeData(
         classCategory = classCategory,
-        charAgility = charAgility,
-        classIncrementAgility = classIncrementAgility,
-        specializationIncrementAgility = specializationIncrementAgility
+        agility = CharAttribute(
+            charValue = charAgility,
+            classValue = classIncrementAgility,
+            specializationValue = specializationIncrementAgility
+        )
     )
 }
 
@@ -157,47 +180,61 @@ fun CharAttributesTuple.toDomain(maxAttributeValue: Long): CharAttributes {
     return CharAttributes(
         maxAttributeValue = maxAttributeValue,
         attributes = listOf(
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.STRENGTH,
-                charValue = charStrength,
-                classValue = classIncrementStrength,
-                specializationValue = specializationIncrementStrength ?: 0L
+                attribute = CharAttribute(
+                    charValue = charStrength,
+                    classValue = classIncrementStrength,
+                    specializationValue = specializationIncrementStrength ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.DEXTERITY,
-                charValue = charDexterity,
-                classValue = classIncrementDexterity,
-                specializationValue = specializationIncrementDexterity ?: 0L
+                attribute = CharAttribute(
+                    charValue = charDexterity,
+                    classValue = classIncrementDexterity,
+                    specializationValue = specializationIncrementDexterity ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.INTELLIGENCE,
-                charValue = charIntelligence,
-                classValue = classIncrementIntelligence,
-                specializationValue = specializationIncrementIntelligence ?: 0L
+                attribute = CharAttribute(
+                    charValue = charIntelligence,
+                    classValue = classIncrementIntelligence,
+                    specializationValue = specializationIncrementIntelligence ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.PHYSICAL_RESISTANCE,
-                charValue = charPhysicalResistance,
-                classValue = classIncrementPhysicalResistance,
-                specializationValue = specializationIncrementPhysicalResistance ?: 0L
+                attribute = CharAttribute(
+                    charValue = charPhysicalResistance,
+                    classValue = classIncrementPhysicalResistance,
+                    specializationValue = specializationIncrementPhysicalResistance ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.MAGIC_RESISTANCE,
-                charValue = charMagicResistance,
-                classValue = classIncrementMagicResistance,
-                specializationValue = specializationIncrementMagicResistance ?: 0L
+                attribute = CharAttribute(
+                    charValue = charMagicResistance,
+                    classValue = classIncrementMagicResistance,
+                    specializationValue = specializationIncrementMagicResistance ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.VITALITY,
-                charValue = charVitality,
-                classValue = classIncrementVitality,
-                specializationValue = specializationIncrementVitality ?: 0L
+                attribute = CharAttribute(
+                    charValue = charVitality,
+                    classValue = classIncrementVitality,
+                    specializationValue = specializationIncrementVitality ?: 0L
+                )
             ),
-            CharAttributes.Attributes(
+            IdentifiedCharAttribute(
                 id = AttributeIdentifier.AGILITY,
-                charValue = charAgility,
-                classValue = classIncrementAgility,
-                specializationValue = specializationIncrementAgility ?: 0L
+                attribute = CharAttribute(
+                    charValue = charAgility,
+                    classValue = classIncrementAgility,
+                    specializationValue = specializationIncrementAgility ?: 0L
+                )
             )
         )
     )
@@ -209,37 +246,37 @@ fun BattleCharTuple.toDomain(): BattleChar {
         name = name,
         battleImageName = battleImageName,
         classCategory = classCategory,
-        strength = BattleChar.Attribute(
+        strength = CharAttribute(
             charValue = charStrength,
             classValue = classIncrementStrength,
             specializationValue = specializationIncrementStrength
         ),
-        dexterity = BattleChar.Attribute(
+        dexterity = CharAttribute(
             charValue = charDexterity,
             classValue = classIncrementDexterity,
             specializationValue = specializationIncrementDexterity
         ),
-        intelligence = BattleChar.Attribute(
+        intelligence = CharAttribute(
             charValue = charIntelligence,
             classValue = classIncrementIntelligence,
             specializationValue = specializationIncrementIntelligence
         ),
-        physicalResistance = BattleChar.Attribute(
+        physicalResistance = CharAttribute(
             charValue = charPhysicalResistance,
             classValue = classIncrementPhysicalResistance,
             specializationValue = specializationIncrementPhysicalResistance
         ),
-        magicResistance = BattleChar.Attribute(
+        magicResistance = CharAttribute(
             charValue = charMagicResistance,
             classValue = classIncrementMagicResistance,
             specializationValue = specializationIncrementMagicResistance
         ),
-        vitality = BattleChar.Attribute(
+        vitality = CharAttribute(
             charValue = charVitality,
             classValue = classIncrementVitality,
             specializationValue = specializationIncrementVitality
         ),
-        agility = BattleChar.Attribute(
+        agility = CharAttribute(
             charValue = charAgility,
             classValue = classIncrementAgility,
             specializationValue = specializationIncrementAgility

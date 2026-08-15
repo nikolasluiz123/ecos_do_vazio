@@ -15,6 +15,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepositor
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
@@ -25,12 +26,14 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserChar
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharCriticalChanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDamageAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharSkillDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
@@ -316,10 +319,12 @@ object UseCaseModule {
 
     @Provides
     fun provideGetCharBaseDamageUseCase(
+        getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase,
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository
     ): GetCharBaseDamageUseCase = GetCharBaseDamageUseCase(
+        getCharDamageAttributePointsUseCase = getCharDamageAttributePointsUseCase,
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository
@@ -508,5 +513,24 @@ object UseCaseModule {
     @Provides
     fun provideGetCharSkillBlockedUseCase(): GetCharSkillBlockedUseCase {
         return GetCharSkillBlockedUseCase()
+    }
+
+    @Provides
+    fun provideGetCharDamageAttributePointsUseCase(): GetCharDamageAttributePointsUseCase {
+        return GetCharDamageAttributePointsUseCase()
+    }
+
+    @Provides
+    fun provideGetCharSkillDamageUseCase(
+        getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase
+    ): GetCharSkillDamageUseCase {
+        return GetCharSkillDamageUseCase(getCharDamageAttributePointsUseCase)
+    }
+
+    @Provides
+    fun provideUseCharSkillUseCase(
+        getCharSkillDamageUseCase: GetCharSkillDamageUseCase
+    ): UseCharSkillUseCase {
+        return UseCharSkillUseCase(getCharSkillDamageUseCase)
     }
 }

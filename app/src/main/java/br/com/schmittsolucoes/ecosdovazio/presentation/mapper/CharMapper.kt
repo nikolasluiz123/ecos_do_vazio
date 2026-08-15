@@ -1,8 +1,8 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.IdentifiedCharAttribute
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharLevelInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.CharSelectionUIModel
@@ -24,13 +24,10 @@ fun CharLevelInfo.toUIModel(progress: Float): CharLevelInfoUIModel {
     )
 }
 
-fun CharAttributes.Attributes.toUIModel(
-    totalValue: Long,
-    progress: Float
-): CharAttributesUIModel {
+fun IdentifiedCharAttribute.toUIModel(progress: Float): CharAttributesUIModel {
     return CharAttributesUIModel(
         identifier = id,
-        totalValue = totalValue.toString(),
+        totalValue = attribute.totalValue.toString(),
         progress = progress
     )
 }

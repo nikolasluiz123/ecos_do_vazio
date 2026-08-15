@@ -7,9 +7,11 @@ import androidx.navigation.toRoute
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
@@ -23,6 +25,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Batt
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainInfo
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainUsedSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -41,6 +45,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val getMobLevelUseCase: GetMobLevelUseCase,
     private val getCharHPUseCase: GetCharHPUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
+    private val useCharSkillUseCase: UseCharSkillUseCase,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -52,6 +57,7 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
+    private val _selectedMob = MutableStateFlow<BattleMobUIModel?>(null)
 
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HistoryModeBattleUIState> = combine(
@@ -60,7 +66,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         mobsFromPhaseQueryUseCase(route.phaseId),
         getCharBattleUseCase(),
         charDamageSkillsQueryUseCase(),
-        charBuffAndDebuffSkillsQueryUseCase()
+        charBuffAndDebuffSkillsQueryUseCase(),
+        _selectedMob
     ) { flows ->
         val errorMessage = flows[0] as String?
         val isLoading = flows[1] as Boolean
@@ -68,15 +75,19 @@ class HistoryModeBattleViewModel @Inject constructor(
         val char = flows[3] as BattleChar
         val damageSkills = flows[4] as List<CharSkill>
         val buffAndDebuffSkills = flows[5] as List<CharSkill>
+        val selectedMob = flows[6] as BattleMobUIModel?
+
+        val uiModelMobs = mapBattleMobsToUIModel(mobs)
 
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
             errorMessage = errorMessage,
             isLoading = isLoading,
-            mobs = mapBattleMobsToUIModel(mobs),
+            mobs = uiModelMobs,
             char = mapBattleCharToUIModel(char),
             damageSkills = mapCharSkillsToUIModel(char, damageSkills),
-            buffAndDebuffSkills = mapCharSkillsToUIModel(char, buffAndDebuffSkills)
+            buffAndDebuffSkills = mapCharSkillsToUIModel(char, buffAndDebuffSkills),
+            selectedMob = selectedMob ?: uiModelMobs.firstOrNull()
         )
     }.stateIn(
         scope = viewModelScope,
@@ -99,6 +110,34 @@ class HistoryModeBattleViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
+    fun onMobClick(mob: BattleMobUIModel) {
+        _selectedMob.value = mob
+    }
+
+    fun onSkillClick(skill: CharSkillUIModel) {
+        val state = uiState.value
+        val char = state.char ?: return
+        val selectedMob = state.selectedMob ?: return
+
+        val result = useCharSkillUseCase(
+            skillInfo = skill.toDomainUsedSkillInfo(),
+            battleCharInfo = char.toDomainInfo(),
+            battleMobInfo = selectedMob.toDomainInfo()
+        )
+
+        when (result) {
+            is CharSkillUsageResult.CommonDamage -> {
+                _selectedMob.value = selectedMob.copy(
+                    actualHealth = result.newEnemyHealth
+                )
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
     private suspend fun mapBattleMobsToUIModel(mobs: List<BattleMob>): List<BattleMobUIModel> {
         return mobs.map {
             val totalHealth = getMobHPUseCase(it.mobCategory, it.attributes.vitality)
@@ -109,7 +148,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 totalHealth = totalHealth,
                 actualHealth = totalHealth,
                 healthProgress = if (totalHealth > 0) totalHealth.toFloat() / totalHealth.toFloat() else 0f,
-                level = level
+                level = level,
+                multiplier = 1.0
             )
         }
     }
@@ -117,7 +157,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun mapBattleCharToUIModel(char: BattleChar): BattleCharUIModel {
         val totalHealth = getCharHPUseCase.calculate(
             classCategory = char.classCategory,
-            vitalityPoints = char.vitality.value
+            vitalityPoints = char.vitality.totalValue
         )
 
         val battleImage = resourcesProvider.getBattleClassImage(char.battleImageName)
@@ -128,7 +168,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             totalHealth = totalHealth,
             actualHealth = totalHealth,
             battleImage = battleImage,
-            healthProgress = if (totalHealth > 0) totalHealth.toFloat() / totalHealth.toFloat() else 0f
+            healthProgress = if (totalHealth > 0) totalHealth.toFloat() / totalHealth.toFloat() else 0f,
+            multiplier = 1.0
         )
     }
 

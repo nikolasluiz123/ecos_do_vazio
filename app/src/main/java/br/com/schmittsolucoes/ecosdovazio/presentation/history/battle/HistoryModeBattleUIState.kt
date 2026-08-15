@@ -9,6 +9,7 @@ data class HistoryModeBattleUIState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val mobs: List<BattleMobUIModel> = emptyList(),
+    val selectedMob: BattleMobUIModel? = null,
     val char: BattleCharUIModel? = null,
     val damageSkills: List<CharSkillUIModel> = emptyList(),
     val buffAndDebuffSkills: List<CharSkillUIModel> = emptyList()

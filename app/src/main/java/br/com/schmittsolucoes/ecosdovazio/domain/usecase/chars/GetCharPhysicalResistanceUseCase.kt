@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharPhysicalResistanceData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -35,7 +34,7 @@ class GetCharPhysicalResistanceUseCase(
         val resistanceFlow = charRepository.getCharPhysicalResistanceData(charId).map {
             val factor = getFactor(it.classCategory)
             val maxResistance = getMaxResistanceValue(it.classCategory)
-            val points = getPoints(it)
+            val points = it.physicalResistance.totalValue
             val effectiveResistance = points * factor
             val calculatedResistance = (effectiveResistance / (PHYSICAL_RESISTANCE_SCALE_CONSTANT + effectiveResistance))
 
@@ -59,9 +58,5 @@ class GetCharPhysicalResistanceUseCase(
             ClassCategory.MAGE -> 0.3
             ClassCategory.ARCHER -> 0.5
         }
-    }
-
-    private fun getPoints(data: CharPhysicalResistanceData): Long {
-        return data.charPhysicalResistance + data.classIncrementPhysicalResistance + (data.specializationIncrementPhysicalResistance ?: 0L)
     }
 }
