@@ -76,6 +76,27 @@ data class SkillEntity(
     @ColumnInfo("min_level")
     val minLevel: Long,
 
+    @ColumnInfo("required_strength")
+    val requiredStrength: Long = 0,
+
+    @ColumnInfo("required_dexterity")
+    val requiredDexterity: Long = 0,
+
+    @ColumnInfo("required_intelligence")
+    val requiredIntelligence: Long = 0,
+
+    @ColumnInfo("required_physical_resistance")
+    val requiredPhysicalResistance: Long = 0,
+
+    @ColumnInfo("required_magic_resistance")
+    val requiredMagicResistance: Long = 0,
+
+    @ColumnInfo("required_vitality")
+    val requiredVitality: Long = 0,
+
+    @ColumnInfo("required_agility")
+    val requiredAgility: Long = 0,
+
     @ColumnInfo("image_name")
-    val imageName: String? = null,
+    val imageName: String,
 ): UniqueEntity

@@ -3,6 +3,9 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ENGINEER_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ENGINEER_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ENGINEER_SPECIALIZATION_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_CANNON_SHOT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_AUTOMATIC_TURRET_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FRAGMENTATION_GRENADE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CreateSpecializationResult
@@ -39,7 +42,9 @@ class CreateEngineerSpecializationUseCase(
                 specializationId = engineer.id,
                 damage = 50,
                 refreshTime = 4,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_CANNON_SHOT_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 25) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -50,7 +55,9 @@ class CreateEngineerSpecializationUseCase(
                 damage = 15,
                 multiplier = 3.0,
                 refreshTime = 5,
-                minLevel = 16
+                minLevel = 16,
+                imageName = SKILL_AUTOMATIC_TURRET_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 26) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -60,7 +67,9 @@ class CreateEngineerSpecializationUseCase(
                 specializationId = engineer.id,
                 damage = 30,
                 refreshTime = 5,
-                minLevel = 18
+                minLevel = 18,
+                imageName = SKILL_FRAGMENTATION_GRENADE_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 28) 
             )
         )
 

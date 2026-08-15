@@ -3,6 +3,9 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_FIRE_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIREBALL_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIRE_BLAST_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FOCUS_SKIN_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CreateSpecializationResult
@@ -39,7 +42,9 @@ class CreateFireMageSpecializationUseCase(
                 specializationId = fireMage.id,
                 damage = 45,
                 refreshTime = 3,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_FIREBALL_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 25) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -49,7 +54,9 @@ class CreateFireMageSpecializationUseCase(
                 specializationId = fireMage.id,
                 damage = 30,
                 refreshTime = 5,
-                minLevel = 16
+                minLevel = 16,
+                imageName = SKILL_FIRE_BLAST_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 26) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -60,7 +67,9 @@ class CreateFireMageSpecializationUseCase(
                 multiplier = 1.2,
                 duration = 3,
                 refreshTime = 6,
-                minLevel = 18
+                minLevel = 18,
+                imageName = SKILL_FOCUS_SKIN_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 28) 
             )
         )
 

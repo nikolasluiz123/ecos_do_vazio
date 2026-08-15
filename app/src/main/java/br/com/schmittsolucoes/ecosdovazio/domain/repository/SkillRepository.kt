@@ -1,7 +1,16 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.Skill
+import kotlinx.coroutines.flow.Flow
 
 interface SkillRepository {
     suspend fun save(skills: List<Skill>)
+
+    fun getCharSkills(
+        classId: String,
+        specializationId: String?,
+        categories: List<SkillCategory>
+    ): Flow<List<CharSkill>>
 }

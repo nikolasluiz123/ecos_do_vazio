@@ -1,0 +1,1178 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "55e4b2ca8d1d6793d2b52d5d8730c87f",
+    "entities": [
+      {
+        "tableName": "users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "chars",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `experience` INTEGER NOT NULL, `class_id` TEXT NOT NULL, `user_id` TEXT NOT NULL, `specialization_id` TEXT, `level` INTEGER NOT NULL, `strength` INTEGER NOT NULL, `dexterity` INTEGER NOT NULL, `intelligence` INTEGER NOT NULL, `physical_resistance` INTEGER NOT NULL, `magic_resistance` INTEGER NOT NULL, `vitality` INTEGER NOT NULL, `agility` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`class_id`) REFERENCES `classes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`user_id`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`specialization_id`) REFERENCES `specializations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "experience",
+            "columnName": "experience",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classId",
+            "columnName": "class_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "specializationId",
+            "columnName": "specialization_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strength",
+            "columnName": "strength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dexterity",
+            "columnName": "dexterity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intelligence",
+            "columnName": "intelligence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "physicalResistance",
+            "columnName": "physical_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "magicResistance",
+            "columnName": "magic_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vitality",
+            "columnName": "vitality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "agility",
+            "columnName": "agility",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_chars_class_id",
+            "unique": false,
+            "columnNames": [
+              "class_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_chars_class_id` ON `${TABLE_NAME}` (`class_id`)"
+          },
+          {
+            "name": "index_chars_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_chars_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          },
+          {
+            "name": "index_chars_specialization_id",
+            "unique": false,
+            "columnNames": [
+              "specialization_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_chars_specialization_id` ON `${TABLE_NAME}` (`specialization_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "classes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "class_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "specializations",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "specialization_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "classes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_translation_id` TEXT NOT NULL, `description_translation_id` TEXT NOT NULL, `class_category` TEXT NOT NULL, `battle_image_name` TEXT NOT NULL, `presentation_image_name` TEXT NOT NULL, `profile_image_name` TEXT NOT NULL, `increment_strength` INTEGER NOT NULL, `increment_dexterity` INTEGER NOT NULL, `increment_intelligence` INTEGER NOT NULL, `increment_physical_resistance` INTEGER NOT NULL, `increment_magic_resistance` INTEGER NOT NULL, `increment_vitality` INTEGER NOT NULL, `increment_agility` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`name_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`description_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTranslationId",
+            "columnName": "name_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionTranslationId",
+            "columnName": "description_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classCategory",
+            "columnName": "class_category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "battleImageName",
+            "columnName": "battle_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "presentationImageName",
+            "columnName": "presentation_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileImageName",
+            "columnName": "profile_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementStrength",
+            "columnName": "increment_strength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementDexterity",
+            "columnName": "increment_dexterity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementIntelligence",
+            "columnName": "increment_intelligence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementPhysicalResistance",
+            "columnName": "increment_physical_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementMagicResistance",
+            "columnName": "increment_magic_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementVitality",
+            "columnName": "increment_vitality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementAgility",
+            "columnName": "increment_agility",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_classes_name_translation_id",
+            "unique": false,
+            "columnNames": [
+              "name_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_classes_name_translation_id` ON `${TABLE_NAME}` (`name_translation_id`)"
+          },
+          {
+            "name": "index_classes_description_translation_id",
+            "unique": false,
+            "columnNames": [
+              "description_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_classes_description_translation_id` ON `${TABLE_NAME}` (`description_translation_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "description_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "specializations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_translation_id` TEXT NOT NULL, `description_translation_id` TEXT NOT NULL, `class_id` TEXT NOT NULL, `battle_image_name` TEXT NOT NULL, `presentation_image_name` TEXT NOT NULL, `profile_image_name` TEXT NOT NULL, `increment_strength` INTEGER NOT NULL, `increment_dexterity` INTEGER NOT NULL, `increment_intelligence` INTEGER NOT NULL, `increment_physical_resistance` INTEGER NOT NULL, `increment_magic_resistance` INTEGER NOT NULL, `increment_vitality` INTEGER NOT NULL, `increment_agility` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`class_id`) REFERENCES `classes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`name_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`description_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTranslationId",
+            "columnName": "name_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionTranslationId",
+            "columnName": "description_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classId",
+            "columnName": "class_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "battleImageName",
+            "columnName": "battle_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "presentationImageName",
+            "columnName": "presentation_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileImageName",
+            "columnName": "profile_image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementStrength",
+            "columnName": "increment_strength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementDexterity",
+            "columnName": "increment_dexterity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementIntelligence",
+            "columnName": "increment_intelligence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementPhysicalResistance",
+            "columnName": "increment_physical_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementMagicResistance",
+            "columnName": "increment_magic_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementVitality",
+            "columnName": "increment_vitality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incrementAgility",
+            "columnName": "increment_agility",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_specializations_name_translation_id",
+            "unique": false,
+            "columnNames": [
+              "name_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_specializations_name_translation_id` ON `${TABLE_NAME}` (`name_translation_id`)"
+          },
+          {
+            "name": "index_specializations_description_translation_id",
+            "unique": false,
+            "columnNames": [
+              "description_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_specializations_description_translation_id` ON `${TABLE_NAME}` (`description_translation_id`)"
+          },
+          {
+            "name": "index_specializations_class_id",
+            "unique": false,
+            "columnNames": [
+              "class_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_specializations_class_id` ON `${TABLE_NAME}` (`class_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "classes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "class_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "description_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "languages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `is_default` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDefault",
+            "columnName": "is_default",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "translations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `language_id` TEXT NOT NULL, `translated_text` TEXT NOT NULL, PRIMARY KEY(`id`, `language_id`), FOREIGN KEY(`id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`language_id`) REFERENCES `languages`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "languageId",
+            "columnName": "language_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translatedText",
+            "columnName": "translated_text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id",
+            "language_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_translations_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_translations_id` ON `${TABLE_NAME}` (`id`)"
+          },
+          {
+            "name": "index_translations_language_id",
+            "unique": false,
+            "columnNames": [
+              "language_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_translations_language_id` ON `${TABLE_NAME}` (`language_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "languages",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "language_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "translation_identifiers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "mobs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_translation_id` TEXT NOT NULL, `description_translation_id` TEXT NOT NULL, `strength` INTEGER NOT NULL, `dexterity` INTEGER NOT NULL, `intelligence` INTEGER NOT NULL, `physical_resistance` INTEGER NOT NULL, `magic_resistance` INTEGER NOT NULL, `vitality` INTEGER NOT NULL, `agility` INTEGER NOT NULL, `image_name` TEXT NOT NULL, `mob_category` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`name_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`description_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTranslationId",
+            "columnName": "name_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionTranslationId",
+            "columnName": "description_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strength",
+            "columnName": "strength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dexterity",
+            "columnName": "dexterity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intelligence",
+            "columnName": "intelligence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "physicalResistance",
+            "columnName": "physical_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "magicResistance",
+            "columnName": "magic_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vitality",
+            "columnName": "vitality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "agility",
+            "columnName": "agility",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageName",
+            "columnName": "image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mobCategory",
+            "columnName": "mob_category",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_mobs_name_translation_id",
+            "unique": false,
+            "columnNames": [
+              "name_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_mobs_name_translation_id` ON `${TABLE_NAME}` (`name_translation_id`)"
+          },
+          {
+            "name": "index_mobs_description_translation_id",
+            "unique": false,
+            "columnNames": [
+              "description_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_mobs_description_translation_id` ON `${TABLE_NAME}` (`description_translation_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "description_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "history_phases",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_translation_id` TEXT NOT NULL, `phase_number` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`name_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTranslationId",
+            "columnName": "name_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phaseNumber",
+            "columnName": "phase_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_history_phases_name_translation_id",
+            "unique": false,
+            "columnNames": [
+              "name_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_phases_name_translation_id` ON `${TABLE_NAME}` (`name_translation_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "history_phase_mobs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `mob_id` TEXT NOT NULL, `history_phase_id` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`mob_id`) REFERENCES `mobs`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`history_phase_id`) REFERENCES `history_phases`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mobId",
+            "columnName": "mob_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "historyPhaseId",
+            "columnName": "history_phase_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_history_phase_mobs_mob_id",
+            "unique": false,
+            "columnNames": [
+              "mob_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_phase_mobs_mob_id` ON `${TABLE_NAME}` (`mob_id`)"
+          },
+          {
+            "name": "index_history_phase_mobs_history_phase_id",
+            "unique": false,
+            "columnNames": [
+              "history_phase_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_phase_mobs_history_phase_id` ON `${TABLE_NAME}` (`history_phase_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "mobs",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mob_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "history_phases",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "history_phase_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "history_phase_info",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `char_id` TEXT NOT NULL, `phase_id` TEXT NOT NULL, `finished_at` INTEGER, `try_number` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`char_id`) REFERENCES `chars`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`phase_id`) REFERENCES `history_phases`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "charId",
+            "columnName": "char_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phaseId",
+            "columnName": "phase_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finishedAt",
+            "columnName": "finished_at",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "tryNumber",
+            "columnName": "try_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_history_phase_info_char_id",
+            "unique": false,
+            "columnNames": [
+              "char_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_phase_info_char_id` ON `${TABLE_NAME}` (`char_id`)"
+          },
+          {
+            "name": "index_history_phase_info_phase_id",
+            "unique": false,
+            "columnNames": [
+              "phase_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_phase_info_phase_id` ON `${TABLE_NAME}` (`phase_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "chars",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "char_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "history_phases",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "phase_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "skills",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_translation_id` TEXT NOT NULL, `description_translation_id` TEXT NOT NULL, `skill_category` TEXT NOT NULL, `class_id` TEXT, `specialization_id` TEXT, `mob_id` TEXT, `damage` INTEGER, `multiplier` REAL, `duration` INTEGER, `refresh_time` INTEGER NOT NULL, `min_level` INTEGER NOT NULL, `required_strength` INTEGER NOT NULL, `required_dexterity` INTEGER NOT NULL, `required_intelligence` INTEGER NOT NULL, `required_physical_resistance` INTEGER NOT NULL, `required_magic_resistance` INTEGER NOT NULL, `required_vitality` INTEGER NOT NULL, `required_agility` INTEGER NOT NULL, `image_name` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`name_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`description_translation_id`) REFERENCES `translation_identifiers`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`class_id`) REFERENCES `classes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`specialization_id`) REFERENCES `specializations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`mob_id`) REFERENCES `mobs`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameTranslationId",
+            "columnName": "name_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descriptionTranslationId",
+            "columnName": "description_translation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "skillCategory",
+            "columnName": "skill_category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classId",
+            "columnName": "class_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "specializationId",
+            "columnName": "specialization_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mobId",
+            "columnName": "mob_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "damage",
+            "columnName": "damage",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "multiplier",
+            "columnName": "multiplier",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "refreshTime",
+            "columnName": "refresh_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minLevel",
+            "columnName": "min_level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredStrength",
+            "columnName": "required_strength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredDexterity",
+            "columnName": "required_dexterity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredIntelligence",
+            "columnName": "required_intelligence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredPhysicalResistance",
+            "columnName": "required_physical_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredMagicResistance",
+            "columnName": "required_magic_resistance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredVitality",
+            "columnName": "required_vitality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requiredAgility",
+            "columnName": "required_agility",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageName",
+            "columnName": "image_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_skills_name_translation_id",
+            "unique": false,
+            "columnNames": [
+              "name_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_skills_name_translation_id` ON `${TABLE_NAME}` (`name_translation_id`)"
+          },
+          {
+            "name": "index_skills_description_translation_id",
+            "unique": false,
+            "columnNames": [
+              "description_translation_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_skills_description_translation_id` ON `${TABLE_NAME}` (`description_translation_id`)"
+          },
+          {
+            "name": "index_skills_class_id",
+            "unique": false,
+            "columnNames": [
+              "class_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_skills_class_id` ON `${TABLE_NAME}` (`class_id`)"
+          },
+          {
+            "name": "index_skills_specialization_id",
+            "unique": false,
+            "columnNames": [
+              "specialization_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_skills_specialization_id` ON `${TABLE_NAME}` (`specialization_id`)"
+          },
+          {
+            "name": "index_skills_mob_id",
+            "unique": false,
+            "columnNames": [
+              "mob_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_skills_mob_id` ON `${TABLE_NAME}` (`mob_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "translation_identifiers",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "description_translation_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "classes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "class_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "specializations",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "specialization_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "mobs",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mob_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55e4b2ca8d1d6793d2b52d5d8730c87f')"
+    ]
+  }
+}

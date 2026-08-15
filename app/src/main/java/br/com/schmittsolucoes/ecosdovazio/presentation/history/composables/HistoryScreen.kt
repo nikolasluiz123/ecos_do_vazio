@@ -150,7 +150,7 @@ private fun PhaseImage(
             .size(200.dp)
             .clip(RoundedCornerShape(8.dp))
             .border(4.dp, borderColor, RoundedCornerShape(8.dp))
-            .then(if (true) Modifier.clickable { onPhaseClick(phase.id) } else Modifier),
+            .then(if (!phase.isLocked) Modifier.clickable { onPhaseClick(phase.id) } else Modifier),
         contentAlignment = Alignment.Center
     ) {
         SubcomposeAsyncImage(
@@ -159,7 +159,7 @@ private fun PhaseImage(
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize(),
             filterQuality = FilterQuality.Medium,
-            colorFilter = if (false) {
+            colorFilter = if (phase.isLocked) {
                 ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
             } else null,
             loading = {

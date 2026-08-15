@@ -7,16 +7,21 @@ import androidx.navigation.toRoute
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffAndDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,9 +40,12 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val getMobHPUseCase: GetMobHPUseCase,
     private val getMobLevelUseCase: GetMobLevelUseCase,
     private val getCharHPUseCase: GetCharHPUseCase,
+    private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
-    getCharBattleUseCase: GetCharBattleUseCase
+    getCharBattleUseCase: GetCharBattleUseCase,
+    charDamageSkillsQueryUseCase: CharDamageSkillsQueryUseCase,
+    charBuffAndDebuffSkillsQueryUseCase: CharBuffAndDebuffSkillsQueryUseCase
 ) : CommonViewModel() {
 
     private val route = savedStateHandle.toRoute<HistoryModeBattleRoute>()
@@ -45,18 +53,30 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
 
+    @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HistoryModeBattleUIState> = combine(
         _errorMessage,
         _isLoading,
         mobsFromPhaseQueryUseCase(route.phaseId),
-        getCharBattleUseCase()
-    ) { errorMessage, isLoading, mobs, char ->
+        getCharBattleUseCase(),
+        charDamageSkillsQueryUseCase(),
+        charBuffAndDebuffSkillsQueryUseCase()
+    ) { flows ->
+        val errorMessage = flows[0] as String?
+        val isLoading = flows[1] as Boolean
+        val mobs = flows[2] as List<BattleMob>
+        val char = flows[3] as BattleChar
+        val damageSkills = flows[4] as List<CharSkill>
+        val buffAndDebuffSkills = flows[5] as List<CharSkill>
+
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
             errorMessage = errorMessage,
             isLoading = isLoading,
             mobs = mapBattleMobsToUIModel(mobs),
-            char = mapBattleCharToUIModel(char)
+            char = mapBattleCharToUIModel(char),
+            damageSkills = mapCharSkillsToUIModel(char, damageSkills),
+            buffAndDebuffSkills = mapCharSkillsToUIModel(char, buffAndDebuffSkills)
         )
     }.stateIn(
         scope = viewModelScope,
@@ -110,5 +130,18 @@ class HistoryModeBattleViewModel @Inject constructor(
             battleImage = battleImage,
             healthProgress = if (totalHealth > 0) totalHealth.toFloat() / totalHealth.toFloat() else 0f
         )
+    }
+
+    private fun mapCharSkillsToUIModel(battleChar: BattleChar, skills: List<CharSkill>): List<CharSkillUIModel> {
+        return skills.map {
+            it.toUIModel(
+                imageName = resourcesProvider.getSkillImage(it.imageName) ?: 0,
+                currentRefreshTime = 0,
+                blocked = getCharSkillBlockedUseCase(
+                    battleChar = battleChar,
+                    skillRequiredAttributes = it.attributes
+                )
+            )
+        }
     }
 }

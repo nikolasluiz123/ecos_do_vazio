@@ -1,6 +1,11 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_HEALER_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_INVIGORATING_HEAL_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HOLY_SHIELD_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FOCUS_SKIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -38,7 +43,9 @@ class CreateGoblinHealerMobUseCase(
                 mobId = mob.id,
                 multiplier = 1.2,
                 refreshTime = 3,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_INVIGORATING_HEAL_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -49,7 +56,9 @@ class CreateGoblinHealerMobUseCase(
                 multiplier = 1.1,
                 duration = 3,
                 refreshTime = 5,
-                minLevel = 3
+                minLevel = 3,
+                imageName = SKILL_HOLY_SHIELD_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -60,7 +69,9 @@ class CreateGoblinHealerMobUseCase(
                 multiplier = 1.1,
                 duration = 3,
                 refreshTime = 6,
-                minLevel = 6
+                minLevel = 6,
+                imageName = SKILL_FOCUS_SKIN_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -70,7 +81,9 @@ class CreateGoblinHealerMobUseCase(
                 mobId = mob.id,
                 damage = 15,
                 refreshTime = 3,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_ARCANE_MISSILE_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -81,7 +94,9 @@ class CreateGoblinHealerMobUseCase(
                 damage = 8,
                 duration = 2,
                 refreshTime = 4,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_FLAMING_TOUCH_KEY,
+                attributes = Skill.Attributes()
             )
         )
 

@@ -3,6 +3,14 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ARCHER_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ARCHER_CLASS_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_PIERCING_SHOT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RAPID_FIRE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_POISON_ARROW_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_PERFECT_AIM_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_PRECISION_SHOT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_RETREAT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SMOKESCREEN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_THORN_TRAP_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
@@ -43,7 +51,9 @@ class CreateArcherClassUseCase(
                 classId = archer.id,
                 damage = 22,
                 refreshTime = 1,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_PRECISION_SHOT_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 10) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -53,7 +63,9 @@ class CreateArcherClassUseCase(
                 classId = archer.id,
                 damage = 12,
                 refreshTime = 3,
-                minLevel = 2
+                minLevel = 2,
+                imageName = SKILL_RAPID_FIRE_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 11, requiredAgility = 6) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -64,7 +76,9 @@ class CreateArcherClassUseCase(
                 multiplier = 0.3,
                 duration = 2,
                 refreshTime = 4,
-                minLevel = 4
+                minLevel = 4,
+                imageName = SKILL_TACTICAL_RETREAT_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 12, requiredAgility = 7, requiredVitality = 3) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -75,7 +89,9 @@ class CreateArcherClassUseCase(
                 damage = 18,
                 multiplier = 1.0,
                 refreshTime = 5,
-                minLevel = 5
+                minLevel = 5,
+                imageName = SKILL_THORN_TRAP_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 14, requiredAgility = 7) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -86,7 +102,9 @@ class CreateArcherClassUseCase(
                 damage = 10,
                 multiplier = 2.0,
                 refreshTime = 3,
-                minLevel = 8
+                minLevel = 8,
+                imageName = SKILL_POISON_ARROW_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 15, requiredMagicResistance = 5) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -97,7 +115,9 @@ class CreateArcherClassUseCase(
                 multiplier = 0.6,
                 duration = 2,
                 refreshTime = 5,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_PERFECT_AIM_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 17, requiredAgility = 10) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -108,7 +128,9 @@ class CreateArcherClassUseCase(
                 multiplier = 0.2,
                 duration = 3,
                 refreshTime = 6,
-                minLevel = 12
+                minLevel = 12,
+                imageName = SKILL_SMOKESCREEN_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 18, requiredAgility = 12, requiredPhysicalResistance = 5) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -118,10 +140,11 @@ class CreateArcherClassUseCase(
                 classId = archer.id,
                 damage = 40,
                 refreshTime = 5,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_PIERCING_SHOT_KEY,
+                attributes = Skill.Attributes(requiredDexterity = 24, requiredAgility = 14, requiredVitality = 5) 
             )
         )
-
         return CreateClassResult(archer, skills)
     }
 }

@@ -3,6 +3,9 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GLADIATOR_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.GLADIATOR_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.GLADIATOR_SPECIALIZATION_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_SLASH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_RAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_WHIRLWIND_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CreateSpecializationResult
@@ -39,7 +42,9 @@ class CreateGladiatorSpecializationUseCase(
                 specializationId = gladiator.id,
                 damage = 40,
                 refreshTime = 3,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_BRUTAL_SLASH_KEY,
+                attributes = Skill.Attributes(requiredStrength = 25)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -50,7 +55,9 @@ class CreateGladiatorSpecializationUseCase(
                 multiplier = 1.3,
                 duration = 3,
                 refreshTime = 5,
-                minLevel = 16
+                minLevel = 16,
+                imageName = SKILL_BLOOD_RAGE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 26)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -60,7 +67,9 @@ class CreateGladiatorSpecializationUseCase(
                 specializationId = gladiator.id,
                 damage = 35,
                 refreshTime = 4,
-                minLevel = 18
+                minLevel = 18,
+                imageName = SKILL_WHIRLWIND_KEY,
+                attributes = Skill.Attributes(requiredStrength = 28)
             )
         )
 

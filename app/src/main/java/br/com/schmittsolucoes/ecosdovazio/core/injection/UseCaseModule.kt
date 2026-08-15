@@ -56,6 +56,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.translations
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.user.InitializeUserUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffAndDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -474,5 +477,36 @@ object UseCaseModule {
             charRepository = charRepository,
             preferencesRepository = preferencesRepository
         )
+    }
+
+    @Provides
+    fun provideCharDamageSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository
+    ): CharDamageSkillsQueryUseCase = CharDamageSkillsQueryUseCase(
+        skillRepository = skillRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository
+    )
+
+    @Provides
+    fun provideCharBuffAndDebuffSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository
+    ): CharBuffAndDebuffSkillsQueryUseCase = CharBuffAndDebuffSkillsQueryUseCase(
+        skillRepository = skillRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository
+    )
+
+    @Provides
+    fun provideGetCharSkillBlockedUseCase(): GetCharSkillBlockedUseCase {
+        return GetCharSkillBlockedUseCase()
     }
 }

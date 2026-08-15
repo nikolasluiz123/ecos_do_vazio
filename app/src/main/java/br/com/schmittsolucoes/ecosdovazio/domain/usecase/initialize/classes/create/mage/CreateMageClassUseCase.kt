@@ -3,6 +3,14 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLASH_FREEZE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BASTION_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SHOCKWAVE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_FOCUS_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ESSENCE_DRAIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_METEOR_SHOWER_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
@@ -43,7 +51,9 @@ class CreateMageClassUseCase(
                 classId = mage.id,
                 damage = 20,
                 refreshTime = 1,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_ARCANE_MISSILE_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 10) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -54,7 +64,9 @@ class CreateMageClassUseCase(
                 damage = 15,
                 multiplier = 2.0,
                 refreshTime = 3,
-                minLevel = 2
+                minLevel = 2,
+                imageName = SKILL_FLASH_FREEZE_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 11, requiredDexterity = 7) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -65,7 +77,9 @@ class CreateMageClassUseCase(
                 multiplier = 0.4,
                 duration = 2,
                 refreshTime = 5,
-                minLevel = 4
+                minLevel = 4,
+                imageName = SKILL_BASTION_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 12, requiredMagicResistance = 5) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -76,7 +90,9 @@ class CreateMageClassUseCase(
                 damage = 12,
                 multiplier = 3.0,
                 refreshTime = 4,
-                minLevel = 5
+                minLevel = 5,
+                imageName = SKILL_FLAMING_TOUCH_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 14, requiredDexterity = 7) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -86,7 +102,9 @@ class CreateMageClassUseCase(
                 classId = mage.id,
                 damage = 25,
                 refreshTime = 4,
-                minLevel = 8
+                minLevel = 8,
+                imageName = SKILL_SHOCKWAVE_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 15, requiredDexterity = 9, requiredMagicResistance = 3) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -97,7 +115,9 @@ class CreateMageClassUseCase(
                 multiplier = 0.5,
                 duration = 2,
                 refreshTime = 5,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_ARCANE_FOCUS_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 17, requiredDexterity = 11) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -107,7 +127,9 @@ class CreateMageClassUseCase(
                 classId = mage.id,
                 damage = 35,
                 refreshTime = 5,
-                minLevel = 12
+                minLevel = 12,
+                imageName = SKILL_ESSENCE_DRAIN_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 19, requiredMagicResistance = 7, requiredVitality = 4) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -117,10 +139,11 @@ class CreateMageClassUseCase(
                 classId = mage.id,
                 damage = 50,
                 refreshTime = 8,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_METEOR_SHOWER_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 25, requiredDexterity = 12, requiredMagicResistance = 8) 
             )
         )
-
         return CreateClassResult(mage, skills)
     }
 }

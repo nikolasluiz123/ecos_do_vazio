@@ -3,6 +3,9 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WATER_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WATER_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WATER_MAGE_SPECIALIZATION_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ICE_LANCE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_INVIGORATING_HEAL_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLIZZARD_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CreateSpecializationResult
@@ -40,7 +43,9 @@ class CreateWaterMageSpecializationUseCase(
                 damage = 35,
                 duration = 2,
                 refreshTime = 3,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_ICE_LANCE_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 25) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -50,7 +55,9 @@ class CreateWaterMageSpecializationUseCase(
                 specializationId = waterMage.id,
                 damage = 20,
                 refreshTime = 4,
-                minLevel = 16
+                minLevel = 16,
+                imageName = SKILL_INVIGORATING_HEAL_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 26) 
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -61,7 +68,9 @@ class CreateWaterMageSpecializationUseCase(
                 damage = 25,
                 multiplier = 2.0,
                 refreshTime = 6,
-                minLevel = 18
+                minLevel = 18,
+                imageName = SKILL_BLIZZARD_KEY,
+                attributes = Skill.Attributes(requiredIntelligence = 28) 
             )
         )
 

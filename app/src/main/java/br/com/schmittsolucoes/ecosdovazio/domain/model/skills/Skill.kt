@@ -16,5 +16,16 @@ data class Skill(
     val duration: Int? = null,
     val refreshTime: Int,
     val minLevel: Long,
-    val imageName: String? = null,
-)
+    val imageName: String,
+    val attributes: Attributes
+) {
+    data class Attributes(
+        val requiredStrength: Long = 0,
+        val requiredDexterity: Long = 0,
+        val requiredIntelligence: Long = 0,
+        val requiredPhysicalResistance: Long = 0,
+        val requiredMagicResistance: Long = 0,
+        val requiredVitality: Long = 0,
+        val requiredAgility: Long = 0,
+    )
+}

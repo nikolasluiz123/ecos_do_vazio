@@ -3,6 +3,14 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HEAVY_STRIKE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_ADVANCE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_DEFENSIVE_STANCE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_STRIKE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RELENTLESS_CHARGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_RIFT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARMOR_BREAK_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
@@ -43,7 +51,9 @@ class CreateWarriorClassUseCase(
                 classId = warrior.id,
                 damage = 25,
                 refreshTime = 1,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_HEAVY_STRIKE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 10)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -53,7 +63,9 @@ class CreateWarriorClassUseCase(
                 classId = warrior.id,
                 damage = 15,
                 refreshTime = 3,
-                minLevel = 2
+                minLevel = 2,
+                imageName = SKILL_TACTICAL_ADVANCE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 11, requiredDexterity = 5)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -63,7 +75,9 @@ class CreateWarriorClassUseCase(
                 classId = warrior.id,
                 multiplier = 2.0,
                 refreshTime = 5,
-                minLevel = 4
+                minLevel = 4,
+                imageName = SKILL_DEFENSIVE_STANCE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 12, requiredPhysicalResistance = 5)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -74,7 +88,9 @@ class CreateWarriorClassUseCase(
                 damage = 10,
                 duration = 3,
                 refreshTime = 4,
-                minLevel = 5
+                minLevel = 5,
+                imageName = SKILL_BLOOD_STRIKE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 13, requiredDexterity = 6)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -85,7 +101,9 @@ class CreateWarriorClassUseCase(
                 multiplier = 0.4,
                 duration = 3,
                 refreshTime = 4,
-                minLevel = 8
+                minLevel = 8,
+                imageName = SKILL_BATTLE_RAGE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 14, requiredVitality = 6)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -96,7 +114,9 @@ class CreateWarriorClassUseCase(
                 damage = 30,
                 multiplier = 1.0,
                 refreshTime = 5,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_RELENTLESS_CHARGE_KEY,
+                attributes = Skill.Attributes(requiredStrength = 16, requiredPhysicalResistance = 7, requiredDexterity = 7)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -106,7 +126,9 @@ class CreateWarriorClassUseCase(
                 classId = warrior.id,
                 damage = 25,
                 refreshTime = 4,
-                minLevel = 12
+                minLevel = 12,
+                imageName = SKILL_BRUTAL_RIFT_KEY,
+                attributes = Skill.Attributes(requiredStrength = 20, requiredVitality = 7)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -117,10 +139,11 @@ class CreateWarriorClassUseCase(
                 damage = 20,
                 multiplier = 3.0,
                 refreshTime = 6,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_ARMOR_BREAK_KEY,
+                attributes = Skill.Attributes(requiredStrength = 24, requiredDexterity = 10, requiredPhysicalResistance = 8)
             )
         )
-
         return CreateClassResult(warrior, skills)
     }
 }

@@ -1,6 +1,11 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_WARRIOR_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_ADVANCE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_SLASH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_RAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RELENTLESS_CHARGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -36,7 +41,9 @@ class CreateGoblinWarriorMobUseCase(
                 mobId = mob.id,
                 damage = 15,
                 refreshTime = 1,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_TACTICAL_ADVANCE_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -46,7 +53,9 @@ class CreateGoblinWarriorMobUseCase(
                 mobId = mob.id,
                 damage = 20,
                 refreshTime = 3,
-                minLevel = 3
+                minLevel = 3,
+                imageName = SKILL_BRUTAL_SLASH_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -57,7 +66,9 @@ class CreateGoblinWarriorMobUseCase(
                 multiplier = 1.1,
                 duration = 2,
                 refreshTime = 4,
-                minLevel = 6
+                minLevel = 6,
+                imageName = SKILL_BLOOD_RAGE_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -67,7 +78,9 @@ class CreateGoblinWarriorMobUseCase(
                 mobId = mob.id,
                 damage = 25,
                 refreshTime = 4,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_RELENTLESS_CHARGE_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -78,7 +91,9 @@ class CreateGoblinWarriorMobUseCase(
                 multiplier = 1.2,
                 duration = 3,
                 refreshTime = 5,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_BATTLE_RAGE_KEY,
+                attributes = Skill.Attributes()
             )
         )
 

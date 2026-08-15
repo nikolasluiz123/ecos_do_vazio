@@ -1,6 +1,10 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_XAMA_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ESSENCE_DRAIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BASTION_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SHOCKWAVE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -36,7 +40,9 @@ class CreateGoblinShamanMobUseCase(
                 mobId = mob.id,
                 damage = 15,
                 refreshTime = 1,
-                minLevel = 1
+                minLevel = 1,
+                imageName = SKILL_ARCANE_MISSILE_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -47,7 +53,9 @@ class CreateGoblinShamanMobUseCase(
                 damage = 5,
                 duration = 3,
                 refreshTime = 4,
-                minLevel = 3
+                minLevel = 3,
+                imageName = SKILL_ESSENCE_DRAIN_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -58,7 +66,9 @@ class CreateGoblinShamanMobUseCase(
                 multiplier = 1.2,
                 duration = 2,
                 refreshTime = 5,
-                minLevel = 6
+                minLevel = 6,
+                imageName = SKILL_BASTION_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -68,7 +78,9 @@ class CreateGoblinShamanMobUseCase(
                 mobId = mob.id,
                 damage = 20,
                 refreshTime = 4,
-                minLevel = 10
+                minLevel = 10,
+                imageName = SKILL_ESSENCE_DRAIN_KEY,
+                attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -78,7 +90,9 @@ class CreateGoblinShamanMobUseCase(
                 mobId = mob.id,
                 damage = 30,
                 refreshTime = 5,
-                minLevel = 15
+                minLevel = 15,
+                imageName = SKILL_SHOCKWAVE_KEY,
+                attributes = Skill.Attributes()
             )
         )
 
