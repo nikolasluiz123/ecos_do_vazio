@@ -1,5 +1,16 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +29,7 @@ import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
@@ -41,15 +53,22 @@ fun SkillsLazyVerticalGrid(
         else -> 3
     }
 
-    SkillsSurface(modifier = modifier) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
-                SkillItem(skill = skill)
+    AnimatedVisibility(
+        visible = !state.isLoading,
+        enter = VerticalGridEnterTransition,
+        exit = VerticalGridExitTransition,
+        modifier = modifier
+    ) {
+        SkillsSurface {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columns),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
+                    SkillItem(skill = skill)
+                }
             }
         }
     }
@@ -67,15 +86,22 @@ fun SkillsLazyHorizontalGrid(
         else -> 3
     }
 
-    SkillsSurface(modifier = modifier) {
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(rows),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
-                SkillItem(skill = skill)
+    AnimatedVisibility(
+        visible = !state.isLoading,
+        enter = HorizontalGridEnterTransition,
+        exit = HorizontalGridExitTransition,
+        modifier = modifier
+    ) {
+        SkillsSurface {
+            LazyHorizontalGrid(
+                rows = GridCells.Fixed(rows),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(state.damageSkills + state.buffAndDebuffSkills) { skill ->
+                    SkillItem(skill = skill)
+                }
             }
         }
     }
@@ -121,3 +147,33 @@ private fun SkillItem(
         )
     }
 }
+
+private const val SKILLS_ANIMATION_DURATION = 600
+
+private val VerticalGridEnterTransition: EnterTransition =
+    fadeIn(animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            expandHorizontally(
+                animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing),
+                expandFrom = Alignment.End
+            )
+
+private val VerticalGridExitTransition: ExitTransition =
+    fadeOut(animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            shrinkHorizontally(
+                animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing),
+                shrinkTowards = Alignment.End
+            )
+
+private val HorizontalGridEnterTransition: EnterTransition =
+    fadeIn(animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            expandVertically(
+                animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing),
+                expandFrom = Alignment.Bottom
+            )
+
+private val HorizontalGridExitTransition: ExitTransition =
+    fadeOut(animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +
+            shrinkVertically(
+                animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing),
+                shrinkTowards = Alignment.Bottom
+            )
