@@ -59,8 +59,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.translations
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.user.InitializeUserUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.SelectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffAndDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import dagger.Module
 import dagger.Provides
@@ -506,7 +507,7 @@ object UseCaseModule {
         preferencesRepository: PreferencesRepository,
         charRepository: CharRepository,
         languageProvider: LanguageProvider,
-    ): CharBuffAndDebuffSkillsQueryUseCase = CharBuffAndDebuffSkillsQueryUseCase(
+    ): CharBuffSkillsQueryUseCase = CharBuffSkillsQueryUseCase(
         skillRepository = skillRepository,
         userRepository = userRepository,
         preferencesRepository = preferencesRepository,
@@ -536,5 +537,22 @@ object UseCaseModule {
         getCharSkillDamageUseCase: GetCharSkillDamageUseCase
     ): UseCharSkillUseCase {
         return UseCharSkillUseCase(getCharSkillDamageUseCase)
+    }
+
+    @Provides
+    fun provideCharDebuffSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository,
+        languageProvider: LanguageProvider,
+    ): CharDebuffSkillsQueryUseCase {
+        return CharDebuffSkillsQueryUseCase(
+            skillRepository = skillRepository,
+            userRepository = userRepository,
+            preferencesRepository = preferencesRepository,
+            charRepository = charRepository,
+            languageProvider = languageProvider,
+        )
     }
 }

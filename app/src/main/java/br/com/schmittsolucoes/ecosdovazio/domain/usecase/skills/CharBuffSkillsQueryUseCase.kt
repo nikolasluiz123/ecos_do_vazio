@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
-class CharBuffAndDebuffSkillsQueryUseCase(
+class CharBuffSkillsQueryUseCase(
     private val skillRepository: SkillRepository,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository,
@@ -32,9 +32,6 @@ class CharBuffAndDebuffSkillsQueryUseCase(
                 SkillCategory.OFFENSIVE_BUFF,
                 SkillCategory.DEFENSIVE_MAGIC_BUFF,
                 SkillCategory.DEFENSIVE_PHYSICAL_BUFF,
-                SkillCategory.OFFENSIVE_DEBUFF,
-                SkillCategory.DEFENSIVE_MAGIC_DEBUFF,
-                SkillCategory.DEFENSIVE_PHYSICAL_DEBUFF
             )
         )
 

@@ -102,6 +102,6 @@ object HistoryModeBattlePreviewData {
         mobs = mockMobsList,
         char = mockChar,
         damageSkills = listOf(mockSkillDamage),
-        buffAndDebuffSkills = listOf(mockSkillBuff)
+        buffSkills = listOf(mockSkillBuff)
     )
 }

@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -33,7 +36,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
@@ -69,7 +72,7 @@ fun SkillsLazyVerticalGrid(
         else -> 3
     }
 
-    val pagerState = rememberPagerState(pageCount = { 2 })
+    val pagerState = rememberPagerState(pageCount = { getTabIcons().size })
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -117,7 +120,7 @@ fun SkillsLazyHorizontalGrid(
         else -> 3
     }
 
-    val pagerState = rememberPagerState(pageCount = { 2 })
+    val pagerState = rememberPagerState(pageCount = { getTabIcons().size })
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -162,30 +165,30 @@ private fun SkillsHorizontalTabRow(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val tabs = listOf(
-        R.drawable.ic_char_16dp,
-        R.drawable.ic_home_16dp
-    )
+    val tabs = getTabIcons()
 
-    SecondaryTabRow(
+    SecondaryScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
         modifier = modifier,
         containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onSurface,
-        divider = { }
+        divider = { },
     ) {
         tabs.forEachIndexed { index, drawable ->
             Tab(
                 selected = pagerState.currentPage == index,
                 onClick = {
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
+                        pagerState.animateScrollToPage(
+                            page = index,
+                            animationSpec = TabRowAnimationSpec
+                        )
                     }
                 },
-                text = {
+                icon = {
                     Icon(
                         painter = painterResource(id = drawable),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.Unspecified
                     )
                 }
             )
@@ -199,37 +202,68 @@ private fun SkillsVerticalTabRow(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val tabs = listOf(
-        R.drawable.ic_char_16dp,
-        R.drawable.ic_home_16dp
-    )
+    val tabs = getTabIcons()
 
     Column(
-        modifier = modifier.width(64.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        modifier = modifier.width(56.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         tabs.forEachIndexed { index, drawable ->
-            Tab(
-                selected = pagerState.currentPage == index,
-                onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
+            val selected = pagerState.currentPage == index
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Tab(
+                    selected = selected,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(
+                                page = index,
+                                animationSpec = TabRowAnimationSpec
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = drawable),
+                            contentDescription = null,
+                            tint = Color.Unspecified
+                        )
                     }
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = drawable),
-                        contentDescription = null
-                    )
-                }
-            )
+                )
+
+                Box(
+                    modifier = Modifier
+                        .width(3.dp)
+                        .fillMaxHeight()
+                        .background(color = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent)
+                )
+            }
         }
     }
 }
 
+private fun getTabIcons(): List<Int> {
+    return listOf(
+        R.drawable.ic_damage_24dp,
+        R.drawable.ic_buff_24dp,
+        R.drawable.ic_debuff_24dp
+    )
+}
+
 private fun getSkillsList(page: Int, state: HistoryModeBattleUIState): List<CharSkillUIModel> {
-    return if (page == 0) state.damageSkills else state.buffAndDebuffSkills
+    return when (page) {
+        0 -> state.damageSkills
+        1 -> state.buffSkills
+        else -> state.debuffSkills
+    }
 }
 
 @Composable
@@ -274,6 +308,11 @@ private fun SkillItem(
 }
 
 private const val SKILLS_ANIMATION_DURATION = 600
+
+private val TabRowAnimationSpec = spring(
+    stiffness = Spring.StiffnessMediumLow,
+    visibilityThreshold = 0.1f
+)
 
 private val VerticalGridEnterTransition: EnterTransition =
     fadeIn(animationSpec = tween(SKILLS_ANIMATION_DURATION, easing = FastOutSlowInEasing)) +

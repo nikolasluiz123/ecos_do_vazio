@@ -12,5 +12,6 @@ data class HistoryModeBattleUIState(
     val selectedMob: BattleMobUIModel? = null,
     val char: BattleCharUIModel? = null,
     val damageSkills: List<CharSkillUIModel> = emptyList(),
-    val buffAndDebuffSkills: List<CharSkillUIModel> = emptyList()
+    val buffSkills: List<CharSkillUIModel> = emptyList(),
+    val debuffSkills: List<CharSkillUIModel> = emptyList()
 )

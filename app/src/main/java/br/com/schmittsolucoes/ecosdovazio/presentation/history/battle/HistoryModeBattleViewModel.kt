@@ -16,8 +16,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseC
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffAndDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
@@ -50,7 +51,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
     charDamageSkillsQueryUseCase: CharDamageSkillsQueryUseCase,
-    charBuffAndDebuffSkillsQueryUseCase: CharBuffAndDebuffSkillsQueryUseCase
+    charBuffSkillsQueryUseCase: CharBuffSkillsQueryUseCase,
+    charDebuffSkillsQueryUseCase: CharDebuffSkillsQueryUseCase
 ) : CommonViewModel() {
 
     private val route = savedStateHandle.toRoute<HistoryModeBattleRoute>()
@@ -66,7 +68,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         mobsFromPhaseQueryUseCase(route.phaseId),
         getCharBattleUseCase(),
         charDamageSkillsQueryUseCase(),
-        charBuffAndDebuffSkillsQueryUseCase(),
+        charBuffSkillsQueryUseCase(),
+        charDebuffSkillsQueryUseCase(),
         _selectedMob
     ) { flows ->
         val errorMessage = flows[0] as String?
@@ -74,8 +77,9 @@ class HistoryModeBattleViewModel @Inject constructor(
         val mobs = flows[2] as List<BattleMob>
         val char = flows[3] as BattleChar
         val damageSkills = flows[4] as List<CharSkill>
-        val buffAndDebuffSkills = flows[5] as List<CharSkill>
-        val selectedMob = flows[6] as BattleMobUIModel?
+        val buffSkills = flows[5] as List<CharSkill>
+        val debuffSkills = flows[6] as List<CharSkill>
+        val selectedMob = flows[7] as BattleMobUIModel?
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs)
 
@@ -86,7 +90,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             mobs = uiModelMobs,
             char = mapBattleCharToUIModel(char),
             damageSkills = mapCharSkillsToUIModel(char, damageSkills),
-            buffAndDebuffSkills = mapCharSkillsToUIModel(char, buffAndDebuffSkills),
+            buffSkills = mapCharSkillsToUIModel(char, buffSkills),
+            debuffSkills = mapCharSkillsToUIModel(char, debuffSkills),
             selectedMob = selectedMob ?: uiModelMobs.firstOrNull()
         )
     }.stateIn(
