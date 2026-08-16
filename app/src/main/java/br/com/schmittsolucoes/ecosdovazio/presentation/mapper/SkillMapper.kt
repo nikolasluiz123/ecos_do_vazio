@@ -1,7 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 
 fun CharSkill.toUIModel(
     image: Int,
@@ -52,6 +54,50 @@ fun CharSkill.toUIModel(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             image = image,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            multiplier = multiplier,
+            duration = duration
+        )
+    }
+}
+
+fun MobSkill.toUIModel(
+    currentRefreshTime: Int,
+    blocked: Boolean
+): MobSkillUIModel {
+    return when (this) {
+        is MobSkill.CommonDamage -> MobSkillUIModel.CommonDamage(
+            id = id,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            damage = damage
+        )
+
+        is MobSkill.DamageOverTime -> MobSkillUIModel.DamageOverTime(
+            id = id,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            damage = damage,
+            duration = duration
+        )
+
+        is MobSkill.Buff -> MobSkillUIModel.Buff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            multiplier = multiplier,
+            duration = duration
+        )
+
+        is MobSkill.Debuff -> MobSkillUIModel.Debuff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
             multiplier = multiplier,

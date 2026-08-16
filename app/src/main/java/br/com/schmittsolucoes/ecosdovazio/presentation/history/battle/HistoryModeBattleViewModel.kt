@@ -9,11 +9,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
@@ -25,6 +27,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MIL
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainUsedSkillInfo
@@ -47,6 +50,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val getCharHPUseCase: GetCharHPUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
     private val useCharSkillUseCase: UseCharSkillUseCase,
+    private val getMobSkillBlockedUseCase: GetMobSkillBlockedUseCase,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -92,6 +96,7 @@ class HistoryModeBattleViewModel @Inject constructor(
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth)
         val uiModelChar = mapBattleCharToUIModel(char, charHealth)
+        val selectedMob = uiModelMobs.find { it.id == selectedMobId } ?: uiModelMobs.firstOrNull()
 
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
@@ -102,8 +107,9 @@ class HistoryModeBattleViewModel @Inject constructor(
             damageSkills = mapCharSkillsToUIModel(char, damageSkills),
             buffSkills = mapCharSkillsToUIModel(char, buffSkills),
             debuffSkills = mapCharSkillsToUIModel(char, debuffSkills),
-            selectedMob = uiModelMobs.find { it.id == selectedMobId } ?: uiModelMobs.firstOrNull(),
-            selectedSkill = selectedSkill
+            selectedMob = selectedMob,
+            selectedSkill = selectedSkill,
+            mobSkills = selectedMob?.skills ?: emptyList()
         )
     }.stateIn(
         scope = viewModelScope,
@@ -180,7 +186,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
                 level = level,
                 offensiveMultiplier = 1.0,
-                defensiveMultiplier = 0.0
+                defensiveMultiplier = 0.0,
+                skills = mapMobSkillsToUIModel(it.skills, level)
             )
         }
     }
@@ -214,7 +221,20 @@ class HistoryModeBattleViewModel @Inject constructor(
                 currentRefreshTime = 0,
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,
-                    skillRequiredAttributes = it.attributes
+                    skillRequiredAttributes = it.attributes,
+                    minLevel = it.minLevel
+                )
+            )
+        }
+    }
+
+    private fun mapMobSkillsToUIModel(mobSkills: List<MobSkill>, mobLevel: Long): List<MobSkillUIModel> {
+        return mobSkills.map {
+            it.toUIModel(
+                currentRefreshTime = 0,
+                blocked = getMobSkillBlockedUseCase(
+                    mobLevel = mobLevel,
+                    skillMinLevel = it.minLevel
                 )
             )
         }

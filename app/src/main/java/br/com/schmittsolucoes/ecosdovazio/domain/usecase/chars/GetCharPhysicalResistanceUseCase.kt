@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
@@ -15,7 +14,9 @@ class GetCharPhysicalResistanceUseCase(
     private val charRepository: CharRepository,
     private val preferencesRepository: PreferencesRepository,
     private val userRepository: UserRepository,
-    private val calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase
+    private val calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase,
+    private val getCharPhysicalResistanceFactorUseCase: GetCharPhysicalResistanceFactorUseCase,
+    private val getCharPhysicalResistanceMaxUseCase: GetCharPhysicalResistanceMaxUseCase
 ) {
     operator fun invoke(): Flow<Double> = flow {
         val userId = userRepository.getFirstUser()?.id
@@ -33,29 +34,16 @@ class GetCharPhysicalResistanceUseCase(
         }
 
         val resistanceFlow = charRepository.getCharPhysicalResistanceData(charId).map {
+            val factor = getCharPhysicalResistanceFactorUseCase.executeInternal(it.classCategory)
+            val maxResistance = getCharPhysicalResistanceMaxUseCase.executeInternal(it.classCategory)
+
             calculatePhysicalResistanceUseCase.executeInternal(
                 points = it.physicalResistance.totalValue,
-                factor = getFactor(it.classCategory),
-                maxResistance = getMaxResistanceValue(it.classCategory)
+                factor = factor,
+                maxResistance = maxResistance
             )
         }
 
         emitAll(resistanceFlow)
-    }
-
-    private fun getFactor(category: ClassCategory): Double {
-        return when (category) {
-            ClassCategory.WARRIOR -> 2.0
-            ClassCategory.MAGE -> 0.5
-            ClassCategory.ARCHER -> 1.0
-        }
-    }
-
-    private fun getMaxResistanceValue(category: ClassCategory): Double {
-        return when (category) {
-            ClassCategory.WARRIOR -> 0.75
-            ClassCategory.MAGE -> 0.3
-            ClassCategory.ARCHER -> 0.5
-        }
     }
 }

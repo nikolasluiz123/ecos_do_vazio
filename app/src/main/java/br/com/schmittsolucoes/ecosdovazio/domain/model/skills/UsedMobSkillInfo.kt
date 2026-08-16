@@ -1,0 +1,37 @@
+package br.com.schmittsolucoes.ecosdovazio.domain.model.skills
+
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+
+sealed interface UsedMobSkillInfo {
+    val skillCategory: SkillCategory
+    val refreshTime: Int
+
+    data class CommonDamage(
+        override val refreshTime: Int,
+        val damage: Long
+    ): UsedMobSkillInfo {
+        override val skillCategory: SkillCategory = SkillCategory.DAMAGE
+    }
+
+    data class DamageOverTime(
+        override val refreshTime: Int,
+        val damage: Long,
+        val duration: Int,
+    ): UsedMobSkillInfo {
+        override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
+    }
+
+    data class Buff(
+        override val skillCategory: SkillCategory,
+        override val refreshTime: Int,
+        val multiplier: Double,
+        val duration: Int,
+    ): UsedMobSkillInfo
+
+    data class Debuff(
+        override val skillCategory: SkillCategory,
+        override val refreshTime: Int,
+        val multiplier: Double,
+        val duration: Int,
+    ): UsedMobSkillInfo
+}

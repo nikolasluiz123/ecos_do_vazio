@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 
 fun BattleChar.toUIModel(
     totalHealth: Long,
@@ -41,7 +42,8 @@ fun BattleMob.toUIModel(
     level: Long,
     @DrawableRes image: Int,
     offensiveMultiplier: Double,
-    defensiveMultiplier: Double
+    defensiveMultiplier: Double,
+    skills: List<MobSkillUIModel> = emptyList()
 ): BattleMobUIModel {
     return BattleMobUIModel(
         id = id,
@@ -55,6 +57,7 @@ fun BattleMob.toUIModel(
         actualHealth = actualHealth,
         healthProgress = healthProgress,
         level = level,
-        attributes = attributes
+        attributes = attributes,
+        skills = skills
     )
 }

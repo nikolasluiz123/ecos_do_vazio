@@ -2,9 +2,11 @@ package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.SkillEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharSkillTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobSkillTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.Skill
 
 fun Skill.toEntity() = SkillEntity(
@@ -116,6 +118,47 @@ fun CharSkillTuple.toDomain(): CharSkill {
             minLevel = minLevel,
             imageName = imageName,
             attributes = attributes,
+            multiplier = multiplier ?: 0.0,
+            duration = duration ?: 0
+        )
+    }
+}
+
+fun MobSkillTuple.toDomain(): MobSkill {
+    return when (skillCategory) {
+        SkillCategory.DAMAGE -> MobSkill.CommonDamage(
+            id = id,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            damage = damage ?: 0L
+        )
+
+        SkillCategory.DAMAGE_OVER_TIME -> MobSkill.DamageOverTime(
+            id = id,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            damage = damage ?: 0L,
+            duration = duration ?: 0
+        )
+
+        SkillCategory.OFFENSIVE_BUFF,
+        SkillCategory.DEFENSIVE_MAGIC_BUFF,
+        SkillCategory.DEFENSIVE_PHYSICAL_BUFF -> MobSkill.Buff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            multiplier = multiplier ?: 0.0,
+            duration = duration ?: 0
+        )
+
+        SkillCategory.OFFENSIVE_DEBUFF,
+        SkillCategory.DEFENSIVE_MAGIC_DEBUFF,
+        SkillCategory.DEFENSIVE_PHYSICAL_DEBUFF -> MobSkill.Debuff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
             multiplier = multiplier ?: 0.0,
             duration = duration ?: 0
         )

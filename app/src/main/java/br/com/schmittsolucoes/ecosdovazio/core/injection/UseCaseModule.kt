@@ -17,14 +17,22 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobPointsCountByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.UseMobSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
@@ -35,10 +43,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDodgeChanc
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceFactorUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceMaxUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceFactorUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceMaxUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
@@ -352,16 +362,36 @@ object UseCaseModule {
     }
 
     @Provides
+    fun provideGetCharMagicResistanceFactorUseCase(): GetCharMagicResistanceFactorUseCase =
+        GetCharMagicResistanceFactorUseCase()
+
+    @Provides
+    fun provideGetCharMagicResistanceMaxUseCase(): GetCharMagicResistanceMaxUseCase =
+        GetCharMagicResistanceMaxUseCase()
+
+    @Provides
+    fun provideGetCharPhysicalResistanceFactorUseCase(): GetCharPhysicalResistanceFactorUseCase =
+        GetCharPhysicalResistanceFactorUseCase()
+
+    @Provides
+    fun provideGetCharPhysicalResistanceMaxUseCase(): GetCharPhysicalResistanceMaxUseCase =
+        GetCharPhysicalResistanceMaxUseCase()
+
+    @Provides
     fun provideGetCharMagicResistanceUseCase(
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository,
-        calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase
+        calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase,
+        getCharMagicResistanceFactorUseCase: GetCharMagicResistanceFactorUseCase,
+        getCharMagicResistanceMaxUseCase: GetCharMagicResistanceMaxUseCase
     ): GetCharMagicResistanceUseCase = GetCharMagicResistanceUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository,
-        calculateMagicResistanceUseCase = calculateMagicResistanceUseCase
+        calculateMagicResistanceUseCase = calculateMagicResistanceUseCase,
+        getCharMagicResistanceFactorUseCase = getCharMagicResistanceFactorUseCase,
+        getCharMagicResistanceMaxUseCase = getCharMagicResistanceMaxUseCase
     )
 
     @Provides
@@ -369,12 +399,16 @@ object UseCaseModule {
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository,
-        calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase
+        calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase,
+        getCharPhysicalResistanceFactorUseCase: GetCharPhysicalResistanceFactorUseCase,
+        getCharPhysicalResistanceMaxUseCase: GetCharPhysicalResistanceMaxUseCase
     ): GetCharPhysicalResistanceUseCase = GetCharPhysicalResistanceUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository,
-        calculatePhysicalResistanceUseCase = calculatePhysicalResistanceUseCase
+        calculatePhysicalResistanceUseCase = calculatePhysicalResistanceUseCase,
+        getCharPhysicalResistanceFactorUseCase = getCharPhysicalResistanceFactorUseCase,
+        getCharPhysicalResistanceMaxUseCase = getCharPhysicalResistanceMaxUseCase
     )
 
     @Provides
@@ -508,6 +542,25 @@ object UseCaseModule {
     }
 
     @Provides
+    fun provideGetCharDamageReductionUseCase(
+        calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase,
+        calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase,
+        getCharPhysicalResistanceFactorUseCase: GetCharPhysicalResistanceFactorUseCase,
+        getCharPhysicalResistanceMaxUseCase: GetCharPhysicalResistanceMaxUseCase,
+        getCharMagicResistanceFactorUseCase: GetCharMagicResistanceFactorUseCase,
+        getCharMagicResistanceMaxUseCase: GetCharMagicResistanceMaxUseCase
+    ): GetCharDamageReductionUseCase {
+        return GetCharDamageReductionUseCase(
+            calculatePhysicalResistanceUseCase = calculatePhysicalResistanceUseCase,
+            calculateMagicResistanceUseCase = calculateMagicResistanceUseCase,
+            getCharPhysicalResistanceFactorUseCase = getCharPhysicalResistanceFactorUseCase,
+            getCharPhysicalResistanceMaxUseCase = getCharPhysicalResistanceMaxUseCase,
+            getCharMagicResistanceFactorUseCase = getCharMagicResistanceFactorUseCase,
+            getCharMagicResistanceMaxUseCase = getCharMagicResistanceMaxUseCase
+        )
+    }
+
+    @Provides
     fun provideGetCharBattleUseCase(
         userRepository: UserRepository,
         charRepository: CharRepository,
@@ -562,9 +615,13 @@ object UseCaseModule {
 
     @Provides
     fun provideGetCharSkillRawDamageUseCase(
-        getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase
+        getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase,
+        calculateRawDamageUseCase: CalculateRawDamageUseCase
     ): GetCharSkillRawDamageUseCase {
-        return GetCharSkillRawDamageUseCase(getCharDamageAttributePointsUseCase)
+        return GetCharSkillRawDamageUseCase(
+            getCharDamageAttributePointsUseCase = getCharDamageAttributePointsUseCase,
+            calculateRawDamageUseCase = calculateRawDamageUseCase
+        )
     }
 
     @Provides
@@ -605,4 +662,37 @@ object UseCaseModule {
             languageProvider = languageProvider,
         )
     }
+
+    @Provides
+    fun provideCalculateRawDamageUseCase(): CalculateRawDamageUseCase = CalculateRawDamageUseCase()
+
+    @Provides
+    fun provideGetMobDamageAttributePointsUseCase(
+        getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase
+    ): GetMobDamageAttributePointsUseCase = GetMobDamageAttributePointsUseCase(getMobAttributesByLevelUseCase)
+
+    @Provides
+    fun provideGetMobSkillRawDamageUseCase(
+        getMobDamageAttributePointsUseCase: GetMobDamageAttributePointsUseCase,
+        calculateRawDamageUseCase: CalculateRawDamageUseCase
+    ): GetMobSkillRawDamageUseCase = GetMobSkillRawDamageUseCase(
+        getMobDamageAttributePointsUseCase = getMobDamageAttributePointsUseCase,
+        calculateRawDamageUseCase = calculateRawDamageUseCase
+    )
+
+    @Provides
+    fun provideGetMobSkillDamageUseCase(
+        getMobSkillRawDamageUseCase: GetMobSkillRawDamageUseCase,
+        getCharDamageReductionUseCase: GetCharDamageReductionUseCase,
+        calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase
+    ): GetMobSkillDamageUseCase = GetMobSkillDamageUseCase(
+        getMobSkillRawDamageUseCase = getMobSkillRawDamageUseCase,
+        getCharDamageReductionUseCase = getCharDamageReductionUseCase,
+        calculateEffectiveDamageUseCase = calculateEffectiveDamageUseCase
+    )
+
+    @Provides
+    fun provideUseMobSkillUseCase(
+        getMobSkillDamageUseCase: GetMobSkillDamageUseCase
+    ): UseMobSkillUseCase = UseMobSkillUseCase(getMobSkillDamageUseCase)
 }

@@ -1,0 +1,13 @@
+package br.com.schmittsolucoes.ecosdovazio.data.model.tuples
+
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+
+data class MobSkillTuple(
+    val id: String,
+    val skillCategory: SkillCategory,
+    val damage: Long?,
+    val multiplier: Double?,
+    val duration: Int?,
+    val refreshTime: Int,
+    val minLevel: Long,
+)

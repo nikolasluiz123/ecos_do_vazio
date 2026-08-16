@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.EntityLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.SkillEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharSkillTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobSkillTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import kotlinx.coroutines.flow.Flow
 
@@ -13,4 +14,6 @@ interface SkillLocalDataSource : EntityLocalDataSource<SkillEntity> {
         specializationId: String?,
         categories: List<SkillCategory>
     ): Flow<List<CharSkillTuple>>
+
+    suspend fun getMobSkills(mobId: String): List<MobSkillTuple>
 }

@@ -62,6 +62,7 @@ fun BattleMobUIModel.toDomainInfo(): BattleMobInfo {
         offensiveMultiplier = offensiveMultiplier,
         defensiveMultiplier = defensiveMultiplier,
         attributes = attributes,
+        level = level,
         actualHealth = actualHealth
     )
 }

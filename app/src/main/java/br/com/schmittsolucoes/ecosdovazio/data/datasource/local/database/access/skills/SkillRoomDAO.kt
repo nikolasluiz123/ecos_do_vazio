@@ -5,6 +5,7 @@ import androidx.room.Query
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.RoomLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.SkillEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharSkillTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobSkillTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import kotlinx.coroutines.flow.Flow
 
@@ -47,4 +48,18 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
         specializationId: String?,
         categories: List<SkillCategory>
     ): Flow<List<CharSkillTuple>>
+
+    @Query("""
+        select id as id,
+               skill_category as skillCategory,
+               damage as damage,
+               multiplier as multiplier,
+               duration as duration,
+               refresh_time as refreshTime,
+               min_level as minLevel
+        from skills
+        where mob_id = :mobId
+        order by skills.min_level
+    """)
+    override suspend fun getMobSkills(mobId: String): List<MobSkillTuple>
 }
