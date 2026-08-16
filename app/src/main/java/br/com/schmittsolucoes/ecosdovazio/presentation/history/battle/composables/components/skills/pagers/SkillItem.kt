@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.pagers
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.FilterQuality
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
@@ -18,7 +22,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeCo
 @Composable
 internal fun SkillItem(
     skill: CharSkillUIModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSkillClick: (CharSkillUIModel) -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -26,15 +31,19 @@ internal fun SkillItem(
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
                 width = ITEM_BORDER_WIDTH,
-                color = SkillBattleStrokeColor,
+                color = if (skill.blocked) Color.Unspecified else SkillBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
+            .then(if (!skill.blocked) Modifier.clickable { onSkillClick(skill) } else Modifier),
     ) {
         BattleAsyncImage(
             model = skill.image,
             contentDescription = skill.name,
             modifier = Modifier.fillMaxSize(),
-            filterQuality = FilterQuality.Medium
+            filterQuality = FilterQuality.Medium,
+            colorFilter = if (skill.blocked) {
+                ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
+            } else null
         )
     }
 }

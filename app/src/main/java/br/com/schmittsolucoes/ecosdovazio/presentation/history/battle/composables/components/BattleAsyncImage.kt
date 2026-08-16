@@ -8,6 +8,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -22,7 +23,8 @@ internal fun BattleAsyncImage(
     model: Any?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    filterQuality: FilterQuality = FilterQuality.High
+    filterQuality: FilterQuality = FilterQuality.High,
+    colorFilter: ColorFilter? = null
 ) {
     if (LocalInspectionMode.current && model is Int) {
         Image(
@@ -38,6 +40,7 @@ internal fun BattleAsyncImage(
             modifier = modifier,
             contentScale = ContentScale.Crop,
             filterQuality = filterQuality,
+            colorFilter = colorFilter,
             loading = {
                 Box(
                     modifier = Modifier
