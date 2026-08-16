@@ -30,8 +30,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryMod
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.CharSection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.SkillsLazyHorizontalGrid
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.SkillsLazyVerticalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyVerticalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
