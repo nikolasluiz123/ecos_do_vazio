@@ -1,21 +1,25 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
@@ -23,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.TAB_BAR_SIZE
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.TAB_ICON_SIZE
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @Composable
 fun SkillsVerticalTabRow(
@@ -32,50 +35,53 @@ fun SkillsVerticalTabRow(
 ) {
     val tabs = getTabIcons()
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
-    Row(
+    Box(
         modifier = modifier
             .width(TAB_BAR_SIZE)
-            .fillMaxHeight(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxHeight()
     ) {
-        BoxWithConstraints(
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .clipToBounds()
-                .clickable {
-                    coroutineScope.launch {
-                        val next = (pagerState.currentPage + 1) % tabs.size
-                        pagerState.animateScrollToPage(next)
-                    }
-                },
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val fullHeight = maxHeight
-
             tabs.forEachIndexed { index, drawable ->
-                Icon(
-                    painter = painterResource(id = drawable),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
+                Box(
                     modifier = Modifier
-                        .size(TAB_ICON_SIZE)
-                        .graphicsLayer {
-                            val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
-                            val pageOffset = index - scrollPosition
-
-                            translationY = pageOffset * fullHeight.toPx()
-                            alpha = (1f - abs(pageOffset)).coerceIn(0f, 1f)
-                        }
-                )
+                        .size(TAB_BAR_SIZE)
+                        .selectable(
+                            selected = pagerState.currentPage == index,
+                            onClick = {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = drawable),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(TAB_ICON_SIZE)
+                    )
+                }
             }
         }
 
         Box(
             modifier = Modifier
                 .width(3.dp)
-                .fillMaxHeight()
+                .height(TAB_BAR_SIZE)
+                .graphicsLayer {
+                    translationY = (pagerState.currentPage + pagerState.currentPageOffsetFraction) * TAB_BAR_SIZE.toPx()
+                }
+                .align(Alignment.TopEnd)
                 .background(color = MaterialTheme.colorScheme.primary)
         )
     }
