@@ -111,7 +111,7 @@ internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Windo
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().weight(0.7f),
+            modifier = Modifier.fillMaxSize().weight(0.8f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EnemySection(
@@ -131,7 +131,7 @@ internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Windo
         SkillsLazyVerticalGrid(
             state = state,
             windowSizeClass = windowSizeClass,
-            modifier = Modifier.fillMaxSize().weight(0.3f)
+            modifier = Modifier.fillMaxSize().weight(0.2f)
         )
     }
 }
@@ -150,7 +150,7 @@ internal fun SideBySideLayout(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.7f),
+                .weight(0.8f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             EnemySection(
@@ -172,7 +172,7 @@ internal fun SideBySideLayout(
         SkillsLazyHorizontalGrid(
             state = state,
             windowSizeClass = windowSizeClass,
-            modifier = Modifier.fillMaxSize().weight(0.3f)
+            modifier = Modifier.fillMaxSize().weight(0.2f)
         )
     }
 }

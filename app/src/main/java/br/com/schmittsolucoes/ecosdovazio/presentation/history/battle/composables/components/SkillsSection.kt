@@ -15,15 +15,18 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -47,8 +50,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
@@ -59,6 +64,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Char
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SurfaceVariantGradient
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @Composable
 fun SkillsLazyVerticalGrid(
@@ -201,52 +207,55 @@ private fun SkillsVerticalTabRow(
     pagerState: PagerState,
     modifier: Modifier = Modifier
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val tabs = getTabIcons()
+    val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = modifier.width(56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        modifier = modifier
+            .width(56.dp)
+            .fillMaxHeight(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        tabs.forEachIndexed { index, drawable ->
-            val selected = pagerState.currentPage == index
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Tab(
-                    selected = selected,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(
-                                page = index,
-                                animationSpec = TabRowAnimationSpec
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = drawable),
-                            contentDescription = null,
-                            tint = Color.Unspecified
-                        )
+        BoxWithConstraints(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .clipToBounds()
+                .clickable {
+                    coroutineScope.launch {
+                        val next = (pagerState.currentPage + 1) % tabs.size
+                        pagerState.animateScrollToPage(next)
                     }
-                )
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            val fullHeight = maxHeight
+            val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
 
-                Box(
-                    modifier = Modifier
-                        .width(3.dp)
-                        .fillMaxHeight()
-                        .background(color = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent)
-                )
+            tabs.forEachIndexed { index, drawable ->
+                val pageOffset = index - scrollPosition
+
+                if (pageOffset > -1f && pageOffset < 1f) {
+                    Icon(
+                        painter = painterResource(id = drawable),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .graphicsLayer {
+                                translationY = pageOffset * fullHeight.toPx()
+                                alpha = 1f - abs(pageOffset)
+                            }
+                    )
+                }
             }
         }
+
+        Box(
+            modifier = Modifier
+                .width(3.dp)
+                .fillMaxHeight()
+                .background(color = MaterialTheme.colorScheme.primary)
+        )
     }
 }
 
