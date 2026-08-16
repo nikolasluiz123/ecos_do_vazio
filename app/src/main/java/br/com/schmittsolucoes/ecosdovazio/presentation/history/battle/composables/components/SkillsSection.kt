@@ -230,23 +230,21 @@ private fun SkillsVerticalTabRow(
             contentAlignment = Alignment.Center
         ) {
             val fullHeight = maxHeight
-            val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
 
             tabs.forEachIndexed { index, drawable ->
-                val pageOffset = index - scrollPosition
+                Icon(
+                    painter = painterResource(id = drawable),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .graphicsLayer {
+                            val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                            val pageOffset = index - scrollPosition
 
-                if (pageOffset > -1f && pageOffset < 1f) {
-                    Icon(
-                        painter = painterResource(id = drawable),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier
-                            .graphicsLayer {
-                                translationY = pageOffset * fullHeight.toPx()
-                                alpha = 1f - abs(pageOffset)
-                            }
-                    )
-                }
+                            translationY = pageOffset * fullHeight.toPx()
+                            alpha = (1f - abs(pageOffset)).coerceIn(0f, 1f)
+                        }
+                )
             }
         }
 
