@@ -20,7 +20,7 @@ class MobsFromPhaseQueryUseCase(
 
         val mobsFlow = historyPhaseRepository.getMobsFromPhase(phaseId, languageTag).map {
             it.map { battleMob ->
-                val newAttributes = getMobAttributesByLevelUseCase(
+                val newAttributes = getMobAttributesByLevelUseCase.executeInternal(
                     level = level,
                     mobCategory = battleMob.mobCategory,
                     attributes = battleMob.attributes

@@ -7,7 +7,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 class GetMobAttributesByLevelUseCase(
     private val getMobPointsCountByLevelUseCase: GetMobPointsCountByLevelUseCase
 ) {
-    operator fun invoke(
+    fun executeInternal(
         level: Long,
         mobCategory: MobCategory,
         attributes: Mob.Attributes
