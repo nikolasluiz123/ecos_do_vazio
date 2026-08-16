@@ -10,10 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
@@ -38,9 +34,10 @@ internal val TAB_ICON_SIZE = 32.dp
 fun SkillsLazyVerticalGrid(
     state: HistoryModeBattleUIState,
     modifier: Modifier = Modifier,
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {},
+    onDismissSkillTooltip: () -> Unit = {}
 ) {
     val pagerState = rememberSkillsPagerState()
-    var selectedSkill by remember { mutableStateOf<CharSkillUIModel?>(null) }
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -56,16 +53,16 @@ fun SkillsLazyVerticalGrid(
                     state = state,
                     pagerState = pagerState,
                     modifier = Modifier.weight(1f),
-                    onSkillLongClick = { selectedSkill = it }
+                    onSkillLongClick = onSkillLongClick
                 )
             }
         }
     }
 
-    selectedSkill?.let { skill ->
+    state.selectedSkill?.let { skill ->
         SkillTooltip(
             skill = skill,
-            onDismissRequest = { selectedSkill = null }
+            onDismissRequest = onDismissSkillTooltip
         )
     }
 }
@@ -74,9 +71,10 @@ fun SkillsLazyVerticalGrid(
 fun SkillsLazyHorizontalGrid(
     state: HistoryModeBattleUIState,
     modifier: Modifier = Modifier,
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {},
+    onDismissSkillTooltip: () -> Unit = {}
 ) {
     val pagerState = rememberSkillsPagerState()
-    var selectedSkill by remember { mutableStateOf<CharSkillUIModel?>(null) }
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -95,16 +93,16 @@ fun SkillsLazyHorizontalGrid(
                     state = state,
                     pagerState = pagerState,
                     modifier = Modifier.weight(1f),
-                    onSkillLongClick = { selectedSkill = it }
+                    onSkillLongClick = onSkillLongClick
                 )
             }
         }
     }
 
-    selectedSkill?.let { skill ->
+    state.selectedSkill?.let { skill ->
         SkillTooltip(
             skill = skill,
-            onDismissRequest = { selectedSkill = null }
+            onDismissRequest = onDismissSkillTooltip
         )
     }
 }

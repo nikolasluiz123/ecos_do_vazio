@@ -60,6 +60,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
     private val _selectedMob = MutableStateFlow<BattleMobUIModel?>(null)
+    private val _selectedSkill = MutableStateFlow<CharSkillUIModel?>(null)
 
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HistoryModeBattleUIState> = combine(
@@ -70,7 +71,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         charDamageSkillsQueryUseCase(),
         charBuffSkillsQueryUseCase(),
         charDebuffSkillsQueryUseCase(),
-        _selectedMob
+        _selectedMob,
+        _selectedSkill
     ) { flows ->
         val errorMessage = flows[0] as String?
         val isLoading = flows[1] as Boolean
@@ -80,6 +82,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val buffSkills = flows[5] as List<CharSkill>
         val debuffSkills = flows[6] as List<CharSkill>
         val selectedMob = flows[7] as BattleMobUIModel?
+        val selectedSkill = flows[8] as CharSkillUIModel?
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs)
 
@@ -92,7 +95,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             damageSkills = mapCharSkillsToUIModel(char, damageSkills),
             buffSkills = mapCharSkillsToUIModel(char, buffSkills),
             debuffSkills = mapCharSkillsToUIModel(char, debuffSkills),
-            selectedMob = selectedMob ?: uiModelMobs.firstOrNull()
+            selectedMob = selectedMob ?: uiModelMobs.firstOrNull(),
+            selectedSkill = selectedSkill
         )
     }.stateIn(
         scope = viewModelScope,
@@ -117,6 +121,14 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     fun onMobClick(mob: BattleMobUIModel) {
         _selectedMob.value = mob
+    }
+
+    fun onSkillLongClick(skill: CharSkillUIModel) {
+        _selectedSkill.value = skill
+    }
+
+    fun onDismissSkillTooltip() {
+        _selectedSkill.value = null
     }
 
     fun onSkillClick(skill: CharSkillUIModel) {

@@ -32,6 +32,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyVerticalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
@@ -60,7 +61,9 @@ fun HistoryModeBattleScreen(
     HistoryModeBattleScreen(
         state = state,
         windowSizeClass = windowSizeClass,
-        onDismissErrorDialog = viewModel::onDismissErrorDialog
+        onDismissErrorDialog = viewModel::onDismissErrorDialog,
+        onSkillLongClick = viewModel::onSkillLongClick,
+        onDismissSkillTooltip = viewModel::onDismissSkillTooltip
     )
 }
 
@@ -68,7 +71,9 @@ fun HistoryModeBattleScreen(
 fun HistoryModeBattleScreen(
     state: HistoryModeBattleUIState = HistoryModeBattleUIState(),
     windowSizeClass: WindowSizeClass? = null,
-    onDismissErrorDialog: () -> Unit = {}
+    onDismissErrorDialog: () -> Unit = {},
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {},
+    onDismissSkillTooltip: () -> Unit = {}
 ) {
     val isExpandedWidth = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
     val isCompactHeight = windowSizeClass?.heightSizeClass == WindowHeightSizeClass.Compact
@@ -90,9 +95,20 @@ fun HistoryModeBattleScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             if (useSideBySide) {
-                SideBySideLayout(isExpandedWidth, state, windowSizeClass)
+                SideBySideLayout(
+                    isExpandedWidth = isExpandedWidth,
+                    state = state,
+                    windowSizeClass = windowSizeClass,
+                    onSkillLongClick = onSkillLongClick,
+                    onDismissSkillTooltip = onDismissSkillTooltip
+                )
             } else {
-                StackLayout(state, windowSizeClass)
+                StackLayout(
+                    state = state,
+                    windowSizeClass = windowSizeClass,
+                    onSkillLongClick = onSkillLongClick,
+                    onDismissSkillTooltip = onDismissSkillTooltip
+                )
             }
 
             state.errorMessage?.let { message ->
@@ -106,7 +122,12 @@ fun HistoryModeBattleScreen(
 }
 
 @Composable
-internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: WindowSizeClass?) {
+internal fun StackLayout(
+    state: HistoryModeBattleUIState,
+    windowSizeClass: WindowSizeClass?,
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {},
+    onDismissSkillTooltip: () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -130,7 +151,9 @@ internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Windo
 
         SkillsLazyVerticalGrid(
             state = state,
-            modifier = Modifier.fillMaxSize().weight(0.2f)
+            modifier = Modifier.fillMaxSize().weight(0.2f),
+            onSkillLongClick = onSkillLongClick,
+            onDismissSkillTooltip = onDismissSkillTooltip
         )
     }
 }
@@ -139,7 +162,9 @@ internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Windo
 internal fun SideBySideLayout(
     isExpandedWidth: Boolean,
     state: HistoryModeBattleUIState,
-    windowSizeClass: WindowSizeClass?
+    windowSizeClass: WindowSizeClass?,
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {},
+    onDismissSkillTooltip: () -> Unit = {}
 ) {
     val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
@@ -170,7 +195,9 @@ internal fun SideBySideLayout(
 
         SkillsLazyHorizontalGrid(
             state = state,
-            modifier = Modifier.fillMaxSize().weight(0.2f)
+            modifier = Modifier.fillMaxSize().weight(0.2f),
+            onSkillLongClick = onSkillLongClick,
+            onDismissSkillTooltip = onDismissSkillTooltip
         )
     }
 }
