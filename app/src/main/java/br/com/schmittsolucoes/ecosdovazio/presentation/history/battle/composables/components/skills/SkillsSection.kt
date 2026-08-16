@@ -34,6 +34,7 @@ internal val TAB_ICON_SIZE = 32.dp
 fun SkillsLazyVerticalGrid(
     state: HistoryModeBattleUIState,
     modifier: Modifier = Modifier,
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -53,6 +54,7 @@ fun SkillsLazyVerticalGrid(
                     state = state,
                     pagerState = pagerState,
                     modifier = Modifier.weight(1f),
+                    onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick
                 )
             }
@@ -71,6 +73,7 @@ fun SkillsLazyVerticalGrid(
 fun SkillsLazyHorizontalGrid(
     state: HistoryModeBattleUIState,
     modifier: Modifier = Modifier,
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -93,6 +96,7 @@ fun SkillsLazyHorizontalGrid(
                     state = state,
                     pagerState = pagerState,
                     modifier = Modifier.weight(1f),
+                    onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick
                 )
             }

@@ -5,7 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharSkillDamageUseCase
-import kotlin.math.min
+import kotlin.math.max
 
 class UseCharSkillUseCase(
     private val getCharSkillDamageUseCase: GetCharSkillDamageUseCase
@@ -24,7 +24,7 @@ class UseCharSkillUseCase(
                     skillDamage = skillInfo.damage
                 )
 
-                val newEnemyHealth = min(battleMobInfo.actualHealth - damage, 0)
+                val newEnemyHealth = max(battleMobInfo.actualHealth - damage, 0)
 
                 CharSkillUsageResult.CommonDamage(
                     newEnemyHealth = newEnemyHealth,

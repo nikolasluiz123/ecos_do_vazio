@@ -65,6 +65,7 @@ fun HistoryModeBattleScreen(
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
         onMobClick = viewModel::onMobClick,
+        onSkillClick = viewModel::onSkillClick,
         onSkillLongClick = viewModel::onSkillLongClick,
         onDismissSkillTooltip = viewModel::onDismissSkillTooltip
     )
@@ -76,6 +77,7 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -104,6 +106,7 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
+                    onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
                 )
@@ -112,6 +115,7 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
+                    onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
                 )
@@ -132,6 +136,7 @@ internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -161,6 +166,7 @@ internal fun StackLayout(
         SkillsLazyVerticalGrid(
             state = state,
             modifier = Modifier.fillMaxSize().weight(0.2f),
+            onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip
         )
@@ -173,6 +179,7 @@ internal fun SideBySideLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -208,6 +215,7 @@ internal fun SideBySideLayout(
         SkillsLazyHorizontalGrid(
             state = state,
             modifier = Modifier.fillMaxSize().weight(0.2f),
+            onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip
         )

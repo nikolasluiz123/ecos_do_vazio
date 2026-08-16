@@ -23,6 +23,7 @@ fun SkillsVerticalPager(
     state: HistoryModeBattleUIState,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
+    onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {}
 ) {
     VerticalPager(
@@ -51,6 +52,7 @@ fun SkillsVerticalPager(
                 items(skills) { skill ->
                     SkillItem(
                         skill = skill,
+                        onSkillClick = onSkillClick,
                         onSkillLongClick = onSkillLongClick
                     )
                 }
