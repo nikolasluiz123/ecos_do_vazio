@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
@@ -18,6 +22,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.SkillsHorizontalTabRow
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.SkillsVerticalTabRow
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.rememberSkillsPagerState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SurfaceVariantGradient
 
 internal const val SKILLS_ANIMATION_DURATION = 600
@@ -35,6 +40,7 @@ fun SkillsLazyVerticalGrid(
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberSkillsPagerState()
+    var selectedSkill by remember { mutableStateOf<CharSkillUIModel?>(null) }
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -49,10 +55,18 @@ fun SkillsLazyVerticalGrid(
                 SkillsHorizontalPager(
                     state = state,
                     pagerState = pagerState,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onSkillLongClick = { selectedSkill = it }
                 )
             }
         }
+    }
+
+    selectedSkill?.let { skill ->
+        SkillTooltip(
+            skill = skill,
+            onDismissRequest = { selectedSkill = null }
+        )
     }
 }
 
@@ -62,6 +76,7 @@ fun SkillsLazyHorizontalGrid(
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberSkillsPagerState()
+    var selectedSkill by remember { mutableStateOf<CharSkillUIModel?>(null) }
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -79,10 +94,18 @@ fun SkillsLazyHorizontalGrid(
                 SkillsVerticalPager(
                     state = state,
                     pagerState = pagerState,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onSkillLongClick = { selectedSkill = it }
                 )
             }
         }
+    }
+
+    selectedSkill?.let { skill ->
+        SkillTooltip(
+            skill = skill,
+            onDismissRequest = { selectedSkill = null }
+        )
     }
 }
 

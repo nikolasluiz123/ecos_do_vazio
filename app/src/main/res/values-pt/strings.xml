@@ -243,4 +243,10 @@
 
     <string name="history_phase_status_finished">Concluído</string>
     <string name="history_phase_status_current">Atual</string>
+
+    <string name="skill_tooltip_refresh_time">Tempo de recarga: %d Rounds</string>
+    <string name="skill_tooltip_damage">Dano: %d</string>
+    <string name="skill_tooltip_duration">Duração: %d Rounds</string>
+    <string name="skill_tooltip_multiplier">Multiplicador: %.1f</string>
+    <string name="skill_tooltip_close">Fechar</string>
 </resources>

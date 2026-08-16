@@ -16,12 +16,14 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryMod
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_PADDING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_SPACING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SKILL_ITEM_MIN_SIZE
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 
 @Composable
 fun SkillsHorizontalPager(
     state: HistoryModeBattleUIState,
     pagerState: PagerState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSkillLongClick: (CharSkillUIModel) -> Unit = {}
 ) {
     HorizontalPager(
         state = pagerState,
@@ -47,7 +49,10 @@ fun SkillsHorizontalPager(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(skills) { skill ->
-                    SkillItem(skill = skill)
+                    SkillItem(
+                        skill = skill,
+                        onSkillLongClick = onSkillLongClick
+                    )
                 }
             }
         }
