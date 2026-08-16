@@ -16,12 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.TAB_BAR_SIZE
@@ -36,6 +38,22 @@ fun SkillsVerticalTabRow(
     val tabs = getTabIcons()
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val density = LocalDensity.current
+
+    LaunchedEffect(pagerState.currentPage) {
+        val tabSizePx = with(density) { TAB_BAR_SIZE.toPx() }
+        val viewportHeightPx = scrollState.viewportSize
+
+        if (viewportHeightPx > 0) {
+            val targetCenter = pagerState.currentPage * tabSizePx + (tabSizePx / 2)
+            val scrollOffset = (targetCenter - (viewportHeightPx / 2)).coerceIn(
+                0f,
+                scrollState.maxValue.toFloat()
+            )
+
+            scrollState.animateScrollTo(scrollOffset.toInt())
+        }
+    }
 
     Box(
         modifier = modifier
@@ -79,7 +97,9 @@ fun SkillsVerticalTabRow(
                 .width(3.dp)
                 .height(TAB_BAR_SIZE)
                 .graphicsLayer {
-                    translationY = (pagerState.currentPage + pagerState.currentPageOffsetFraction) * TAB_BAR_SIZE.toPx()
+                    val tabSizePx = TAB_BAR_SIZE.toPx()
+                    val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+                    translationY = (scrollPosition * tabSizePx) - scrollState.value
                 }
                 .align(Alignment.TopEnd)
                 .background(color = MaterialTheme.colorScheme.primary)
