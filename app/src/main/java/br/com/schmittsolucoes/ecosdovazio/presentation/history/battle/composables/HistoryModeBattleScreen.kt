@@ -130,7 +130,6 @@ internal fun StackLayout(state: HistoryModeBattleUIState, windowSizeClass: Windo
 
         SkillsLazyVerticalGrid(
             state = state,
-            windowSizeClass = windowSizeClass,
             modifier = Modifier.fillMaxSize().weight(0.2f)
         )
     }
@@ -171,7 +170,6 @@ internal fun SideBySideLayout(
 
         SkillsLazyHorizontalGrid(
             state = state,
-            windowSizeClass = windowSizeClass,
             modifier = Modifier.fillMaxSize().weight(0.2f)
         )
     }

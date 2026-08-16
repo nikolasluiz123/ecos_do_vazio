@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -43,9 +42,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -70,15 +66,8 @@ import kotlin.math.abs
 @Composable
 fun SkillsLazyVerticalGrid(
     state: HistoryModeBattleUIState,
-    windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
 ) {
-    val columns = when (windowSizeClass?.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 1
-        WindowWidthSizeClass.Medium -> 2
-        else -> 3
-    }
-
     val pagerState = rememberPagerState(pageCount = { getTabIcons().size })
 
     AnimatedVisibility(
@@ -98,15 +87,38 @@ fun SkillsLazyVerticalGrid(
                 ) { page ->
                     val skills = getSkillsList(page, state)
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(columns),
-                        contentPadding = PaddingValues(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(skills) { skill ->
-                            SkillItem(skill = skill)
+                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                        val availableWidth = maxWidth - (GRID_PADDING * 2)
+                        val availableHeight = maxHeight - (GRID_PADDING * 2)
+
+                        val maxColumns = maxOf(
+                            1,
+                            ((availableWidth + GRID_SPACING) / (SKILL_ITEM_MIN_SIZE + GRID_SPACING)).toInt()
+                        )
+
+                        var columns = maxColumns
+
+                        for (c in 1..maxColumns) {
+                            val itemWidth = (availableWidth - (GRID_SPACING * (c - 1))) / c
+                            val rowsCount = (skills.size + c - 1) / c
+                            val totalHeight = (itemWidth * rowsCount) + (GRID_SPACING * (rowsCount - 1))
+
+                            if (totalHeight <= availableHeight) {
+                                columns = c
+                                break
+                            }
+                        }
+
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(columns),
+                            contentPadding = PaddingValues(GRID_PADDING),
+                            horizontalArrangement = Arrangement.spacedBy(GRID_SPACING),
+                            verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(skills) { skill ->
+                                SkillItem(skill = skill)
+                            }
                         }
                     }
                 }
@@ -118,15 +130,8 @@ fun SkillsLazyVerticalGrid(
 @Composable
 fun SkillsLazyHorizontalGrid(
     state: HistoryModeBattleUIState,
-    windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
 ) {
-    val rows = when (windowSizeClass?.heightSizeClass) {
-        WindowHeightSizeClass.Compact -> 1
-        WindowHeightSizeClass.Medium -> 2
-        else -> 3
-    }
-
     val pagerState = rememberPagerState(pageCount = { getTabIcons().size })
 
     AnimatedVisibility(
@@ -149,15 +154,37 @@ fun SkillsLazyHorizontalGrid(
                 ) { page ->
                     val skills = getSkillsList(page, state)
 
-                    LazyHorizontalGrid(
-                        rows = GridCells.Fixed(rows),
-                        contentPadding = PaddingValues(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(skills) { skill ->
-                            SkillItem(skill = skill)
+                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                        val availableWidth = maxWidth - (GRID_PADDING * 2)
+                        val availableHeight = maxHeight - (GRID_PADDING * 2)
+
+                        val maxRows = maxOf(
+                            1,
+                            ((availableHeight + GRID_SPACING) / (SKILL_ITEM_MIN_SIZE + GRID_SPACING)).toInt()
+                        )
+
+                        var rows = maxRows
+
+                        for (r in 1..maxRows) {
+                            val itemHeight = (availableHeight - (GRID_SPACING * (r - 1))) / r
+                            val colsCount = (skills.size + r - 1) / r
+                            val totalWidth = (itemHeight * colsCount) + (GRID_SPACING * (colsCount - 1))
+                            if (totalWidth <= availableWidth) {
+                                rows = r
+                                break
+                            }
+                        }
+
+                        LazyHorizontalGrid(
+                            rows = GridCells.Fixed(rows),
+                            contentPadding = PaddingValues(GRID_PADDING),
+                            horizontalArrangement = Arrangement.spacedBy(GRID_SPACING),
+                            verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(skills) { skill ->
+                                SkillItem(skill = skill)
+                            }
                         }
                     }
                 }
@@ -318,6 +345,9 @@ private fun SkillItem(
 }
 
 private const val SKILLS_ANIMATION_DURATION = 600
+private val SKILL_ITEM_MIN_SIZE = 80.dp
+private val GRID_SPACING = 8.dp
+private val GRID_PADDING = 8.dp
 
 private val TAB_BAR_SIZE = 56.dp
 private val TAB_ICON_SIZE = 32.dp
