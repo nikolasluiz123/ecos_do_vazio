@@ -48,6 +48,9 @@
     <string name="char_attribute_strength">Strength</string>
     <string name="char_attribute_dexterity">Dexterity</string>
     <string name="char_attribute_intelligence">Intelligence</string>
+
+    <string name="battle_skills_tab_damage">DMG</string>
+    <string name="battle_skills_tab_buff_debuff">STATUS</string>
     <string name="char_attribute_physical_resistance">Physical Resistance</string>
     <string name="char_attribute_magic_resistance">Magic Resistance</string>
     <string name="char_attribute_vitality">Vitality</string>

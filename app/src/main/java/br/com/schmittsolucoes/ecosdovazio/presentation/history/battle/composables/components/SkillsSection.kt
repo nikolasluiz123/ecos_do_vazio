@@ -15,33 +15,47 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SurfaceVariantGradient
+import kotlinx.coroutines.launch
 
 @Composable
 fun SkillsLazyVerticalGrid(
@@ -64,22 +78,26 @@ fun SkillsLazyVerticalGrid(
         modifier = modifier
     ) {
         SkillsSurface {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.Top
-            ) { page ->
-                val skills = getSkillsList(page, state)
+            Column(modifier = Modifier.fillMaxSize()) {
+                SkillsHorizontalTabRow(pagerState = pagerState)
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(columns),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(skills) { skill ->
-                        SkillItem(skill = skill)
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.Top
+                ) { page ->
+                    val skills = getSkillsList(page, state)
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(columns),
+                        contentPadding = PaddingValues(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(skills) { skill ->
+                            SkillItem(skill = skill)
+                        }
                     }
                 }
             }
@@ -108,25 +126,104 @@ fun SkillsLazyHorizontalGrid(
         modifier = modifier
     ) {
         SkillsSurface {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.Top
-            ) { page ->
-                val skills = getSkillsList(page, state)
+            Row(modifier = Modifier.fillMaxSize()) {
+                SkillsVerticalTabRow(
+                    pagerState = pagerState,
+                    modifier = Modifier.fillMaxHeight()
+                )
 
-                LazyHorizontalGrid(
-                    rows = GridCells.Fixed(rows),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(skills) { skill ->
-                        SkillItem(skill = skill)
+                VerticalPager(
+                    state = pagerState,
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.Start
+                ) { page ->
+                    val skills = getSkillsList(page, state)
+
+                    LazyHorizontalGrid(
+                        rows = GridCells.Fixed(rows),
+                        contentPadding = PaddingValues(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(skills) { skill ->
+                            SkillItem(skill = skill)
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun SkillsHorizontalTabRow(
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val tabs = listOf(
+        R.drawable.ic_char_16dp,
+        R.drawable.ic_home_16dp
+    )
+
+    SecondaryTabRow(
+        selectedTabIndex = pagerState.currentPage,
+        modifier = modifier,
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        divider = { }
+    ) {
+        tabs.forEachIndexed { index, drawable ->
+            Tab(
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+                text = {
+                    Icon(
+                        painter = painterResource(id = drawable),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SkillsVerticalTabRow(
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val tabs = listOf(
+        R.drawable.ic_char_16dp,
+        R.drawable.ic_home_16dp
+    )
+
+    Column(
+        modifier = modifier.width(64.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        tabs.forEachIndexed { index, drawable ->
+            Tab(
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = drawable),
+                        contentDescription = null
+                    )
+                }
+            )
         }
     }
 }
