@@ -179,7 +179,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 actualHealth = actualHealth,
                 healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
                 level = level,
-                multiplier = 1.0
+                offensiveMultiplier = 1.0,
+                defensiveMultiplier = 0.0
             )
         }
     }
@@ -201,7 +202,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             actualHealth = actualHealth,
             battleImage = battleImage,
             healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
-            multiplier = 1.0
+            offensiveMultiplier = 1.0,
+            defensiveMultiplier = 0.0
         )
     }
 

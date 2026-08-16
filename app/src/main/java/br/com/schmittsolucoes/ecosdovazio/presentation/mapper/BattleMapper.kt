@@ -11,14 +11,16 @@ fun BattleChar.toUIModel(
     actualHealth: Long,
     healthProgress: Float,
     @DrawableRes battleImage: Int,
-    multiplier: Double
+    offensiveMultiplier: Double,
+    defensiveMultiplier: Double
 ): BattleCharUIModel {
     return BattleCharUIModel(
         level = level,
         name = name,
         battleImage = battleImage,
         classCategory = classCategory,
-        multiplier = multiplier,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
         totalHealth = totalHealth,
         actualHealth = actualHealth,
         healthProgress = healthProgress,
@@ -38,7 +40,8 @@ fun BattleMob.toUIModel(
     healthProgress: Float,
     level: Long,
     @DrawableRes image: Int,
-    multiplier: Double
+    offensiveMultiplier: Double,
+    defensiveMultiplier: Double
 ): BattleMobUIModel {
     return BattleMobUIModel(
         id = id,
@@ -46,7 +49,8 @@ fun BattleMob.toUIModel(
         description = description,
         image = image,
         mobCategory = mobCategory,
-        multiplier = multiplier,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
         totalHealth = totalHealth,
         actualHealth = actualHealth,
         healthProgress = healthProgress,

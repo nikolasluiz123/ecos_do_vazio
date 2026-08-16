@@ -41,7 +41,8 @@ fun CharSkillUIModel.toDomainUsedSkillInfo(): UsedSkillInfo {
 fun BattleCharUIModel.toDomainInfo(): BattleCharInfo {
     return BattleCharInfo(
         classCategory = classCategory,
-        multiplier = multiplier,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
         attributes = listOf(
             IdentifiedCharAttribute(AttributeIdentifier.STRENGTH, strength),
             IdentifiedCharAttribute(AttributeIdentifier.DEXTERITY, dexterity),
@@ -58,7 +59,8 @@ fun BattleCharUIModel.toDomainInfo(): BattleCharInfo {
 fun BattleMobUIModel.toDomainInfo(): BattleMobInfo {
     return BattleMobInfo(
         mobCategory = mobCategory,
-        multiplier = multiplier,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
         attributes = attributes,
         actualHealth = actualHealth
     )

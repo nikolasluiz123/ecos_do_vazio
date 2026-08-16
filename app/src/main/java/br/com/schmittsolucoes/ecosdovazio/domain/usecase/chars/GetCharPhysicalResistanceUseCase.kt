@@ -4,7 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.constants.GameConstants.PHYSICAL_RESISTANCE_SCALE_CONSTANT
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.map
 class GetCharPhysicalResistanceUseCase(
     private val charRepository: CharRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase
 ) {
     operator fun invoke(): Flow<Double> = flow {
         val userId = userRepository.getFirstUser()?.id
@@ -32,13 +33,11 @@ class GetCharPhysicalResistanceUseCase(
         }
 
         val resistanceFlow = charRepository.getCharPhysicalResistanceData(charId).map {
-            val factor = getFactor(it.classCategory)
-            val maxResistance = getMaxResistanceValue(it.classCategory)
-            val points = it.physicalResistance.totalValue
-            val effectiveResistance = points * factor
-            val calculatedResistance = (effectiveResistance / (PHYSICAL_RESISTANCE_SCALE_CONSTANT + effectiveResistance))
-
-            minOf(maxResistance, calculatedResistance)
+            calculatePhysicalResistanceUseCase.executeInternal(
+                points = it.physicalResistance.totalValue,
+                factor = getFactor(it.classCategory),
+                maxResistance = getMaxResistanceValue(it.classCategory)
+            )
         }
 
         emitAll(resistanceFlow)

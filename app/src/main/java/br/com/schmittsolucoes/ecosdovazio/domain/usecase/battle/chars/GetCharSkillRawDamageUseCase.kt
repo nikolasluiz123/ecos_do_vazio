@@ -1,10 +1,11 @@
-package br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars
+package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.IdentifiedCharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDamageAttributePointsUseCase
 import kotlin.math.roundToLong
 
-class GetCharSkillDamageUseCase(
+class GetCharSkillRawDamageUseCase(
     private val getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase,
 ) {
     fun executeInternal(

@@ -14,9 +14,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.SpecializationReposi
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobPointsCountByLevelUseCase
@@ -33,7 +37,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseC
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
@@ -332,25 +337,44 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideCalculatePhysicalResistanceUseCase(): CalculatePhysicalResistanceUseCase {
+        return CalculatePhysicalResistanceUseCase()
+    }
+
+    @Provides
+    fun provideCalculateMagicResistanceUseCase(): CalculateMagicResistanceUseCase {
+        return CalculateMagicResistanceUseCase()
+    }
+
+    @Provides
+    fun provideCalculateEffectiveDamageUseCase(): CalculateEffectiveDamageUseCase {
+        return CalculateEffectiveDamageUseCase()
+    }
+
+    @Provides
     fun provideGetCharMagicResistanceUseCase(
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase
     ): GetCharMagicResistanceUseCase = GetCharMagicResistanceUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
-        userRepository = userRepository
+        userRepository = userRepository,
+        calculateMagicResistanceUseCase = calculateMagicResistanceUseCase
     )
 
     @Provides
     fun provideGetCharPhysicalResistanceUseCase(
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase
     ): GetCharPhysicalResistanceUseCase = GetCharPhysicalResistanceUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
-        userRepository = userRepository
+        userRepository = userRepository,
+        calculatePhysicalResistanceUseCase = calculatePhysicalResistanceUseCase
     )
 
     @Provides
@@ -473,6 +497,17 @@ object UseCaseModule {
     }
 
     @Provides
+    fun provideGetMobDamageReductionUseCase(
+        calculatePhysicalResistanceUseCase: CalculatePhysicalResistanceUseCase,
+        calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase
+    ): GetMobDamageReductionUseCase {
+        return GetMobDamageReductionUseCase(
+            calculatePhysicalResistanceUseCase = calculatePhysicalResistanceUseCase,
+            calculateMagicResistanceUseCase = calculateMagicResistanceUseCase
+        )
+    }
+
+    @Provides
     fun provideGetCharBattleUseCase(
         userRepository: UserRepository,
         charRepository: CharRepository,
@@ -526,17 +561,32 @@ object UseCaseModule {
     }
 
     @Provides
-    fun provideGetCharSkillDamageUseCase(
+    fun provideGetCharSkillRawDamageUseCase(
         getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase
+    ): GetCharSkillRawDamageUseCase {
+        return GetCharSkillRawDamageUseCase(getCharDamageAttributePointsUseCase)
+    }
+
+    @Provides
+    fun provideGetCharSkillDamageUseCase(
+        getCharSkillRawDamageUseCase: GetCharSkillRawDamageUseCase,
+        getMobDamageReductionUseCase: GetMobDamageReductionUseCase,
+        calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase
     ): GetCharSkillDamageUseCase {
-        return GetCharSkillDamageUseCase(getCharDamageAttributePointsUseCase)
+        return GetCharSkillDamageUseCase(
+            getCharSkillRawDamageUseCase = getCharSkillRawDamageUseCase,
+            getMobDamageReductionUseCase = getMobDamageReductionUseCase,
+            calculateEffectiveDamageUseCase = calculateEffectiveDamageUseCase
+        )
     }
 
     @Provides
     fun provideUseCharSkillUseCase(
         getCharSkillDamageUseCase: GetCharSkillDamageUseCase
     ): UseCharSkillUseCase {
-        return UseCharSkillUseCase(getCharSkillDamageUseCase)
+        return UseCharSkillUseCase(
+            getCharSkillDamageUseCase = getCharSkillDamageUseCase
+        )
     }
 
     @Provides

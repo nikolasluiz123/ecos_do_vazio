@@ -4,7 +4,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 
 data class BattleCharInfo(
     val classCategory: ClassCategory,
-    val multiplier: Double,
+    val offensiveMultiplier: Double = 1.0,
+    val defensiveMultiplier: Double = 0.0,
     val attributes: List<IdentifiedCharAttribute>,
     val actualHealth: Long
 )

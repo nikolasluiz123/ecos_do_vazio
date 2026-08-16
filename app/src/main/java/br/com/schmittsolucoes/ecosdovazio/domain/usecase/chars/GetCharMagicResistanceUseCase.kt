@@ -4,7 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.constants.GameConstants.MAGIC_RESISTANCE_SCALE_CONSTANT
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.map
 class GetCharMagicResistanceUseCase(
     private val charRepository: CharRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val calculateMagicResistanceUseCase: CalculateMagicResistanceUseCase
 ) {
     operator fun invoke(): Flow<Double> = flow {
         val userId = userRepository.getFirstUser()?.id
@@ -32,13 +33,11 @@ class GetCharMagicResistanceUseCase(
         }
 
         val resistanceFlow = charRepository.getCharMagicResistanceData(charId).map {
-            val factor = getFactor(it.classCategory)
-            val maxResistance = getMaxResistanceValue(it.classCategory)
-            val points = it.magicResistance.totalValue
-            val effectiveResistance = points * factor
-            val calculatedResistance = (effectiveResistance / (MAGIC_RESISTANCE_SCALE_CONSTANT + effectiveResistance))
-
-            minOf(maxResistance, calculatedResistance)
+            calculateMagicResistanceUseCase.executeInternal(
+                points = it.magicResistance.totalValue,
+                factor = getFactor(it.classCategory),
+                maxResistance = getMaxResistanceValue(it.classCategory)
+            )
         }
 
         emitAll(resistanceFlow)
