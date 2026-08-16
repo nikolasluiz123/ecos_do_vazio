@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -175,7 +176,7 @@ private fun SkillsHorizontalTabRow(
 
     SecondaryScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
-        modifier = modifier,
+        modifier = modifier.height(TAB_BAR_SIZE),
         containerColor = Color.Transparent,
         divider = { },
     ) {
@@ -194,7 +195,8 @@ private fun SkillsHorizontalTabRow(
                     Icon(
                         painter = painterResource(id = drawable),
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(TAB_ICON_SIZE)
                     )
                 }
             )
@@ -212,7 +214,7 @@ private fun SkillsVerticalTabRow(
 
     Row(
         modifier = modifier
-            .width(56.dp)
+            .width(TAB_BAR_SIZE)
             .fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -237,6 +239,7 @@ private fun SkillsVerticalTabRow(
                     contentDescription = null,
                     tint = Color.Unspecified,
                     modifier = Modifier
+                        .size(TAB_ICON_SIZE)
                         .graphicsLayer {
                             val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
                             val pageOffset = index - scrollPosition
@@ -315,6 +318,9 @@ private fun SkillItem(
 }
 
 private const val SKILLS_ANIMATION_DURATION = 600
+
+private val TAB_BAR_SIZE = 56.dp
+private val TAB_ICON_SIZE = 32.dp
 
 private val TabRowAnimationSpec = spring(
     stiffness = Spring.StiffnessMediumLow,
