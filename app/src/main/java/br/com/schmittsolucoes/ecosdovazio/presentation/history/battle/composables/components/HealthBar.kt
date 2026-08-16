@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -34,30 +34,39 @@ internal fun HealthBar(
     progress: Float,
     modifier: Modifier = Modifier
 ) {
+    val cornerRadius = RoundedCornerShape(ITEM_CORNER_RADIUS)
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(24.dp)
-            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-            .background(HealthBarTrack),
+            .height(20.dp)
+            .clip(cornerRadius)
+            .background(HealthBarTrack.copy(alpha = 0.5f))
+            .border(
+                width = 1.dp,
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.3f),
+                        Color.Transparent
+                    )
+                ),
+                shape = cornerRadius
+            ),
         contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(progress.coerceIn(0f, 1f))
                 .fillMaxHeight()
-                .drawBehind {
-                    drawRect(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                HealthBarRedEnd,
-                                HealthBarRedStart
-                            ),
-                            startX = 0f,
-                            endX = size.width / progress.coerceAtLeast(0.01f)
+                .clip(cornerRadius)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            HealthBarRedStart.copy(alpha = 0.9f),
+                            HealthBarRedEnd.copy(alpha = 0.9f)
                         )
                     )
-                }
+                )
                 .align(Alignment.CenterStart)
         )
 
@@ -67,8 +76,8 @@ internal fun HealthBar(
                 fontWeight = FontWeight.Bold,
                 shadow = Shadow(
                     color = Color.Black,
-                    offset = Offset(1f, 1f),
-                    blurRadius = 2f
+                    offset = Offset(1.5f, 1.5f),
+                    blurRadius = 3f
                 )
             ),
             color = Color.White,
