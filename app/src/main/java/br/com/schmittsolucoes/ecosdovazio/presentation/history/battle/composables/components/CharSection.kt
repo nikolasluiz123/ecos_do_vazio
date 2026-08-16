@@ -26,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.CHAR_AND_MOBS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.INFO_PADDING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_ASPECT_RATIO
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_MAX_HEIGHT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
@@ -72,7 +72,7 @@ private fun CharItem(
             .aspectRatio(ITEM_ASPECT_RATIO)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
-                width = ITEM_BORDER_WIDTH,
+                width = CHAR_AND_MOBS_BORDER_WIDTH,
                 color = CharacterBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )

@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.input.pointer.pointerInput
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SKILLS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.BattleAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
@@ -32,7 +32,7 @@ internal fun SkillItem(
             .aspectRatio(1f)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
-                width = ITEM_BORDER_WIDTH,
+                width = SKILLS_BORDER_WIDTH,
                 color = if (skill.blocked) Color.Unspecified else SkillBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )

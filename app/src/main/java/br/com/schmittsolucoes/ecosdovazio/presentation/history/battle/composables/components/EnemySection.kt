@@ -1,6 +1,13 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -27,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +44,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.CHAR_AND_MOBS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.INFO_PADDING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_ASPECT_RATIO
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_MAX_HEIGHT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_SPACING
@@ -50,10 +58,17 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Batt
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
+
+private const val PULSE_ANIMATION_DURATION = 600
+private const val PULSE_ALPHA_INITIAL = 0.4f
+private const val PULSE_ALPHA_TARGET = 1f
 
 @Composable
 internal fun EnemySection(
     mobs: List<BattleMobUIModel>,
+    selectedMob: BattleMobUIModel?,
+    onMobClick: (BattleMobUIModel) -> Unit,
     windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ITEM_SPACING)
@@ -63,9 +78,9 @@ internal fun EnemySection(
     val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
 
     if (isExpanded) {
-        EnemyHorizontalList(modifier, horizontalArrangement, mobs)
+        EnemyHorizontalList(modifier, horizontalArrangement, mobs, selectedMob, onMobClick)
     } else {
-        EnemyHorizontalPager(mobs, modifier)
+        EnemyHorizontalPager(mobs, selectedMob, onMobClick, modifier)
     }
 }
 
@@ -73,7 +88,9 @@ internal fun EnemySection(
 private fun EnemyHorizontalList(
     modifier: Modifier,
     horizontalArrangement: Arrangement.Horizontal,
-    mobs: List<BattleMobUIModel>
+    mobs: List<BattleMobUIModel>,
+    selectedMob: BattleMobUIModel?,
+    onMobClick: (BattleMobUIModel) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -83,6 +100,8 @@ private fun EnemyHorizontalList(
         items(mobs) { mob ->
             EnemyItem(
                 mob = mob,
+                isSelected = mob.id == selectedMob?.id,
+                onMobClick = onMobClick,
                 modifier = Modifier
                     .heightIn(max = ITEM_MAX_HEIGHT)
                     .fillMaxHeight()
@@ -95,6 +114,8 @@ private fun EnemyHorizontalList(
 @Composable
 private fun EnemyHorizontalPager(
     mobs: List<BattleMobUIModel>,
+    selectedMob: BattleMobUIModel?,
+    onMobClick: (BattleMobUIModel) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
@@ -105,13 +126,16 @@ private fun EnemyHorizontalPager(
             modifier = Modifier
                 .fillMaxWidth(),
         ) { page ->
+            val mob = mobs[page]
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 EnemyItem(
-                    mob = mobs[page],
+                    mob = mob,
+                    isSelected = mob.id == selectedMob?.id,
+                    onMobClick = onMobClick,
                     modifier = Modifier
                         .heightIn(max = ITEM_MAX_HEIGHT)
                         .fillMaxHeight()
@@ -139,17 +163,37 @@ private fun EnemyHorizontalPager(
 @Composable
 private fun EnemyItem(
     mob: BattleMobUIModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    onMobClick: (BattleMobUIModel) -> Unit = {}
 ) {
+    val infiniteTransition = rememberInfiniteTransition(label = "Pulse")
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = PULSE_ALPHA_INITIAL,
+        targetValue = PULSE_ALPHA_TARGET,
+        animationSpec = infiniteRepeatable(
+            animation = tween(PULSE_ANIMATION_DURATION, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "Alpha"
+    )
+
+    val borderColor = if (isSelected) {
+        OrangeForDetails.copy(alpha = alpha)
+    } else {
+        CharacterBattleStrokeColor
+    }
+
     BoxWithConstraints(
         modifier = modifier
             .aspectRatio(ITEM_ASPECT_RATIO)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
             .border(
-                width = ITEM_BORDER_WIDTH,
-                color = CharacterBattleStrokeColor,
+                width = CHAR_AND_MOBS_BORDER_WIDTH,
+                color = borderColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
+            .clickable { onMobClick(mob) }
     ) {
         BattleAsyncImage(
             model = mob.image,
@@ -210,6 +254,8 @@ private fun EnemyItemPreview() {
 private fun EnemySectionPreview() {
     EnemySection(
         mobs = HistoryModeBattlePreviewData.mockMobsList,
+        selectedMob = HistoryModeBattlePreviewData.mockMobWarrior,
+        onMobClick = {},
         windowSizeClass = null,
         modifier = Modifier.height(400.dp)
     )

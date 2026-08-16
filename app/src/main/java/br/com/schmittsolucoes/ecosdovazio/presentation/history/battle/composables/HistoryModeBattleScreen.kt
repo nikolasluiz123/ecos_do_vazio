@@ -32,6 +32,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyVerticalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
@@ -42,7 +43,8 @@ internal val SECTION_PADDING_VERTICAL = 12.dp
 internal val ITEM_SPACING = 8.dp
 internal val SIDE_BY_SIDE_SPACING = 0.dp
 internal val ITEM_CORNER_RADIUS = 4.dp
-internal val ITEM_BORDER_WIDTH = 2.dp
+internal val CHAR_AND_MOBS_BORDER_WIDTH = 3.dp
+internal val SKILLS_BORDER_WIDTH = 2.dp
 internal val INFO_PADDING = 8.dp
 
 internal const val WEIGHT_SINGLE_MOB = 1f
@@ -62,6 +64,7 @@ fun HistoryModeBattleScreen(
         state = state,
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
+        onMobClick = viewModel::onMobClick,
         onSkillLongClick = viewModel::onSkillLongClick,
         onDismissSkillTooltip = viewModel::onDismissSkillTooltip
     )
@@ -72,6 +75,7 @@ fun HistoryModeBattleScreen(
     state: HistoryModeBattleUIState = HistoryModeBattleUIState(),
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
+    onMobClick: (BattleMobUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -99,6 +103,7 @@ fun HistoryModeBattleScreen(
                     isExpandedWidth = isExpandedWidth,
                     state = state,
                     windowSizeClass = windowSizeClass,
+                    onMobClick = onMobClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
                 )
@@ -106,6 +111,7 @@ fun HistoryModeBattleScreen(
                 StackLayout(
                     state = state,
                     windowSizeClass = windowSizeClass,
+                    onMobClick = onMobClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
                 )
@@ -125,6 +131,7 @@ fun HistoryModeBattleScreen(
 internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
+    onMobClick: (BattleMobUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -137,6 +144,8 @@ internal fun StackLayout(
         ) {
             EnemySection(
                 mobs = state.mobs,
+                selectedMob = state.selectedMob,
+                onMobClick = onMobClick,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(1f)
             )
@@ -163,6 +172,7 @@ internal fun SideBySideLayout(
     isExpandedWidth: Boolean,
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
+    onMobClick: (BattleMobUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
@@ -179,6 +189,8 @@ internal fun SideBySideLayout(
         ) {
             EnemySection(
                 mobs = state.mobs,
+                selectedMob = state.selectedMob,
+                onMobClick = onMobClick,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(enemyWeight),
                 horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
