@@ -109,7 +109,6 @@ class HistoryModeBattleViewModel @Inject constructor(
             debuffSkills = mapCharSkillsToUIModel(char, debuffSkills),
             selectedMob = selectedMob,
             selectedSkill = selectedSkill,
-            mobSkills = selectedMob?.skills ?: emptyList()
         )
     }.stateIn(
         scope = viewModelScope,
