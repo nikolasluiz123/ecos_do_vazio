@@ -496,12 +496,14 @@ object UseCaseModule {
         historyPhaseRepository: HistoryPhaseRepository,
         getMobLevelUseCase: GetMobLevelUseCase,
         getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase,
-        languageProvider: LanguageProvider
+        languageProvider: LanguageProvider,
+        skillRepository: SkillRepository
     ): MobsFromPhaseQueryUseCase = MobsFromPhaseQueryUseCase(
         historyPhaseRepository = historyPhaseRepository,
         getMobLevelUseCase = getMobLevelUseCase,
         getMobAttributesByLevelUseCase = getMobAttributesByLevelUseCase,
-        languageProvider = languageProvider
+        languageProvider = languageProvider,
+        skillRepository = skillRepository
     )
 
     @Provides
