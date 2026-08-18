@@ -8,6 +8,7 @@ data class HistoryModeBattleUIState(
     val phaseId: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
+    val shouldPop: Boolean = false,
     val mobs: List<BattleMobUIModel> = emptyList(),
     val selectedMob: BattleMobUIModel? = null,
     val char: BattleCharUIModel? = null,

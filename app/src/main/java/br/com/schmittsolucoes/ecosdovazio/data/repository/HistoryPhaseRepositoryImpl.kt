@@ -1,12 +1,14 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository
 
 import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTransaction
+import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseInfoLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.history.HistoryPhaseMobLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class HistoryPhaseRepositoryImpl @Inject constructor(
     private val historyPhaseLocalDataSource: HistoryPhaseLocalDataSource,
     private val historyPhaseMobLocalDataSource: HistoryPhaseMobLocalDataSource,
+    private val historyPhaseInfoLocalDataSource: HistoryPhaseInfoLocalDataSource,
     private val databaseTransaction: DatabaseTransaction
 ): HistoryPhaseRepository {
 
@@ -56,5 +59,13 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
 
     override suspend fun getById(id: String): HistoryPhase? {
         return historyPhaseLocalDataSource.getById(id)?.toDomain(emptyList())
+    }
+
+    override suspend fun getHistoryPhaseInfo(charId: String, phaseId: String): HistoryPhaseInfo? {
+        return historyPhaseInfoLocalDataSource.getByCharAndPhase(charId, phaseId)?.toDomain()
+    }
+
+    override suspend fun saveHistoryPhaseInfo(historyPhaseInfo: HistoryPhaseInfo) {
+        historyPhaseInfoLocalDataSource.upsert(listOf(historyPhaseInfo.toEntity()))
     }
 }

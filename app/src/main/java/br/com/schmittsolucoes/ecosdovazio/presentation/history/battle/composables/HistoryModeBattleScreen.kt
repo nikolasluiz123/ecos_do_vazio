@@ -70,12 +70,19 @@ internal const val WEIGHT_DEFAULT = 1f
 @Composable
 fun HistoryModeBattleScreen(
     viewModel: HistoryModeBattleViewModel,
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
+    onPop: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.actualRound) {
-        viewModel.onRunEnemyRound()
+        viewModel.onRoundUpdate()
+    }
+
+    LaunchedEffect(state.shouldPop) {
+        if (state.shouldPop) {
+            onPop()
+        }
     }
 
     HistoryModeBattleScreen(

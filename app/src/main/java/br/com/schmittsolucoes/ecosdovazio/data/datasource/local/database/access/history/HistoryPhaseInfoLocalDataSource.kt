@@ -3,4 +3,6 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.EntityLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseInfoEntity
 
-interface HistoryPhaseInfoLocalDataSource : EntityLocalDataSource<HistoryPhaseInfoEntity>
+interface HistoryPhaseInfoLocalDataSource : EntityLocalDataSource<HistoryPhaseInfoEntity> {
+    suspend fun getByCharAndPhase(charId: String, phaseId: String): HistoryPhaseInfoEntity?
+}

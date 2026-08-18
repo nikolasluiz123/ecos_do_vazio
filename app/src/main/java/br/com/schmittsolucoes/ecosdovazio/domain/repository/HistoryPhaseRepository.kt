@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import kotlinx.coroutines.flow.Flow
@@ -13,4 +14,6 @@ interface HistoryPhaseRepository {
     suspend fun getExistsHistoryPhase(): Boolean
     fun getMobsFromPhase(phaseId: String, languageTag: String): Flow<List<BattleMob>>
     suspend fun getById(id: String): HistoryPhase?
+    suspend fun getHistoryPhaseInfo(charId: String, phaseId: String): HistoryPhaseInfo?
+    suspend fun saveHistoryPhaseInfo(historyPhaseInfo: HistoryPhaseInfo)
 }

@@ -13,13 +13,15 @@ fun NavController.navigateToHistoryModeBattle(phaseId: String) {
 }
 
 fun NavGraphBuilder.historyModeBattleScreen(
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
+    onPop: () -> Unit
 ) {
     composable<HistoryModeBattleRoute> {
         val viewModel = hiltViewModel<HistoryModeBattleViewModel>()
         HistoryModeBattleScreen(
             viewModel = viewModel,
-            windowSizeClass = windowSizeClass
+            windowSizeClass = windowSizeClass,
+            onPop = onPop
         )
     }
 }

@@ -38,7 +38,10 @@ fun AppNavHost(
             onNavigateToHome = navController::navigateToHome
         )
 
-        historyModeBattleScreen(windowSizeClass = windowSizeClass)
+        historyModeBattleScreen(
+            windowSizeClass = windowSizeClass,
+            onPop = navController::popBackStack
+        )
 
         navigation<MainGraph>(
             startDestination = HomeRoute

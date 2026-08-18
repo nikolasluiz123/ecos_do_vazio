@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.manager.SnackbarManager
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
@@ -17,6 +18,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseC
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.EndHistoryPhaseUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.StartHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
@@ -49,6 +53,9 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
     private val useCharSkillUseCase: UseCharSkillUseCase,
     private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
+    private val startHistoryPhaseUseCase: StartHistoryPhaseUseCase,
+    private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
+    private val snackbarManager: SnackbarManager,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -66,6 +73,9 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val _charHealth = MutableStateFlow<Long?>(null)
     private val _mobsHealth = MutableStateFlow<Map<String, Long>>(emptyMap())
     private val _actualRound = MutableStateFlow<Long>(1)
+    private val _shouldPop = MutableStateFlow(false)
+
+    private var isPhaseStarted = false
 
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HistoryModeBattleUIState> = combine(
@@ -80,7 +90,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         _selectedSkill,
         _mobsHealth,
         _charHealth,
-        _actualRound
+        _actualRound,
+        _shouldPop
     ) { flows ->
         val errorMessage = flows[0] as String?
         val isLoading = flows[1] as Boolean
@@ -94,6 +105,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val mobsHealth = flows[9] as Map<String, Long>
         val charHealth = flows[10] as Long?
         val actualRound = flows[11] as Long
+        val shouldPop = flows[12] as Boolean
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth)
         val uiModelChar = mapBattleCharToUIModel(
@@ -109,6 +121,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
             errorMessage = errorMessage,
+            shouldPop = shouldPop,
             isLoading = isLoading,
             mobs = uiModelMobs,
             char = uiModelChar,
@@ -126,7 +139,10 @@ class HistoryModeBattleViewModel @Inject constructor(
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
-        return context.getString(R.string.error_unexpected)
+        return when (throwable) {
+            is UserException.UserNotFound -> context.getString(R.string.user_error_not_found)
+            else -> context.getString(R.string.error_unexpected)
+        }
     }
 
     override fun onShowErrorDialog(message: String) {
@@ -177,9 +193,14 @@ class HistoryModeBattleViewModel @Inject constructor(
         incrementRound()
     }
 
-    fun onRunEnemyRound() {
-        if (uiState.value.actualRound % 2 == 0L) {
-            launch {
+    fun onRoundUpdate() {
+        launch {
+            if (!isPhaseStarted) {
+                startHistoryPhaseUseCase(route.phaseId)
+                isPhaseStarted = true
+            }
+
+            if (isEnemyRound()) {
                 val state = uiState.value
                 val char = state.char ?: return@launch
                 val mobs = state.mobs
@@ -190,7 +211,34 @@ class HistoryModeBattleViewModel @Inject constructor(
                     onMobUseSkill = ::handleMobSkillResult
                 )
             }
+
+            tryFinishBattle()
         }
+    }
+
+    private suspend fun tryFinishBattle() {
+        val state = uiState.value
+        val char = state.char ?: return
+        val mobs = state.mobs
+        val isFinished = endHistoryPhaseUseCase(
+            phaseId = route.phaseId,
+            battleCharInfo = char.toDomainInfo(),
+            mobs = mobs.map { it.toDomainInfo() }
+        )
+
+        if (isFinished) {
+            val allMobsDead = mobs.all { it.actualHealth <= 0 }
+
+            if (allMobsDead) {
+                snackbarManager.showSnackbar(context.getString(R.string.history_mode_battle_victory))
+            }
+
+            _shouldPop.value = true
+        }
+    }
+
+    private fun isEnemyRound(): Boolean {
+        return uiState.value.actualRound % 2 == 0L
     }
 
     private fun handleMobSkillResult(result: MobSkillUsageResult) {
