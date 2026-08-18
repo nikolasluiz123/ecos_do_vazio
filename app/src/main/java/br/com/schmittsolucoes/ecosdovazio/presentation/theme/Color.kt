@@ -191,3 +191,7 @@ val CharacterBattleStrokeColor: Color
 @get:Composable
 val SkillBattleStrokeColor: Color
     get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight
+
+@get:Composable
+val RoundStrokeColor: Color
+    get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight

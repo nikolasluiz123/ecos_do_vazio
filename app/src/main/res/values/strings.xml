@@ -249,4 +249,5 @@
     <string name="skill_tooltip_duration">Duration: %d Rounds</string>
     <string name="skill_tooltip_multiplier">Multiplier: %.1f</string>
     <string name="skill_tooltip_close">Close</string>
+    <string name="history_mode_battle_screen_label_round">ROUND %1$d</string>
 </resources>

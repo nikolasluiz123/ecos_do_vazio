@@ -31,8 +31,8 @@ internal fun calculateFixedAxisCells(
 
 internal fun getSkillsList(page: Int, state: HistoryModeBattleUIState): List<CharSkillUIModel> {
     return when (page) {
-        0 -> state.damageSkills
-        1 -> state.buffSkills
-        else -> state.debuffSkills
+        0 -> state.char?.damageSkills ?: emptyList()
+        1 -> state.char?.buffSkills ?: emptyList()
+        else -> state.char?.debuffSkills ?: emptyList()
     }
 }

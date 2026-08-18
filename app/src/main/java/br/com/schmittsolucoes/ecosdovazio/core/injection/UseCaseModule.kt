@@ -23,15 +23,18 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDam
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.ChooseMobSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobPointsCountByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.UseMobSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
@@ -496,14 +499,31 @@ object UseCaseModule {
         historyPhaseRepository: HistoryPhaseRepository,
         getMobLevelUseCase: GetMobLevelUseCase,
         getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase,
+        getMobSkillBlockedUseCase: GetMobSkillBlockedUseCase,
         languageProvider: LanguageProvider,
         skillRepository: SkillRepository
     ): MobsFromPhaseQueryUseCase = MobsFromPhaseQueryUseCase(
         historyPhaseRepository = historyPhaseRepository,
         getMobLevelUseCase = getMobLevelUseCase,
         getMobAttributesByLevelUseCase = getMobAttributesByLevelUseCase,
+        getMobSkillBlockedUseCase = getMobSkillBlockedUseCase,
         languageProvider = languageProvider,
         skillRepository = skillRepository
+    )
+
+    @Provides
+    fun provideGetMobSkillBlockedUseCase(): GetMobSkillBlockedUseCase = GetMobSkillBlockedUseCase()
+
+    @Provides
+    fun provideChooseMobSkillUseCase(): ChooseMobSkillUseCase = ChooseMobSkillUseCase()
+
+    @Provides
+    fun provideRunEnemyRoundUseCase(
+        chooseMobSkillUseCase: ChooseMobSkillUseCase,
+        useMobSkillUseCase: UseMobSkillUseCase
+    ): RunEnemyRoundUseCase = RunEnemyRoundUseCase(
+        chooseMobSkillUseCase = chooseMobSkillUseCase,
+        useMobSkillUseCase = useMobSkillUseCase
     )
 
     @Provides

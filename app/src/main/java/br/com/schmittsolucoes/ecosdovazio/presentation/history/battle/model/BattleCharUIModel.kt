@@ -21,4 +21,7 @@ data class BattleCharUIModel(
     val magicResistance: CharAttribute,
     val vitality: CharAttribute,
     val agility: CharAttribute,
+    val damageSkills: List<CharSkillUIModel> = emptyList(),
+    val buffSkills: List<CharSkillUIModel> = emptyList(),
+    val debuffSkills: List<CharSkillUIModel> = emptyList(),
 )

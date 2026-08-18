@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.IdentifiedCharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
+import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
@@ -63,6 +64,19 @@ fun BattleMobUIModel.toDomainInfo(): BattleMobInfo {
         defensiveMultiplier = defensiveMultiplier,
         attributes = attributes,
         level = level,
-        actualHealth = actualHealth
+        actualHealth = actualHealth,
+        skills = skills.map { it.toDomain() }
+    )
+}
+
+fun BattleMob.toInfo(): BattleMobInfo {
+    return BattleMobInfo(
+        mobCategory = mobCategory,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
+        attributes = attributes,
+        level = level,
+        actualHealth = actualHealth,
+        skills = skills
     )
 }

@@ -6,11 +6,15 @@ sealed interface MobSkill {
     val id: String
     val skillCategory: SkillCategory
     val refreshTime: Int
+    val currentRefreshTime: Int
+    val blocked: Boolean
     val minLevel: Long
 
     data class CommonDamage(
         override val id: String,
         override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
         override val minLevel: Long,
         val damage: Long
     ) : MobSkill {
@@ -20,6 +24,8 @@ sealed interface MobSkill {
     data class DamageOverTime(
         override val id: String,
         override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
         override val minLevel: Long,
         val damage: Long,
         val duration: Int
@@ -31,6 +37,8 @@ sealed interface MobSkill {
         override val id: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
         override val minLevel: Long,
         val multiplier: Double,
         val duration: Int
@@ -40,6 +48,8 @@ sealed interface MobSkill {
         override val id: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
         override val minLevel: Long,
         val multiplier: Double,
         val duration: Int

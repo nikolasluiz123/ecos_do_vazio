@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,19 +13,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
@@ -36,14 +46,18 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Batt
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundBottom
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundTop
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.RoundStrokeColor
 
 internal const val ITEM_ASPECT_RATIO = 0.60f
 internal val ITEM_MAX_HEIGHT = 450.dp
 internal val SECTION_PADDING_VERTICAL = 12.dp
 internal val ITEM_SPACING = 8.dp
-internal val SIDE_BY_SIDE_SPACING = 0.dp
+internal val SIDE_BY_SIDE_SPACING = 8.dp
 internal val ITEM_CORNER_RADIUS = 4.dp
 internal val CHAR_AND_MOBS_BORDER_WIDTH = 3.dp
+internal val ROUND_BORDER_WIDTH = 2.dp
 internal val SKILLS_BORDER_WIDTH = 2.dp
 internal val INFO_PADDING = 8.dp
 
@@ -59,6 +73,10 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.actualRound) {
+        viewModel.onRunEnemyRound()
+    }
 
     HistoryModeBattleScreen(
         state = state,
@@ -96,7 +114,9 @@ fun HistoryModeBattleScreen(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = if (useSideBySide) SIDE_BY_SIDE_SPACING else paddingValues.calculateEndPadding(layoutDirection)
+                    end = if (useSideBySide) SIDE_BY_SIDE_SPACING else paddingValues.calculateEndPadding(
+                        layoutDirection
+                    )
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -144,7 +164,9 @@ internal fun StackLayout(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().weight(0.8f),
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(0.8f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EnemySection(
@@ -154,6 +176,8 @@ internal fun StackLayout(
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(1f)
             )
+
+            RoundViewer(actualRound = state.actualRound)
 
             CharSection(
                 char = state.char,
@@ -165,7 +189,9 @@ internal fun StackLayout(
 
         SkillsLazyVerticalGrid(
             state = state,
-            modifier = Modifier.fillMaxSize().weight(0.2f),
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(0.2f),
             onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip
@@ -205,6 +231,10 @@ internal fun SideBySideLayout(
 
             Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
 
+            RoundViewer(state.actualRound)
+
+            Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
+
             CharSection(
                 char = state.char,
                 modifier = Modifier.weight(1f),
@@ -214,10 +244,47 @@ internal fun SideBySideLayout(
 
         SkillsLazyHorizontalGrid(
             state = state,
-            modifier = Modifier.fillMaxSize().weight(0.2f),
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(0.2f),
             onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip
+        )
+    }
+}
+
+@Composable
+private fun RoundViewer(actualRound: Long, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        HeroSlotBackgroundTop,
+                        HeroSlotBackgroundBottom
+                    )
+                ),
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+            )
+            .border(
+                width = ROUND_BORDER_WIDTH,
+                color = RoundStrokeColor,
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+            )
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(
+                R.string.history_mode_battle_screen_label_round,
+                actualRound
+            ),
+            style = MaterialTheme.typography.titleMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.SemiBold
+            )
         )
     }
 }

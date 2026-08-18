@@ -59,25 +59,6 @@ object HistoryModeBattlePreviewData {
 
     val mockMobsList = listOf(mockMobWarrior, mockMobMage, mockMobOrc)
 
-    val mockChar = BattleCharUIModel(
-        level = 10,
-        name = "Herói",
-        battleImage = R.drawable.classe_guerreiro_16_9,
-        classCategory = ClassCategory.WARRIOR,
-        offensiveMultiplier = 1.0,
-        defensiveMultiplier = 0.0,
-        totalHealth = 200,
-        actualHealth = 150,
-        healthProgress = 0.75f,
-        strength = CharAttribute(15, 5, null),
-        dexterity = CharAttribute(10, 2, null),
-        intelligence = CharAttribute(5, 0, null),
-        physicalResistance = CharAttribute(12, 3, null),
-        magicResistance = CharAttribute(8, 2, null),
-        vitality = CharAttribute(20, 5, null),
-        agility = CharAttribute(12, 3, null)
-    )
-
     val mockSkillDamage = CharSkillUIModel.CommonDamage(
         id = "skill_1",
         name = "Golpe Pesado",
@@ -102,10 +83,29 @@ object HistoryModeBattlePreviewData {
         duration = 3
     )
 
+    val mockChar = BattleCharUIModel(
+        level = 10,
+        name = "Herói",
+        battleImage = R.drawable.classe_guerreiro_16_9,
+        classCategory = ClassCategory.WARRIOR,
+        offensiveMultiplier = 1.0,
+        defensiveMultiplier = 0.0,
+        totalHealth = 200,
+        actualHealth = 150,
+        healthProgress = 0.75f,
+        strength = CharAttribute(15, 5, null),
+        dexterity = CharAttribute(10, 2, null),
+        intelligence = CharAttribute(5, 0, null),
+        physicalResistance = CharAttribute(12, 3, null),
+        magicResistance = CharAttribute(8, 2, null),
+        vitality = CharAttribute(20, 5, null),
+        agility = CharAttribute(12, 3, null),
+        damageSkills = listOf(mockSkillDamage),
+        buffSkills = listOf(mockSkillBuff)
+    )
+
     val uiState = HistoryModeBattleUIState(
         mobs = mockMobsList,
         char = mockChar,
-        damageSkills = listOf(mockSkillDamage),
-        buffSkills = listOf(mockSkillBuff)
     )
 }

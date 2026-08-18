@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 
 fun BattleChar.toUIModel(
@@ -13,7 +14,10 @@ fun BattleChar.toUIModel(
     healthProgress: Float,
     @DrawableRes battleImage: Int,
     offensiveMultiplier: Double,
-    defensiveMultiplier: Double
+    defensiveMultiplier: Double,
+    damageSkills: List<CharSkillUIModel> = emptyList(),
+    buffSkills: List<CharSkillUIModel> = emptyList(),
+    debuffSkills: List<CharSkillUIModel> = emptyList()
 ): BattleCharUIModel {
     return BattleCharUIModel(
         level = level,
@@ -31,18 +35,17 @@ fun BattleChar.toUIModel(
         physicalResistance = physicalResistance,
         magicResistance = magicResistance,
         vitality = vitality,
-        agility = agility
+        agility = agility,
+        damageSkills = damageSkills,
+        buffSkills = buffSkills,
+        debuffSkills = debuffSkills
     )
 }
 
 fun BattleMob.toUIModel(
     totalHealth: Long,
-    actualHealth: Long,
     healthProgress: Float,
-    level: Long,
     @DrawableRes image: Int,
-    offensiveMultiplier: Double,
-    defensiveMultiplier: Double,
     skills: List<MobSkillUIModel> = emptyList()
 ): BattleMobUIModel {
     return BattleMobUIModel(
@@ -59,5 +62,21 @@ fun BattleMob.toUIModel(
         level = level,
         attributes = attributes,
         skills = skills
+    )
+}
+
+fun BattleMobUIModel.toDomain(): BattleMob {
+    return BattleMob(
+        id = id,
+        name = name,
+        description = description,
+        imageName = "",
+        mobCategory = mobCategory,
+        level = level,
+        offensiveMultiplier = offensiveMultiplier,
+        defensiveMultiplier = defensiveMultiplier,
+        actualHealth = actualHealth,
+        attributes = attributes,
+        skills = skills.map { it.toDomain() }
     )
 }

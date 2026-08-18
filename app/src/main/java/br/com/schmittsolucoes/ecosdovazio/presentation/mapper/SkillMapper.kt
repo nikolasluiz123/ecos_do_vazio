@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 
@@ -62,16 +63,14 @@ fun CharSkill.toUIModel(
     }
 }
 
-fun MobSkill.toUIModel(
-    currentRefreshTime: Int,
-    blocked: Boolean
-): MobSkillUIModel {
+fun MobSkill.toUIModel(): MobSkillUIModel {
     return when (this) {
         is MobSkill.CommonDamage -> MobSkillUIModel.CommonDamage(
             id = id,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
+            minLevel = minLevel,
             damage = damage
         )
 
@@ -80,6 +79,7 @@ fun MobSkill.toUIModel(
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
+            minLevel = minLevel,
             damage = damage,
             duration = duration
         )
@@ -90,6 +90,7 @@ fun MobSkill.toUIModel(
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
+            minLevel = minLevel,
             multiplier = multiplier,
             duration = duration
         )
@@ -100,6 +101,81 @@ fun MobSkill.toUIModel(
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
+            minLevel = minLevel,
+            multiplier = multiplier,
+            duration = duration
+        )
+    }
+}
+
+fun MobSkillUIModel.toDomain(): MobSkill {
+    return when (this) {
+        is MobSkillUIModel.CommonDamage -> MobSkill.CommonDamage(
+            id = id,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            minLevel = minLevel,
+            damage = damage
+        )
+
+        is MobSkillUIModel.DamageOverTime -> MobSkill.DamageOverTime(
+            id = id,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            minLevel = minLevel,
+            damage = damage,
+            duration = duration
+        )
+
+        is MobSkillUIModel.Buff -> MobSkill.Buff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            minLevel = minLevel,
+            multiplier = multiplier,
+            duration = duration
+        )
+
+        is MobSkillUIModel.Debuff -> MobSkill.Debuff(
+            id = id,
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            currentRefreshTime = currentRefreshTime,
+            blocked = blocked,
+            minLevel = minLevel,
+            multiplier = multiplier,
+            duration = duration
+        )
+    }
+}
+
+fun MobSkill.toUsedInfo(): UsedMobSkillInfo {
+    return when (this) {
+        is MobSkill.CommonDamage -> UsedMobSkillInfo.CommonDamage(
+            refreshTime = refreshTime,
+            damage = damage
+        )
+
+        is MobSkill.DamageOverTime -> UsedMobSkillInfo.DamageOverTime(
+            refreshTime = refreshTime,
+            damage = damage,
+            duration = duration
+        )
+
+        is MobSkill.Buff -> UsedMobSkillInfo.Buff(
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
+            multiplier = multiplier,
+            duration = duration
+        )
+
+        is MobSkill.Debuff -> UsedMobSkillInfo.Debuff(
+            skillCategory = skillCategory,
+            refreshTime = refreshTime,
             multiplier = multiplier,
             duration = duration
         )

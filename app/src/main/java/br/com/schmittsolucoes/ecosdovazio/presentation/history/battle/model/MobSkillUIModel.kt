@@ -8,12 +8,14 @@ sealed interface MobSkillUIModel {
     val refreshTime: Int
     val currentRefreshTime: Int
     val blocked: Boolean
+    val minLevel: Long
 
     data class CommonDamage(
         override val id: String,
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
+        override val minLevel: Long,
         val damage: Long
     ): MobSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
@@ -24,6 +26,7 @@ sealed interface MobSkillUIModel {
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
+        override val minLevel: Long,
         val damage: Long,
         val duration: Int,
     ): MobSkillUIModel {
@@ -36,6 +39,7 @@ sealed interface MobSkillUIModel {
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
+        override val minLevel: Long,
         val multiplier: Double,
         val duration: Int,
     ): MobSkillUIModel
@@ -46,6 +50,7 @@ sealed interface MobSkillUIModel {
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
+        override val minLevel: Long,
         val multiplier: Double,
         val duration: Int,
     ): MobSkillUIModel
