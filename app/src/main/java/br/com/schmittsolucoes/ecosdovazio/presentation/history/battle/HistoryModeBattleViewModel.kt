@@ -116,7 +116,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             debuffSkills = mapCharSkillsToUIModel(char, debuffSkills)
         )
 
-        val selectedMob = uiModelMobs.find { it.id == selectedMobId } ?: uiModelMobs.firstOrNull()
+        val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
 
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
@@ -154,7 +154,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     fun onMobClick(mob: BattleMobUIModel) {
-        _selectedMobId.value = mob.id
+        _selectedMobId.value = mob.phaseMobId
     }
 
     fun onSkillLongClick(skill: CharSkillUIModel) {
@@ -179,13 +179,13 @@ class HistoryModeBattleViewModel @Inject constructor(
         when (result) {
             is CharSkillUsageResult.CommonDamage -> {
                 _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
-                    put(selectedMob.id, result.newEnemyHealth)
+                    put(selectedMob.phaseMobId, result.newEnemyHealth)
                 }
             }
 
             is CharSkillUsageResult.DamageOverTime -> {
                 _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
-                    put(selectedMob.id, result.newEnemyHealth)
+                    put(selectedMob.phaseMobId, result.newEnemyHealth)
                 }
             }
         }
@@ -258,7 +258,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     ): List<BattleMobUIModel> {
         return mobs.map { battleMob ->
             val totalHealth = getMobHPUseCase(battleMob.mobCategory, battleMob.attributes.vitality)
-            val actualHealth = mobsHealth[battleMob.id] ?: totalHealth
+            val actualHealth = mobsHealth[battleMob.phaseMobId] ?: totalHealth
 
             battleMob.copy(actualHealth = actualHealth).toUIModel(
                 image = resourcesProvider.getBattleMobImage(battleMob.imageName) ?: 0,

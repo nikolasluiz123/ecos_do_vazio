@@ -49,7 +49,8 @@ fun BattleMob.toUIModel(
     skills: List<MobSkillUIModel> = emptyList()
 ): BattleMobUIModel {
     return BattleMobUIModel(
-        id = id,
+        mobId = mobId,
+        phaseMobId = phaseMobId,
         name = name,
         description = description,
         image = image,
@@ -67,7 +68,8 @@ fun BattleMob.toUIModel(
 
 fun BattleMobUIModel.toDomain(): BattleMob {
     return BattleMob(
-        id = id,
+        mobId = mobId,
+        phaseMobId = phaseMobId,
         name = name,
         description = description,
         imageName = "",

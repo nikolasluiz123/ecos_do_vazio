@@ -13,7 +13,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Char
 
 object HistoryModeBattlePreviewData {
     val mockMobWarrior = BattleMobUIModel(
-        id = "1",
+        mobId = "1",
+        phaseMobId = "1",
         name = "Goblin Guerreiro",
         description = "Um goblin armado com uma espada enferrujada.",
         image = R.drawable.goblin_guerreiro_16_9,
@@ -28,7 +29,8 @@ object HistoryModeBattlePreviewData {
     )
 
     val mockMobMage = BattleMobUIModel(
-        id = "2",
+        mobId = "2",
+        phaseMobId = "2",
         name = "Goblin Xamã",
         description = "Um goblin que domina magias básicas.",
         image = R.drawable.goblin_xama_16_9,
@@ -43,7 +45,8 @@ object HistoryModeBattlePreviewData {
     )
 
     val mockMobOrc = BattleMobUIModel(
-        id = "3",
+        mobId = "3",
+        phaseMobId = "3",
         name = "Orc das Cavernas",
         description = "Um orc brutal das profundezas.",
         image = R.drawable.orc_das_cavernas_16_9,

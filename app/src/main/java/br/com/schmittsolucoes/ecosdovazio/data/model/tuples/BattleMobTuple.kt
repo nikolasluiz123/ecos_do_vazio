@@ -3,7 +3,8 @@ package br.com.schmittsolucoes.ecosdovazio.data.model.tuples
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 
 data class BattleMobTuple(
-    val id: String,
+    val mobId: String,
+    val phaseMobId: String,
     val strength: Long,
     val dexterity: Long,
     val intelligence: Long,

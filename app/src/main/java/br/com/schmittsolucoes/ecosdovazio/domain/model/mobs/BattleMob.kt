@@ -4,7 +4,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 
 data class BattleMob(
-    val id: String,
+    val mobId: String,
+    val phaseMobId: String,
     val name: String,
     val description: String,
     val imageName: String,

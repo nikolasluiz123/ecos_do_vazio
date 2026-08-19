@@ -31,7 +31,7 @@ class MobsFromPhaseQueryUseCase @Inject constructor(
                     attributes = battleMob.attributes
                 )
 
-                val skills = skillRepository.getMobSkills(battleMob.id).map { skill ->
+                val skills = skillRepository.getMobSkills(battleMob.mobId).map { skill ->
                     val isBlocked = getMobSkillBlockedUseCase(level, skill.minLevel)
 
                     when (skill) {

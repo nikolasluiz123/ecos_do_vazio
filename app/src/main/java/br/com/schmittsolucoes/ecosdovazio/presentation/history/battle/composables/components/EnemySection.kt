@@ -100,7 +100,7 @@ private fun EnemyHorizontalList(
         items(mobs) { mob ->
             EnemyItem(
                 mob = mob,
-                isSelected = mob.id == selectedMob?.id,
+                isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                 onMobClick = onMobClick,
                 modifier = Modifier
                     .heightIn(max = ITEM_MAX_HEIGHT)
@@ -134,7 +134,7 @@ private fun EnemyHorizontalPager(
             ) {
                 EnemyItem(
                     mob = mob,
-                    isSelected = mob.id == selectedMob?.id,
+                    isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                     onMobClick = onMobClick,
                     modifier = Modifier
                         .heightIn(max = ITEM_MAX_HEIGHT)

@@ -5,7 +5,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 
 data class BattleMobUIModel(
-    val id: String,
+    val mobId: String,
+    val phaseMobId: String,
     val name: String,
     val description: String,
     @DrawableRes val image: Int,

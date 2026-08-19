@@ -39,7 +39,8 @@ fun MobEntity.toDomain() = Mob(
 )
 
 fun BattleMobTuple.toDomain() = BattleMob(
-    id = id,
+    mobId = mobId,
+    phaseMobId = phaseMobId,
     name = name,
     description = description,
     imageName = imageName,

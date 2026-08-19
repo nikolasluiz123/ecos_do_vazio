@@ -23,7 +23,8 @@ interface HistoryPhaseMobRoomDAO : HistoryPhaseMobLocalDataSource, RoomLocalData
 
     @Query("""
         select 
-            mobs.id as id,
+            mobs.id as mobId,
+            history_phase_mobs.id as phaseMobId,
             mobs.strength as strength,
             mobs.dexterity as dexterity,
             mobs.intelligence as intelligence,
