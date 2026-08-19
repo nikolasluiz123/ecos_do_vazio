@@ -167,30 +167,43 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     fun onSkillClick(skill: CharSkillUIModel) {
         val state = uiState.value
-        val char = state.char ?: return
-        val selectedMob = state.selectedMob ?: return
 
-        val result = useCharSkillUseCase(
-            skillInfo = skill.toDomainUsedSkillInfo(),
-            battleCharInfo = char.toDomainInfo(),
-            battleMobInfo = selectedMob.toDomainInfo()
-        )
+        if (state.selectedMob != null) {
+            val char = state.char ?: return
 
-        when (result) {
-            is CharSkillUsageResult.CommonDamage -> {
-                _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
-                    put(selectedMob.phaseMobId, result.newEnemyHealth)
+            val result = useCharSkillUseCase(
+                skillInfo = skill.toDomainUsedSkillInfo(),
+                battleCharInfo = char.toDomainInfo(),
+                battleMobInfo = state.selectedMob.toDomainInfo()
+            )
+
+            when (result) {
+                is CharSkillUsageResult.CommonDamage -> {
+                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
+                }
+
+                is CharSkillUsageResult.DamageOverTime -> {
+                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
                 }
             }
 
-            is CharSkillUsageResult.DamageOverTime -> {
-                _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
-                    put(selectedMob.phaseMobId, result.newEnemyHealth)
-                }
-            }
+            incrementRound()
+        } else {
+            val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
+            snackbarManager.showSnackbar(message)
+        }
+    }
+
+    private fun updateMobHealth(selectedMob: BattleMobUIModel, newEnemyHealth: Long) {
+        _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
+            put(selectedMob.phaseMobId, newEnemyHealth)
         }
 
-        incrementRound()
+        val mobToKill = uiState.value.mobs.firstOrNull { it.actualHealth > 0 }
+
+        if (newEnemyHealth <= 0 && mobToKill != null) {
+            _selectedMobId.value = mobToKill.phaseMobId
+        }
     }
 
     fun onRoundUpdate() {

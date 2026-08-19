@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -119,6 +120,16 @@ private fun EnemyHorizontalPager(
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
+
+    LaunchedEffect(selectedMob) {
+        selectedMob?.let { mob ->
+            val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
+
+            if (index != -1 && index != pagerState.currentPage) {
+                pagerState.animateScrollToPage(index)
+            }
+        }
+    }
 
     Box(modifier = modifier) {
         HorizontalPager(
