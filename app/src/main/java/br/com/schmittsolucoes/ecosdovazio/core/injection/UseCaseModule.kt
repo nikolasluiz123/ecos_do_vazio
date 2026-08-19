@@ -15,6 +15,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepositor
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateHistoryPhaseExperienceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
@@ -36,6 +37,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillR
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.UseMobSkillUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CalculateNextLevelExperienceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
@@ -326,14 +328,20 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideCalculateNextLevelExperienceUseCase(): CalculateNextLevelExperienceUseCase =
+        CalculateNextLevelExperienceUseCase()
+
+    @Provides
     fun provideGetCharLevelInfoUseCase(
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        calculateNextLevelExperienceUseCase: CalculateNextLevelExperienceUseCase
     ): GetCharLevelInfoUseCase = GetCharLevelInfoUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
-        userRepository = userRepository
+        userRepository = userRepository,
+        calculateNextLevelExperienceUseCase = calculateNextLevelExperienceUseCase
     )
 
     @Provides
@@ -717,4 +725,9 @@ object UseCaseModule {
     fun provideUseMobSkillUseCase(
         getMobSkillDamageUseCase: GetMobSkillDamageUseCase
     ): UseMobSkillUseCase = UseMobSkillUseCase(getMobSkillDamageUseCase)
+
+    @Provides
+    fun provideCalculateHistoryPhaseExperienceUseCase(): CalculateHistoryPhaseExperienceUseCase {
+        return CalculateHistoryPhaseExperienceUseCase()
+    }
 }
