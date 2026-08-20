@@ -251,5 +251,6 @@
     <string name="skill_tooltip_close">Fechar</string>
     <string name="history_mode_battle_screen_label_round">TURNO %1$d</string>
     <string name="history_mode_battle_victory">Parabéns! Você venceu a batalha!</string>
+    <string name="history_mode_battle_victory_level_up">Parabéns! Você venceu a batalha e subiu para o nível %d!</string>
     <string name="history_mode_battle_screen_select_mob_message">Você deve selecionar o Mob que deseja atacar.</string>
 </resources>

@@ -229,17 +229,26 @@ class HistoryModeBattleViewModel @Inject constructor(
         val state = uiState.value
         val char = state.char ?: return
         val mobs = state.mobs
-        val isFinished = endHistoryPhaseUseCase(
+        val result = endHistoryPhaseUseCase(
             phaseId = route.phaseId,
             battleCharInfo = char.toDomainInfo(),
             mobs = mobs.map { it.toDomainInfo() }
         )
 
-        if (isFinished) {
+        if (result.isHistoryFinished) {
             val allMobsDead = mobs.all { it.actualHealth <= 0 }
 
             if (allMobsDead) {
-                snackbarManager.showSnackbar(context.getString(R.string.history_mode_battle_victory))
+                val message = if (result.levelInfo.levelUp) {
+                    context.getString(
+                        R.string.history_mode_battle_victory_level_up,
+                        result.levelInfo.currentLevel
+                    )
+                } else {
+                    context.getString(R.string.history_mode_battle_victory)
+                }
+
+                snackbarManager.showSnackbar(message)
             }
 
             _shouldPop.value = true

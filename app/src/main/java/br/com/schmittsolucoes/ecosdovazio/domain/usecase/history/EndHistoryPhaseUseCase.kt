@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.toXPInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.result.EndHistoryPhaseResult
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
@@ -29,34 +30,44 @@ class EndHistoryPhaseUseCase @Inject constructor(
         phaseId: String,
         battleCharInfo: BattleCharInfo,
         mobs: List<BattleMobInfo>
-    ): Boolean {
+    ): EndHistoryPhaseResult {
         val charDead = battleCharInfo.actualHealth <= 0
         val allMobsDead = mobs.all { it.actualHealth <= 0 }
 
         if (charDead || allMobsDead) {
             val user = userRepository.getFirstUser() ?: throw UserException.UserNotFound()
             val charId = preferencesRepository.getUserPreferences(user.id).firstOrNull()?.selectedCharId!!
+            val char = charRepository.getById(charId)
+            var levelInfo = EndHistoryPhaseResult.LevelInfo(
+                currentLevel = char.level,
+                levelUp = false
+            )
+
             val existingInfo = historyPhaseRepository.getHistoryPhaseInfo(charId, phaseId)
 
             if (allMobsDead && existingInfo != null && existingInfo.finishedAt == null) {
-                val char = charRepository.getById(charId)
-
                 transaction.run {
                     historyPhaseRepository.saveHistoryPhaseInfo(
                         existingInfo.copy(finishedAt = Instant.now())
                     )
 
-                    incrementCharExperience(mobs, char)
+                    levelInfo = incrementCharExperience(mobs, char)
                 }
             }
 
-            return true
+            return EndHistoryPhaseResult(
+                isHistoryFinished = true,
+                levelInfo = levelInfo
+            )
         }
 
-        return false
+        return EndHistoryPhaseResult(isHistoryFinished = false)
     }
 
-    private suspend fun incrementCharExperience(mobs: List<BattleMobInfo>, char: Char) {
+    private suspend fun incrementCharExperience(
+        mobs: List<BattleMobInfo>,
+        char: Char
+    ): EndHistoryPhaseResult.LevelInfo {
         val phaseExperience = calculateHistoryPhaseExperienceUseCase.executeInternal(
             battleMobXPInfo = mobs.map { it.toXPInfo() }
         )
@@ -64,12 +75,18 @@ class EndHistoryPhaseUseCase @Inject constructor(
         val newCharExperience = char.experience + phaseExperience
         val nextLevelExperience = calculateNextLevelExperienceUseCase.executeInternal(char.level)
         val levelUp = newCharExperience >= nextLevelExperience
+        val newLevel = if (levelUp) char.level + 1 else char.level
 
         charRepository.update(
             char.copy(
                 experience = newCharExperience,
-                level = if (levelUp) char.level + 1 else char.level
+                level = newLevel
             )
+        )
+
+        return EndHistoryPhaseResult.LevelInfo(
+            currentLevel = newLevel,
+            levelUp = levelUp
         )
     }
 }
