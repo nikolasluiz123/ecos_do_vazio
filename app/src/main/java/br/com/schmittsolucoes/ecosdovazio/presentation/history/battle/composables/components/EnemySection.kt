@@ -2,9 +2,11 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composabl
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -126,7 +128,7 @@ private fun EnemyHorizontalPager(
             val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
 
             if (index != -1 && index != pagerState.currentPage) {
-                pagerState.animateScrollToPage(index)
+                pagerState.animateScrollToPage(index, animationSpec = spring(stiffness = Spring.StiffnessVeryLow))
             }
         }
     }
