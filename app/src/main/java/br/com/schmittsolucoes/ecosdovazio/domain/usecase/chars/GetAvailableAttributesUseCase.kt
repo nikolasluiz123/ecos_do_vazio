@@ -5,8 +5,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class GetAvailableAttributesUseCase(
     private val getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase,
@@ -29,11 +31,14 @@ class GetAvailableAttributesUseCase(
             return@flow
         }
 
-        val char = charRepository.getById(charId)
-        val totalGrantedAttributes = getTotalGrantedAttributes(char.level)
-        val totalCharAttributes = getTotalCharAttributes(char)
+        val flow = charRepository.getByIdObservable(charId).map {
+            val totalGrantedAttributes = getTotalGrantedAttributes(it.level)
+            val totalCharAttributes = getTotalCharAttributes(it)
 
-        emit(totalGrantedAttributes - totalCharAttributes)
+            totalGrantedAttributes - totalCharAttributes
+        }
+
+        emitAll(flow)
     }
 
     private fun getTotalGrantedAttributes(charLevel: Long): Long {

@@ -17,6 +17,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharPhysicalResista
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -79,6 +80,10 @@ class CharRepositoryImpl @Inject constructor(
 
     override suspend fun getById(id: String): Char {
         return charLocalDataSource.getById(id).toDomain()
+    }
+
+    override fun getByIdObservable(id: String): Flow<Char> {
+        return charLocalDataSource.getByIdObservable(id).filterNotNull().map { it.toDomain() }
     }
 
     override suspend fun update(char: Char) {

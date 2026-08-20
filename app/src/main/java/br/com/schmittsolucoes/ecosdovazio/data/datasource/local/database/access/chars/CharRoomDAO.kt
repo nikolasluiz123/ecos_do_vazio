@@ -166,6 +166,9 @@ interface CharRoomDAO: CharLocalDataSource, RoomLocalDataSource<CharEntity> {
     @Query("select * from chars where id = :id")
     override suspend fun getById(id: String): CharEntity
 
+    @Query("select * from chars where id = :id")
+    override fun getByIdObservable(id: String): Flow<CharEntity?>
+
     @Query("""
         select chars.level as level, 
                chars.name as name,

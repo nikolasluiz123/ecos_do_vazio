@@ -29,5 +29,6 @@ interface CharRepository {
     fun getCharAttributesData(charId: String, maxAttributeValue: Long): Flow<CharAttributes>
     fun getBattleChar(charId: String): Flow<BattleChar>
     suspend fun getById(id: String): Char
+    fun getByIdObservable(id: String): Flow<Char>
     suspend fun update(char: Char)
 }

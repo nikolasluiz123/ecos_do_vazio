@@ -28,5 +28,6 @@ interface CharLocalDataSource: EntityLocalDataSource<CharEntity> {
     fun getCharAttributesDataTuple(charId: String): Flow<CharAttributesTuple>
     fun getCharLevelInfoDataTuple(charId: String): Flow<CharLevelInfoTuple>
     suspend fun getById(id: String): CharEntity
+    fun getByIdObservable(id: String): Flow<CharEntity?>
     fun getBattleChar(charId: String): Flow<BattleCharTuple>
 }
