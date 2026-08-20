@@ -11,7 +11,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseReposito
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateHistoryPhaseExperienceUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CalculateNextLevelExperienceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementCharExperienceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import kotlinx.coroutines.flow.firstOrNull
 import java.time.Instant
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class EndHistoryPhaseUseCase @Inject constructor(
     private val calculateHistoryPhaseExperienceUseCase: CalculateHistoryPhaseExperienceUseCase,
-    private val calculateNextLevelExperienceUseCase: CalculateNextLevelExperienceUseCase,
+    private val incrementCharExperienceUseCase: IncrementCharExperienceUseCase,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository,
     private val historyPhaseRepository: HistoryPhaseRepository,
@@ -72,21 +72,11 @@ class EndHistoryPhaseUseCase @Inject constructor(
             battleMobXPInfo = mobs.map { it.toXPInfo() }
         )
 
-        val newCharExperience = char.experience + phaseExperience
-        val nextLevelExperience = calculateNextLevelExperienceUseCase.executeInternal(char.level)
-        val levelUp = newCharExperience >= nextLevelExperience
-        val newLevel = if (levelUp) char.level + 1 else char.level
-
-        charRepository.update(
-            char.copy(
-                experience = newCharExperience,
-                level = newLevel
-            )
-        )
+        val result = incrementCharExperienceUseCase.executeInternal(char, phaseExperience)
 
         return EndHistoryPhaseResult.LevelInfo(
-            currentLevel = newLevel,
-            levelUp = levelUp
+            currentLevel = result.newLevel,
+            levelUp = result.levelUp
         )
     }
 }
