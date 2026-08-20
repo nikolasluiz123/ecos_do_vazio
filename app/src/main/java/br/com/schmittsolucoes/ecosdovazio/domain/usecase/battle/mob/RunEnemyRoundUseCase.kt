@@ -6,14 +6,14 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResul
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUsedInfo
 import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 class RunEnemyRoundUseCase(
     private val chooseMobSkillUseCase: ChooseMobSkillUseCase,
     private val useMobSkillUseCase: UseMobSkillUseCase,
 ) {
     suspend operator fun invoke(
-        charInfo: BattleCharInfo,
+        getCharInfo: () -> BattleCharInfo,
         mobs: List<BattleMob>,
         onMobUseSkill: (MobSkillUsageResult) -> Unit,
     ) {
@@ -24,11 +24,11 @@ class RunEnemyRoundUseCase(
                 val usageResult = useMobSkillUseCase.executeInternal(
                     skillInfo = skill.toUsedInfo(),
                     battleMobInfo = mob.toInfo(),
-                    battleCharInfo = charInfo
+                    battleCharInfo = getCharInfo()
                 )
 
                 onMobUseSkill(usageResult)
-                delay(1.seconds)
+                delay(300.milliseconds)
             }
         }
     }

@@ -214,13 +214,9 @@ class HistoryModeBattleViewModel @Inject constructor(
             }
 
             if (isEnemyRound()) {
-                val state = uiState.value
-                val char = state.char ?: return@launch
-                val mobs = state.mobs
-
                 runEnemyRoundUseCase(
-                    charInfo = char.toDomainInfo(),
-                    mobs = mobs.map { it.toDomain() },
+                    getCharInfo = { uiState.value.char?.toDomainInfo()!! },
+                    mobs = uiState.value.mobs.map { it.toDomain() },
                     onMobUseSkill = ::handleMobSkillResult
                 )
             }
