@@ -3,6 +3,8 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
@@ -46,7 +48,8 @@ fun BattleMob.toUIModel(
     totalHealth: Long,
     healthProgress: Float,
     @DrawableRes image: Int,
-    skills: List<MobSkillUIModel> = emptyList()
+    skills: List<MobSkillUIModel> = emptyList(),
+    activeDots: List<ActiveDotUIModel> = emptyList()
 ): BattleMobUIModel {
     return BattleMobUIModel(
         mobId = mobId,
@@ -62,7 +65,16 @@ fun BattleMob.toUIModel(
         healthProgress = healthProgress,
         level = level,
         attributes = attributes,
-        skills = skills
+        skills = skills,
+        activeDots = activeDots
+    )
+}
+
+fun ActiveDot.toUIModel(): ActiveDotUIModel {
+    return ActiveDotUIModel(
+        skillId = skillId,
+        remainingTurns = remainingTurns,
+        skillInfo = skillInfo
     )
 }
 
@@ -79,6 +91,7 @@ fun BattleMobUIModel.toDomain(): BattleMob {
         defensiveMultiplier = defensiveMultiplier,
         actualHealth = actualHealth,
         attributes = attributes,
-        skills = skills.map { it.toDomain() }
+        skills = skills.map { it.toDomain() },
+        activeDots = activeDots.map { it.toDomain() }
     )
 }

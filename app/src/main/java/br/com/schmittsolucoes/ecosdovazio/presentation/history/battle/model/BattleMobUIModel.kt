@@ -18,5 +18,6 @@ data class BattleMobUIModel(
     val healthProgress: Float,
     val level: Long,
     val attributes: Mob.Attributes,
-    val skills: List<MobSkillUIModel> = emptyList()
+    val skills: List<MobSkillUIModel> = emptyList(),
+    val activeDots: List<ActiveDotUIModel> = emptyList()
 )

@@ -12,15 +12,21 @@ class GetCharSkillDamageUseCase(
     private val calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase
 ) {
     fun executeInternal(
-        skillInfo: UsedSkillInfo.CommonDamage,
+        skillInfo: UsedSkillInfo,
         battleCharInfo: BattleCharInfo,
         battleMobInfo: BattleMobInfo
     ): Long {
+        val skillDamage = when (skillInfo) {
+            is UsedSkillInfo.CommonDamage -> skillInfo.damage
+            is UsedSkillInfo.DamageOverTime -> skillInfo.damage
+            else -> 0
+        }
+
         val rawDamage = getCharSkillRawDamageUseCase.executeInternal(
             classCategory = battleCharInfo.classCategory,
             multiplier = battleCharInfo.offensiveMultiplier,
             attributes = battleCharInfo.attributes,
-            skillDamage = skillInfo.damage
+            skillDamage = skillDamage
         )
 
         val damageReduction = getMobDamageReductionUseCase.executeInternal(battleMobInfo)

@@ -19,6 +19,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateHistory
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyDoTDamagesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
@@ -664,6 +665,15 @@ object UseCaseModule {
             getCharSkillRawDamageUseCase = getCharSkillRawDamageUseCase,
             getMobDamageReductionUseCase = getMobDamageReductionUseCase,
             calculateEffectiveDamageUseCase = calculateEffectiveDamageUseCase
+        )
+    }
+
+    @Provides
+    fun provideApplyDoTDamagesUseCase(
+        getCharSkillDamageUseCase: GetCharSkillDamageUseCase
+    ): ApplyDoTDamagesUseCase {
+        return ApplyDoTDamagesUseCase(
+            getCharSkillDamageUseCase = getCharSkillDamageUseCase
         )
     }
 

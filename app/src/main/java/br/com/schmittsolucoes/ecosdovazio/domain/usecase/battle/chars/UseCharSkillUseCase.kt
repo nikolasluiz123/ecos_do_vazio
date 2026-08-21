@@ -31,7 +31,19 @@ class UseCharSkillUseCase(
             }
 
             is UsedSkillInfo.DamageOverTime -> {
-                TODO("Not yet implemented")
+                val damage = getCharSkillDamageUseCase.executeInternal(
+                    skillInfo = skillInfo,
+                    battleCharInfo = battleCharInfo,
+                    battleMobInfo = battleMobInfo
+                )
+
+                val newEnemyHealth = max(battleMobInfo.actualHealth - damage, 0)
+
+                CharSkillUsageResult.DamageOverTime(
+                    newEnemyHealth = newEnemyHealth,
+                    repeat = skillInfo.duration,
+                    refreshTime = skillInfo.refreshTime
+                )
             }
 
             is UsedSkillInfo.Buff -> {
