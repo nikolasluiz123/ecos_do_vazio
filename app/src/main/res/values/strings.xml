@@ -248,6 +248,14 @@
     <string name="skill_tooltip_damage">Damage: %d</string>
     <string name="skill_tooltip_duration">Duration: %d Rounds</string>
     <string name="skill_tooltip_multiplier">Multiplier: %.1f</string>
+    <string name="skill_tooltip_min_level">Minimum Level: %d</string>
+    <string name="skill_tooltip_required_strength">Required Strength: %d</string>
+    <string name="skill_tooltip_required_dexterity">Required Dexterity: %d</string>
+    <string name="skill_tooltip_required_intelligence">Required Intelligence: %d</string>
+    <string name="skill_tooltip_required_physical_resistance">Required Phys. Res.: %d</string>
+    <string name="skill_tooltip_required_magic_resistance">Required Mag. Res.: %d</string>
+    <string name="skill_tooltip_required_vitality">Required Vitality: %d</string>
+    <string name="skill_tooltip_required_agility">Required Agility: %d</string>
     <string name="skill_tooltip_close">Close</string>
     <string name="history_mode_battle_screen_label_round">ROUND %1$d</string>
     <string name="history_mode_battle_victory">Congratulations! You won the battle!</string>

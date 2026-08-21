@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
@@ -62,12 +63,24 @@ object HistoryModeBattlePreviewData {
 
     val mockMobsList = listOf(mockMobWarrior, mockMobMage, mockMobOrc)
 
+    val mockSkillAttributes = CharSkill.Attributes(
+        requiredStrength = 0,
+        requiredDexterity = 0,
+        requiredIntelligence = 0,
+        requiredPhysicalResistance = 0,
+        requiredMagicResistance = 0,
+        requiredVitality = 0,
+        requiredAgility = 0
+    )
+
     val mockSkillDamage = CharSkillUIModel.CommonDamage(
         id = "skill_1",
         name = "Golpe Pesado",
         description = "Um ataque que causa dano físico massivo.",
         refreshTime = 3,
+        minLevel = 1,
         image = R.drawable.skill_golpe_pesado,
+        attributes = mockSkillAttributes,
         currentRefreshTime = 0,
         blocked = false,
         damage = 50
@@ -79,7 +92,9 @@ object HistoryModeBattlePreviewData {
         description = "Aumenta o dano causado por alguns turnos.",
         skillCategory = SkillCategory.OFFENSIVE_BUFF,
         refreshTime = 5,
+        minLevel = 5,
         image = R.drawable.skill_furia_de_batalha,
+        attributes = mockSkillAttributes,
         currentRefreshTime = 0,
         blocked = false,
         multiplier = 1.5,

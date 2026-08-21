@@ -244,10 +244,18 @@
     <string name="history_phase_status_finished">Concluído</string>
     <string name="history_phase_status_current">Atual</string>
 
-    <string name="skill_tooltip_refresh_time">Tempo de recarga: %d Rounds</string>
+    <string name="skill_tooltip_refresh_time">Tempo de recarga: %d Turnos</string>
     <string name="skill_tooltip_damage">Dano: %d</string>
-    <string name="skill_tooltip_duration">Duração: %d Rounds</string>
+    <string name="skill_tooltip_duration">Duração: %d Turnos</string>
     <string name="skill_tooltip_multiplier">Multiplicador: %.1f</string>
+    <string name="skill_tooltip_min_level">Nível Mínimo: %d</string>
+    <string name="skill_tooltip_required_strength">Força Requerida: %d</string>
+    <string name="skill_tooltip_required_dexterity">Destreza Requerida: %d</string>
+    <string name="skill_tooltip_required_intelligence">Inteligência Requerida: %d</string>
+    <string name="skill_tooltip_required_physical_resistance">Res. Física Requerida: %d</string>
+    <string name="skill_tooltip_required_magic_resistance">Res. Mágica Requerida: %d</string>
+    <string name="skill_tooltip_required_vitality">Vitalidade Requerida: %d</string>
+    <string name="skill_tooltip_required_agility">Agilidade Requerida: %d</string>
     <string name="skill_tooltip_close">Fechar</string>
     <string name="history_mode_battle_screen_label_round">TURNO %1$d</string>
     <string name="history_mode_battle_victory">Parabéns! Você venceu a batalha!</string>
