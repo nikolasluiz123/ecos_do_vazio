@@ -48,14 +48,14 @@ class GetCharHPUseCase(
     private fun getBaseValue(classCategory: ClassCategory): Long {
         return when (classCategory) {
             ClassCategory.WARRIOR -> 100L
-            ClassCategory.MAGE -> 60L
+            ClassCategory.MAGE -> 80L
             ClassCategory.ARCHER -> 80L
         }
     }
 
     private fun getMultiplier(classCategory: ClassCategory): Long {
         return when (classCategory) {
-            ClassCategory.WARRIOR -> 10L
+            ClassCategory.WARRIOR -> 8L
             ClassCategory.MAGE -> 4L
             ClassCategory.ARCHER -> 6L
         }
