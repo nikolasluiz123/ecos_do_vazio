@@ -49,7 +49,7 @@ class CreateWarriorClassUseCase(
                 descriptionTranslationId = TranslationIdentifier.HEAVY_STRIKE_SKILL_DESCRIPTION,
                 skillCategory = SkillCategory.DAMAGE,
                 classId = warrior.id,
-                damage = 25,
+                damage = 18,
                 refreshTime = 1,
                 minLevel = 1,
                 imageName = SKILL_HEAVY_STRIKE_KEY,
