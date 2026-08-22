@@ -87,7 +87,8 @@ fun BattleCharUIModel.toDomainInfo(): BattleCharInfo {
             IdentifiedCharAttribute(AttributeIdentifier.AGILITY, agility)
         ),
         actualHealth = actualHealth,
-        activeDots = activeDots.map { it.toDomain() }.filterIsInstance<ActiveDoT.MobActiveDoT>()
+        activeDots = activeDots.map { it.toDomain() }.filterIsInstance<ActiveDoT.MobActiveDoT>(),
+        criticalFailCount = criticalFailCount
     )
 }
 

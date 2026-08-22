@@ -25,4 +25,5 @@ data class BattleCharUIModel(
     val buffSkills: List<CharSkillUIModel> = emptyList(),
     val debuffSkills: List<CharSkillUIModel> = emptyList(),
     val activeDots: List<ActiveDotUIModel.MobActiveDotUIModel> = emptyList(),
+    val criticalFailCount: Int = 0
 )
