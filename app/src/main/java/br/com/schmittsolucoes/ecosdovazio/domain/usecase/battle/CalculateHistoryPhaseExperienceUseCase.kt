@@ -16,10 +16,10 @@ class CalculateHistoryPhaseExperienceUseCase {
 
     private fun getBaseXP(mobCategory: MobCategory): Long {
         return when (mobCategory) {
-            MobCategory.WARRIOR -> 20
-            MobCategory.MAGE -> 20
-            MobCategory.HEALER -> 15
-            MobCategory.ORC_WARRIOR -> 60
+            MobCategory.WARRIOR -> 40
+            MobCategory.MAGE -> 40
+            MobCategory.HEALER -> 30
+            MobCategory.ORC_WARRIOR -> 120
         }
     }
 }

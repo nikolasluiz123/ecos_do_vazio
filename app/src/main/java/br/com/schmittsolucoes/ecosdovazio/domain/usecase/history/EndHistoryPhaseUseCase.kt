@@ -45,7 +45,7 @@ class EndHistoryPhaseUseCase @Inject constructor(
 
             val existingInfo = historyPhaseRepository.getHistoryPhaseInfo(charId, phaseId)
 
-            if (allMobsDead && existingInfo != null && existingInfo.finishedAt == null) {
+            if (allMobsDead && existingInfo != null) {
                 transaction.run {
                     historyPhaseRepository.saveHistoryPhaseInfo(
                         existingInfo.copy(finishedAt = Instant.now())
