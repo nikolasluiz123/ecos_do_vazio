@@ -1,7 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -12,6 +11,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyDoTDamagesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
@@ -27,7 +27,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQu
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
@@ -78,6 +77,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val _charHealth = MutableStateFlow<Long?>(null)
     private val _mobsHealth = MutableStateFlow<Map<String, Long>>(emptyMap())
     private val _mobsDots = MutableStateFlow<Map<String, List<ActiveDotUIModel>>>(emptyMap())
+    private val _skillsRefreshTime = MutableStateFlow<Map<String, Int>>(emptyMap())
     private val _actualRound = MutableStateFlow<Long>(1)
     private val _shouldPop = MutableStateFlow(false)
 
@@ -96,6 +96,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         _selectedSkill,
         _mobsHealth,
         _mobsDots,
+        _skillsRefreshTime,
         _charHealth,
         _actualRound,
         _shouldPop
@@ -111,17 +112,18 @@ class HistoryModeBattleViewModel @Inject constructor(
         val selectedSkill = flows[8] as CharSkillUIModel?
         val mobsHealth = flows[9] as Map<String, Long>
         val mobsDots = flows[10] as Map<String, List<ActiveDotUIModel>>
-        val charHealth = flows[11] as Long?
-        val actualRound = flows[12] as Long
-        val shouldPop = flows[13] as Boolean
+        val skillsRefreshTime = flows[11] as Map<String, Int>
+        val charHealth = flows[12] as Long?
+        val actualRound = flows[13] as Long
+        val shouldPop = flows[14] as Boolean
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsDots)
         val uiModelChar = mapBattleCharToUIModel(
             char = char,
             charHealth = charHealth,
-            damageSkills = mapCharSkillsToUIModel(char, damageSkills),
-            buffSkills = mapCharSkillsToUIModel(char, buffSkills),
-            debuffSkills = mapCharSkillsToUIModel(char, debuffSkills)
+            damageSkills = mapCharSkillsToUIModel(char, damageSkills, skillsRefreshTime),
+            buffSkills = mapCharSkillsToUIModel(char, buffSkills, skillsRefreshTime),
+            debuffSkills = mapCharSkillsToUIModel(char, debuffSkills, skillsRefreshTime)
         )
 
         val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
@@ -176,6 +178,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     fun onSkillClick(skill: CharSkillUIModel) {
         val state = uiState.value
 
+        if (skill.currentRefreshTime > 0 || skill.blocked) return
+
         if (state.selectedMob != null) {
             val char = state.char ?: return
 
@@ -188,11 +192,13 @@ class HistoryModeBattleViewModel @Inject constructor(
             when (result) {
                 is CharSkillUsageResult.CommonDamage -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
+                    updateSkillRefreshTime(skill.id, result.refreshTime)
                 }
 
                 is CharSkillUsageResult.DamageOverTime -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
                     registerMobDot(state.selectedMob, skill, result)
+                    updateSkillRefreshTime(skill.id, result.refreshTime)
                 }
             }
 
@@ -201,6 +207,18 @@ class HistoryModeBattleViewModel @Inject constructor(
             val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
             snackbarManager.showSnackbar(message)
         }
+    }
+
+    private fun updateSkillRefreshTime(skillId: String, refreshTime: Int) {
+        _skillsRefreshTime.value = _skillsRefreshTime.value.toMutableMap().apply {
+            put(skillId, refreshTime)
+        }
+    }
+
+    private fun decrementSkillsRefreshTime() {
+        _skillsRefreshTime.value = _skillsRefreshTime.value.mapValues { (_, time) ->
+            if (time > 0) time - 1 else 0
+        }.filterValues { it > 0 }
     }
 
     private fun updateMobHealth(selectedMob: BattleMobUIModel, newEnemyHealth: Long) {
@@ -250,6 +268,9 @@ class HistoryModeBattleViewModel @Inject constructor(
                     mobs = uiState.value.mobs.map { it.toDomain() },
                     onMobUseSkill = ::handleMobSkillResult
                 )
+                incrementRound()
+            } else {
+                decrementSkillsRefreshTime()
             }
 
             tryFinishBattle()
@@ -370,11 +391,15 @@ class HistoryModeBattleViewModel @Inject constructor(
         )
     }
 
-    private fun mapCharSkillsToUIModel(battleChar: BattleChar, skills: List<CharSkill>): List<CharSkillUIModel> {
+    private fun mapCharSkillsToUIModel(
+        battleChar: BattleChar,
+        skills: List<CharSkill>,
+        skillsRefreshTime: Map<String, Int>
+    ): List<CharSkillUIModel> {
         return skills.map {
             it.toUIModel(
                 image = resourcesProvider.getSkillImage(it.imageName) ?: 0,
-                currentRefreshTime = 0,
+                currentRefreshTime = skillsRefreshTime[it.id] ?: 0,
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,
                     skillRequiredAttributes = it.attributes,
