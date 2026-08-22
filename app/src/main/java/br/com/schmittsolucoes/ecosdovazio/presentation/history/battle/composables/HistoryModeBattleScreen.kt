@@ -91,7 +91,7 @@ fun HistoryModeBattleScreen(
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
         onMobClick = viewModel::onMobClick,
-        onDotClick = viewModel::onDotClick,
+        onStatusClick = viewModel::onStatusClick,
         onDismissDotTooltip = viewModel::onDismissDotTooltip,
         onSkillClick = viewModel::onSkillClick,
         onSkillLongClick = viewModel::onSkillLongClick,
@@ -105,7 +105,7 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onStatusClick: (ActiveDotUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
@@ -138,7 +138,7 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
-                    onDotClick = onDotClick,
+                    onDotClick = onStatusClick,
                     onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
@@ -149,7 +149,7 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
-                    onDotClick = onDotClick,
+                    onStatusClick = onStatusClick,
                     onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
@@ -172,7 +172,7 @@ internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onStatusClick: (ActiveDotUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
@@ -190,7 +190,7 @@ internal fun StackLayout(
             EnemySection(
                 state = state,
                 onMobClick = onMobClick,
-                onDotClick = onDotClick,
+                onStatusClick = onStatusClick,
                 onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(1f)
@@ -200,6 +200,7 @@ internal fun StackLayout(
 
             CharSection(
                 char = state.char,
+                onStatusClick = onStatusClick,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -244,7 +245,7 @@ internal fun SideBySideLayout(
             EnemySection(
                 state = state,
                 onMobClick = onMobClick,
-                onDotClick = onDotClick,
+                onStatusClick = onDotClick,
                 onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(enemyWeight),
@@ -259,6 +260,7 @@ internal fun SideBySideLayout(
 
             CharSection(
                 char = state.char,
+                onStatusClick = onDotClick,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.Center
             )

@@ -1,25 +1,24 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars
 
-import android.util.Log
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyDoTDamageResult
+import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyMobsDoTDamageResult
 import kotlin.math.max
 
-class ApplyDoTDamagesUseCase(
+class ApplyMobsDoTDamagesUseCase(
     private val getCharSkillDamageUseCase: GetCharSkillDamageUseCase
 ) {
     operator fun invoke(
         battleCharInfo: BattleCharInfo,
         mobs: Map<String, BattleMobInfo>
-    ): ApplyDoTDamageResult {
+    ): ApplyMobsDoTDamageResult {
         val newMobsHealth = mutableMapOf<String, Long>()
-        val newMobsDots = mutableMapOf<String, List<ActiveDot>>()
+        val newMobsDots = mutableMapOf<String, List<ActiveDoT.CharActiveDoT>>()
 
         mobs.forEach { (phaseMobId, mobInfo) ->
             var currentHealth = mobInfo.actualHealth
-            val updatedDots = mutableListOf<ActiveDot>()
+            val updatedDots = mutableListOf<ActiveDoT.CharActiveDoT>()
 
             mobInfo.activeDots.forEach { dot ->
                 if (currentHealth > 0) {
@@ -30,10 +29,10 @@ class ApplyDoTDamagesUseCase(
                     )
 
                     currentHealth = max(currentHealth - damage, 0L)
+                }
 
-                    if (dot.remainingTurns > 1 && currentHealth > 0) {
-                        updatedDots.add(dot.copy(remainingTurns = dot.remainingTurns - 1))
-                    }
+                if (dot.remainingTurns > 1) {
+                    updatedDots.add(dot.copyWithRemainingTurns(dot.remainingTurns - 1) as ActiveDoT.CharActiveDoT)
                 }
             }
 
@@ -44,7 +43,7 @@ class ApplyDoTDamagesUseCase(
             }
         }
 
-        return ApplyDoTDamageResult(
+        return ApplyMobsDoTDamageResult(
             mobsHealth = newMobsHealth,
             mobsDots = newMobsDots
         )

@@ -15,5 +15,5 @@ interface SkillLocalDataSource : EntityLocalDataSource<SkillEntity> {
         categories: List<SkillCategory>
     ): Flow<List<CharSkillTuple>>
 
-    suspend fun getMobSkills(mobId: String): List<MobSkillTuple>
+    suspend fun getMobSkills(languageTag: String, mobId: String): List<MobSkillTuple>
 }

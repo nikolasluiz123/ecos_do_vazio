@@ -4,6 +4,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 
 sealed interface MobSkill {
     val id: String
+    val name: String
+    val description: String
+    val imageName: String
     val skillCategory: SkillCategory
     val refreshTime: Int
     val currentRefreshTime: Int
@@ -12,6 +15,9 @@ sealed interface MobSkill {
 
     data class CommonDamage(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
         override val refreshTime: Int,
         override val currentRefreshTime: Int = 0,
         override val blocked: Boolean = false,
@@ -23,6 +29,9 @@ sealed interface MobSkill {
 
     data class DamageOverTime(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
         override val refreshTime: Int,
         override val currentRefreshTime: Int = 0,
         override val blocked: Boolean = false,
@@ -35,6 +44,9 @@ sealed interface MobSkill {
 
     data class Buff(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
         override val currentRefreshTime: Int = 0,
@@ -46,6 +58,9 @@ sealed interface MobSkill {
 
     data class Debuff(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
         override val currentRefreshTime: Int = 0,

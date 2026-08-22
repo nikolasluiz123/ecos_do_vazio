@@ -1,7 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
 import androidx.annotation.DrawableRes
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
@@ -19,7 +19,8 @@ fun BattleChar.toUIModel(
     defensiveMultiplier: Double,
     damageSkills: List<CharSkillUIModel> = emptyList(),
     buffSkills: List<CharSkillUIModel> = emptyList(),
-    debuffSkills: List<CharSkillUIModel> = emptyList()
+    debuffSkills: List<CharSkillUIModel> = emptyList(),
+    activeDots: List<ActiveDotUIModel.MobActiveDotUIModel> = emptyList()
 ): BattleCharUIModel {
     return BattleCharUIModel(
         level = level,
@@ -40,7 +41,8 @@ fun BattleChar.toUIModel(
         agility = agility,
         damageSkills = damageSkills,
         buffSkills = buffSkills,
-        debuffSkills = debuffSkills
+        debuffSkills = debuffSkills,
+        activeDots = activeDots
     )
 }
 
@@ -49,7 +51,7 @@ fun BattleMob.toUIModel(
     healthProgress: Float,
     @DrawableRes image: Int,
     skills: List<MobSkillUIModel> = emptyList(),
-    activeDots: List<ActiveDotUIModel> = emptyList()
+    activeDots: List<ActiveDotUIModel.CharActiveDotUIModel> = emptyList()
 ): BattleMobUIModel {
     return BattleMobUIModel(
         mobId = mobId,
@@ -70,15 +72,31 @@ fun BattleMob.toUIModel(
     )
 }
 
-fun ActiveDot.toUIModel(skillName: String, skillDescription: String, skillImage: Int): ActiveDotUIModel {
-    return ActiveDotUIModel(
-        skillId = skillId,
-        skillName = skillName,
-        skillDescription = skillDescription,
-        remainingTurns = remainingTurns,
-        skillInfo = skillInfo,
-        skillImage = skillImage
-    )
+fun ActiveDoT.toUIModel(
+    skillName: String,
+    skillDescription: String,
+    skillImage: Int
+): ActiveDotUIModel {
+    return when (this) {
+        is ActiveDoT.CharActiveDoT -> ActiveDotUIModel.CharActiveDotUIModel(
+            skillId = skillId,
+            skillName = skillName,
+            skillDescription = skillDescription,
+            remainingTurns = remainingTurns,
+            skillImage = skillImage,
+            skillInfo = skillInfo
+        )
+
+        is ActiveDoT.MobActiveDoT -> ActiveDotUIModel.MobActiveDotUIModel(
+            skillId = skillId,
+            skillName = skillName,
+            skillDescription = skillDescription,
+            remainingTurns = remainingTurns,
+            skillImage = skillImage,
+            sourceId = sourceId,
+            skillInfo = skillInfo
+        )
+    }
 }
 
 fun BattleMobUIModel.toDomain(): BattleMob {
@@ -95,6 +113,6 @@ fun BattleMobUIModel.toDomain(): BattleMob {
         actualHealth = actualHealth,
         attributes = attributes,
         skills = skills.map { it.toDomain() },
-        activeDots = activeDots.map { it.toDomain() }
+        activeDots = activeDots.map { it.toDomain() }.filterIsInstance<ActiveDoT.CharActiveDoT>()
     )
 }

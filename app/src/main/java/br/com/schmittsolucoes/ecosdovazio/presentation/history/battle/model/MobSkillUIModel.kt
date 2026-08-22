@@ -1,9 +1,13 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model
 
+import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 
 sealed interface MobSkillUIModel {
     val id: String
+    val name: String
+    val description: String
+    val image: Int
     val skillCategory: SkillCategory
     val refreshTime: Int
     val currentRefreshTime: Int
@@ -12,6 +16,9 @@ sealed interface MobSkillUIModel {
 
     data class CommonDamage(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
@@ -23,6 +30,9 @@ sealed interface MobSkillUIModel {
 
     data class DamageOverTime(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
@@ -35,6 +45,9 @@ sealed interface MobSkillUIModel {
 
     data class Buff(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
         override val currentRefreshTime: Int,
@@ -46,6 +59,9 @@ sealed interface MobSkillUIModel {
 
     data class Debuff(
         override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
         override val currentRefreshTime: Int,

@@ -16,5 +16,5 @@ interface SkillRepository {
         categories: List<SkillCategory>
     ): Flow<List<CharSkill>>
 
-    suspend fun getMobSkills(mobId: String): List<MobSkill>
+    suspend fun getMobSkills(languageTag: String, mobId: String): List<MobSkill>
 }

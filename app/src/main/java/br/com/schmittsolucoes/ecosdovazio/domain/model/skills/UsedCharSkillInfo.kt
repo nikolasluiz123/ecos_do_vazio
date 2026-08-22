@@ -2,22 +2,23 @@ package br.com.schmittsolucoes.ecosdovazio.domain.model.skills
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 
-sealed interface UsedSkillInfo {
+sealed interface UsedCharSkillInfo {
     val skillCategory: SkillCategory
     val refreshTime: Int
+    val damage: Long get() = 0
 
     data class CommonDamage(
         override val refreshTime: Int,
-        val damage: Long
-    ): UsedSkillInfo {
+        override val damage: Long
+    ): UsedCharSkillInfo {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
 
     data class DamageOverTime(
         override val refreshTime: Int,
-        val damage: Long,
+        override val damage: Long,
         val duration: Int,
-    ): UsedSkillInfo {
+    ): UsedCharSkillInfo {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
     }
 
@@ -26,12 +27,12 @@ sealed interface UsedSkillInfo {
         override val refreshTime: Int,
         val multiplier: Double,
         val duration: Int,
-    ): UsedSkillInfo
+    ): UsedCharSkillInfo
 
     data class Debuff(
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
         val multiplier: Double,
         val duration: Int,
-    ): UsedSkillInfo
+    ): UsedCharSkillInfo
 }

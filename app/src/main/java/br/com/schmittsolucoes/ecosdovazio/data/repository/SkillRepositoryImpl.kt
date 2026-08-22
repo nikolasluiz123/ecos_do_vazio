@@ -34,7 +34,7 @@ class SkillRepositoryImpl @Inject constructor(
         ).map { skills -> skills.map { it.toDomain() } }
     }
 
-    override suspend fun getMobSkills(mobId: String): List<MobSkill> {
-        return skillLocalDataSource.getMobSkills(mobId).map { it.toDomain() }
+    override suspend fun getMobSkills(languageTag: String, mobId: String): List<MobSkill> {
+        return skillLocalDataSource.getMobSkills(languageTag, mobId).map { it.toDomain() }
     }
 }

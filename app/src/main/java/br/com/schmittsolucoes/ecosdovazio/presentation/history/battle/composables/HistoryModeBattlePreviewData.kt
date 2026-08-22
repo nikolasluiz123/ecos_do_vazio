@@ -7,7 +7,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
-import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedSkillInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
@@ -15,17 +16,31 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Batt
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 
 object HistoryModeBattlePreviewData {
-    val mockActiveDot = ActiveDotUIModel(
+    val mockCharActiveDot = ActiveDotUIModel.CharActiveDotUIModel(
         skillId = "dot_1",
         skillName = "Veneno",
         skillDescription = "Causa dano por veneno a cada turno.",
         remainingTurns = 3,
-        skillInfo = UsedSkillInfo.DamageOverTime(
+        skillInfo = UsedCharSkillInfo.DamageOverTime(
             refreshTime = 3,
             damage = 10,
             duration = 3
         ),
         skillImage = R.drawable.skill_golpe_pesado
+    )
+
+    val mockMobActiveDot = ActiveDotUIModel.MobActiveDotUIModel(
+        skillId = "dot_mob_1",
+        skillName = "Fogo",
+        skillDescription = "Dano de fogo.",
+        remainingTurns = 2,
+        skillInfo = UsedMobSkillInfo.DamageOverTime(
+            refreshTime = 3,
+            damage = 5,
+            duration = 2
+        ),
+        skillImage = R.drawable.skill_furia_de_batalha,
+        sourceId = "1"
     )
 
     val mockMobWarrior = BattleMobUIModel(
@@ -42,7 +57,7 @@ object HistoryModeBattlePreviewData {
         healthProgress = 0.75f,
         level = 5,
         attributes = Mob.Attributes(strength = 10, vitality = 8),
-        activeDots = listOf(mockActiveDot, mockActiveDot.copy(skillId = "dot_2", skillName = "Sangramento"))
+        activeDots = listOf(mockCharActiveDot, mockCharActiveDot.copy(skillId = "dot_2", skillName = "Sangramento"))
     )
 
     val mockMobMage = BattleMobUIModel(
@@ -135,7 +150,8 @@ object HistoryModeBattlePreviewData {
         vitality = CharAttribute(20, 5, null),
         agility = CharAttribute(12, 3, null),
         damageSkills = listOf(mockSkillDamage),
-        buffSkills = listOf(mockSkillBuff)
+        buffSkills = listOf(mockSkillBuff),
+        activeDots = listOf(mockMobActiveDot)
     )
 
     val uiState = HistoryModeBattleUIState(

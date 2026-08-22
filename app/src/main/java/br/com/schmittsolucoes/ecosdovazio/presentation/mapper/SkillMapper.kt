@@ -71,10 +71,13 @@ fun CharSkill.toUIModel(
     }
 }
 
-fun MobSkill.toUIModel(): MobSkillUIModel {
+fun MobSkill.toUIModel(image: Int): MobSkillUIModel {
     return when (this) {
         is MobSkill.CommonDamage -> MobSkillUIModel.CommonDamage(
             id = id,
+            name = name,
+            description = description,
+            image = image,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
@@ -84,6 +87,9 @@ fun MobSkill.toUIModel(): MobSkillUIModel {
 
         is MobSkill.DamageOverTime -> MobSkillUIModel.DamageOverTime(
             id = id,
+            name = name,
+            description = description,
+            image = image,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
@@ -94,6 +100,9 @@ fun MobSkill.toUIModel(): MobSkillUIModel {
 
         is MobSkill.Buff -> MobSkillUIModel.Buff(
             id = id,
+            name = name,
+            description = description,
+            image = image,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
@@ -105,6 +114,9 @@ fun MobSkill.toUIModel(): MobSkillUIModel {
 
         is MobSkill.Debuff -> MobSkillUIModel.Debuff(
             id = id,
+            name = name,
+            description = description,
+            image = image,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
@@ -120,6 +132,9 @@ fun MobSkillUIModel.toDomain(): MobSkill {
     return when (this) {
         is MobSkillUIModel.CommonDamage -> MobSkill.CommonDamage(
             id = id,
+            name = name,
+            description = description,
+            imageName = "",
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
@@ -129,6 +144,9 @@ fun MobSkillUIModel.toDomain(): MobSkill {
 
         is MobSkillUIModel.DamageOverTime -> MobSkill.DamageOverTime(
             id = id,
+            name = name,
+            description = description,
+            imageName = "",
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
             blocked = blocked,
@@ -139,6 +157,9 @@ fun MobSkillUIModel.toDomain(): MobSkill {
 
         is MobSkillUIModel.Buff -> MobSkill.Buff(
             id = id,
+            name = name,
+            description = description,
+            imageName = "",
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,
@@ -150,6 +171,9 @@ fun MobSkillUIModel.toDomain(): MobSkill {
 
         is MobSkillUIModel.Debuff -> MobSkill.Debuff(
             id = id,
+            name = name,
+            description = description,
+            imageName = "",
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             currentRefreshTime = currentRefreshTime,

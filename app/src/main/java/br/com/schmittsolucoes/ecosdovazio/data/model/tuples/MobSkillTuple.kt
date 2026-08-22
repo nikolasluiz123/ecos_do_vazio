@@ -4,6 +4,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 
 data class MobSkillTuple(
     val id: String,
+    val name: String,
+    val description: String,
+    val imageName: String,
     val skillCategory: SkillCategory,
     val damage: Long?,
     val multiplier: Double?,

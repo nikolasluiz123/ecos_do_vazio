@@ -128,6 +128,9 @@ fun MobSkillTuple.toDomain(): MobSkill {
     return when (skillCategory) {
         SkillCategory.DAMAGE -> MobSkill.CommonDamage(
             id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
             refreshTime = refreshTime,
             minLevel = minLevel,
             damage = damage ?: 0L
@@ -135,6 +138,9 @@ fun MobSkillTuple.toDomain(): MobSkill {
 
         SkillCategory.DAMAGE_OVER_TIME -> MobSkill.DamageOverTime(
             id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
             refreshTime = refreshTime,
             minLevel = minLevel,
             damage = damage ?: 0L,
@@ -145,6 +151,9 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DEFENSIVE_MAGIC_BUFF,
         SkillCategory.DEFENSIVE_PHYSICAL_BUFF -> MobSkill.Buff(
             id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -156,6 +165,9 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DEFENSIVE_MAGIC_DEBUFF,
         SkillCategory.DEFENSIVE_PHYSICAL_DEBUFF -> MobSkill.Debuff(
             id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             minLevel = minLevel,

@@ -50,16 +50,23 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
     ): Flow<List<CharSkillTuple>>
 
     @Query("""
-        select id as id,
-               skill_category as skillCategory,
-               damage as damage,
-               multiplier as multiplier,
-               duration as duration,
-               refresh_time as refreshTime,
-               min_level as minLevel
+        select skills.id as id,
+               coalesce(skill_name.translated_text, skill_name_default.translated_text) as name,
+               coalesce(skill_description.translated_text, skill_description_default.translated_text) as description,
+               skills.skill_category as skillCategory,
+               skills.damage as damage,
+               skills.multiplier as multiplier,
+               skills.duration as duration,
+               skills.refresh_time as refreshTime,
+               skills.min_level as minLevel,
+               skills.image_name as imageName
         from skills
-        where mob_id = :mobId
+        left join translations skill_name on skill_name.id = skills.name_translation_id and skill_name.language_id = :languageTag
+        left join translations skill_name_default on skill_name_default.id = skills.name_translation_id and skill_name_default.language_id = (select id from languages where is_default = 1 limit 1)
+        left join translations skill_description on skill_description.id = skills.description_translation_id and skill_description.language_id = :languageTag
+        left join translations skill_description_default on skill_description_default.id = skills.description_translation_id and skill_description_default.language_id = (select id from languages where is_default = 1 limit 1)
+        where skills.mob_id = :mobId
         order by skills.min_level
     """)
-    override suspend fun getMobSkills(mobId: String): List<MobSkillTuple>
+    override suspend fun getMobSkills(languageTag: String, mobId: String): List<MobSkillTuple>
 }

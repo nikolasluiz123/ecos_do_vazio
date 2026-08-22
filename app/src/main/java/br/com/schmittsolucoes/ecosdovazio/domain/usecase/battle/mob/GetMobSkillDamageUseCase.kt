@@ -12,7 +12,7 @@ class GetMobSkillDamageUseCase(
     private val calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase
 ) {
     fun executeInternal(
-        skillInfo: UsedMobSkillInfo.CommonDamage,
+        skillInfo: UsedMobSkillInfo,
         battleCharInfo: BattleCharInfo,
         battleMobInfo: BattleMobInfo
     ): Long {

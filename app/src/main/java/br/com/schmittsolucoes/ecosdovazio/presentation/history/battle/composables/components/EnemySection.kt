@@ -78,7 +78,7 @@ private const val PULSE_ALPHA_TARGET = 1f
 internal fun EnemySection(
     state: HistoryModeBattleUIState,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onDotClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveDotUIModel) -> Unit,
     onDismissDotTooltip: () -> Unit,
     windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
@@ -95,14 +95,14 @@ internal fun EnemySection(
             mobs = state.mobs,
             selectedMob = state.selectedMob,
             onMobClick = onMobClick,
-            onDotClick = onDotClick
+            onStatusClick = onStatusClick
         )
     } else {
         EnemyHorizontalPager(
             mobs = state.mobs,
             selectedMob = state.selectedMob,
             onMobClick = onMobClick,
-            onDotClick = onDotClick,
+            onStatusClick = onStatusClick,
             modifier = modifier
         )
     }
@@ -122,7 +122,7 @@ private fun EnemyHorizontalList(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onDotClick: (ActiveDotUIModel) -> Unit
+    onStatusClick: (ActiveDotUIModel) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -134,7 +134,7 @@ private fun EnemyHorizontalList(
                 mob = mob,
                 isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                 onMobClick = onMobClick,
-                onDotClick = onDotClick,
+                onDotClick = onStatusClick,
                 modifier = Modifier
                     .heightIn(max = ITEM_MAX_HEIGHT)
                     .fillMaxHeight()
@@ -149,7 +149,7 @@ private fun EnemyHorizontalPager(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onDotClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveDotUIModel) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
@@ -180,7 +180,7 @@ private fun EnemyHorizontalPager(
                     mob = mob,
                     isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                     onMobClick = onMobClick,
-                    onDotClick = onDotClick,
+                    onDotClick = onStatusClick,
                     modifier = Modifier
                         .heightIn(max = ITEM_MAX_HEIGHT)
                         .fillMaxHeight()
@@ -251,7 +251,7 @@ private fun EnemyItem(
                 modifier = Modifier.fillMaxSize()
             )
 
-            EnemyAppliedStatus(mob, onDotClick)
+            AppliedStatus(mob.activeDots, onDotClick)
 
             EnemyInfo(mob, maxWidth)
         }
@@ -259,11 +259,11 @@ private fun EnemyItem(
 }
 
 @Composable
-private fun BoxWithConstraintsScope.EnemyAppliedStatus(
-    mob: BattleMobUIModel,
-    onDotClick: (ActiveDotUIModel) -> Unit
+internal fun BoxWithConstraintsScope.AppliedStatus(
+    status: List<ActiveDotUIModel>,
+    onClick: (ActiveDotUIModel) -> Unit
 ) {
-    if (mob.activeDots.isNotEmpty()) {
+    if (status.isNotEmpty()) {
         Column(
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -275,14 +275,14 @@ private fun BoxWithConstraintsScope.EnemyAppliedStatus(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            mob.activeDots.forEach { dot ->
+            status.forEach { dot ->
                 BattleAsyncImage(
                     model = dot.skillImage,
                     contentDescription = dot.skillName,
                     modifier = Modifier
                         .size(20.dp)
                         .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-                        .clickable { onDotClick(dot) }
+                        .clickable { onClick(dot) }
                 )
             }
         }
@@ -339,7 +339,7 @@ private fun EnemySectionPreview() {
     EnemySection(
         state = HistoryModeBattlePreviewData.uiState,
         onMobClick = {},
-        onDotClick = {},
+        onStatusClick = {},
         onDismissDotTooltip = {},
         windowSizeClass = null,
         modifier = Modifier.height(400.dp)

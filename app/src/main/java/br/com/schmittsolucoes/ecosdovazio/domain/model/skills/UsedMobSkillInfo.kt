@@ -5,17 +5,18 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 sealed interface UsedMobSkillInfo {
     val skillCategory: SkillCategory
     val refreshTime: Int
+    val damage: Long get() = 0
 
     data class CommonDamage(
         override val refreshTime: Int,
-        val damage: Long
+        override val damage: Long
     ): UsedMobSkillInfo {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
 
     data class DamageOverTime(
         override val refreshTime: Int,
-        val damage: Long,
+        override val damage: Long,
         val duration: Int,
     ): UsedMobSkillInfo {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME

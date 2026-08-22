@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.model.mobs
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 
@@ -17,5 +17,5 @@ data class BattleMob(
     val actualHealth: Long = 0,
     val attributes: Mob.Attributes,
     val skills: List<MobSkill> = emptyList(),
-    val activeDots: List<ActiveDot> = emptyList()
+    val activeDots: List<ActiveDoT.CharActiveDoT> = emptyList()
 )

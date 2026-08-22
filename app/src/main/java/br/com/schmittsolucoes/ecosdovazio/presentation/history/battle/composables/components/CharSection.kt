@@ -35,6 +35,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getNameStyle
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
@@ -43,6 +44,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnI
 @Composable
 internal fun CharSection(
     char: BattleCharUIModel?,
+    onStatusClick: (ActiveDotUIModel) -> Unit,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center
 ) {
@@ -54,6 +56,7 @@ internal fun CharSection(
     ) {
         CharItem(
             char = char,
+            onStatusClick = onStatusClick,
             modifier = Modifier
                 .heightIn(max = ITEM_MAX_HEIGHT)
                 .fillMaxHeight()
@@ -65,6 +68,7 @@ internal fun CharSection(
 @Composable
 private fun CharItem(
     char: BattleCharUIModel,
+    onStatusClick: (ActiveDotUIModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints(
@@ -76,11 +80,17 @@ private fun CharItem(
                 color = CharacterBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
+            .padding(CHAR_AND_MOBS_BORDER_WIDTH)
     ) {
         BattleAsyncImage(
             model = char.battleImage,
             contentDescription = char.name,
             modifier = Modifier.fillMaxSize()
+        )
+
+        AppliedStatus(
+            status = char.activeDots,
+            onClick = onStatusClick
         )
 
         CharInfo(char, maxWidth)
@@ -127,6 +137,7 @@ private fun BoxScope.CharInfo(char: BattleCharUIModel, containerWidth: Dp) {
 private fun CharItemPreview() {
     CharItem(
         char = HistoryModeBattlePreviewData.mockChar,
+        onStatusClick = {},
         modifier = Modifier.height(300.dp)
     )
 }
