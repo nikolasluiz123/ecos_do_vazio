@@ -80,6 +80,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val _skillsRefreshTime = MutableStateFlow<Map<String, Int>>(emptyMap())
     private val _actualRound = MutableStateFlow<Long>(1)
     private val _shouldPop = MutableStateFlow(false)
+    private val _selectedDot = MutableStateFlow<ActiveDotUIModel?>(null)
 
     private var isPhaseStarted = false
 
@@ -99,7 +100,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         _skillsRefreshTime,
         _charHealth,
         _actualRound,
-        _shouldPop
+        _shouldPop,
+        _selectedDot
     ) { flows ->
         val errorMessage = flows[0] as String?
         val isLoading = flows[1] as Boolean
@@ -116,6 +118,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val charHealth = flows[12] as Long?
         val actualRound = flows[13] as Long
         val shouldPop = flows[14] as Boolean
+        val selectedDot = flows[15] as ActiveDotUIModel?
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsDots)
         val uiModelChar = mapBattleCharToUIModel(
@@ -137,6 +140,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             char = uiModelChar,
             selectedMob = selectedMob,
             selectedSkill = selectedSkill,
+            selectedDot = selectedDot,
             actualRound = actualRound
         )
     }.stateIn(
@@ -173,6 +177,14 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     fun onDismissSkillTooltip() {
         _selectedSkill.value = null
+    }
+
+    fun onDotClick(dot: ActiveDotUIModel) {
+        _selectedDot.value = dot
+    }
+
+    fun onDismissDotTooltip() {
+        _selectedDot.value = null
     }
 
     fun onSkillClick(skill: CharSkillUIModel) {
@@ -259,6 +271,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             val newDot = ActiveDotUIModel(
                 skillId = skill.id,
                 skillName = skill.name,
+                skillDescription = skill.description,
                 remainingTurns = result.repeat,
                 skillInfo = skill.toDomainUsedSkillInfo() as UsedSkillInfo.DamageOverTime,
                 skillImage = skill.image
@@ -341,7 +354,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 val skill = charSkills.find { it.id == dot.skillId }
                 val skillImage = skill?.image ?: 0
                 val skillName = skill?.name ?: ""
-                dot.toUIModel(skillName, skillImage)
+                val skillDescription = skill?.description ?: ""
+                dot.toUIModel(skillName, skillDescription, skillImage)
             }
         }
 

@@ -18,6 +18,7 @@ object HistoryModeBattlePreviewData {
     val mockActiveDot = ActiveDotUIModel(
         skillId = "dot_1",
         skillName = "Veneno",
+        skillDescription = "Causa dano por veneno a cada turno.",
         remainingTurns = 3,
         skillInfo = UsedSkillInfo.DamageOverTime(
             refreshTime = 3,

@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.CHAR_AND_MOBS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.INFO_PADDING
@@ -59,8 +60,10 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_MAX_HEIGHT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_SPACING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.dots.ActiveDotTooltip
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getNameStyle
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
@@ -73,21 +76,42 @@ private const val PULSE_ALPHA_TARGET = 1f
 
 @Composable
 internal fun EnemySection(
-    mobs: List<BattleMobUIModel>,
-    selectedMob: BattleMobUIModel?,
+    state: HistoryModeBattleUIState,
     onMobClick: (BattleMobUIModel) -> Unit,
+    onDotClick: (ActiveDotUIModel) -> Unit,
+    onDismissDotTooltip: () -> Unit,
     windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ITEM_SPACING)
 ) {
-    if (mobs.isEmpty()) return
+    if (state.mobs.isEmpty()) return
 
     val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
 
     if (isExpanded) {
-        EnemyHorizontalList(modifier, horizontalArrangement, mobs, selectedMob, onMobClick)
+        EnemyHorizontalList(
+            modifier = modifier,
+            horizontalArrangement = horizontalArrangement,
+            mobs = state.mobs,
+            selectedMob = state.selectedMob,
+            onMobClick = onMobClick,
+            onDotClick = onDotClick
+        )
     } else {
-        EnemyHorizontalPager(mobs, selectedMob, onMobClick, modifier)
+        EnemyHorizontalPager(
+            mobs = state.mobs,
+            selectedMob = state.selectedMob,
+            onMobClick = onMobClick,
+            onDotClick = onDotClick,
+            modifier = modifier
+        )
+    }
+
+    state.selectedDot?.let { dot ->
+        ActiveDotTooltip(
+            dot = dot,
+            onDismissRequest = onDismissDotTooltip
+        )
     }
 }
 
@@ -97,7 +121,8 @@ private fun EnemyHorizontalList(
     horizontalArrangement: Arrangement.Horizontal,
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
-    onMobClick: (BattleMobUIModel) -> Unit
+    onMobClick: (BattleMobUIModel) -> Unit,
+    onDotClick: (ActiveDotUIModel) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -109,6 +134,7 @@ private fun EnemyHorizontalList(
                 mob = mob,
                 isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                 onMobClick = onMobClick,
+                onDotClick = onDotClick,
                 modifier = Modifier
                     .heightIn(max = ITEM_MAX_HEIGHT)
                     .fillMaxHeight()
@@ -123,6 +149,7 @@ private fun EnemyHorizontalPager(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
     onMobClick: (BattleMobUIModel) -> Unit,
+    onDotClick: (ActiveDotUIModel) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
@@ -153,6 +180,7 @@ private fun EnemyHorizontalPager(
                     mob = mob,
                     isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
                     onMobClick = onMobClick,
+                    onDotClick = onDotClick,
                     modifier = Modifier
                         .heightIn(max = ITEM_MAX_HEIGHT)
                         .fillMaxHeight()
@@ -182,7 +210,8 @@ private fun EnemyItem(
     mob: BattleMobUIModel,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onMobClick: (BattleMobUIModel) -> Unit = {}
+    onMobClick: (BattleMobUIModel) -> Unit = {},
+    onDotClick: (ActiveDotUIModel) -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "Pulse")
     val alpha by infiniteTransition.animateFloat(
@@ -222,7 +251,7 @@ private fun EnemyItem(
                 modifier = Modifier.fillMaxSize()
             )
 
-            EnemyAppliedStatus(mob)
+            EnemyAppliedStatus(mob, onDotClick)
 
             EnemyInfo(mob, maxWidth)
         }
@@ -230,7 +259,10 @@ private fun EnemyItem(
 }
 
 @Composable
-private fun BoxWithConstraintsScope.EnemyAppliedStatus(mob: BattleMobUIModel) {
+private fun BoxWithConstraintsScope.EnemyAppliedStatus(
+    mob: BattleMobUIModel,
+    onDotClick: (ActiveDotUIModel) -> Unit
+) {
     Column(
         modifier = Modifier
             .align(Alignment.TopEnd)
@@ -249,6 +281,7 @@ private fun BoxWithConstraintsScope.EnemyAppliedStatus(mob: BattleMobUIModel) {
                 modifier = Modifier
                     .size(20.dp)
                     .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+                    .clickable { onDotClick(dot) }
             )
         }
     }
@@ -302,9 +335,10 @@ private fun EnemyItemPreview() {
 @Composable
 private fun EnemySectionPreview() {
     EnemySection(
-        mobs = HistoryModeBattlePreviewData.mockMobsList,
-        selectedMob = HistoryModeBattlePreviewData.mockMobWarrior,
+        state = HistoryModeBattlePreviewData.uiState,
         onMobClick = {},
+        onDotClick = {},
+        onDismissDotTooltip = {},
         windowSizeClass = null,
         modifier = Modifier.height(400.dp)
     )

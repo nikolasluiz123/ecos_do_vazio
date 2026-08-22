@@ -42,6 +42,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyVerticalGrid
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
@@ -90,6 +91,8 @@ fun HistoryModeBattleScreen(
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
         onMobClick = viewModel::onMobClick,
+        onDotClick = viewModel::onDotClick,
+        onDismissDotTooltip = viewModel::onDismissDotTooltip,
         onSkillClick = viewModel::onSkillClick,
         onSkillLongClick = viewModel::onSkillLongClick,
         onDismissSkillTooltip = viewModel::onDismissSkillTooltip
@@ -102,6 +105,8 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
@@ -133,6 +138,8 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
+                    onDotClick = onDotClick,
+                    onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
@@ -142,6 +149,8 @@ fun HistoryModeBattleScreen(
                     state = state,
                     windowSizeClass = windowSizeClass,
                     onMobClick = onMobClick,
+                    onDotClick = onDotClick,
+                    onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
                     onDismissSkillTooltip = onDismissSkillTooltip
@@ -163,6 +172,8 @@ internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
@@ -177,9 +188,10 @@ internal fun StackLayout(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EnemySection(
-                mobs = state.mobs,
-                selectedMob = state.selectedMob,
+                state = state,
                 onMobClick = onMobClick,
+                onDotClick = onDotClick,
+                onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(1f)
             )
@@ -212,6 +224,8 @@ internal fun SideBySideLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
+    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
@@ -228,9 +242,10 @@ internal fun SideBySideLayout(
             verticalAlignment = Alignment.CenterVertically
         ) {
             EnemySection(
-                mobs = state.mobs,
-                selectedMob = state.selectedMob,
+                state = state,
                 onMobClick = onMobClick,
+                onDotClick = onDotClick,
+                onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(enemyWeight),
                 horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
@@ -338,6 +353,9 @@ private fun HistoryModeBattleScreenSideBySidePreview() {
                 SideBySideLayout(
                     isExpandedWidth = true,
                     state = HistoryModeBattlePreviewData.uiState,
+                    onMobClick = {},
+                    onDotClick = {},
+                    onDismissDotTooltip = {},
                     windowSizeClass = null
                 )
             }

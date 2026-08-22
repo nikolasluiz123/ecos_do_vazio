@@ -70,10 +70,11 @@ fun BattleMob.toUIModel(
     )
 }
 
-fun ActiveDot.toUIModel(skillName: String, skillImage: Int): ActiveDotUIModel {
+fun ActiveDot.toUIModel(skillName: String, skillDescription: String, skillImage: Int): ActiveDotUIModel {
     return ActiveDotUIModel(
         skillId = skillId,
         skillName = skillName,
+        skillDescription = skillDescription,
         remainingTurns = remainingTurns,
         skillInfo = skillInfo,
         skillImage = skillImage
