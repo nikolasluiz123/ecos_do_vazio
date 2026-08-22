@@ -8,14 +8,16 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -41,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -197,29 +201,61 @@ private fun EnemyItem(
         CharacterBattleStrokeColor
     }
 
-    BoxWithConstraints(
+    Row(
         modifier = modifier
-            .aspectRatio(ITEM_ASPECT_RATIO)
-            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-            .border(
-                width = CHAR_AND_MOBS_BORDER_WIDTH,
-                color = borderColor,
-                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
-            )
-            .clickable { onMobClick(mob) }
     ) {
-        BattleAsyncImage(
-            model = mob.image,
-            contentDescription = mob.name,
-            modifier = Modifier.fillMaxSize()
-        )
+        BoxWithConstraints(
+            modifier = Modifier
+                .aspectRatio(ITEM_ASPECT_RATIO)
+                .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+                .border(
+                    width = CHAR_AND_MOBS_BORDER_WIDTH,
+                    color = borderColor,
+                    shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+                )
+                .padding(CHAR_AND_MOBS_BORDER_WIDTH)
+                .clickable { onMobClick(mob) }
+        ) {
+            BattleAsyncImage(
+                model = mob.image,
+                contentDescription = mob.name,
+                modifier = Modifier.fillMaxSize()
+            )
 
-        EnemyInfo(mob, maxWidth)
+            EnemyAppliedStatus(mob)
+
+            EnemyInfo(mob, maxWidth)
+        }
     }
 }
 
 @Composable
-private fun BoxScope.EnemyInfo(mob: BattleMobUIModel, containerWidth: Dp) {
+private fun BoxWithConstraintsScope.EnemyAppliedStatus(mob: BattleMobUIModel) {
+    Column(
+        modifier = Modifier
+            .align(Alignment.TopEnd)
+            .background(
+                color = Color.Black.copy(alpha = 0.6f),
+                shape = RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp)
+            )
+            .padding(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        mob.activeDots.forEach { dot ->
+            BattleAsyncImage(
+                model = dot.skillImage,
+                contentDescription = dot.skillName,
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxWithConstraintsScope.EnemyInfo(mob: BattleMobUIModel, containerWidth: Dp) {
     Column(
         modifier = Modifier
             .matchParentSize()

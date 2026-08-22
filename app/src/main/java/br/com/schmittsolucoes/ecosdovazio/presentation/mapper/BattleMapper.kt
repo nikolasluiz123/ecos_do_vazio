@@ -1,9 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
 import androidx.annotation.DrawableRes
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDot
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
@@ -70,11 +70,13 @@ fun BattleMob.toUIModel(
     )
 }
 
-fun ActiveDot.toUIModel(): ActiveDotUIModel {
+fun ActiveDot.toUIModel(skillName: String, skillImage: Int): ActiveDotUIModel {
     return ActiveDotUIModel(
         skillId = skillId,
+        skillName = skillName,
         remainingTurns = remainingTurns,
-        skillInfo = skillInfo
+        skillInfo = skillInfo,
+        skillImage = skillImage
     )
 }
 

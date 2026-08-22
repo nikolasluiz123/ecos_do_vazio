@@ -258,8 +258,10 @@ class HistoryModeBattleViewModel @Inject constructor(
         if (currentDots.none { it.skillId == skill.id }) {
             val newDot = ActiveDotUIModel(
                 skillId = skill.id,
+                skillName = skill.name,
                 remainingTurns = result.repeat,
-                skillInfo = skill.toDomainUsedSkillInfo() as UsedSkillInfo.DamageOverTime
+                skillInfo = skill.toDomainUsedSkillInfo() as UsedSkillInfo.DamageOverTime,
+                skillImage = skill.image
             )
 
             _mobsDots.value = _mobsDots.value.toMutableMap().apply {
@@ -328,12 +330,19 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private fun applyDotsDamage() {
         val state = uiState.value
-        val charInfo = state.char?.toDomainInfo() ?: return
+        val char = state.char ?: return
+        val charInfo = char.toDomainInfo()
         val mobsInfo = state.mobs.associate { it.phaseMobId to it.toDomainInfo() }
         val result = applyDoTDamagesUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
         _mobsDots.value = result.mobsDots.mapValues { (_, dots) ->
-            dots.map { it.toUIModel() }
+            dots.map { dot ->
+                val charSkills = (char.damageSkills + char.buffSkills + char.debuffSkills)
+                val skill = charSkills.find { it.id == dot.skillId }
+                val skillImage = skill?.image ?: 0
+                val skillName = skill?.name ?: ""
+                dot.toUIModel(skillName, skillImage)
+            }
         }
 
         result.mobsHealth.forEach { (phaseMobId, newHealth) ->
