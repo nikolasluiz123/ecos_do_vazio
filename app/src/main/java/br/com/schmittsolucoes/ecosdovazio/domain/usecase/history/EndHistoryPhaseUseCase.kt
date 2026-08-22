@@ -47,9 +47,11 @@ class EndHistoryPhaseUseCase @Inject constructor(
 
             if (allMobsDead && existingInfo != null) {
                 transaction.run {
-                    historyPhaseRepository.saveHistoryPhaseInfo(
-                        existingInfo.copy(finishedAt = Instant.now())
-                    )
+                    if (existingInfo.finishedAt == null) {
+                        historyPhaseRepository.saveHistoryPhaseInfo(
+                            existingInfo.copy(finishedAt = Instant.now())
+                        )
+                    }
 
                     levelInfo = incrementCharExperience(mobs, char)
                 }

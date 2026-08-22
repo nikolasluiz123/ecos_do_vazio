@@ -270,6 +270,10 @@ class HistoryModeBattleViewModel @Inject constructor(
         }
     }
 
+    private fun updateCharHealth(newHealth: Long) {
+        _charHealth.value = newHealth
+    }
+
     private fun registerMobDot(
         selectedMob: BattleMobUIModel,
         skill: CharSkillUIModel,
@@ -300,6 +304,11 @@ class HistoryModeBattleViewModel @Inject constructor(
                 isPhaseStarted = true
             }
 
+            if (allMobsIsDead() || charIsDead()) {
+                tryFinishBattle()
+                return@launch
+            }
+
             applyDotsDamage()
 
             if (isEnemyRound()) {
@@ -308,7 +317,10 @@ class HistoryModeBattleViewModel @Inject constructor(
                     mobs = uiState.value.mobs.map { it.toDomain() },
                     onMobUseSkill = ::handleMobSkillResult
                 )
-                incrementRound()
+                
+                if (!allMobsIsDead()) {
+                    incrementRound()
+                }
             } else {
                 decrementSkillsRefreshTime()
             }
@@ -318,19 +330,18 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private suspend fun tryFinishBattle() {
-        val state = uiState.value
-        val char = state.char ?: return
-        val mobs = state.mobs
+        if (_shouldPop.value) return
+
+        val char = uiState.value.char ?: return
+
         val result = endHistoryPhaseUseCase(
             phaseId = route.phaseId,
             battleCharInfo = char.toDomainInfo(),
-            mobs = mobs.map { it.toDomainInfo() }
+            mobs = uiState.value.mobs.map { it.toDomainInfo() }
         )
 
         if (result.isHistoryFinished) {
-            val allMobsDead = mobs.all { it.actualHealth <= 0 }
-
-            if (allMobsDead) {
+            if (allMobsIsDead()) {
                 val message = if (result.levelInfo.levelUp) {
                     context.getString(
                         R.string.history_mode_battle_victory_level_up,
@@ -352,22 +363,20 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun applyDotsDamage() {
-        val state = uiState.value
-        val char = state.char ?: return
+        val char = uiState.value.char ?: return
         val charInfo = char.toDomainInfo()
-        val mobsInfo = state.mobs.associate { it.phaseMobId to it.toDomainInfo() }
+        val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to it.toDomainInfo() }
         
         applyMobsDoTDamage(charInfo, mobsInfo)
         applyCharDoTDamage(charInfo, mobsInfo)
     }
 
     private fun applyMobsDoTDamage(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
-        val state = uiState.value
         val result = applyMobsDoTDamagesUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
         _mobsDots.value = result.mobsDots.mapValues { (_, dots) ->
             dots.map { dot ->
-                val char = state.char!!
+                val char = uiState.value.char!!
                 val skill = char.damageSkills.first { it.id == dot.skillId }
 
                 dot.toUIModel(
@@ -379,7 +388,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         }
 
         result.mobsHealth.forEach { (phaseMobId, newHealth) ->
-            val mob = state.mobs.find { it.phaseMobId == phaseMobId } ?: return@forEach
+            val mob = uiState.value.mobs.find { it.phaseMobId == phaseMobId } ?: return@forEach
 
             if (mob.actualHealth != newHealth) {
                 updateMobHealth(mob, newHealth)
@@ -388,11 +397,10 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun applyCharDoTDamage(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
-        val state = uiState.value
         val result = applyCharDoTDamagesUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
         _charDots.value = result.charDots.map { dot ->
-            val mob = state.mobs.find { it.phaseMobId == dot.sourceId }!!
+            val mob = uiState.value.mobs.find { it.phaseMobId == dot.sourceId }!!
             val skill = mob.skills.first { it.id == dot.skillId }
 
             dot.toUIModel(
@@ -403,18 +411,18 @@ class HistoryModeBattleViewModel @Inject constructor(
         }
 
         if (charInfo.actualHealth != result.charHealth) {
-            _charHealth.value = result.charHealth
+            updateCharHealth(result.charHealth)
         }
     }
 
     private fun handleMobSkillResult(result: MobSkillUsageResult) {
         when (result) {
             is MobSkillUsageResult.CommonDamage -> {
-                _charHealth.value = result.newEnemyHealth
+                updateCharHealth(result.newEnemyHealth)
             }
 
             is MobSkillUsageResult.DamageOverTime -> {
-                _charHealth.value = result.newEnemyHealth
+                updateCharHealth(result.newEnemyHealth)
                 registerCharDot(result)
             }
         }
@@ -512,5 +520,23 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private fun incrementRound() {
         _actualRound.value += 1
+    }
+
+    private fun charIsDead(): Boolean {
+        val notLoaded = _charHealth.value == null && uiState.value.char?.actualHealth == null
+        if (notLoaded) return false
+
+        return (_charHealth.value ?: uiState.value.char?.actualHealth ?: 0) <= 0
+    }
+
+    private fun allMobsIsDead(): Boolean {
+        val notLoaded = _mobsHealth.value.isEmpty() && uiState.value.mobs.all { it.actualHealth <= 0 }
+        if (notLoaded) return false
+
+        val mobsHealth = _mobsHealth.value.ifEmpty {
+            uiState.value.mobs.associate { it.phaseMobId to it.actualHealth }
+        }
+
+        return mobsHealth.all { it.value <= 0 }
     }
 }
