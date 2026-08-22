@@ -5,13 +5,15 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobCriticalChanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 
 class GetMobSkillDamageUseCase(
     private val getMobSkillRawDamageUseCase: GetMobSkillRawDamageUseCase,
     private val getCharDamageReductionUseCase: GetCharDamageReductionUseCase,
     private val calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase,
-    private val calculateMobCriticalChanceUseCase: CalculateMobCriticalChanceUseCase
+    private val calculateMobCriticalChanceUseCase: CalculateMobCriticalChanceUseCase,
+    private val calculateMobDodgeChanceUseCase: CalculateMobDodgeChanceUseCase
 ) {
     fun executeInternal(
         skillInfo: UsedMobSkillInfo,
@@ -33,11 +35,17 @@ class GetMobSkillDamageUseCase(
             category = battleMobInfo.mobCategory
         )
 
+        val dodgeChance = calculateMobDodgeChanceUseCase.executeInternal(
+            agilityPoints = battleMobInfo.attributes.agility,
+            category = battleMobInfo.mobCategory
+        )
+
         return calculateEffectiveDamageUseCase.executeInternal(
             rawDamage = rawDamage,
             damageReduction = damageReduction,
             targetMultiplier = battleCharInfo.defensiveMultiplier,
-            criticalChance = criticalChance
+            criticalChance = criticalChance,
+            dodgeChance = dodgeChance
         )
     }
 }

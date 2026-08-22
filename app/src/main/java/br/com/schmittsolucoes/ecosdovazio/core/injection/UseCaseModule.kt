@@ -15,10 +15,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepositor
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateCharCriticalChanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateCharDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateHistoryPhaseExperienceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMagicResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobCriticalChanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTDamagesUseCase
@@ -665,13 +667,15 @@ object UseCaseModule {
         getCharSkillRawDamageUseCase: GetCharSkillRawDamageUseCase,
         getMobDamageReductionUseCase: GetMobDamageReductionUseCase,
         calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase,
-        calculateCharCriticalChanceUseCase: CalculateCharCriticalChanceUseCase
+        calculateCharCriticalChanceUseCase: CalculateCharCriticalChanceUseCase,
+        calculateCharDodgeChanceUseCase: CalculateCharDodgeChanceUseCase
     ): GetCharSkillDamageUseCase {
         return GetCharSkillDamageUseCase(
             getCharSkillRawDamageUseCase = getCharSkillRawDamageUseCase,
             getMobDamageReductionUseCase = getMobDamageReductionUseCase,
             calculateEffectiveDamageUseCase = calculateEffectiveDamageUseCase,
-            calculateCharCriticalChanceUseCase = calculateCharCriticalChanceUseCase
+            calculateCharCriticalChanceUseCase = calculateCharCriticalChanceUseCase,
+            calculateCharDodgeChanceUseCase = calculateCharDodgeChanceUseCase
         )
     }
 
@@ -741,12 +745,14 @@ object UseCaseModule {
         getMobSkillRawDamageUseCase: GetMobSkillRawDamageUseCase,
         getCharDamageReductionUseCase: GetCharDamageReductionUseCase,
         calculateEffectiveDamageUseCase: CalculateEffectiveDamageUseCase,
-        calculateMobCriticalChanceUseCase: CalculateMobCriticalChanceUseCase
+        calculateMobCriticalChanceUseCase: CalculateMobCriticalChanceUseCase,
+        calculateMobDodgeChanceUseCase: CalculateMobDodgeChanceUseCase
     ): GetMobSkillDamageUseCase = GetMobSkillDamageUseCase(
         getMobSkillRawDamageUseCase = getMobSkillRawDamageUseCase,
         getCharDamageReductionUseCase = getCharDamageReductionUseCase,
         calculateEffectiveDamageUseCase = calculateEffectiveDamageUseCase,
-        calculateMobCriticalChanceUseCase = calculateMobCriticalChanceUseCase
+        calculateMobCriticalChanceUseCase = calculateMobCriticalChanceUseCase,
+        calculateMobDodgeChanceUseCase = calculateMobDodgeChanceUseCase
     )
 
     @Provides
@@ -767,5 +773,15 @@ object UseCaseModule {
     @Provides
     fun provideCalculateMobCriticalChanceUseCase(): CalculateMobCriticalChanceUseCase {
         return CalculateMobCriticalChanceUseCase()
+    }
+
+    @Provides
+    fun provideCalculateCharDodgeChanceUseCase(): CalculateCharDodgeChanceUseCase {
+        return CalculateCharDodgeChanceUseCase()
+    }
+
+    @Provides
+    fun provideCalculateMobDodgeChanceUseCase(): CalculateMobDodgeChanceUseCase {
+        return CalculateMobDodgeChanceUseCase()
     }
 }

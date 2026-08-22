@@ -8,8 +8,12 @@ class CalculateEffectiveDamageUseCase {
         rawDamage: Long,
         damageReduction: Double,
         targetMultiplier: Double,
-        criticalChance: Double
+        criticalChance: Double,
+        dodgeChance: Double,
     ): Long {
+        val isDodge = Random.nextDouble() <= dodgeChance
+        if (isDodge) return 0
+
         val isCritical = Random.nextDouble() <= criticalChance
         val criticalMultiplier = if (isCritical) 1.5 else 1.0
 
