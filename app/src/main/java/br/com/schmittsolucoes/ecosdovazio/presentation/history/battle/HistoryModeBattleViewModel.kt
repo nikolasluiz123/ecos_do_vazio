@@ -222,14 +222,29 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun updateMobHealth(selectedMob: BattleMobUIModel, newEnemyHealth: Long) {
-        _mobsHealth.value = _mobsHealth.value.toMutableMap().apply {
+        var currentHealths = _mobsHealth.value
+
+        if (currentHealths.isEmpty()) {
+            currentHealths = uiState.value.mobs.associate { it.phaseMobId to it.actualHealth }
+        }
+
+        val updatedHealths = currentHealths.toMutableMap().apply {
             put(selectedMob.phaseMobId, newEnemyHealth)
         }
 
-        val mobToKill = uiState.value.mobs.firstOrNull { it.actualHealth > 0 }
+        _mobsHealth.value = updatedHealths
 
-        if (newEnemyHealth <= 0 && mobToKill != null) {
-            _selectedMobId.value = mobToKill.phaseMobId
+        val currentSelectedId = _selectedMobId.value ?: uiState.value.mobs.firstOrNull()?.phaseMobId
+
+        if (newEnemyHealth <= 0 && selectedMob.phaseMobId == currentSelectedId) {
+            val nextMob = uiState.value.mobs.firstOrNull { mob ->
+                val health = updatedHealths[mob.phaseMobId] ?: 0L
+                health > 0
+            }
+
+            if (nextMob != null) {
+                _selectedMobId.value = nextMob.phaseMobId
+            }
         }
     }
 
