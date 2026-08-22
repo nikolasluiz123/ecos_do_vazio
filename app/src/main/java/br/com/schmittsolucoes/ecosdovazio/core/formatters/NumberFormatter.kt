@@ -1,10 +1,29 @@
 package br.com.schmittsolucoes.ecosdovazio.core.formatters
 
-import kotlin.math.roundToInt
+import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
+import java.text.NumberFormat
+import java.util.Locale
+import javax.inject.Inject
 
-object NumberFormatter {
+interface NumberFormatter {
+    fun formatPercentage(value: Double): String
+}
 
-    fun formatPercentage(value: Double): String {
-        return "${(value * 100).roundToInt()}%"
+class LocalizableNumberFormatter @Inject constructor(
+    private val languageProvider: LanguageProvider
+) : NumberFormatter {
+
+    override fun formatPercentage(value: Double): String {
+        val locale = Locale.Builder()
+            .setLanguage(languageProvider.getDeviceLanguage())
+            .setRegion(languageProvider.getDeviceRegion())
+            .build()
+
+        val formatter = NumberFormat.getPercentInstance(locale).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+
+        return formatter.format(value)
     }
 }

@@ -25,6 +25,14 @@ class LocaleLanguageProvider @Inject constructor(
         return Locale.getDefault().toLanguageTag()
     }
 
+    override fun getDeviceLanguage(): String {
+        return Locale.getDefault().language
+    }
+
+    override fun getDeviceRegion(): String {
+        return Locale.getDefault().country
+    }
+
     override fun getString(resourceId: Int, languageTag: String): String {
         val localizedContext = contextCache.getOrPut(languageTag) {
             val locale = Locale.forLanguageTag(languageTag)

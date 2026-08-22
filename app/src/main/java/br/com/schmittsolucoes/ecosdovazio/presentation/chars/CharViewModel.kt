@@ -44,7 +44,8 @@ class CharViewModel @Inject constructor(
     getCharDodgeChanceUseCase: GetCharDodgeChanceUseCase,
     charAttributesQueryUseCase: CharAttributesQueryUseCase,
     getAvailableAttributesUseCase: GetAvailableAttributesUseCase,
-    private val incrementAttributeUseCase: IncrementAttributeUseCase
+    private val incrementAttributeUseCase: IncrementAttributeUseCase,
+    private val numberFormatter: NumberFormatter
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -81,10 +82,10 @@ class CharViewModel @Inject constructor(
             statusInfo = CharStatusUIModel(
                 hp = hp.toString(),
                 baseDamage = baseDamage.toString(),
-                physicalResistance = NumberFormatter.formatPercentage(physRes),
-                magicResistance = NumberFormatter.formatPercentage(magRes),
-                criticalChance = NumberFormatter.formatPercentage(crit),
-                dodgeChance = NumberFormatter.formatPercentage(dodge)
+                physicalResistance = numberFormatter.formatPercentage(physRes),
+                magicResistance = numberFormatter.formatPercentage(magRes),
+                criticalChance = numberFormatter.formatPercentage(crit),
+                dodgeChance = numberFormatter.formatPercentage(dodge)
             ),
             attributesInfo = attributesInfo,
             availablePoints = availablePoints
