@@ -263,26 +263,28 @@ private fun BoxWithConstraintsScope.EnemyAppliedStatus(
     mob: BattleMobUIModel,
     onDotClick: (ActiveDotUIModel) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .align(Alignment.TopEnd)
-            .background(
-                color = Color.Black.copy(alpha = 0.6f),
-                shape = RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp)
-            )
-            .padding(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        mob.activeDots.forEach { dot ->
-            BattleAsyncImage(
-                model = dot.skillImage,
-                contentDescription = dot.skillName,
-                modifier = Modifier
-                    .size(20.dp)
-                    .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-                    .clickable { onDotClick(dot) }
-            )
+    if (mob.activeDots.isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .background(
+                    color = Color.Black.copy(alpha = 0.6f),
+                    shape = RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp)
+                )
+                .padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            mob.activeDots.forEach { dot ->
+                BattleAsyncImage(
+                    model = dot.skillImage,
+                    contentDescription = dot.skillName,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+                        .clickable { onDotClick(dot) }
+                )
+            }
         }
     }
 }
