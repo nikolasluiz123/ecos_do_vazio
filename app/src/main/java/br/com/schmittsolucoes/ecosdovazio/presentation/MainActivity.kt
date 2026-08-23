@@ -72,6 +72,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.Histor
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.navigateToHistory
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.navigateToHome
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.navigation.CharSkillsRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.navigation.navigateToCharSkills
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
@@ -220,7 +222,8 @@ private fun AppBottomBar(
                 icon = {
                     Icon(
                         painter = painterResource(item.icon),
-                        contentDescription = stringResource(item.label)
+                        contentDescription = stringResource(item.label),
+                        modifier = Modifier.size(20.dp)
                     )
                 },
                 label = { Text(stringResource(item.label)) },
@@ -230,6 +233,7 @@ private fun AppBottomBar(
                         when (item) {
                             BottomBarItem.Home -> navController.navigateToHome()
                             BottomBarItem.Char -> navController.navigateToChar()
+                            BottomBarItem.Skills -> navController.navigateToCharSkills()
                             BottomBarItem.History -> navController.navigateToHistory()
                         }
                     }
@@ -246,6 +250,7 @@ private enum class BottomBarItem(
 ) {
     Home(HomeRoute, R.string.bottom_menu_home, R.drawable.ic_home_16dp),
     Char(CharRoute, R.string.bottom_menu_char, R.drawable.ic_char_16dp),
+    Skills(CharSkillsRoute, R.string.bottom_menu_skills, R.drawable.ic_skills_16dp),
     History(HistoryRoute, R.string.bottom_menu_history, R.drawable.ic_history_16dp)
 }
 

@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobSkillTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.Skill
 
@@ -123,6 +124,29 @@ fun CharSkillTuple.toDomain(): CharSkill {
         )
     }
 }
+
+fun CharSkillTuple.toDomainDetails() = CharSkillDetails(
+    id = id,
+    name = name,
+    description = description,
+    skillCategory = skillCategory,
+    damage = damage,
+    multiplier = multiplier,
+    duration = duration,
+    refreshTime = refreshTime,
+    minLevel = minLevel,
+    attributes = CharSkill.Attributes(
+        requiredStrength = requiredStrength,
+        requiredDexterity = requiredDexterity,
+        requiredIntelligence = requiredIntelligence,
+        requiredPhysicalResistance = requiredPhysicalResistance,
+        requiredMagicResistance = requiredMagicResistance,
+        requiredVitality = requiredVitality,
+        requiredAgility = requiredAgility
+    ),
+    imageName = imageName,
+    blocked = false
+)
 
 fun MobSkillTuple.toDomain(): MobSkill {
     return when (skillCategory) {

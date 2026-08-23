@@ -31,6 +31,7 @@
 
     <string name="bottom_menu_home">Home</string>
     <string name="bottom_menu_char">Character</string>
+    <string name="bottom_menu_skills">Skills</string>
     <string name="bottom_menu_history">History</string>
 
     <string name="level_label">Level %s</string>

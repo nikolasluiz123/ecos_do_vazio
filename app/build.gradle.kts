@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
     implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3.window.size)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

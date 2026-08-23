@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.Skill
 import kotlinx.coroutines.flow.Flow
@@ -17,4 +18,10 @@ interface SkillRepository {
     ): Flow<List<CharSkill>>
 
     suspend fun getMobSkills(languageTag: String, mobId: String): List<MobSkill>
+
+    fun getAllSkills(
+        languageTag: String,
+        classId: String,
+        specializationId: String?
+    ): Flow<List<CharSkillDetails>>
 }

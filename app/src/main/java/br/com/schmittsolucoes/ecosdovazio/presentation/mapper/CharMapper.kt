@@ -28,6 +28,7 @@ fun IdentifiedCharAttribute.toUIModel(progress: Float): CharAttributesUIModel {
     return CharAttributesUIModel(
         identifier = id,
         totalValue = attribute.totalValue.toString(),
-        progress = progress
+        progress = progress,
+        rawValue = attribute.totalValue
     )
 }

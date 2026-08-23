@@ -31,6 +31,7 @@
 
     <string name="bottom_menu_home">Início</string>
     <string name="bottom_menu_char">Personagem</string>
+    <string name="bottom_menu_skills">Habilidades</string>
     <string name="bottom_menu_history">História</string>
 
     <string name="level_label">Nível %s</string>

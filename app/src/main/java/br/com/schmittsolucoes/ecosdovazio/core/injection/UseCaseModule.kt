@@ -46,6 +46,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.UseMobSkillU
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CalculateNextLevelExperienceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.DecrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharCriticalChanceUseCase
@@ -88,6 +89,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCha
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetailsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import dagger.Module
 import dagger.Provides
@@ -493,6 +495,17 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideDecrementAttributeUseCase(
+        charRepository: CharRepository,
+        preferencesRepository: PreferencesRepository,
+        userRepository: UserRepository
+    ): DecrementAttributeUseCase = DecrementAttributeUseCase(
+        charRepository = charRepository,
+        preferencesRepository = preferencesRepository,
+        userRepository = userRepository
+    )
+
+    @Provides
     fun provideSelectCharUseCase(
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository
@@ -784,4 +797,23 @@ object UseCaseModule {
     fun provideCalculateMobDodgeChanceUseCase(): CalculateMobDodgeChanceUseCase {
         return CalculateMobDodgeChanceUseCase()
     }
+
+    @Provides
+    fun provideCharSkillsDetailsQueryUseCase(
+        skillRepository: SkillRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository,
+        languageProvider: LanguageProvider,
+        getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
+        getCharBattleUseCase: GetCharBattleUseCase,
+    ): CharSkillsDetailsQueryUseCase = CharSkillsDetailsQueryUseCase(
+        skillRepository = skillRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository,
+        languageProvider = languageProvider,
+        getCharSkillBlockedUseCase = getCharSkillBlockedUseCase,
+        getCharBattleUseCase = getCharBattleUseCase,
+    )
 }

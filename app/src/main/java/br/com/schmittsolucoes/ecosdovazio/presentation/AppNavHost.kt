@@ -16,6 +16,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.histor
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.homeScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.navigateToHome
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.navigation.charSkillsScreen
 
 @Composable
 fun AppNavHost(
@@ -48,6 +49,7 @@ fun AppNavHost(
         ) {
             homeScreen()
             charScreen(windowSizeClass = windowSizeClass)
+            charSkillsScreen(windowSizeClass = windowSizeClass)
             historyScreen(
                 windowSizeClass = windowSizeClass,
                 onNavigateToBattle = navController::navigateToHistoryModeBattle

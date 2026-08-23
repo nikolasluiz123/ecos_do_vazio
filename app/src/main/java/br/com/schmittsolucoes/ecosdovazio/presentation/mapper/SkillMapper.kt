@@ -1,10 +1,39 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.IdentifiedSkillAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
+
+fun CharSkillDetails.toUIModel(image: Int) = CharSkillDetailsUIModel(
+    id = id,
+    name = name,
+    description = description,
+    skillCategory = skillCategory,
+    damage = damage,
+    multiplier = multiplier,
+    duration = duration,
+    refreshTime = refreshTime,
+    minLevel = minLevel,
+    attributes = attributes.toUIModelList(),
+    image = image,
+    blocked = blocked
+)
+
+private fun CharSkill.Attributes.toUIModelList() = listOf(
+    IdentifiedSkillAttribute(AttributeIdentifier.STRENGTH, requiredStrength),
+    IdentifiedSkillAttribute(AttributeIdentifier.DEXTERITY, requiredDexterity),
+    IdentifiedSkillAttribute(AttributeIdentifier.INTELLIGENCE, requiredIntelligence),
+    IdentifiedSkillAttribute(AttributeIdentifier.PHYSICAL_RESISTANCE, requiredPhysicalResistance),
+    IdentifiedSkillAttribute(AttributeIdentifier.MAGIC_RESISTANCE, requiredMagicResistance),
+    IdentifiedSkillAttribute(AttributeIdentifier.VITALITY, requiredVitality),
+    IdentifiedSkillAttribute(AttributeIdentifier.AGILITY, requiredAgility),
+)
 
 fun CharSkill.toUIModel(
     image: Int,
