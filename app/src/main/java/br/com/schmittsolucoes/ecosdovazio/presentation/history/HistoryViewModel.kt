@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
@@ -33,10 +34,8 @@ class HistoryViewModel @Inject constructor(
         _isLoading
     ) { phases, errorMessage, isLoading ->
         HistoryUIState(
-            phases = phases.map { phase ->
-                val imageResId = resourcesProvider.getPhaseImage(phase.imageName) ?: 0
-                phase.toUIModel(imageResId)
-            },
+            phases = mapPhaseToUIModel(phases),
+            actualPhaseIndex = getActualPhaseIndex(phases),
             errorMessage = errorMessage,
             isLoading = isLoading
         )
@@ -60,5 +59,18 @@ class HistoryViewModel @Inject constructor(
 
     fun onDismissErrorDialog() {
         _errorMessage.value = null
+    }
+
+    private fun mapPhaseToUIModel(phases: List<CharHistoryPhase>): List<HistoryPhaseUIModel> {
+        return phases.map { phase ->
+            val imageResId = resourcesProvider.getPhaseImage(phase.imageName) ?: 0
+            phase.toUIModel(imageResId)
+        }
+    }
+
+    private fun getActualPhaseIndex(phases: List<CharHistoryPhase>): Int {
+        return phases.indexOf(
+            element = phases.firstOrNull { it.isActual } ?: 0
+        )
     }
 }

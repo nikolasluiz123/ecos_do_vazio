@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -61,6 +63,14 @@ fun HistoryScreen(
         else -> DEFAULT_COLUMNS
     }
 
+    val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = state.actualPhaseIndex)
+
+    LaunchedEffect(state.actualPhaseIndex, state.phases.isNotEmpty()) {
+        if (state.phases.isNotEmpty() && state.actualPhaseIndex in state.phases.indices) {
+            gridState.animateScrollToItem(state.actualPhaseIndex)
+        }
+    }
+
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -73,6 +83,7 @@ fun HistoryScreen(
                 contentPadding = PaddingValues(GridContentPadding),
                 verticalArrangement = Arrangement.spacedBy(GridVerticalSpacing),
                 horizontalArrangement = Arrangement.spacedBy(GridHorizontalSpacing),
+                state = gridState,
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(state.phases) { phase ->
