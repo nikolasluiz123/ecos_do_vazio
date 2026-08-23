@@ -8,16 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -35,6 +29,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIden
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSelectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
@@ -227,29 +223,15 @@ private fun SkillAttributeAdjustmentItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FilledTonalIconButton(
+            AttributeDecrementButton(
                 onClick = onDecrement,
-                modifier = Modifier.size(32.dp),
                 enabled = canDecrement
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Remove,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
+            )
 
-            FilledTonalIconButton(
+            AttributeIncrementButton(
                 onClick = onIncrement,
-                modifier = Modifier.size(32.dp),
                 enabled = canIncrement
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
+            )
         }
     }
 }

@@ -1,56 +1,28 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.CharViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharLevelInfoUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.CharAttributes
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.CharLevelInfo
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.CharStatus
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
-
-private const val BUTTON_SIZE = 32
-private const val BUTTON_ICON_SIZE = 16
 
 @Composable
 fun CharScreen(
@@ -85,7 +57,7 @@ fun CharScreen(
                 .padding(paddingValues)
                 .background(BackgroundGradient)
                 .verticalScroll(scrollState)
-                .padding(BUTTON_ICON_SIZE.dp),
+                .padding(16.dp),
         ) {
 
             state.levelInfo?.let { levelInfo ->
@@ -120,269 +92,5 @@ fun CharScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun CharLevelInfo(
-    levelInfo: CharLevelInfoUIModel
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.level_label, levelInfo.level),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
-                )
-            )
-            Text(
-                text = stringResource(
-                    R.string.char_xp_label,
-                    levelInfo.currentExperience,
-                    levelInfo.nextLevelExperience
-                ),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
-                )
-            )
-        }
-        AttributeProgressBar(
-            progress = { levelInfo.progress }
-        )
-    }
-}
-
-@Composable
-fun CharStatus(
-    statusInfo: CharStatusUIModel,
-    windowSizeClass: WindowSizeClass
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = stringResource(R.string.char_status_title),
-            style = MaterialTheme.typography.titleMedium.copy(
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        val widthSizeClass = windowSizeClass.widthSizeClass
-
-        val statusItems = remember(statusInfo) {
-            listOf(
-                R.string.char_status_hp to statusInfo.hp,
-                R.string.char_status_damage to statusInfo.baseDamage,
-                R.string.char_status_phys_res to statusInfo.physicalResistance,
-                R.string.char_status_mag_res to statusInfo.magicResistance,
-                R.string.char_status_crit to statusInfo.criticalChance,
-                R.string.char_status_dodge to statusInfo.dodgeChance,
-            )
-        }
-
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .border(1.dp, HeroButtonStrokeColor, RoundedCornerShape(8.dp))
-                .padding(BUTTON_ICON_SIZE.dp),
-            maxItemsInEachRow = getMaxItemsEachRow(widthSizeClass),
-            horizontalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp),
-            verticalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp)
-        ) {
-            statusItems.forEach { (labelRes, value) ->
-                StatusItem(
-                    label = stringResource(labelRes),
-                    value = value,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-    }
-}
-
-private fun getMaxItemsEachRow(widthSizeClass: WindowWidthSizeClass): Int {
-    return when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 2
-        else -> 3
-    }
-}
-
-@Composable
-fun CharAttributes(
-    attributes: List<CharAttributesUIModel>,
-    availablePoints: Long = 0,
-    windowSizeClass: WindowSizeClass,
-    onIncrementAttribute: (AttributeIdentifier) -> Unit = {},
-    onDecrementAttribute: (AttributeIdentifier) -> Unit = {}
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = stringResource(R.string.char_attributes_title),
-            style = MaterialTheme.typography.titleMedium.copy(
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            )
-        )
-
-        if (availablePoints > 0) {
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = stringResource(R.string.char_available_points, availablePoints),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        val widthSizeClass = windowSizeClass.widthSizeClass
-        val columns = if (widthSizeClass == WindowWidthSizeClass.Expanded) 2 else 1
-        val itemsInLastRow = attributes.size % columns
-        val spacersNeeded = if (itemsInLastRow > 0) columns - itemsInLastRow else 0
-
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            maxItemsInEachRow = columns,
-            horizontalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp),
-            verticalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp)
-        ) {
-            attributes.forEach { attribute ->
-                AttributeItem(
-                    attribute = attribute,
-                    modifier = Modifier.weight(1f),
-                    onIncrement = { onIncrementAttribute(attribute.identifier) },
-                    onDecrement = { onDecrementAttribute(attribute.identifier) }
-                )
-            }
-
-            repeat(spacersNeeded) {
-                Spacer(modifier = Modifier.weight(1f))
-            }
-        }
-    }
-}
-
-@Composable
-private fun AttributeItem(
-    attribute: CharAttributesUIModel,
-    modifier: Modifier = Modifier,
-    onIncrement: () -> Unit = {},
-    onDecrement: () -> Unit = {}
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(getAttributeLabel(attribute.identifier)),
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontFamily = FontFamily.Serif
-                    )
-                )
-                Text(
-                    text = attribute.totalValue,
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontFamily = FontFamily.Serif
-                    )
-                )
-            }
-
-            AttributeProgressBar(progress = { attribute.progress })
-        }
-
-        Spacer(modifier = Modifier.size(8.dp))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            FilledTonalIconButton(
-                onClick = onDecrement,
-                modifier = Modifier.size(BUTTON_SIZE.dp),
-                enabled = attribute.canDecrement
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Remove,
-                    contentDescription = null,
-                    modifier = Modifier.size(BUTTON_ICON_SIZE.dp)
-                )
-            }
-
-            FilledTonalIconButton(
-                onClick = onIncrement,
-                modifier = Modifier.size(BUTTON_SIZE.dp),
-                enabled = attribute.canIncrement
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(BUTTON_ICON_SIZE.dp)
-                )
-            }
-        }
-    }
-}
-
-private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
-    return when (identifier) {
-        AttributeIdentifier.STRENGTH -> R.string.char_attribute_strength
-        AttributeIdentifier.DEXTERITY -> R.string.char_attribute_dexterity
-        AttributeIdentifier.INTELLIGENCE -> R.string.char_attribute_intelligence
-        AttributeIdentifier.PHYSICAL_RESISTANCE -> R.string.char_attribute_physical_resistance
-        AttributeIdentifier.MAGIC_RESISTANCE -> R.string.char_attribute_magic_resistance
-        AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
-        AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
-    }
-}
-
-@Composable
-private fun StatusItem(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = label.uppercase(),
-            style = MaterialTheme.typography.labelLarge.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = Highlight,
-            )
-        )
     }
 }
