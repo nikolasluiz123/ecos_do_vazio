@@ -16,4 +16,5 @@ data class HistoryModeBattleUIState(
     val selectedSkill: CharSkillUIModel? = null,
     val selectedDot: ActiveDotUIModel? = null,
     val actualRound: Long = 1,
+    val isEnemyRound: Boolean = false
 )

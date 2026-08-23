@@ -196,7 +196,10 @@ internal fun StackLayout(
                 modifier = Modifier.weight(1f)
             )
 
-            RoundViewer(actualRound = state.actualRound)
+            RoundViewer(
+                actualRound = state.actualRound,
+                isEnemyRound = state.isEnemyRound
+            )
 
             CharSection(
                 char = state.char,
@@ -254,7 +257,10 @@ internal fun SideBySideLayout(
 
             Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
 
-            RoundViewer(state.actualRound)
+            RoundViewer(
+                actualRound = state.actualRound,
+                isEnemyRound = state.isEnemyRound
+            )
 
             Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
 
@@ -279,8 +285,12 @@ internal fun SideBySideLayout(
 }
 
 @Composable
-private fun RoundViewer(actualRound: Long, modifier: Modifier = Modifier) {
-    Box(
+private fun RoundViewer(
+    actualRound: Long,
+    isEnemyRound: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Column(
         modifier = modifier
             .background(
                 brush = Brush.linearGradient(
@@ -297,7 +307,7 @@ private fun RoundViewer(actualRound: Long, modifier: Modifier = Modifier) {
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
             .padding(16.dp),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(
@@ -308,6 +318,20 @@ private fun RoundViewer(actualRound: Long, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.SemiBold
+            )
+        )
+
+        val roundSpecificationLabel = if (isEnemyRound) {
+            R.string.history_mode_battle_screen_label_enemy_round
+        } else {
+            R.string.history_mode_battle_screen_label_player_round
+        }
+
+        Text(
+            text = stringResource(roundSpecificationLabel),
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif
             )
         )
     }

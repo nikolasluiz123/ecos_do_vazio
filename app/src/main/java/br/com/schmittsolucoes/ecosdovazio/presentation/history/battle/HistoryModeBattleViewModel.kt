@@ -151,7 +151,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             selectedMob = selectedMob,
             selectedSkill = selectedSkill,
             selectedDot = selectedDot,
-            actualRound = actualRound
+            actualRound = actualRound,
+            isEnemyRound = isEnemyRound(actualRound)
         )
     }.stateIn(
         scope = viewModelScope,
@@ -358,8 +359,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         }
     }
 
-    private fun isEnemyRound(): Boolean {
-        return uiState.value.actualRound % 2 == 0L
+    private fun isEnemyRound(actualRound: Long = uiState.value.actualRound): Boolean {
+        return actualRound % 2 == 0L
     }
 
     private fun applyDotsDamage() {

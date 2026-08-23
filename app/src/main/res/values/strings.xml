@@ -262,4 +262,6 @@
     <string name="history_mode_battle_victory">Congratulations! You won the battle!</string>
     <string name="history_mode_battle_victory_level_up">Congratulations! You won the battle and leveled up to level %d!</string>
     <string name="history_mode_battle_screen_select_mob_message">You must select the Mob you want to attack.</string>
+    <string name="history_mode_battle_screen_label_enemy_round">Enemy Turn</string>
+    <string name="history_mode_battle_screen_label_player_round">Your Turn</string>
 </resources>
