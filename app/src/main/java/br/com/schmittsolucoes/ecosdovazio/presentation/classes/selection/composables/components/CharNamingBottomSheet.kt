@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSelectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighlightedElevatedButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightedTextFieldBackground
@@ -57,7 +57,7 @@ fun CharNamingBottomSheet(
         dragHandle = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(18.dp))
-                HeroSelectionDivider(
+                CustomSectionDivider(
                     modifier = Modifier.width(120.dp)
                 )
                 Spacer(modifier = Modifier.height(18.dp))

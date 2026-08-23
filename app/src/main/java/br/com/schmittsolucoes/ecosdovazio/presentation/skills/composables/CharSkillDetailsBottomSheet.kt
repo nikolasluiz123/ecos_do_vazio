@@ -28,7 +28,7 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSelectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
@@ -54,7 +54,7 @@ fun CharSkillDetailsBottomSheet(
         dragHandle = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(18.dp))
-                HeroSelectionDivider(
+                CustomSectionDivider(
                     modifier = Modifier.width(120.dp)
                 )
                 Spacer(modifier = Modifier.height(18.dp))

@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components
+package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.DividerColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 
 @Composable
-fun HeroSelectionDivider(modifier: Modifier = Modifier) {
+fun CustomSectionDivider(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,

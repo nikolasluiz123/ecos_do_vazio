@@ -36,7 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.CharSelectionUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.CharSelectionViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSelectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components.HeroSlot
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
@@ -114,7 +114,7 @@ fun CharSelectionScreen(
                             )
                         )
 
-                        HeroSelectionDivider(
+                        CustomSectionDivider(
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
                                 .width(180.dp)
