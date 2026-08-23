@@ -100,7 +100,7 @@ class CreateArcherClassUseCase(
                 skillCategory = SkillCategory.DAMAGE_OVER_TIME,
                 classId = archer.id,
                 damage = 15,
-                multiplier = 2.0,
+                duration = 2,
                 refreshTime = 3,
                 minLevel = 8,
                 imageName = SKILL_POISON_ARROW_KEY,
