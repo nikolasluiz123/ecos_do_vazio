@@ -218,6 +218,7 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
             SKILL_RELENTLESS_CHARGE_KEY -> R.drawable.skill_investida_implacavel
             SKILL_THORN_TRAP_KEY -> R.drawable.skill_armadilha_de_espinhos
             SKILL_FRAGMENTATION_GRENADE_KEY -> R.drawable.skill_granada_de_fragmentacao
+            SKILL_MANA_BARRIER -> R.drawable.skill_barreira_de_mana
             else -> null
         }
     }
