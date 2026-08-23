@@ -88,7 +88,7 @@ class CreateMageClassUseCase(
                 skillCategory = SkillCategory.DAMAGE_OVER_TIME,
                 classId = mage.id,
                 damage = 15,
-                multiplier = 3.0,
+                duration = 3,
                 refreshTime = 4,
                 minLevel = 5,
                 imageName = SKILL_FLAMING_TOUCH_KEY,
