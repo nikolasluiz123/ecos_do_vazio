@@ -5,11 +5,11 @@ import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLASH_FREEZE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BASTION_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SHOCKWAVE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_FOCUS_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ESSENCE_DRAIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_MANA_BARRIER
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_METEOR_SHOWER_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
@@ -78,7 +78,7 @@ class CreateMageClassUseCase(
                 duration = 2,
                 refreshTime = 5,
                 minLevel = 4,
-                imageName = SKILL_BASTION_KEY,
+                imageName = SKILL_MANA_BARRIER,
                 attributes = Skill.Attributes(requiredIntelligence = 12, requiredMagicResistance = 5) 
             ),
             Skill(

@@ -83,6 +83,7 @@ const val SKILL_PRECISION_SHOT_KEY = "skill_disparo_de_precisao"
 const val SKILL_RELENTLESS_CHARGE_KEY = "skill_investida_implacavel"
 const val SKILL_THORN_TRAP_KEY = "skill_armadilha_de_espinhos"
 const val SKILL_FRAGMENTATION_GRENADE_KEY = "skill_granada_de_fragmentacao"
+const val SKILL_MANA_BARRIER = "skill_barreira_de_mana"
 
 const val PHASE_PURPLE_FLAME_ICON_KEY = "icone_fase_chama_roxa"
 const val PHASE_CRACKED_SHIELD_ICON_KEY = "icone_fase_escudo_rachado"
