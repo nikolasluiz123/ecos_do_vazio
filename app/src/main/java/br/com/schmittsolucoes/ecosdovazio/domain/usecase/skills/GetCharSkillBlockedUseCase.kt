@@ -9,22 +9,25 @@ class GetCharSkillBlockedUseCase {
         skillRequiredAttributes: CharSkill.Attributes,
         minLevel: Long
     ): Boolean {
-        val skillRequirements = mapOf(
-            battleChar.strength.totalValue to skillRequiredAttributes.requiredStrength,
-            battleChar.dexterity.totalValue to skillRequiredAttributes.requiredDexterity,
-            battleChar.intelligence.totalValue to skillRequiredAttributes.requiredIntelligence,
-            battleChar.physicalResistance.totalValue to skillRequiredAttributes.requiredPhysicalResistance,
-            battleChar.magicResistance.totalValue to skillRequiredAttributes.requiredMagicResistance,
-            battleChar.vitality.totalValue to skillRequiredAttributes.requiredVitality,
-            battleChar.agility.totalValue to skillRequiredAttributes.requiredAgility,
+        val skillRequirements = listOf(
+            SkillRequirement(battleChar.strength.totalValue, skillRequiredAttributes.requiredStrength),
+            SkillRequirement(battleChar.dexterity.totalValue, skillRequiredAttributes.requiredDexterity),
+            SkillRequirement(battleChar.intelligence.totalValue, skillRequiredAttributes.requiredIntelligence),
+            SkillRequirement(battleChar.physicalResistance.totalValue, skillRequiredAttributes.requiredPhysicalResistance),
+            SkillRequirement(battleChar.magicResistance.totalValue, skillRequiredAttributes.requiredMagicResistance),
+            SkillRequirement(battleChar.vitality.totalValue, skillRequiredAttributes.requiredVitality),
+            SkillRequirement(battleChar.agility.totalValue, skillRequiredAttributes.requiredAgility),
         )
 
-        if (battleChar.level < minLevel) {
-            return true
+        val anyRequirementNotMet = skillRequirements.any { requirement ->
+            requirement.charValue < requirement.requiredValue
         }
 
-        return skillRequirements.any { (charValue, skillRequirement) ->
-            charValue < skillRequirement
-        }
+        return battleChar.level < minLevel || anyRequirementNotMet
     }
+
+    private data class SkillRequirement(
+        val charValue: Long,
+        val requiredValue: Long
+    )
 }
