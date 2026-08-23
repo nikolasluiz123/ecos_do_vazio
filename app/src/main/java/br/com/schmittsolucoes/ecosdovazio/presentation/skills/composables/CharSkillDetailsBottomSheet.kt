@@ -114,8 +114,8 @@ fun CharSkillDetailsBottomSheet(
             attributes.forEach { attribute ->
                 SkillAttributeAdjustmentItem(
                     attribute = attribute,
-                    canIncrement = availablePoints > 0,
-                    canDecrement = attribute.rawValue > 0,
+                    canIncrement = attribute.canIncrement,
+                    canDecrement = attribute.canDecrement,
                     onIncrement = { onIncrementAttribute(attribute.identifier) },
                     onDecrement = { onDecrementAttribute(attribute.identifier) }
                 )
@@ -221,40 +221,38 @@ private fun SkillAttributeAdjustmentItem(
             AttributeProgressBar(progress = { attribute.progress })
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        if (canIncrement || canDecrement) {
+            Spacer(modifier = Modifier.width(16.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (canDecrement) {
-                SmallFloatingActionButton(
-                    onClick = onDecrement,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Remove,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (canDecrement) {
+                    SmallFloatingActionButton(
+                        onClick = onDecrement,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
-            } else {
-                Spacer(modifier = Modifier.size(32.dp))
-            }
 
-            if (canIncrement) {
-                SmallFloatingActionButton(
-                    onClick = onIncrement,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
+                if (canIncrement) {
+                    SmallFloatingActionButton(
+                        onClick = onIncrement,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
-            } else {
-                Spacer(modifier = Modifier.size(32.dp))
             }
         }
     }

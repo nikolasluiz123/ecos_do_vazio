@@ -47,7 +47,7 @@ class CharSkillsViewModel @Inject constructor(
         getAvailableAttributesUseCase(),
         charAttributesQueryUseCase()
     ) { errorMessage, selectedSkill, skills, availablePoints, charAttributes ->
-        val selectedSkillAttributes = getSelectedSkillAttributes(selectedSkill, charAttributes)
+        val selectedSkillAttributes = getSelectedSkillAttributes(selectedSkill, charAttributes, availablePoints)
 
         CharSkillsUIState(
             errorMessage = errorMessage,
@@ -96,23 +96,28 @@ class CharSkillsViewModel @Inject constructor(
 
     private fun getSelectedSkillAttributes(
         selectedSkill: CharSkillDetailsUIModel?,
-        charAttributes: CharAttributes?
+        charAttributes: CharAttributes?,
+        availablePoints: Long
     ): List<CharAttributesUIModel> {
         if (selectedSkill == null || charAttributes == null) return emptyList()
 
         val requiredSkillAttributes = selectedSkill.attributes.filter { it.attribute > 0 }
         val requiredSkillAttributeIdentifiers = requiredSkillAttributes.map { it.id }
 
-        val charAttributes = charAttributes.attributes.filter { attr ->
+        val charAttributesFiltered = charAttributes.attributes.filter { attr ->
             attr.id in requiredSkillAttributeIdentifiers
         }
 
         return requiredSkillAttributes.map { skillAttribute ->
-            val charAttribute = charAttributes.first { it.id == skillAttribute.id }
+            val charAttribute = charAttributesFiltered.first { it.id == skillAttribute.id }
             val charAttributeValue = charAttribute.attribute.totalValue.toFloat()
             val progress = charAttributeValue / skillAttribute.attribute.toFloat()
 
-            charAttribute.toUIModel(progress)
+            charAttribute.toUIModel(
+                progress = progress,
+                canIncrement = availablePoints > 0,
+                canDecrement = charAttribute.attribute.charValue > 0
+            )
         }
     }
 

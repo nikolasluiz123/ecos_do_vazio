@@ -261,7 +261,7 @@ fun CharAttributes(
                 AttributeItem(
                     attribute = attribute,
                     modifier = Modifier.weight(1f),
-                    showIncrementButton = availablePoints > 0,
+                    showIncrementButton = attribute.canIncrement,
                     onIncrement = { onIncrementAttribute(attribute.identifier) }
                 )
             }

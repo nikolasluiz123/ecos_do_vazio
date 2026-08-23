@@ -6,5 +6,6 @@ data class CharAttributesUIModel(
     val identifier: AttributeIdentifier,
     val totalValue: String,
     val progress: Float,
-    val rawValue: Long = 0
+    val canIncrement: Boolean,
+    val canDecrement: Boolean
 )

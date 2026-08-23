@@ -74,7 +74,7 @@ class CharViewModel @Inject constructor(
         val availablePoints = values[9] as Long
 
         val levelProgress = getLevelProgress(levelInfo)
-        val attributesInfo = getAttributesInfo(attributes)
+        val attributesInfo = getAttributesInfo(attributes, availablePoints)
 
         CharUIState(
             errorMessage = errorMessage,
@@ -125,10 +125,14 @@ class CharViewModel @Inject constructor(
         }
     }
 
-    private fun getAttributesInfo(attributes: CharAttributes?): List<CharAttributesUIModel>? =
+    private fun getAttributesInfo(attributes: CharAttributes?, availablePoints: Long): List<CharAttributesUIModel>? =
         attributes?.attributes?.map { attr ->
             val attributeProgress = getAttributeProgress(attributes, attr.attribute.totalValue)
-            attr.toUIModel(progress = attributeProgress)
+            attr.toUIModel(
+                progress = attributeProgress,
+                canIncrement = availablePoints > 0,
+                canDecrement = attr.attribute.charValue > 0
+            )
         }
 
     private fun getAttributeProgress(

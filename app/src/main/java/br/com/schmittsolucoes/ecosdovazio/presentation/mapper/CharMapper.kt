@@ -24,11 +24,16 @@ fun CharLevelInfo.toUIModel(progress: Float): CharLevelInfoUIModel {
     )
 }
 
-fun IdentifiedCharAttribute.toUIModel(progress: Float): CharAttributesUIModel {
+fun IdentifiedCharAttribute.toUIModel(
+    progress: Float,
+    canIncrement: Boolean,
+    canDecrement: Boolean
+): CharAttributesUIModel {
     return CharAttributesUIModel(
         identifier = id,
         totalValue = attribute.totalValue.toString(),
         progress = progress,
-        rawValue = attribute.totalValue
+        canIncrement = canIncrement,
+        canDecrement = canDecrement
     )
 }
