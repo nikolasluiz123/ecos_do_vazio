@@ -17,10 +17,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -48,6 +49,9 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
+private const val BUTTON_SIZE = 32
+private const val BUTTON_ICON_SIZE = 16
+
 @Composable
 fun CharScreen(
     viewModel: CharViewModel,
@@ -59,7 +63,8 @@ fun CharScreen(
         state = state,
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onIncrementAttribute = viewModel::onIncrementAttribute
+        onIncrementAttribute = viewModel::onIncrementAttribute,
+        onDecrementAttribute = viewModel::onDecrementAttribute
     )
 }
 
@@ -68,7 +73,8 @@ fun CharScreen(
     state: CharUIState = CharUIState(),
     windowSizeClass: WindowSizeClass,
     onDismissErrorDialog: () -> Unit = {},
-    onIncrementAttribute: (AttributeIdentifier) -> Unit = {}
+    onIncrementAttribute: (AttributeIdentifier) -> Unit = {},
+    onDecrementAttribute: (AttributeIdentifier) -> Unit = {}
 ) {
     Scaffold { paddingValues ->
         val scrollState = rememberScrollState()
@@ -79,7 +85,7 @@ fun CharScreen(
                 .padding(paddingValues)
                 .background(BackgroundGradient)
                 .verticalScroll(scrollState)
-                .padding(16.dp),
+                .padding(BUTTON_ICON_SIZE.dp),
         ) {
 
             state.levelInfo?.let { levelInfo ->
@@ -102,7 +108,8 @@ fun CharScreen(
                     attributes = attributesInfo,
                     availablePoints = state.availablePoints,
                     windowSizeClass = windowSizeClass,
-                    onIncrementAttribute = onIncrementAttribute
+                    onIncrementAttribute = onIncrementAttribute,
+                    onDecrementAttribute = onDecrementAttribute
                 )
             }
 
@@ -191,10 +198,10 @@ fun CharStatus(
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .border(1.dp, HeroButtonStrokeColor, RoundedCornerShape(8.dp))
-                .padding(16.dp),
+                .padding(BUTTON_ICON_SIZE.dp),
             maxItemsInEachRow = getMaxItemsEachRow(widthSizeClass),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp),
+            verticalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp)
         ) {
             statusItems.forEach { (labelRes, value) ->
                 StatusItem(
@@ -219,7 +226,8 @@ fun CharAttributes(
     attributes: List<CharAttributesUIModel>,
     availablePoints: Long = 0,
     windowSizeClass: WindowSizeClass,
-    onIncrementAttribute: (AttributeIdentifier) -> Unit = {}
+    onIncrementAttribute: (AttributeIdentifier) -> Unit = {},
+    onDecrementAttribute: (AttributeIdentifier) -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -254,15 +262,15 @@ fun CharAttributes(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             maxItemsInEachRow = columns,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp),
+            verticalArrangement = Arrangement.spacedBy(BUTTON_ICON_SIZE.dp)
         ) {
             attributes.forEach { attribute ->
                 AttributeItem(
                     attribute = attribute,
                     modifier = Modifier.weight(1f),
-                    showIncrementButton = availablePoints > 0,
-                    onIncrement = { onIncrementAttribute(attribute.identifier) }
+                    onIncrement = { onIncrementAttribute(attribute.identifier) },
+                    onDecrement = { onDecrementAttribute(attribute.identifier) }
                 )
             }
 
@@ -277,8 +285,8 @@ fun CharAttributes(
 private fun AttributeItem(
     attribute: CharAttributesUIModel,
     modifier: Modifier = Modifier,
-    showIncrementButton: Boolean = false,
-    onIncrement: () -> Unit = {}
+    onIncrement: () -> Unit = {},
+    onDecrement: () -> Unit = {}
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -312,13 +320,33 @@ private fun AttributeItem(
             AttributeProgressBar(progress = { attribute.progress })
         }
 
-        if (showIncrementButton) {
-            Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(8.dp))
 
-            SmallFloatingActionButton(onClick = onIncrement) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            FilledTonalIconButton(
+                onClick = onDecrement,
+                modifier = Modifier.size(BUTTON_SIZE.dp),
+                enabled = attribute.canDecrement
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Remove,
+                    contentDescription = null,
+                    modifier = Modifier.size(BUTTON_ICON_SIZE.dp)
+                )
+            }
+
+            FilledTonalIconButton(
+                onClick = onIncrement,
+                modifier = Modifier.size(BUTTON_SIZE.dp),
+                enabled = attribute.canIncrement
+            ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
+                    modifier = Modifier.size(BUTTON_ICON_SIZE.dp)
                 )
             }
         }

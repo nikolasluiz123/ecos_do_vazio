@@ -8,6 +8,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharLevelInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.DecrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharBaseDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharCriticalChanceUseCase
@@ -45,6 +46,7 @@ class CharViewModel @Inject constructor(
     charAttributesQueryUseCase: CharAttributesQueryUseCase,
     getAvailableAttributesUseCase: GetAvailableAttributesUseCase,
     private val incrementAttributeUseCase: IncrementAttributeUseCase,
+    private val decrementAttributeUseCase: DecrementAttributeUseCase,
     private val numberFormatter: NumberFormatter
 ) : CommonViewModel() {
 
@@ -114,6 +116,12 @@ class CharViewModel @Inject constructor(
     fun onIncrementAttribute(identifier: AttributeIdentifier) {
         launch {
             incrementAttributeUseCase(identifier)
+        }
+    }
+
+    fun onDecrementAttribute(identifier: AttributeIdentifier) {
+        launch {
+            decrementAttributeUseCase(identifier)
         }
     }
 

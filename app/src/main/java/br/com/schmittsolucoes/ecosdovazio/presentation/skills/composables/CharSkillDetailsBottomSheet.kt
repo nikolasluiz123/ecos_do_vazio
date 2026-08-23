@@ -16,10 +16,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -221,38 +221,34 @@ private fun SkillAttributeAdjustmentItem(
             AttributeProgressBar(progress = { attribute.progress })
         }
 
-        if (canIncrement || canDecrement) {
-            Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            FilledTonalIconButton(
+                onClick = onDecrement,
+                modifier = Modifier.size(32.dp),
+                enabled = canDecrement
             ) {
-                if (canDecrement) {
-                    SmallFloatingActionButton(
-                        onClick = onDecrement,
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Remove,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.Default.Remove,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
 
-                if (canIncrement) {
-                    SmallFloatingActionButton(
-                        onClick = onIncrement,
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                }
+            FilledTonalIconButton(
+                onClick = onIncrement,
+                modifier = Modifier.size(32.dp),
+                enabled = canIncrement
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
             }
         }
     }
