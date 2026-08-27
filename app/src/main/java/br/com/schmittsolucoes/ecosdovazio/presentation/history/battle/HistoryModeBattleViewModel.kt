@@ -223,11 +223,13 @@ class HistoryModeBattleViewModel @Inject constructor(
             when (result) {
                 is CharSkillUsageResult.CommonDamage -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
+                    incrementRound()
                 }
 
                 is CharSkillUsageResult.DamageOverTime -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
                     registerMobDot(state.selectedMob, skill, result)
+                    incrementRound()
                 }
 
                 is CharSkillUsageResult.Debuff -> {
@@ -237,8 +239,6 @@ class HistoryModeBattleViewModel @Inject constructor(
             }
 
             updateSkillRefreshTime(skill.id, result.refreshTime)
-
-            incrementRound()
         } else {
             val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
             snackbarManager.showSnackbar(message)
