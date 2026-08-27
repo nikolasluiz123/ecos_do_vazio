@@ -47,9 +47,9 @@ class GetCharHPUseCase(
 
     private fun getBaseValue(classCategory: ClassCategory): Long {
         return when (classCategory) {
-            ClassCategory.WARRIOR -> 90L
-            ClassCategory.MAGE -> 80L
-            ClassCategory.ARCHER -> 80L
+            ClassCategory.WARRIOR -> 220L
+            ClassCategory.MAGE -> 200L
+            ClassCategory.ARCHER -> 200L
         }
     }
 
