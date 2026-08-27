@@ -5,10 +5,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.IdentifiedSkillAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
+import coil.util.CoilUtils.result
 
 fun CharSkillDetails.toUIModel(image: Int) = CharSkillDetailsUIModel(
     id = id,
@@ -218,27 +221,31 @@ fun MobSkill.toUsedInfo(): UsedMobSkillInfo {
     return when (this) {
         is MobSkill.CommonDamage -> UsedMobSkillInfo.CommonDamage(
             refreshTime = refreshTime,
-            damage = damage
+            damage = damage,
+            skillId = id
         )
 
         is MobSkill.DamageOverTime -> UsedMobSkillInfo.DamageOverTime(
             refreshTime = refreshTime,
             damage = damage,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
 
         is MobSkill.Buff -> UsedMobSkillInfo.Buff(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             multiplier = multiplier,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
 
         is MobSkill.Debuff -> UsedMobSkillInfo.Debuff(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             multiplier = multiplier,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
     }
 }

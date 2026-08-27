@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 
 @Composable
 internal fun ActiveDotTooltip(
-    dot: ActiveDotUIModel,
+    dot: ActiveStatusUIModel,
     onDismissRequest: () -> Unit,
 ) {
     Popup(

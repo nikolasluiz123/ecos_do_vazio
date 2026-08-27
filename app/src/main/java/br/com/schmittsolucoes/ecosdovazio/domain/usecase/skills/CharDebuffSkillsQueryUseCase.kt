@@ -30,8 +30,7 @@ class CharDebuffSkillsQueryUseCase(
             specializationId = char.specializationId,
             categories = listOf(
                 SkillCategory.OFFENSIVE_DEBUFF,
-                SkillCategory.DEFENSIVE_MAGIC_DEBUFF,
-                SkillCategory.DEFENSIVE_PHYSICAL_DEBUFF
+                SkillCategory.DEFENSIVE_DEBUFF,
             )
         )
 

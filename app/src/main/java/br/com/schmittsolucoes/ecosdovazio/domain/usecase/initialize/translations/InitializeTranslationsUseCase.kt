@@ -152,8 +152,8 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.METEOR_SHOWER_SKILL_DESCRIPTION -> R.string.meteor_shower_skill_description
             TranslationIdentifier.PRECISION_SHOT_SKILL_NAME -> R.string.precision_shot_skill_name
             TranslationIdentifier.PRECISION_SHOT_SKILL_DESCRIPTION -> R.string.precision_shot_skill_description
-            TranslationIdentifier.RAPID_FIRE_SKILL_NAME -> R.string.rapid_fire_skill_name
-            TranslationIdentifier.RAPID_FIRE_SKILL_DESCRIPTION -> R.string.rapid_fire_skill_description
+            TranslationIdentifier.CORROSIVE_ARROWS_SKILL_NAME -> R.string.corrosive_arrows_skill_name
+            TranslationIdentifier.CORROSIVE_ARROWS_SKILL_DESCRIPTION -> R.string.corrosive_arrows_skill_description
             TranslationIdentifier.TACTICAL_RETREAT_SKILL_NAME -> R.string.tactical_retreat_skill_name
             TranslationIdentifier.TACTICAL_RETREAT_SKILL_DESCRIPTION -> R.string.tactical_retreat_skill_description
             TranslationIdentifier.THORN_TRAP_SKILL_NAME -> R.string.thorn_trap_skill_name

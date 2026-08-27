@@ -127,7 +127,7 @@
     <string name="arcane_missile_skill_name">Arcane Missile</string>
     <string name="arcane_missile_skill_description">Fires offensive magic dealing magical damage to the enemy.</string>
     <string name="quick_freeze_skill_name">Quick Freeze</string>
-    <string name="quick_freeze_skill_description">Reduces enemy evasion by 10% using magical ice.</string>
+    <string name="quick_freeze_skill_description">Reduces enemy magical resistance by 10% using magical ice.</string>
     <string name="mana_barrier_skill_name">Mana Barrier</string>
     <string name="mana_barrier_skill_description">Defensive skill that multiplies the mage\'s defenses.</string>
     <string name="flaming_touch_skill_name">Flaming Touch</string>
@@ -143,12 +143,12 @@
 
     <string name="precision_shot_skill_name">Precision Shot</string>
     <string name="precision_shot_skill_description">A perfect offensive shot focused on dexterity.</string>
-    <string name="rapid_fire_skill_name">Rapid Fire</string>
-    <string name="rapid_fire_skill_description">Agile offensive attack that strikes the enemy twice.</string>
+    <string name="corrosive_arrows_skill_name">Corrosive Arrows</string>
+    <string name="corrosive_arrows_skill_description">An arrow shot that corrodes the enemy\'s armor, reducing their physical resistance.</string>
     <string name="tactical_retreat_skill_name">Tactical Retreat</string>
     <string name="tactical_retreat_skill_description">Dodge and defense skill, stepping away from danger.</string>
     <string name="thorn_trap_skill_name">Thorn Trap</string>
-    <string name="thorn_trap_skill_description">Immobilizes the enemy while the trap is active.</string>
+    <string name="thorn_trap_skill_description">Leave the enemy wounded, dealing 12 damage while active.</string>
     <string name="poison_arrow_skill_name">Poison Arrow</string>
     <string name="poison_arrow_skill_description">Toxic DoT shot inflicting 12 damage while active.</string>
     <string name="perfect_aim_skill_name">Perfect Aim</string>

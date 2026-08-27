@@ -35,7 +35,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getNameStyle
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
@@ -44,7 +44,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnI
 @Composable
 internal fun CharSection(
     char: BattleCharUIModel?,
-    onStatusClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveStatusUIModel) -> Unit,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center
 ) {
@@ -68,7 +68,7 @@ internal fun CharSection(
 @Composable
 private fun CharItem(
     char: BattleCharUIModel,
-    onStatusClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveStatusUIModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints(
@@ -89,7 +89,7 @@ private fun CharItem(
         )
 
         AppliedStatus(
-            status = char.activeDots,
+            status = char.activeStatus,
             onClick = onStatusClick
         )
 

@@ -1,23 +1,23 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.MobActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyCharDoTDamageResult
+import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyCharDoTResult
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillDamageUseCase
 import kotlin.math.max
 
-class ApplyCharDoTDamagesUseCase(
+class ApplyCharDoTUseCase(
     private val getMobSkillDamageUseCase: GetMobSkillDamageUseCase
 ) {
     operator fun invoke(
         battleCharInfo: BattleCharInfo,
         mobs: Map<String, BattleMobInfo>
-    ): ApplyCharDoTDamageResult {
+    ): ApplyCharDoTResult {
         var currentHealth = battleCharInfo.actualHealth
-        val updatedDots = mutableListOf<ActiveDoT.MobActiveDoT>()
+        val updatedDots = mutableListOf<MobActiveStatus.DoT>()
 
-        battleCharInfo.activeDots.forEach { dot ->
+        battleCharInfo.activeStatus.filterIsInstance<MobActiveStatus.DoT>().forEach { dot ->
             if (currentHealth > 0) {
                 val mobInfo = mobs[dot.sourceId] ?: return@forEach
 
@@ -31,13 +31,13 @@ class ApplyCharDoTDamagesUseCase(
             }
 
             if (dot.remainingTurns > 1) {
-                updatedDots.add(dot.copyWithRemainingTurns(dot.remainingTurns - 1) as ActiveDoT.MobActiveDoT)
+                updatedDots.add(dot.copy(remainingTurns = dot.remainingTurns - 1))
             }
         }
 
-        return ApplyCharDoTDamageResult(
+        return ApplyCharDoTResult(
             charHealth = currentHealth,
-            charDots = updatedDots
+            dots = updatedDots
         )
     }
 }

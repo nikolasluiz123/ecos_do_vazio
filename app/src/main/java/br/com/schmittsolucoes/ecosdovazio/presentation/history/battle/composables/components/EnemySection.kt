@@ -63,7 +63,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.dots.ActiveDotTooltip
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getNameStyle
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
@@ -78,7 +78,7 @@ private const val PULSE_ALPHA_TARGET = 1f
 internal fun EnemySection(
     state: HistoryModeBattleUIState,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onStatusClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveStatusUIModel) -> Unit,
     onDismissDotTooltip: () -> Unit,
     windowSizeClass: WindowSizeClass?,
     modifier: Modifier = Modifier,
@@ -122,7 +122,7 @@ private fun EnemyHorizontalList(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onStatusClick: (ActiveDotUIModel) -> Unit
+    onStatusClick: (ActiveStatusUIModel) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -149,7 +149,7 @@ private fun EnemyHorizontalPager(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
     onMobClick: (BattleMobUIModel) -> Unit,
-    onStatusClick: (ActiveDotUIModel) -> Unit,
+    onStatusClick: (ActiveStatusUIModel) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
@@ -211,7 +211,7 @@ private fun EnemyItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onDotClick: (ActiveDotUIModel) -> Unit = {}
+    onDotClick: (ActiveStatusUIModel) -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "Pulse")
     val alpha by infiniteTransition.animateFloat(
@@ -251,7 +251,7 @@ private fun EnemyItem(
                 modifier = Modifier.fillMaxSize()
             )
 
-            AppliedStatus(mob.activeDots, onDotClick)
+            AppliedStatus(mob.activeStatus, onDotClick)
 
             EnemyInfo(mob, maxWidth)
         }
@@ -260,8 +260,8 @@ private fun EnemyItem(
 
 @Composable
 internal fun BoxWithConstraintsScope.AppliedStatus(
-    status: List<ActiveDotUIModel>,
-    onClick: (ActiveDotUIModel) -> Unit
+    status: List<ActiveStatusUIModel>,
+    onClick: (ActiveStatusUIModel) -> Unit
 ) {
     if (status.isNotEmpty()) {
         Column(

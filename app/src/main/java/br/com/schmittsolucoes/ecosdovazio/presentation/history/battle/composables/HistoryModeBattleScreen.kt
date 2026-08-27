@@ -42,7 +42,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyVerticalGrid
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
@@ -105,7 +105,7 @@ fun HistoryModeBattleScreen(
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onStatusClick: (ActiveDotUIModel) -> Unit = {},
+    onStatusClick: (ActiveStatusUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
@@ -172,7 +172,7 @@ internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onStatusClick: (ActiveDotUIModel) -> Unit = {},
+    onStatusClick: (ActiveStatusUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
@@ -228,7 +228,7 @@ internal fun SideBySideLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
     onMobClick: (BattleMobUIModel) -> Unit = {},
-    onDotClick: (ActiveDotUIModel) -> Unit = {},
+    onDotClick: (ActiveStatusUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},

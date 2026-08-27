@@ -23,8 +23,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobCrit
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTDamagesUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTDamagesUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDebuffUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
@@ -695,8 +697,8 @@ object UseCaseModule {
     @Provides
     fun provideApplyMobsDoTDamagesUseCase(
         getCharSkillDamageUseCase: GetCharSkillDamageUseCase
-    ): ApplyMobsDoTDamagesUseCase {
-        return ApplyMobsDoTDamagesUseCase(
+    ): ApplyMobsDoTUseCase {
+        return ApplyMobsDoTUseCase(
             getCharSkillDamageUseCase = getCharSkillDamageUseCase
         )
     }
@@ -704,8 +706,8 @@ object UseCaseModule {
     @Provides
     fun provideApplyCharDoTDamagesUseCase(
         getMobSkillDamageUseCase: GetMobSkillDamageUseCase
-    ): ApplyCharDoTDamagesUseCase {
-        return ApplyCharDoTDamagesUseCase(
+    ): ApplyCharDoTUseCase {
+        return ApplyCharDoTUseCase(
             getMobSkillDamageUseCase = getMobSkillDamageUseCase
         )
     }
@@ -816,4 +818,14 @@ object UseCaseModule {
         getCharSkillBlockedUseCase = getCharSkillBlockedUseCase,
         getCharBattleUseCase = getCharBattleUseCase,
     )
+
+    @Provides
+    fun provideApplyMobsDebuffUseCase(): ApplyMobsDebuffUseCase {
+        return ApplyMobsDebuffUseCase()
+    }
+
+    @Provides
+    fun provideApplyCharDebuffUseCase(): ApplyCharDebuffUseCase {
+        return ApplyCharDebuffUseCase()
+    }
 }

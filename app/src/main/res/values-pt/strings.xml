@@ -127,7 +127,7 @@
     <string name="arcane_missile_skill_name">Míssil Arcano</string>
     <string name="arcane_missile_skill_description">Dispara magia ofensiva causando dano mágico ao inimigo.</string>
     <string name="quick_freeze_skill_name">Congelamento Rápido</string>
-    <string name="quick_freeze_skill_description">Reduz a esquiva do inimigo em 10% com gelo mágico.</string>
+    <string name="quick_freeze_skill_description">Reduz a resistência mágica do inimigo em 10% com gelo mágico.</string>
     <string name="mana_barrier_skill_name">Barreira de Mana</string>
     <string name="mana_barrier_skill_description">Habilidade defensiva que multiplica as defesas do mago.</string>
     <string name="flaming_touch_skill_name">Toque Flamejante</string>
@@ -143,14 +143,14 @@
 
     <string name="precision_shot_skill_name">Tiro Preciso</string>
     <string name="precision_shot_skill_description">Um disparo ofensivo perfeito focado na destreza.</string>
-    <string name="rapid_fire_skill_name">Disparo Rápido</string>
-    <string name="rapid_fire_skill_description">Ataque ofensivo ágil que atinge o inimigo duas vezes.</string>
+    <string name="corrosive_arrows_skill_name">Flechas Corrosivas</string>
+    <string name="corrosive_arrows_skill_description">Um disparo de flechas que corrói a armadura do inimigo, reduzindo sua resistência física.</string>
     <string name="tactical_retreat_skill_name">Recuo Tático</string>
     <string name="tactical_retreat_skill_description">Habilidade de esquiva e defesa, afastando-se do perigo.</string>
     <string name="thorn_trap_skill_name">Armadilha de Espinhos</string>
-    <string name="thorn_trap_skill_description">Imobiliza o inimigo enquanto a armadilha estiver ativa.</string>
+    <string name="thorn_trap_skill_description">Deixa o inimigo ferido causando 12 de dano enquanto estiver ativo.</string>
     <string name="poison_arrow_skill_name">Flecha Envenenada</string>
-    <string name="poison_arrow_skill_description">Disparo tóxico (DoT) que inflige 12 de dano enquanto estiver ativo.</string>
+    <string name="poison_arrow_skill_description">Disparo tóxico (DoT) que inflige 15 de dano enquanto estiver ativo.</string>
     <string name="perfect_aim_skill_name">Mira Perfeita</string>
     <string name="perfect_aim_skill_description">Aumenta consideravelmente o potencial ofensivo do atirador.</string>
     <string name="smoke_screen_skill_name">Cortina de Fumaça</string>

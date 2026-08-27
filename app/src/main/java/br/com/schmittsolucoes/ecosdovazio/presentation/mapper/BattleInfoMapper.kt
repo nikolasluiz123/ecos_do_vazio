@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.CharActiveStatus
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.MobActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.IdentifiedCharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
@@ -8,10 +9,11 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveDotUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 
 fun CharSkillUIModel.toDomainUsedSkillInfo(): UsedCharSkillInfo {
@@ -47,27 +49,31 @@ fun MobSkillUIModel.toDomainUsedSkillInfo(): UsedMobSkillInfo {
     return when (this) {
         is MobSkillUIModel.CommonDamage -> UsedMobSkillInfo.CommonDamage(
             refreshTime = refreshTime,
-            damage = damage
+            damage = damage,
+            skillId = id
         )
 
         is MobSkillUIModel.DamageOverTime -> UsedMobSkillInfo.DamageOverTime(
             refreshTime = refreshTime,
             damage = damage,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
 
         is MobSkillUIModel.Buff -> UsedMobSkillInfo.Buff(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             multiplier = multiplier,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
 
         is MobSkillUIModel.Debuff -> UsedMobSkillInfo.Debuff(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
             multiplier = multiplier,
-            duration = duration
+            duration = duration,
+            skillId = id
         )
     }
 }
@@ -87,7 +93,7 @@ fun BattleCharUIModel.toDomainInfo(): BattleCharInfo {
             IdentifiedCharAttribute(AttributeIdentifier.AGILITY, agility)
         ),
         actualHealth = actualHealth,
-        activeDots = activeDots.map { it.toDomain() }.filterIsInstance<ActiveDoT.MobActiveDoT>(),
+        activeStatus = activeStatus.map { it.toDomain() },
         criticalFailCount = criticalFailCount
     )
 }
@@ -101,24 +107,51 @@ fun BattleMobUIModel.toDomainInfo(): BattleMobInfo {
         level = level,
         actualHealth = actualHealth,
         skills = skills.map { it.toDomain() },
-        activeDots = activeDots.map { it.toDomain() }.filterIsInstance<ActiveDoT.CharActiveDoT>()
+        activeStatus = activeStatus.map { it.toDomain() }
     )
 }
 
-fun ActiveDotUIModel.toDomain(): ActiveDoT {
+fun CharActiveStatusUIModel.toDomain(): CharActiveStatus {
     return when (this) {
-        is ActiveDotUIModel.CharActiveDotUIModel -> ActiveDoT.CharActiveDoT(
-            skillId = skillId,
-            remainingTurns = remainingTurns,
-            skillInfo = skillInfo
-        )
+        is CharActiveStatusUIModel.DoTUIModel -> {
+            CharActiveStatus.DoT(
+                skillId = skillId,
+                remainingTurns = remainingTurns,
+                skillInfo = skillInfo
+            )
+        }
 
-        is ActiveDotUIModel.MobActiveDotUIModel -> ActiveDoT.MobActiveDoT(
-            skillId = skillId,
-            remainingTurns = remainingTurns,
-            sourceId = sourceId,
-            skillInfo = skillInfo
-        )
+        is CharActiveStatusUIModel.DebuffUIModel -> {
+            CharActiveStatus.Debuff(
+                skillId = skillId,
+                remainingTurns = remainingTurns,
+                skillInfo = skillInfo,
+                skillCategory = skillCategory
+            )
+        }
+    }
+}
+
+fun MobActiveStatusUIModel.toDomain(): MobActiveStatus {
+    return when (this) {
+        is MobActiveStatusUIModel.DoTUIModel -> {
+            MobActiveStatus.DoT(
+                skillId = skillId,
+                remainingTurns = remainingTurns,
+                sourceId = sourceId,
+                skillInfo = skillInfo
+            )
+        }
+
+        is MobActiveStatusUIModel.DebuffUIModel -> {
+            MobActiveStatus.Debuff(
+                skillId = skillId,
+                remainingTurns = remainingTurns,
+                sourceId = sourceId,
+                skillInfo = skillInfo,
+                skillCategory = skillCategory
+            )
+        }
     }
 }
 
@@ -131,6 +164,6 @@ fun BattleMob.toInfo(): BattleMobInfo {
         level = level,
         actualHealth = actualHealth,
         skills = skills,
-        activeDots = activeDots
+        activeStatus = activeStatus
     )
 }

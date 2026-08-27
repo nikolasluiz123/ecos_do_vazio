@@ -1,26 +1,26 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveDoT
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.CharActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyMobsDoTDamageResult
+import br.com.schmittsolucoes.ecosdovazio.domain.model.result.ApplyMobsDoTResult
 import kotlin.math.max
 
-class ApplyMobsDoTDamagesUseCase(
+class ApplyMobsDoTUseCase(
     private val getCharSkillDamageUseCase: GetCharSkillDamageUseCase
 ) {
     operator fun invoke(
         battleCharInfo: BattleCharInfo,
         mobs: Map<String, BattleMobInfo>
-    ): ApplyMobsDoTDamageResult {
+    ): ApplyMobsDoTResult {
         val newMobsHealth = mutableMapOf<String, Long>()
-        val newMobsDots = mutableMapOf<String, List<ActiveDoT.CharActiveDoT>>()
+        val newMobsDots = mutableMapOf<String, List<CharActiveStatus.DoT>>()
 
         mobs.forEach { (phaseMobId, mobInfo) ->
             var currentHealth = mobInfo.actualHealth
-            val updatedDots = mutableListOf<ActiveDoT.CharActiveDoT>()
+            val updatedDots = mutableListOf<CharActiveStatus.DoT>()
 
-            mobInfo.activeDots.forEach { dot ->
+            mobInfo.activeStatus.filterIsInstance<CharActiveStatus.DoT>().forEach { dot ->
                 if (currentHealth > 0) {
                     val damage = getCharSkillDamageUseCase.executeInternal(
                         skillInfo = dot.skillInfo,
@@ -32,7 +32,7 @@ class ApplyMobsDoTDamagesUseCase(
                 }
 
                 if (dot.remainingTurns > 1) {
-                    updatedDots.add(dot.copyWithRemainingTurns(dot.remainingTurns - 1) as ActiveDoT.CharActiveDoT)
+                    updatedDots.add(dot.copy(remainingTurns = dot.remainingTurns - 1))
                 }
             }
 
@@ -43,9 +43,9 @@ class ApplyMobsDoTDamagesUseCase(
             }
         }
 
-        return ApplyMobsDoTDamageResult(
+        return ApplyMobsDoTResult(
             mobsHealth = newMobsHealth,
-            mobsDots = newMobsDots
+            dots = newMobsDots
         )
     }
 }
