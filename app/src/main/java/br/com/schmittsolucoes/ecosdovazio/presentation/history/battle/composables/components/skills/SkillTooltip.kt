@@ -76,28 +76,6 @@ internal fun SkillTooltip(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                SkillInfoRow(stringResource(R.string.skill_tooltip_refresh_time, skill.refreshTime))
-
-                when (skill) {
-                    is CharSkillUIModel.CommonDamage -> {
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_damage, skill.damage))
-                    }
-                    is CharSkillUIModel.DamageOverTime -> {
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_damage, skill.damage))
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_duration, skill.duration))
-                    }
-                    is CharSkillUIModel.Buff -> {
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_multiplier, skill.multiplier))
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_duration, skill.duration))
-                    }
-                    is CharSkillUIModel.Debuff -> {
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_multiplier, skill.multiplier))
-                        SkillInfoRow(stringResource(R.string.skill_tooltip_duration, skill.duration))
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
                 SkillInfoRow(stringResource(R.string.skill_tooltip_min_level, skill.minLevel))
 
                 if (skill.attributes.requiredStrength > 0) {

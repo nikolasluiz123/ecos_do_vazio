@@ -132,39 +132,6 @@ private fun SkillInfoGrid(skill: CharSkillDetailsUIModel) {
                 skill.minLevel,
             ),
         )
-        SkillInfo(
-            label = stringResource(
-                R.string.skill_tooltip_refresh_time,
-                skill.refreshTime,
-            ),
-        )
-
-        skill.damage?.let {
-            SkillInfo(
-                label = stringResource(
-                    R.string.skill_tooltip_damage,
-                    it,
-                ),
-            )
-        }
-
-        skill.multiplier?.let {
-            SkillInfo(
-                label = stringResource(
-                    R.string.skill_tooltip_multiplier,
-                    it,
-                ),
-            )
-        }
-
-        skill.duration?.let {
-            SkillInfo(
-                label = stringResource(
-                    R.string.skill_tooltip_duration,
-                    it,
-                ),
-            )
-        }
     }
 }
 

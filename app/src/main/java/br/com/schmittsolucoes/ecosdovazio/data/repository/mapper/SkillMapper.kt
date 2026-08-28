@@ -119,7 +119,8 @@ fun CharSkillTuple.toDomain(): CharSkill {
             imageName = imageName,
             attributes = attributes,
             multiplier = multiplier ?: 0.0,
-            duration = duration ?: 0
+            duration = duration ?: 0,
+            damage = damage
         )
     }
 }

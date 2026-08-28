@@ -43,6 +43,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Char
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainUsedSkillInfo
@@ -74,6 +75,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val startHistoryPhaseUseCase: StartHistoryPhaseUseCase,
     private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
     private val snackbarManager: SnackbarManager,
+    private val skillMapper: SkillMapper,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -617,7 +619,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                 image = resourcesProvider.getBattleMobImage(battleMob.imageName) ?: 0,
                 totalHealth = totalHealth,
                 healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
-                skills = battleMob.skills.map { it.toUIModel(resourcesProvider.getSkillImage(it.imageName) ?: 0) },
+                skills = battleMob.skills.map { skillMapper.mapToUIModel(it) },
                 activeStatus = mobsActiveStatus[battleMob.phaseMobId] ?: emptyList()
             )
         }
@@ -662,8 +664,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         skillsRefreshTime: Map<String, Int>
     ): List<CharSkillUIModel> {
         return skills.map {
-            it.toUIModel(
-                image = resourcesProvider.getSkillImage(it.imageName) ?: 0,
+            skillMapper.mapToUIModel(
+                skill = it,
                 currentRefreshTime = skillsRefreshTime[it.id] ?: 0,
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,

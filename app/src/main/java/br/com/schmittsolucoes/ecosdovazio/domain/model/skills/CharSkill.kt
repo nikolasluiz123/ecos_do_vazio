@@ -72,6 +72,7 @@ sealed interface CharSkill {
         override val imageName: String,
         override val attributes: Attributes,
         val multiplier: Double,
-        val duration: Int
+        val duration: Int,
+        val damage: Long? = null
     ) : CharSkill
 }

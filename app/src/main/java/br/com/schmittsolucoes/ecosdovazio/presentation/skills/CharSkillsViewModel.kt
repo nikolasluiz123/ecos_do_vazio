@@ -6,7 +6,6 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
-import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.DecrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttributesUseCase
@@ -15,6 +14,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetail
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,7 @@ class CharSkillsViewModel @Inject constructor(
     charAttributesQueryUseCase: CharAttributesQueryUseCase,
     private val incrementAttributeUseCase: IncrementAttributeUseCase,
     private val decrementAttributeUseCase: DecrementAttributeUseCase,
-    private val resourcesProvider: ResourcesProvider
+    private val skillMapper: SkillMapper
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -123,8 +123,7 @@ class CharSkillsViewModel @Inject constructor(
 
     private fun mapCharSkillDetailsToUIModel(skills: List<CharSkillDetails>): List<CharSkillDetailsUIModel> {
         return skills.map { skill ->
-            val image = resourcesProvider.getSkillImage(skill.imageName) ?: 0
-            skill.toUIModel(image = image)
+            skillMapper.mapToUIModel(skill)
         }
     }
 }

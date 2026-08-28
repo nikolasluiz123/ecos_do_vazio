@@ -76,5 +76,6 @@ sealed interface CharSkillUIModel {
         override val blocked: Boolean,
         val multiplier: Double,
         val duration: Int,
+        val damage: Long? = null
     ): CharSkillUIModel
 }
