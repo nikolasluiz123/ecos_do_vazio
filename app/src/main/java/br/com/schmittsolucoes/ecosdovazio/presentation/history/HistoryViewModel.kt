@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
-import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.HistoryMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class HistoryViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     historyPhasesQueryUseCase: HistoryPhasesQueryUseCase,
-    private val resourcesProvider: ResourcesProvider
+    private val historyMapper: HistoryMapper
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -63,8 +63,7 @@ class HistoryViewModel @Inject constructor(
 
     private fun mapPhaseToUIModel(phases: List<CharHistoryPhase>): List<HistoryPhaseUIModel> {
         return phases.map { phase ->
-            val imageResId = resourcesProvider.getPhaseImage(phase.imageName) ?: 0
-            phase.toUIModel(imageResId)
+            historyMapper.mapToUIModel(phase)
         }
     }
 

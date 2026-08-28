@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
-import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CreateNewUserCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
@@ -12,7 +11,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserExceptio
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.ClassMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ClassSelectionViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val resourcesProvider: ResourcesProvider,
+    private val classMapper: ClassMapper,
     private val createNewUserCharUseCase: CreateNewUserCharUseCase,
     classesQueryUseCase: ClassesQueryUseCase
 ) : CommonViewModel() {
@@ -61,8 +60,7 @@ class ClassSelectionViewModel @Inject constructor(
     )
 
     private fun mapDomainToUIModel(classSelection: ClassSelection): ClassSelectionUIModel {
-        val presentationDrawableId = resourcesProvider.getClassImage(classSelection.presentationImageName)!!
-        return classSelection.toUIModel(presentationDrawableId)
+        return classMapper.mapToUIModel(classSelection)
     }
 
     override fun getErrorMessageFrom(throwable: Throwable): String {

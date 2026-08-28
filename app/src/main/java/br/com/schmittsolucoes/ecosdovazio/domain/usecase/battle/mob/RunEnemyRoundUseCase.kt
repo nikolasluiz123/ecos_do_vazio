@@ -3,8 +3,8 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResult
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toInfo
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUsedInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.mapper.toInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.mapper.toUsedInfo
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 

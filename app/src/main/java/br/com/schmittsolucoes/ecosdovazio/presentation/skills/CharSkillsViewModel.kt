@@ -14,8 +14,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetail
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.CharMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,7 +34,8 @@ class CharSkillsViewModel @Inject constructor(
     charAttributesQueryUseCase: CharAttributesQueryUseCase,
     private val incrementAttributeUseCase: IncrementAttributeUseCase,
     private val decrementAttributeUseCase: DecrementAttributeUseCase,
-    private val skillMapper: SkillMapper
+    private val skillMapper: SkillMapper,
+    private val charMapper: CharMapper
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -113,7 +114,8 @@ class CharSkillsViewModel @Inject constructor(
             val charAttributeValue = charAttribute.attribute.totalValue.toFloat()
             val progress = charAttributeValue / skillAttribute.attribute.toFloat()
 
-            charAttribute.toUIModel(
+            charMapper.mapToUIModel(
+                identifiedCharAttribute = charAttribute,
                 progress = progress,
                 canIncrement = availablePoints > 0,
                 canDecrement = charAttribute.attribute.charValue > 0

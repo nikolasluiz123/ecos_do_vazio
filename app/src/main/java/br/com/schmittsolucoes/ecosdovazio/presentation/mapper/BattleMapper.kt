@@ -1,157 +1,214 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
-import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.CharActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.MobActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
+import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
+import javax.inject.Inject
 
-fun BattleChar.toUIModel(
-    totalHealth: Long,
-    actualHealth: Long,
-    healthProgress: Float,
-    @DrawableRes battleImage: Int,
-    offensiveMultiplier: Double,
-    defensiveMultiplier: Double,
-    damageSkills: List<CharSkillUIModel> = emptyList(),
-    buffSkills: List<CharSkillUIModel> = emptyList(),
-    debuffSkills: List<CharSkillUIModel> = emptyList(),
-    activeStatus: List<MobActiveStatusUIModel> = emptyList()
-): BattleCharUIModel {
-    return BattleCharUIModel(
-        level = level,
-        name = name,
-        battleImage = battleImage,
-        classCategory = classCategory,
-        offensiveMultiplier = offensiveMultiplier,
-        defensiveMultiplier = defensiveMultiplier,
-        totalHealth = totalHealth,
-        actualHealth = actualHealth,
-        healthProgress = healthProgress,
-        strength = strength,
-        dexterity = dexterity,
-        intelligence = intelligence,
-        physicalResistance = physicalResistance,
-        magicResistance = magicResistance,
-        vitality = vitality,
-        agility = agility,
-        damageSkills = damageSkills,
-        buffSkills = buffSkills,
-        debuffSkills = debuffSkills,
-        activeStatus = activeStatus
-    )
-}
+class BattleMapper @Inject constructor(
+    private val resourcesProvider: ResourcesProvider,
+    private val skillMapper: SkillMapper
+) {
 
-fun BattleMob.toUIModel(
-    totalHealth: Long,
-    healthProgress: Float,
-    @DrawableRes image: Int,
-    skills: List<MobSkillUIModel> = emptyList(),
-    activeStatus: List<CharActiveStatusUIModel> = emptyList()
-): BattleMobUIModel {
-    return BattleMobUIModel(
-        mobId = mobId,
-        phaseMobId = phaseMobId,
-        name = name,
-        description = description,
-        image = image,
-        mobCategory = mobCategory,
-        offensiveMultiplier = offensiveMultiplier,
-        defensiveMultiplier = defensiveMultiplier,
-        totalHealth = totalHealth,
-        actualHealth = actualHealth,
-        healthProgress = healthProgress,
-        level = level,
-        attributes = attributes,
-        skills = skills,
-        activeStatus = activeStatus
-    )
-}
+    fun mapToUIModel(
+        char: BattleChar,
+        totalHealth: Long,
+        actualHealth: Long,
+        healthProgress: Float,
+        offensiveMultiplier: Double,
+        defensiveMultiplier: Double,
+        damageSkills: List<CharSkillUIModel> = emptyList(),
+        buffSkills: List<CharSkillUIModel> = emptyList(),
+        debuffSkills: List<CharSkillUIModel> = emptyList(),
+        activeStatus: List<MobActiveStatusUIModel> = emptyList()
+    ): BattleCharUIModel {
+        val battleImage = resourcesProvider.getBattleClassImage(char.battleImageName)
+            ?: resourcesProvider.getBattleSpecializationImage(char.battleImageName)
+            ?: 0
 
-fun CharActiveStatus.toUIModel(
-    skillName: String,
-    skillDescription: String,
-    skillImage: Int
-): CharActiveStatusUIModel {
-    return when (this) {
-        is CharActiveStatus.DoT -> {
-            CharActiveStatusUIModel.DoTUIModel(
-                skillId = skillId,
-                skillName = skillName,
-                skillDescription = skillDescription,
-                remainingTurns = remainingTurns,
-                skillImage = skillImage,
-                skillInfo = skillInfo
-            )
-        }
+        return BattleCharUIModel(
+            level = char.level,
+            name = char.name,
+            battleImage = battleImage,
+            classCategory = char.classCategory,
+            offensiveMultiplier = offensiveMultiplier,
+            defensiveMultiplier = defensiveMultiplier,
+            totalHealth = totalHealth,
+            actualHealth = actualHealth,
+            healthProgress = healthProgress,
+            strength = char.strength,
+            dexterity = char.dexterity,
+            intelligence = char.intelligence,
+            physicalResistance = char.physicalResistance,
+            magicResistance = char.magicResistance,
+            vitality = char.vitality,
+            agility = char.agility,
+            damageSkills = damageSkills,
+            buffSkills = buffSkills,
+            debuffSkills = debuffSkills,
+            activeStatus = activeStatus
+        )
+    }
 
-        is CharActiveStatus.Debuff -> {
-            CharActiveStatusUIModel.DebuffUIModel(
-                skillId = skillId,
-                skillName = skillName,
-                skillDescription = skillDescription,
-                remainingTurns = remainingTurns,
-                skillImage = skillImage,
-                skillCategory = skillCategory,
-                skillInfo = skillInfo
-            )
+    fun mapToUIModel(
+        battleMob: BattleMob,
+        totalHealth: Long,
+        healthProgress: Float,
+        skills: List<MobSkillUIModel> = emptyList(),
+        activeStatus: List<CharActiveStatusUIModel> = emptyList()
+    ): BattleMobUIModel {
+        return BattleMobUIModel(
+            mobId = battleMob.mobId,
+            phaseMobId = battleMob.phaseMobId,
+            name = battleMob.name,
+            description = battleMob.description,
+            image = resourcesProvider.getBattleMobImage(battleMob.imageName) ?: 0,
+            mobCategory = battleMob.mobCategory,
+            offensiveMultiplier = battleMob.offensiveMultiplier,
+            defensiveMultiplier = battleMob.defensiveMultiplier,
+            totalHealth = totalHealth,
+            actualHealth = battleMob.actualHealth,
+            healthProgress = healthProgress,
+            level = battleMob.level,
+            attributes = battleMob.attributes,
+            skills = skills,
+            activeStatus = activeStatus
+        )
+    }
+
+    fun mapToUIModel(
+        charActiveStatus: CharActiveStatus,
+        skillName: String,
+        skillDescription: String,
+        skillImage: Int
+    ): CharActiveStatusUIModel {
+        return when (charActiveStatus) {
+            is CharActiveStatus.DoT -> {
+                CharActiveStatusUIModel.DoTUIModel(
+                    skillId = charActiveStatus.skillId,
+                    skillName = skillName,
+                    skillDescription = skillDescription,
+                    remainingTurns = charActiveStatus.remainingTurns,
+                    skillImage = skillImage,
+                    skillInfo = charActiveStatus.skillInfo
+                )
+            }
+
+            is CharActiveStatus.Debuff -> {
+                CharActiveStatusUIModel.DebuffUIModel(
+                    skillId = charActiveStatus.skillId,
+                    skillName = skillName,
+                    skillDescription = skillDescription,
+                    remainingTurns = charActiveStatus.remainingTurns,
+                    skillImage = skillImage,
+                    skillCategory = charActiveStatus.skillCategory,
+                    skillInfo = charActiveStatus.skillInfo
+                )
+            }
         }
     }
-}
 
-fun MobActiveStatus.toUIModel(
-    skillName: String,
-    skillDescription: String,
-    skillImage: Int
-): MobActiveStatusUIModel {
-    return when (this) {
-        is MobActiveStatus.DoT -> {
-            MobActiveStatusUIModel.DoTUIModel(
-                skillId = skillId,
-                skillName = skillName,
-                skillDescription = skillDescription,
-                remainingTurns = remainingTurns,
-                skillImage = skillImage,
-                sourceId = sourceId,
-                skillInfo = skillInfo
-            )
-        }
+    fun mapToUIModel(
+        mobActiveStatus: MobActiveStatus,
+        skillName: String,
+        skillDescription: String,
+        skillImage: Int
+    ): MobActiveStatusUIModel {
+        return when (mobActiveStatus) {
+            is MobActiveStatus.DoT -> {
+                MobActiveStatusUIModel.DoTUIModel(
+                    skillId = mobActiveStatus.skillId,
+                    skillName = skillName,
+                    skillDescription = skillDescription,
+                    remainingTurns = mobActiveStatus.remainingTurns,
+                    skillImage = skillImage,
+                    sourceId = mobActiveStatus.sourceId,
+                    skillInfo = mobActiveStatus.skillInfo
+                )
+            }
 
-        is MobActiveStatus.Debuff -> {
-            MobActiveStatusUIModel.DebuffUIModel(
-                skillId = skillId,
-                skillName = skillName,
-                skillDescription = skillDescription,
-                remainingTurns = remainingTurns,
-                skillImage = skillImage,
-                skillCategory = skillCategory,
-                sourceId = sourceId,
-                skillInfo = skillInfo
-            )
+            is MobActiveStatus.Debuff -> {
+                MobActiveStatusUIModel.DebuffUIModel(
+                    skillId = mobActiveStatus.skillId,
+                    skillName = skillName,
+                    skillDescription = skillDescription,
+                    remainingTurns = mobActiveStatus.remainingTurns,
+                    skillImage = skillImage,
+                    skillCategory = mobActiveStatus.skillCategory,
+                    sourceId = mobActiveStatus.sourceId,
+                    skillInfo = mobActiveStatus.skillInfo
+                )
+            }
         }
     }
-}
 
-fun BattleMobUIModel.toDomain(): BattleMob {
-    return BattleMob(
-        mobId = mobId,
-        phaseMobId = phaseMobId,
-        name = name,
-        description = description,
-        imageName = "",
-        mobCategory = mobCategory,
-        level = level,
-        offensiveMultiplier = offensiveMultiplier,
-        defensiveMultiplier = defensiveMultiplier,
-        actualHealth = actualHealth,
-        attributes = attributes,
-        skills = skills.map { it.toDomain() },
-        activeStatus = activeStatus.map { it.toDomain() }
-    )
+    fun mapToDomain(mobUIModel: BattleMobUIModel): BattleMob {
+        return BattleMob(
+            mobId = mobUIModel.mobId,
+            phaseMobId = mobUIModel.phaseMobId,
+            name = mobUIModel.name,
+            description = mobUIModel.description,
+            imageName = "",
+            mobCategory = mobUIModel.mobCategory,
+            level = mobUIModel.level,
+            offensiveMultiplier = mobUIModel.offensiveMultiplier,
+            defensiveMultiplier = mobUIModel.defensiveMultiplier,
+            actualHealth = mobUIModel.actualHealth,
+            attributes = mobUIModel.attributes,
+            skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },
+            activeStatus = mobUIModel.activeStatus.map { mapToDomain(it) }
+        )
+    }
+
+    fun mapToDomain(charActiveStatusUIModel: CharActiveStatusUIModel): CharActiveStatus {
+        return when (charActiveStatusUIModel) {
+            is CharActiveStatusUIModel.DoTUIModel -> {
+                CharActiveStatus.DoT(
+                    skillId = charActiveStatusUIModel.skillId,
+                    remainingTurns = charActiveStatusUIModel.remainingTurns,
+                    skillInfo = charActiveStatusUIModel.skillInfo
+                )
+            }
+
+            is CharActiveStatusUIModel.DebuffUIModel -> {
+                CharActiveStatus.Debuff(
+                    skillId = charActiveStatusUIModel.skillId,
+                    remainingTurns = charActiveStatusUIModel.remainingTurns,
+                    skillInfo = charActiveStatusUIModel.skillInfo,
+                    skillCategory = charActiveStatusUIModel.skillCategory
+                )
+            }
+        }
+    }
+
+    fun mapToDomain(mobActiveStatusUIModel: MobActiveStatusUIModel): MobActiveStatus {
+        return when (mobActiveStatusUIModel) {
+            is MobActiveStatusUIModel.DoTUIModel -> {
+                MobActiveStatus.DoT(
+                    skillId = mobActiveStatusUIModel.skillId,
+                    remainingTurns = mobActiveStatusUIModel.remainingTurns,
+                    sourceId = mobActiveStatusUIModel.sourceId,
+                    skillInfo = mobActiveStatusUIModel.skillInfo
+                )
+            }
+
+            is MobActiveStatusUIModel.DebuffUIModel -> {
+                MobActiveStatus.Debuff(
+                    skillId = mobActiveStatusUIModel.skillId,
+                    remainingTurns = mobActiveStatusUIModel.remainingTurns,
+                    sourceId = mobActiveStatusUIModel.sourceId,
+                    skillInfo = mobActiveStatusUIModel.skillInfo,
+                    skillCategory = mobActiveStatusUIModel.skillCategory
+                )
+            }
+        }
+    }
 }

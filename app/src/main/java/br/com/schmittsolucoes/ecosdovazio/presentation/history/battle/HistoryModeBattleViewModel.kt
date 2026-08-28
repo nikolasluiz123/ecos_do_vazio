@@ -15,7 +15,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResul
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
@@ -43,11 +42,9 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Char
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomain
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainInfo
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toDomainUsedSkillInfo
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,7 +59,7 @@ import kotlin.collections.map
 @HiltViewModel
 class HistoryModeBattleViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val resourcesProvider: ResourcesProvider,
+    private val battleMapper: BattleMapper,
     private val getMobHPUseCase: GetMobHPUseCase,
     private val getCharHPUseCase: GetCharHPUseCase,
     private val applyMobsDoTUseCase: ApplyMobsDoTUseCase,
@@ -76,6 +73,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
     private val snackbarManager: SnackbarManager,
     private val skillMapper: SkillMapper,
+    private val battleInfoMapper: BattleInfoMapper,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -217,9 +215,9 @@ class HistoryModeBattleViewModel @Inject constructor(
             val char = state.char ?: return
 
             val result = useCharSkillUseCase(
-                skillInfo = skill.toDomainUsedSkillInfo(),
-                battleCharInfo = char.toDomainInfo(),
-                battleMobInfo = state.selectedMob.toDomainInfo()
+                skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill),
+                battleCharInfo = battleInfoMapper.mapToDomainInfo(char),
+                battleMobInfo = battleInfoMapper.mapToDomainInfo(state.selectedMob)
             )
 
             when (result) {
@@ -257,7 +255,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = skill.toDomainUsedSkillInfo() as UsedCharSkillInfo.DamageOverTime,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedCharSkillInfo.DamageOverTime,
             skillImage = skill.image
         )
 
@@ -278,7 +276,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = skill.toDomainUsedSkillInfo() as UsedCharSkillInfo.Debuff,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedCharSkillInfo.Debuff,
             skillImage = skill.image,
             skillCategory = skill.skillCategory
         )
@@ -370,8 +368,8 @@ class HistoryModeBattleViewModel @Inject constructor(
 
             if (isEnemyRound()) {
                 runEnemyRoundUseCase(
-                    getCharInfo = { uiState.value.char?.toDomainInfo()!! },
-                    mobs = uiState.value.mobs.map { it.toDomain() },
+                    getCharInfo = { battleInfoMapper.mapToDomainInfo(uiState.value.char!!) },
+                    mobs = uiState.value.mobs.map { battleMapper.mapToDomain(it) },
                     onMobUseSkill = ::handleMobSkillResult
                 )
                 
@@ -393,8 +391,8 @@ class HistoryModeBattleViewModel @Inject constructor(
 
         val result = endHistoryPhaseUseCase(
             phaseId = route.phaseId,
-            battleCharInfo = char.toDomainInfo(),
-            mobs = uiState.value.mobs.map { it.toDomainInfo() }
+            battleCharInfo = battleInfoMapper.mapToDomainInfo(char),
+            mobs = uiState.value.mobs.map { battleInfoMapper.mapToDomainInfo(it) }
         )
 
         if (result.isHistoryFinished) {
@@ -421,8 +419,8 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private fun applyDoTsDamage() {
         val char = uiState.value.char ?: return
-        val charInfo = char.toDomainInfo()
-        val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to it.toDomainInfo() }
+        val charInfo = battleInfoMapper.mapToDomainInfo(char)
+        val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
         
         applyMobsDoTDamage(charInfo, mobsInfo)
         applyCharDoTDamage(charInfo, mobsInfo)
@@ -430,8 +428,8 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private fun applyDebuffs() {
         val char = uiState.value.char ?: return
-        val charInfo = char.toDomainInfo()
-        val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to it.toDomainInfo() }
+        val charInfo = battleInfoMapper.mapToDomainInfo(char)
+        val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
 
         applyMobsDebuff(charInfo, mobsInfo)
         applyCharDebuff(charInfo, mobsInfo)
@@ -451,7 +449,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                     val char = uiState.value.char!!
                     val skill = char.damageSkills.first { it.id == dot.skillId }
 
-                    dot.toUIModel(
+                    battleMapper.mapToUIModel(
+                        charActiveStatus = dot,
                         skillName = skill.name,
                         skillDescription = skill.description,
                         skillImage = skill.image
@@ -487,7 +486,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                     val char = uiState.value.char!!
                     val skill = char.debuffSkills.first { it.id == debuff.skillId }
 
-                    debuff.toUIModel(
+                    battleMapper.mapToUIModel(
+                        charActiveStatus = debuff,
                         skillName = skill.name,
                         skillDescription = skill.description,
                         skillImage = skill.image
@@ -509,7 +509,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 val mob = uiState.value.mobs.find { it.phaseMobId == dot.sourceId }!!
                 val skill = mob.skills.first { it.id == dot.skillId }
 
-                dot.toUIModel(
+                battleMapper.mapToUIModel(
+                    mobActiveStatus = dot,
                     skillName = skill.name,
                     skillDescription = skill.description,
                     skillImage = skill.image
@@ -532,7 +533,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 val mob = uiState.value.mobs.find { it.phaseMobId == debuff.sourceId }!!
                 val skill = mob.skills.first { it.id == debuff.skillId }
 
-                debuff.toUIModel(
+                battleMapper.mapToUIModel(
+                    mobActiveStatus = debuff,
                     skillName = skill.name,
                     skillDescription = skill.description,
                     skillImage = skill.image
@@ -571,7 +573,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = skill.toDomainUsedSkillInfo() as UsedMobSkillInfo.DamageOverTime,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedMobSkillInfo.DamageOverTime,
             skillImage = skill.image,
             sourceId = mob.phaseMobId
         )
@@ -589,7 +591,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = skill.toDomainUsedSkillInfo() as UsedMobSkillInfo.Debuff,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedMobSkillInfo.Debuff,
             skillImage = skill.image,
             sourceId = mob.phaseMobId,
             skillCategory = skill.skillCategory
@@ -615,8 +617,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             val totalHealth = getMobHPUseCase(battleMob.mobCategory, battleMob.attributes.vitality)
             val actualHealth = mobsHealth[battleMob.phaseMobId] ?: totalHealth
 
-            battleMob.copy(actualHealth = actualHealth).toUIModel(
-                image = resourcesProvider.getBattleMobImage(battleMob.imageName) ?: 0,
+            battleMapper.mapToUIModel(
+                battleMob = battleMob.copy(actualHealth = actualHealth),
                 totalHealth = totalHealth,
                 healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
                 skills = battleMob.skills.map { skillMapper.mapToUIModel(it) },
@@ -638,16 +640,12 @@ class HistoryModeBattleViewModel @Inject constructor(
             vitalityPoints = char.vitality.totalValue
         )
 
-        val battleImage = resourcesProvider.getBattleClassImage(char.battleImageName)
-            ?: resourcesProvider.getBattleSpecializationImage(char.battleImageName)
-            ?: 0
-
         val actualHealth = charHealth ?: totalHealth
 
-        return char.toUIModel(
+        return battleMapper.mapToUIModel(
+            char = char,
             totalHealth = totalHealth,
             actualHealth = actualHealth,
-            battleImage = battleImage,
             healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
             offensiveMultiplier = 1.0,
             defensiveMultiplier = 0.0,

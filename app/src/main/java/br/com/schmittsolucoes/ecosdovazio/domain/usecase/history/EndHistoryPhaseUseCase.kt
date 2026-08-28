@@ -4,7 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.core.database.transaction.DatabaseTran
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.Char
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.toXPInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.mapper.toXPInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.EndHistoryPhaseResult
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.CharRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository

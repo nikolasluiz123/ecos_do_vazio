@@ -23,7 +23,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.toUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.CharMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +47,8 @@ class CharViewModel @Inject constructor(
     getAvailableAttributesUseCase: GetAvailableAttributesUseCase,
     private val incrementAttributeUseCase: IncrementAttributeUseCase,
     private val decrementAttributeUseCase: DecrementAttributeUseCase,
-    private val numberFormatter: NumberFormatter
+    private val numberFormatter: NumberFormatter,
+    private val charMapper: CharMapper
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -80,7 +81,7 @@ class CharViewModel @Inject constructor(
 
         CharUIState(
             errorMessage = errorMessage,
-            levelInfo = levelInfo.toUIModel(levelProgress),
+            levelInfo = charMapper.mapToUIModel(levelInfo, levelProgress),
             statusInfo = CharStatusUIModel(
                 hp = hp.toString(),
                 baseDamage = baseDamage.toString(),
@@ -136,7 +137,8 @@ class CharViewModel @Inject constructor(
     private fun getAttributesInfo(attributes: CharAttributes?, availablePoints: Long): List<CharAttributesUIModel>? =
         attributes?.attributes?.map { attr ->
             val attributeProgress = getAttributeProgress(attributes, attr.attribute.totalValue)
-            attr.toUIModel(
+            charMapper.mapToUIModel(
+                identifiedCharAttribute = attr,
                 progress = attributeProgress,
                 canIncrement = availablePoints > 0,
                 canDecrement = attr.attribute.charValue > 0

@@ -163,6 +163,63 @@ class SkillMapper @Inject constructor(
         }
     }
 
+    fun mapToDomain(skillUIModel: MobSkillUIModel): MobSkill {
+        return when (skillUIModel) {
+            is MobSkillUIModel.CommonDamage -> MobSkill.CommonDamage(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                damage = skillUIModel.damage
+            )
+
+            is MobSkillUIModel.DamageOverTime -> MobSkill.DamageOverTime(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                damage = skillUIModel.damage,
+                duration = skillUIModel.duration
+            )
+
+            is MobSkillUIModel.Buff -> MobSkill.Buff(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                skillCategory = skillUIModel.skillCategory,
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                multiplier = skillUIModel.multiplier,
+                duration = skillUIModel.duration
+            )
+
+            is MobSkillUIModel.Debuff -> MobSkill.Debuff(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                skillCategory = skillUIModel.skillCategory,
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                multiplier = skillUIModel.multiplier,
+                duration = skillUIModel.duration
+            )
+        }
+    }
+
     private fun formatDescription(
         description: String,
         damage: Long?,
@@ -190,92 +247,3 @@ class SkillMapper @Inject constructor(
     )
 }
 
-fun MobSkillUIModel.toDomain(): MobSkill {
-    return when (this) {
-        is MobSkillUIModel.CommonDamage -> MobSkill.CommonDamage(
-            id = id,
-            name = name,
-            description = description,
-            imageName = "",
-            refreshTime = refreshTime,
-            currentRefreshTime = currentRefreshTime,
-            blocked = blocked,
-            minLevel = minLevel,
-            damage = damage
-        )
-
-        is MobSkillUIModel.DamageOverTime -> MobSkill.DamageOverTime(
-            id = id,
-            name = name,
-            description = description,
-            imageName = "",
-            refreshTime = refreshTime,
-            currentRefreshTime = currentRefreshTime,
-            blocked = blocked,
-            minLevel = minLevel,
-            damage = damage,
-            duration = duration
-        )
-
-        is MobSkillUIModel.Buff -> MobSkill.Buff(
-            id = id,
-            name = name,
-            description = description,
-            imageName = "",
-            skillCategory = skillCategory,
-            refreshTime = refreshTime,
-            currentRefreshTime = currentRefreshTime,
-            blocked = blocked,
-            minLevel = minLevel,
-            multiplier = multiplier,
-            duration = duration
-        )
-
-        is MobSkillUIModel.Debuff -> MobSkill.Debuff(
-            id = id,
-            name = name,
-            description = description,
-            imageName = "",
-            skillCategory = skillCategory,
-            refreshTime = refreshTime,
-            currentRefreshTime = currentRefreshTime,
-            blocked = blocked,
-            minLevel = minLevel,
-            multiplier = multiplier,
-            duration = duration
-        )
-    }
-}
-
-fun MobSkill.toUsedInfo(): UsedMobSkillInfo {
-    return when (this) {
-        is MobSkill.CommonDamage -> UsedMobSkillInfo.CommonDamage(
-            refreshTime = refreshTime,
-            damage = damage,
-            skillId = id
-        )
-
-        is MobSkill.DamageOverTime -> UsedMobSkillInfo.DamageOverTime(
-            refreshTime = refreshTime,
-            damage = damage,
-            duration = duration,
-            skillId = id
-        )
-
-        is MobSkill.Buff -> UsedMobSkillInfo.Buff(
-            skillCategory = skillCategory,
-            refreshTime = refreshTime,
-            multiplier = multiplier,
-            duration = duration,
-            skillId = id
-        )
-
-        is MobSkill.Debuff -> UsedMobSkillInfo.Debuff(
-            skillCategory = skillCategory,
-            refreshTime = refreshTime,
-            multiplier = multiplier,
-            duration = duration,
-            skillId = id
-        )
-    }
-}
