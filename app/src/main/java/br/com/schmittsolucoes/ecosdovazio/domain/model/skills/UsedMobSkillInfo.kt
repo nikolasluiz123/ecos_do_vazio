@@ -25,6 +25,15 @@ sealed interface UsedMobSkillInfo {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
     }
 
+    data class VampiricDamage(
+        override val refreshTime: Int,
+        override val damage: Long,
+        override val skillId: String,
+        val multiplier: Double,
+    ): UsedMobSkillInfo {
+        override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
+    }
+
     data class Buff(
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,

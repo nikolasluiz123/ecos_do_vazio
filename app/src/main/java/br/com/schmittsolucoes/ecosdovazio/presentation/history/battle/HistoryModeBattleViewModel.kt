@@ -23,10 +23,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsD
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.EndHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.StartHistoryPhaseUseCase
@@ -61,8 +59,6 @@ import javax.inject.Inject
 class HistoryModeBattleViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val battleMapper: BattleMapper,
-    private val getMobHPUseCase: GetMobHPUseCase,
-    private val getCharHPUseCase: GetCharHPUseCase,
     private val applyMobsDoTUseCase: ApplyMobsDoTUseCase,
     private val applyCharDoTUseCase: ApplyCharDoTUseCase,
     private val applyMobsDebuffUseCase: ApplyMobsDebuffUseCase,
@@ -238,6 +234,12 @@ class HistoryModeBattleViewModel @Inject constructor(
                 is CharSkillUsageResult.Debuff -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
                     registerMobDebuff(state.selectedMob, skill, result)
+                }
+
+                is CharSkillUsageResult.VampiricDamage -> {
+                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
+                    updateCharHealth(result.newCharHealth)
+                    incrementRound()
                 }
 
                 is CharSkillUsageResult.Buff -> {
@@ -635,6 +637,13 @@ class HistoryModeBattleViewModel @Inject constructor(
                 registerCharDebuff(result)
             }
 
+            is MobSkillUsageResult.VampiricDamage -> {
+                updateCharHealth(result.newEnemyHealth)
+                getMobById(result.mobId)?.let { mob ->
+                    updateMobHealth(mob, result.newCharHealth)
+                }
+            }
+
             is MobSkillUsageResult.Buff -> {
                 registerMobBuff(result)
             }
@@ -714,13 +723,10 @@ class HistoryModeBattleViewModel @Inject constructor(
         mobsActiveStatus: Map<String, List<ActiveStatusUIModel>>
     ): List<BattleMobUIModel> {
         return mobs.map { battleMob ->
-            val totalHealth = getMobHPUseCase(battleMob.mobCategory, battleMob.attributes.vitality)
-            val actualHealth = mobsHealth[battleMob.phaseMobId] ?: totalHealth
+            val actualHealth = mobsHealth[battleMob.phaseMobId] ?: battleMob.actualHealth
 
             battleMapper.mapToUIModel(
                 battleMob = battleMob.copy(actualHealth = actualHealth),
-                totalHealth = totalHealth,
-                healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
                 skills = battleMob.skills.map { skillMapper.mapToUIModel(it) },
                 activeStatus = mobsActiveStatus[battleMob.phaseMobId] ?: emptyList()
             )
@@ -735,18 +741,10 @@ class HistoryModeBattleViewModel @Inject constructor(
         buffSkills: List<CharSkillUIModel> = emptyList(),
         debuffSkills: List<CharSkillUIModel> = emptyList()
     ): BattleCharUIModel {
-        val totalHealth = getCharHPUseCase.calculate(
-            classCategory = char.classCategory,
-            vitalityPoints = char.vitality.totalValue
-        )
-
-        val actualHealth = charHealth ?: totalHealth
+        val actualHealth = charHealth ?: char.actualHealth
 
         return battleMapper.mapToUIModel(
-            char = char,
-            totalHealth = totalHealth,
-            actualHealth = actualHealth,
-            healthProgress = if (totalHealth > 0) actualHealth.toFloat() / totalHealth.toFloat() else 0f,
+            char = char.copy(actualHealth = actualHealth),
             offensiveMultiplier = 1.0,
             defensiveMultiplier = 0.0,
             damageSkills = damageSkills,

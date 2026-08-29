@@ -15,6 +15,7 @@ class MobsFromPhaseQueryUseCase @Inject constructor(
     private val getMobLevelUseCase: GetMobLevelUseCase,
     private val getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase,
     private val getMobSkillBlockedUseCase: GetMobSkillBlockedUseCase,
+    private val getMobHPUseCase: GetMobHPUseCase,
     private val languageProvider: LanguageProvider
 ) {
     operator fun invoke(phaseId: String): Flow<List<BattleMob>> {
@@ -37,16 +38,21 @@ class MobsFromPhaseQueryUseCase @Inject constructor(
                     when (skill) {
                         is MobSkill.CommonDamage -> skill.copy(blocked = isBlocked)
                         is MobSkill.DamageOverTime -> skill.copy(blocked = isBlocked)
+                        is MobSkill.VampiricDamage -> skill.copy(blocked = isBlocked)
                         is MobSkill.Buff -> skill.copy(blocked = isBlocked)
                         is MobSkill.Debuff -> skill.copy(blocked = isBlocked)
                     }
                 }
 
+                val totalHealth = getMobHPUseCase(battleMob.mobCategory, newAttributes.vitality)
+
                 mappedMobs.add(
                     battleMob.copy(
                         level = level,
                         attributes = newAttributes,
-                        skills = skills
+                        skills = skills,
+                        totalHealth = totalHealth,
+                        actualHealth = totalHealth
                     )
                 )
             }

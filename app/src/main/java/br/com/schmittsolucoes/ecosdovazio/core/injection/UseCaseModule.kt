@@ -534,14 +534,16 @@ object UseCaseModule {
         getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase,
         getMobSkillBlockedUseCase: GetMobSkillBlockedUseCase,
         languageProvider: LanguageProvider,
-        skillRepository: SkillRepository
+        skillRepository: SkillRepository,
+        getMobHPUseCase: GetMobHPUseCase
     ): MobsFromPhaseQueryUseCase = MobsFromPhaseQueryUseCase(
         historyPhaseRepository = historyPhaseRepository,
         getMobLevelUseCase = getMobLevelUseCase,
         getMobAttributesByLevelUseCase = getMobAttributesByLevelUseCase,
         getMobSkillBlockedUseCase = getMobSkillBlockedUseCase,
         languageProvider = languageProvider,
-        skillRepository = skillRepository
+        skillRepository = skillRepository,
+        getMobHPUseCase = getMobHPUseCase
     )
 
     @Provides
@@ -619,12 +621,14 @@ object UseCaseModule {
     fun provideGetCharBattleUseCase(
         userRepository: UserRepository,
         charRepository: CharRepository,
-        preferencesRepository: PreferencesRepository
+        preferencesRepository: PreferencesRepository,
+        getCharHPUseCase: GetCharHPUseCase
     ): GetCharBattleUseCase {
         return GetCharBattleUseCase(
             userRepository = userRepository,
             charRepository = charRepository,
-            preferencesRepository = preferencesRepository
+            preferencesRepository = preferencesRepository,
+            getCharHPUseCase = getCharHPUseCase
         )
     }
 

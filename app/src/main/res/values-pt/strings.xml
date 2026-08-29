@@ -137,7 +137,7 @@
     <string name="arcane_focus_skill_name">Foco Arcano</string>
     <string name="arcane_focus_skill_description">Um encantamento místico ofensivo que eleva o intelecto e o poder em %2$s por %3$d turnos. Após %4$d turnos pode ser utilizado novamente.</string>
     <string name="drain_essence_skill_name">Drenar Essência</string>
-    <string name="drain_essence_skill_description">Uma técnica proibida que drena a força vital do inimigo, causando %1$d de dano e curando instantaneamente o conjurador em 50%% do dano causado. Pode ser usada novamente após %4$d turnos.</string>
+    <string name="drain_essence_skill_description">Uma técnica proibida que drena a força vital do inimigo, causando %1$d de dano e curando instantaneamente o conjurador em %2$s do dano causado. Pode ser usada novamente após %4$d turnos.</string>
     <string name="meteor_shower_skill_name">Chuva de Meteoros</string>
     <string name="meteor_shower_skill_description">Ataque mágico poderoso capaz de devastar o campo de batalha, causa %1$d de dano. Pode ser utilizado novamente depois de %4$d turnos.</string>
 

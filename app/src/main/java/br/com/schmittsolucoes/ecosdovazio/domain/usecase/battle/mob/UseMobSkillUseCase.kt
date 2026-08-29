@@ -9,6 +9,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResul
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.SkillException
 import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToLong
 
 class UseMobSkillUseCase(
     private val getMobSkillDamageUseCase: GetMobSkillDamageUseCase
@@ -73,6 +75,25 @@ class UseMobSkillUseCase(
                     repeat = skillInfo.duration,
                     refreshTime = skillInfo.refreshTime,
                     skillId = skillInfo.skillId
+                )
+            }
+
+            is UsedMobSkillInfo.VampiricDamage -> {
+                val damage = getMobSkillDamageUseCase.executeInternal(
+                    skillInfo = skillInfo,
+                    battleCharInfo = battleCharInfo,
+                    battleMobInfo = battleMobInfo
+                )
+
+                val newEnemyHealth = getNewEnemyHealth(battleCharInfo, damage)
+                val calculatedMobHealth = battleMobInfo.actualHealth + (damage * skillInfo.multiplier).roundToLong()
+                val newMobHealth = min(calculatedMobHealth, battleMobInfo.totalHealth)
+
+                MobSkillUsageResult.VampiricDamage(
+                    newEnemyHealth = newEnemyHealth,
+                    newCharHealth = newMobHealth,
+                    mobId = battleMobInfo.phaseMobId,
+                    refreshTime = skillInfo.refreshTime
                 )
             }
 

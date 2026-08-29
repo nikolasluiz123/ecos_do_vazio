@@ -42,6 +42,21 @@ sealed interface MobSkill {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
     }
 
+    data class VampiricDamage(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
+        override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
+        override val minLevel: Long,
+        val damage: Long,
+        val multiplier: Double
+    ) : MobSkill {
+        override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
+    }
+
     data class Buff(
         override val id: String,
         override val name: String,

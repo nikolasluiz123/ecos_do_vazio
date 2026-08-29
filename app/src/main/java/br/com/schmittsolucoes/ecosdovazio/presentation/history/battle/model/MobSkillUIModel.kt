@@ -43,6 +43,21 @@ sealed interface MobSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
     }
 
+    data class VampiricDamage(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
+        override val refreshTime: Int,
+        override val currentRefreshTime: Int,
+        override val blocked: Boolean,
+        override val minLevel: Long,
+        val damage: Long,
+        val multiplier: Double,
+    ): MobSkillUIModel {
+        override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
+    }
+
     data class Buff(
         override val id: String,
         override val name: String,

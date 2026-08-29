@@ -93,6 +93,18 @@ fun CharSkillTuple.toDomain(): CharSkill {
             duration = duration ?: 0
         )
 
+        SkillCategory.VAMPIRIC_DAMAGE -> CharSkill.VampiricDamage(
+            id = id,
+            name = name,
+            description = description,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            imageName = imageName,
+            attributes = attributes,
+            damage = damage ?: 0L,
+            multiplier = multiplier ?: 0.0
+        )
+
         SkillCategory.OFFENSIVE_BUFF,
         SkillCategory.DEFENSIVE_BUFF -> CharSkill.Buff(
             id = id,
@@ -168,6 +180,17 @@ fun MobSkillTuple.toDomain(): MobSkill {
             minLevel = minLevel,
             damage = damage ?: 0L,
             duration = duration ?: 0
+        )
+
+        SkillCategory.VAMPIRIC_DAMAGE -> MobSkill.VampiricDamage(
+            id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            damage = damage ?: 0L,
+            multiplier = multiplier ?: 0.0
         )
 
         SkillCategory.OFFENSIVE_BUFF,

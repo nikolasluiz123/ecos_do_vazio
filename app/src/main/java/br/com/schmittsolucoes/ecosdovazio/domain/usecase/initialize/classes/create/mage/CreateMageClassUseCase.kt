@@ -3,14 +3,14 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.MAGE_CLASS_PROFILE_IMAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLASH_FREEZE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SHOCKWAVE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_FOCUS_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ESSENCE_DRAIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLASH_FREEZE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_MANA_BARRIER
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_METEOR_SHOWER_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SHOCKWAVE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
@@ -124,9 +124,10 @@ class CreateMageClassUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.DRAIN_ESSENCE_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.DRAIN_ESSENCE_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE,
+                skillCategory = SkillCategory.VAMPIRIC_DAMAGE,
                 classId = mage.id,
                 damage = 40,
+                multiplier = 0.5,
                 refreshTime = 5,
                 minLevel = 12,
                 imageName = SKILL_ESSENCE_DRAIN_KEY,

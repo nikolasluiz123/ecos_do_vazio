@@ -6,13 +6,11 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.IdentifiedSkillAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
-import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class SkillMapper @Inject constructor(
     private val numberFormatter: NumberFormatter,
@@ -69,6 +67,20 @@ class SkillMapper @Inject constructor(
                 blocked = blocked,
                 damage = skill.damage,
                 duration = skill.duration
+            )
+
+            is CharSkill.VampiricDamage -> CharSkillUIModel.VampiricDamage(
+                id = skill.id,
+                name = skill.name,
+                description = formatDescription(skill.description, skill.damage, skill.multiplier, null, skill.refreshTime),
+                refreshTime = skill.refreshTime,
+                minLevel = skill.minLevel,
+                image = image,
+                attributes = skill.attributes,
+                currentRefreshTime = currentRefreshTime,
+                blocked = blocked,
+                damage = skill.damage,
+                multiplier = skill.multiplier
             )
 
             is CharSkill.Buff -> CharSkillUIModel.Buff(
@@ -133,6 +145,19 @@ class SkillMapper @Inject constructor(
                 duration = skill.duration
             )
 
+            is MobSkill.VampiricDamage -> MobSkillUIModel.VampiricDamage(
+                id = skill.id,
+                name = skill.name,
+                description = formatDescription(skill.description, skill.damage, skill.multiplier, null, skill.refreshTime),
+                image = image,
+                refreshTime = skill.refreshTime,
+                currentRefreshTime = skill.currentRefreshTime,
+                blocked = skill.blocked,
+                minLevel = skill.minLevel,
+                damage = skill.damage,
+                multiplier = skill.multiplier
+            )
+
             is MobSkill.Buff -> MobSkillUIModel.Buff(
                 id = skill.id,
                 name = skill.name,
@@ -188,6 +213,19 @@ class SkillMapper @Inject constructor(
                 minLevel = skillUIModel.minLevel,
                 damage = skillUIModel.damage,
                 duration = skillUIModel.duration
+            )
+
+            is MobSkillUIModel.VampiricDamage -> MobSkill.VampiricDamage(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                damage = skillUIModel.damage,
+                multiplier = skillUIModel.multiplier
             )
 
             is MobSkillUIModel.Buff -> MobSkill.Buff(

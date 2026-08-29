@@ -137,7 +137,7 @@
     <string name="arcane_focus_skill_name">Arcane Focus</string>
     <string name="arcane_focus_skill_description">A mystical offensive enchantment that increases intellect and power by %2$s for %3$d rounds. After %4$d rounds, it can be used again.</string>
     <string name="drain_essence_skill_name">Drain Essence</string>
-    <string name="drain_essence_skill_description">A forbidden technique that drains the enemy\'s life force, dealing %1$d damage and instantly healing the caster for 50%% of the damage dealt. Can be used again after %4$d rounds.</string>
+    <string name="drain_essence_skill_description">A forbidden technique that drains the enemy\'s life force, dealing %1$d damage and instantly healing the caster for %2$s of the damage dealt. Can be used again after %4$d rounds.</string>
     <string name="meteor_shower_skill_name">Meteor Shower</string>
     <string name="meteor_shower_skill_description">Powerful magic attack capable of devastating the battlefield, deals %1$d damage. Can be used again after %4$d rounds.</string>
 

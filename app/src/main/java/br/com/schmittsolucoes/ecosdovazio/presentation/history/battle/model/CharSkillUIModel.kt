@@ -48,6 +48,22 @@ sealed interface CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
     }
 
+    data class VampiricDamage(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val refreshTime: Int,
+        override val minLevel: Long,
+        @DrawableRes override val image: Int,
+        override val attributes: CharSkill.Attributes,
+        override val currentRefreshTime: Int,
+        override val blocked: Boolean,
+        val damage: Long,
+        val multiplier: Double,
+    ): CharSkillUIModel {
+        override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
+    }
+
     data class Buff(
         override val id: String,
         override val name: String,

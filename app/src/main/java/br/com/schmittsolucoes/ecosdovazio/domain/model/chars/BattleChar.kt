@@ -14,4 +14,6 @@ data class BattleChar(
     val magicResistance: CharAttribute,
     val vitality: CharAttribute,
     val agility: CharAttribute,
+    val totalHealth: Long = 0,
+    val actualHealth: Long = 0,
 )

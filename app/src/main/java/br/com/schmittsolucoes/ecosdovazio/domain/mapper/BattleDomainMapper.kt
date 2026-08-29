@@ -21,6 +21,13 @@ fun MobSkill.toUsedInfo(): UsedMobSkillInfo {
             skillId = id
         )
 
+        is MobSkill.VampiricDamage -> UsedMobSkillInfo.VampiricDamage(
+            refreshTime = refreshTime,
+            damage = damage,
+            multiplier = multiplier,
+            skillId = id
+        )
+
         is MobSkill.Buff -> UsedMobSkillInfo.Buff(
             skillCategory = skillCategory,
             refreshTime = refreshTime,
@@ -47,6 +54,7 @@ fun BattleMob.toInfo(): BattleMobInfo {
         attributes = attributes,
         level = level,
         actualHealth = actualHealth,
+        totalHealth = totalHealth,
         skills = skills,
         activeStatus = activeStatus,
         phaseMobId = phaseMobId

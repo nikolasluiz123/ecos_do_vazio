@@ -9,6 +9,7 @@ data class BattleCharInfo(
     val defensiveMultiplier: Double = 0.0,
     val attributes: List<IdentifiedCharAttribute>,
     val actualHealth: Long,
+    val totalHealth: Long = 0,
     val activeStatus: List<ActiveStatus> = emptyList(),
     val criticalFailCount: Int = 0
 )

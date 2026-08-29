@@ -30,6 +30,12 @@ class BattleInfoMapper @Inject constructor(
                 duration = skillUIModel.duration
             )
 
+            is CharSkillUIModel.VampiricDamage -> UsedCharSkillInfo.VampiricDamage(
+                refreshTime = skillUIModel.refreshTime,
+                damage = skillUIModel.damage,
+                multiplier = skillUIModel.multiplier
+            )
+
             is CharSkillUIModel.Buff -> UsedCharSkillInfo.Buff(
                 skillCategory = skillUIModel.skillCategory,
                 refreshTime = skillUIModel.refreshTime,
@@ -59,6 +65,13 @@ class BattleInfoMapper @Inject constructor(
                 damage = skillUIModel.damage,
                 duration = skillUIModel.duration,
                 skillId = skillUIModel.id
+            )
+
+            is MobSkillUIModel.VampiricDamage -> UsedMobSkillInfo.VampiricDamage(
+                refreshTime = skillUIModel.refreshTime,
+                damage = skillUIModel.damage,
+                skillId = skillUIModel.id,
+                multiplier = skillUIModel.multiplier
             )
 
             is MobSkillUIModel.Buff -> UsedMobSkillInfo.Buff(
@@ -94,6 +107,7 @@ class BattleInfoMapper @Inject constructor(
                 IdentifiedCharAttribute(AttributeIdentifier.AGILITY, charUIModel.agility)
             ),
             actualHealth = charUIModel.actualHealth,
+            totalHealth = charUIModel.totalHealth,
             activeStatus = charUIModel.activeStatus.map { battleMapper.mapToDomain(it) },
             criticalFailCount = charUIModel.criticalFailCount
         )
@@ -107,6 +121,7 @@ class BattleInfoMapper @Inject constructor(
             attributes = mobUIModel.attributes,
             level = mobUIModel.level,
             actualHealth = mobUIModel.actualHealth,
+            totalHealth = mobUIModel.totalHealth,
             skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },
             activeStatus = mobUIModel.activeStatus.map { battleMapper.mapToDomain(it) },
             phaseMobId = mobUIModel.phaseMobId

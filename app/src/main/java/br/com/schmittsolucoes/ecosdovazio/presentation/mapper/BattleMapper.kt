@@ -23,9 +23,6 @@ class BattleMapper @Inject constructor(
 
     fun mapToUIModel(
         char: BattleChar,
-        totalHealth: Long,
-        actualHealth: Long,
-        healthProgress: Float,
         offensiveMultiplier: Double,
         defensiveMultiplier: Double,
         damageSkills: List<CharSkillUIModel> = emptyList(),
@@ -44,9 +41,9 @@ class BattleMapper @Inject constructor(
             classCategory = char.classCategory,
             offensiveMultiplier = offensiveMultiplier,
             defensiveMultiplier = defensiveMultiplier,
-            totalHealth = totalHealth,
-            actualHealth = actualHealth,
-            healthProgress = healthProgress,
+            totalHealth = char.totalHealth,
+            actualHealth = char.actualHealth,
+            healthProgress = if (char.totalHealth > 0) char.actualHealth.toFloat() / char.totalHealth.toFloat() else 0f,
             strength = char.strength,
             dexterity = char.dexterity,
             intelligence = char.intelligence,
@@ -63,8 +60,6 @@ class BattleMapper @Inject constructor(
 
     fun mapToUIModel(
         battleMob: BattleMob,
-        totalHealth: Long,
-        healthProgress: Float,
         skills: List<MobSkillUIModel> = emptyList(),
         activeStatus: List<ActiveStatusUIModel> = emptyList()
     ): BattleMobUIModel {
@@ -77,9 +72,9 @@ class BattleMapper @Inject constructor(
             mobCategory = battleMob.mobCategory,
             offensiveMultiplier = battleMob.offensiveMultiplier,
             defensiveMultiplier = battleMob.defensiveMultiplier,
-            totalHealth = totalHealth,
+            totalHealth = battleMob.totalHealth,
             actualHealth = battleMob.actualHealth,
-            healthProgress = healthProgress,
+            healthProgress = if (battleMob.totalHealth > 0) battleMob.actualHealth.toFloat() / battleMob.totalHealth.toFloat() else 0f,
             level = battleMob.level,
             attributes = battleMob.attributes,
             skills = skills,

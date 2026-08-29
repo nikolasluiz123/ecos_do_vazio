@@ -15,6 +15,7 @@ data class BattleMob(
     val offensiveMultiplier: Double = 1.0,
     val defensiveMultiplier: Double = 0.0,
     val actualHealth: Long = 0,
+    val totalHealth: Long = 0,
     val attributes: Mob.Attributes,
     val skills: List<MobSkill> = emptyList(),
     val activeStatus: List<ActiveStatus> = emptyList()

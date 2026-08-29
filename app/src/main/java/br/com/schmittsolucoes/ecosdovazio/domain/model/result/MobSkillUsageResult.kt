@@ -17,6 +17,13 @@ sealed interface MobSkillUsageResult {
         override val refreshTime: Int
     ) : MobSkillUsageResult
 
+    data class VampiricDamage(
+        val newEnemyHealth: Long,
+        val newCharHealth: Long,
+        val mobId: String,
+        override val refreshTime: Int
+    ) : MobSkillUsageResult
+
     data class Debuff(
         val newEnemyHealth: Long,
         val repeat: Int,

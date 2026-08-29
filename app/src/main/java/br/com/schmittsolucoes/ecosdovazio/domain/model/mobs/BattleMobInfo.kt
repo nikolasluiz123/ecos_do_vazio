@@ -11,6 +11,7 @@ data class BattleMobInfo(
     val attributes: Mob.Attributes,
     val level: Long,
     val actualHealth: Long,
+    val totalHealth: Long = 0,
     val phaseMobId: String,
     val skills: List<MobSkill> = emptyList(),
     val activeStatus: List<ActiveStatus> = emptyList(),

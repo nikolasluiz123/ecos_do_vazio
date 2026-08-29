@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration
 enum class SkillCategory {
     DAMAGE,
     DAMAGE_OVER_TIME,
+    VAMPIRIC_DAMAGE,
     OFFENSIVE_BUFF,
     DEFENSIVE_BUFF,
     OFFENSIVE_DEBUFF,

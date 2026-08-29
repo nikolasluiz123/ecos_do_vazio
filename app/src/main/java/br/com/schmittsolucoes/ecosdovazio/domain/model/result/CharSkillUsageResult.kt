@@ -16,6 +16,12 @@ sealed interface CharSkillUsageResult {
         override val refreshTime: Int
     ) : CharSkillUsageResult
 
+    data class VampiricDamage(
+        val newEnemyHealth: Long,
+        val newCharHealth: Long,
+        override val refreshTime: Int
+    ) : CharSkillUsageResult
+
     data class Debuff(
         val newEnemyHealth: Long,
         val repeat: Int,
