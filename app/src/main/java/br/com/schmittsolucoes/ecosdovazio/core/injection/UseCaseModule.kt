@@ -23,8 +23,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobCrit
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharBuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsBuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
@@ -827,5 +829,15 @@ object UseCaseModule {
     @Provides
     fun provideApplyCharDebuffUseCase(): ApplyCharDebuffUseCase {
         return ApplyCharDebuffUseCase()
+    }
+
+    @Provides
+    fun provideApplyMobsBuffUseCase(): ApplyMobsBuffUseCase {
+        return ApplyMobsBuffUseCase()
+    }
+
+    @Provides
+    fun provideApplyCharBuffUseCase(): ApplyCharBuffUseCase {
+        return ApplyCharBuffUseCase()
     }
 }

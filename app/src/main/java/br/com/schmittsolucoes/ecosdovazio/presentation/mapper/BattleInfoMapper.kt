@@ -108,7 +108,8 @@ class BattleInfoMapper @Inject constructor(
             level = mobUIModel.level,
             actualHealth = mobUIModel.actualHealth,
             skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },
-            activeStatus = mobUIModel.activeStatus.map { battleMapper.mapToDomain(it) }
+            activeStatus = mobUIModel.activeStatus.map { battleMapper.mapToDomain(it) },
+            phaseMobId = mobUIModel.phaseMobId
         )
     }
 

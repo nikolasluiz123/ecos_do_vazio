@@ -90,6 +90,7 @@ private fun CharItem(
 
         AppliedStatus(
             status = char.activeStatus,
+            isPlayerStatus = true,
             onClick = onStatusClick
         )
 

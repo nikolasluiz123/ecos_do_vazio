@@ -22,6 +22,13 @@ sealed interface CharActiveStatus: ActiveStatus {
         val skillCategory: SkillCategory,
         val skillInfo: UsedCharSkillInfo.Debuff
     ) : CharActiveStatus
+
+    data class Buff(
+        override val skillId: String,
+        override val remainingTurns: Int,
+        val skillCategory: SkillCategory,
+        val skillInfo: UsedCharSkillInfo.Buff
+    ) : CharActiveStatus
 }
 
 sealed interface MobActiveStatus: ActiveStatus {
@@ -38,5 +45,13 @@ sealed interface MobActiveStatus: ActiveStatus {
         val sourceId: String,
         val skillCategory: SkillCategory,
         val skillInfo: UsedMobSkillInfo.Debuff
+    ) : MobActiveStatus
+
+    data class Buff(
+        override val skillId: String,
+        override val remainingTurns: Int,
+        val sourceId: String,
+        val skillCategory: SkillCategory,
+        val skillInfo: UsedMobSkillInfo.Buff
     ) : MobActiveStatus
 }

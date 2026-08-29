@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.model.chars
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.MobActiveStatus
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 
 data class BattleCharInfo(
@@ -9,6 +9,6 @@ data class BattleCharInfo(
     val defensiveMultiplier: Double = 0.0,
     val attributes: List<IdentifiedCharAttribute>,
     val actualHealth: Long,
-    val activeStatus: List<MobActiveStatus> = emptyList(),
+    val activeStatus: List<ActiveStatus> = emptyList(),
     val criticalFailCount: Int = 0
 )

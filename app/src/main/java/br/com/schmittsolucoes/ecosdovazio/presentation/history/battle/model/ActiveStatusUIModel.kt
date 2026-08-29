@@ -32,6 +32,16 @@ sealed interface CharActiveStatusUIModel: ActiveStatusUIModel {
         val skillCategory: SkillCategory,
         val skillInfo: UsedCharSkillInfo.Debuff
     ) : CharActiveStatusUIModel
+
+    data class BuffUIModel(
+        override val skillId: String,
+        override val skillName: String,
+        override val skillDescription: String,
+        override val remainingTurns: Int,
+        @DrawableRes override val skillImage: Int,
+        val skillCategory: SkillCategory,
+        val skillInfo: UsedCharSkillInfo.Buff
+    ) : CharActiveStatusUIModel
 }
 
 sealed interface MobActiveStatusUIModel: ActiveStatusUIModel {
@@ -54,5 +64,16 @@ sealed interface MobActiveStatusUIModel: ActiveStatusUIModel {
         val sourceId: String,
         val skillCategory: SkillCategory,
         val skillInfo: UsedMobSkillInfo.Debuff
+    ) : MobActiveStatusUIModel
+
+    data class BuffUIModel(
+        override val skillId: String,
+        override val skillName: String,
+        override val skillDescription: String,
+        override val remainingTurns: Int,
+        @DrawableRes override val skillImage: Int,
+        val sourceId: String,
+        val skillCategory: SkillCategory,
+        val skillInfo: UsedMobSkillInfo.Buff
     ) : MobActiveStatusUIModel
 }

@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.dots
+package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.status
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,8 +28,8 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 
 @Composable
-internal fun ActiveDotTooltip(
-    dot: ActiveStatusUIModel,
+internal fun ActiveStatusTooltip(
+    status: ActiveStatusUIModel,
     onDismissRequest: () -> Unit,
 ) {
     Popup(
@@ -54,7 +54,7 @@ internal fun ActiveDotTooltip(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = dot.skillName,
+                        text = status.skillName,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
@@ -70,20 +70,20 @@ internal fun ActiveDotTooltip(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = dot.skillDescription,
+                    text = status.skillDescription,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                DotInfoRow(stringResource(R.string.skill_tooltip_duration, dot.remainingTurns))
+                StatusInfoRow(stringResource(R.string.skill_tooltip_duration, status.remainingTurns))
             }
         }
     }
 }
 
 @Composable
-private fun DotInfoRow(text: String) {
+private fun StatusInfoRow(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodySmall,

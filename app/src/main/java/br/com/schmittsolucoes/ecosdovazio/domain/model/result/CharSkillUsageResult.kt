@@ -20,7 +20,14 @@ sealed interface CharSkillUsageResult {
         val newEnemyHealth: Long,
         val repeat: Int,
         val skillCategory: SkillCategory,
-        val newDefensiveMultiplier: Double,
+        val newMultiplier: Double,
+        override val refreshTime: Int
+    ) : CharSkillUsageResult
+
+    data class Buff(
+        val repeat: Int,
+        val skillCategory: SkillCategory,
+        val newMultiplier: Double,
         override val refreshTime: Int
     ) : CharSkillUsageResult
 }

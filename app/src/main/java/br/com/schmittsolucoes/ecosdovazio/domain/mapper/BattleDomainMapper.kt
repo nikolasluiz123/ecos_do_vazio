@@ -48,7 +48,8 @@ fun BattleMob.toInfo(): BattleMobInfo {
         level = level,
         actualHealth = actualHealth,
         skills = skills,
-        activeStatus = activeStatus
+        activeStatus = activeStatus,
+        phaseMobId = phaseMobId
     )
 }
 

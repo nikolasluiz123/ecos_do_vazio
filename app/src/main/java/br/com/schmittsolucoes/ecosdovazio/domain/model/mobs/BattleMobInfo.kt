@@ -1,6 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.model.mobs
 
-import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.CharActiveStatus
+import br.com.schmittsolucoes.ecosdovazio.domain.model.battle.ActiveStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 
@@ -11,6 +11,7 @@ data class BattleMobInfo(
     val attributes: Mob.Attributes,
     val level: Long,
     val actualHealth: Long,
+    val phaseMobId: String,
     val skills: List<MobSkill> = emptyList(),
-    val activeStatus: List<CharActiveStatus> = emptyList()
+    val activeStatus: List<ActiveStatus> = emptyList(),
 )

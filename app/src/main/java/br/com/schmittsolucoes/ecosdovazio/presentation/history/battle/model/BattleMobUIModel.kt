@@ -19,5 +19,5 @@ data class BattleMobUIModel(
     val level: Long,
     val attributes: Mob.Attributes,
     val skills: List<MobSkillUIModel> = emptyList(),
-    val activeStatus: List<CharActiveStatusUIModel> = emptyList()
+    val activeStatus: List<ActiveStatusUIModel> = emptyList()
 )

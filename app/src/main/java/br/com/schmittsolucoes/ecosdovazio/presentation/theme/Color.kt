@@ -67,6 +67,8 @@ val HealthBarRedEnd = Color(0xFF7F0000)
 val HealthBarTrack = Color(0xFF121416)
 val HighlightOnImage = Color(0xFFFFB77D)
 val OnSurfaceVariantOnImage = Color(0xFFDDC1AE)
+val PositiveStatus = Color(0xFF2196F3)
+val NegativeStatus = Color(0xFFE53935)
 
 @get:Composable
 val OrangeForDetails: Color

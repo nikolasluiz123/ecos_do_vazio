@@ -60,15 +60,19 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_MAX_HEIGHT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_SPACING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.dots.ActiveDotTooltip
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.status.ActiveStatusTooltip
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getNameStyle
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NegativeStatus
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PositiveStatus
 
 private const val PULSE_ANIMATION_DURATION = 600
 private const val PULSE_ALPHA_INITIAL = 0.4f
@@ -107,9 +111,9 @@ internal fun EnemySection(
         )
     }
 
-    state.selectedDot?.let { dot ->
-        ActiveDotTooltip(
-            dot = dot,
+    state.selectedActiveStatus?.let { dot ->
+        ActiveStatusTooltip(
+            status = dot,
             onDismissRequest = onDismissDotTooltip
         )
     }
@@ -251,7 +255,7 @@ private fun EnemyItem(
                 modifier = Modifier.fillMaxSize()
             )
 
-            AppliedStatus(mob.activeStatus, onDotClick)
+            AppliedStatus(mob.activeStatus, isPlayerStatus = false, onDotClick)
 
             EnemyInfo(mob, maxWidth)
         }
@@ -261,6 +265,7 @@ private fun EnemyItem(
 @Composable
 internal fun BoxWithConstraintsScope.AppliedStatus(
     status: List<ActiveStatusUIModel>,
+    isPlayerStatus: Boolean,
     onClick: (ActiveStatusUIModel) -> Unit
 ) {
     if (status.isNotEmpty()) {
@@ -275,14 +280,25 @@ internal fun BoxWithConstraintsScope.AppliedStatus(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            status.forEach { dot ->
+            status.forEach { status ->
+                val borderColor = if (isPlayerStatus) {
+                    if (status is CharActiveStatusUIModel) PositiveStatus else NegativeStatus
+                } else {
+                    if (status is MobActiveStatusUIModel) PositiveStatus else NegativeStatus
+                }
+
                 BattleAsyncImage(
-                    model = dot.skillImage,
-                    contentDescription = dot.skillName,
+                    model = status.skillImage,
+                    contentDescription = status.skillName,
                     modifier = Modifier
                         .size(20.dp)
                         .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
-                        .clickable { onClick(dot) }
+                        .border(
+                            width = 1.dp,
+                            color = borderColor,
+                            shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+                        )
+                        .clickable { onClick(status) }
                 )
             }
         }

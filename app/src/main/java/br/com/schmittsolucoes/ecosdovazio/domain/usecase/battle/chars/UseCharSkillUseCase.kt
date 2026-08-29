@@ -18,12 +18,27 @@ class UseCharSkillUseCase(
         battleMobInfo: BattleMobInfo
     ): CharSkillUsageResult {
         var actualDefensiveMultiplier = battleMobInfo.defensiveMultiplier
+        var actualOffensiveMultiplier = battleMobInfo.offensiveMultiplier
 
         battleMobInfo.activeStatus.forEach { status ->
-            when {
-                status is CharActiveStatus.Debuff && status.skillCategory == SkillCategory.DEFENSIVE_DEBUFF -> {
+            when (status) {
+                is CharActiveStatus.Debuff if status.skillCategory == SkillCategory.DEFENSIVE_DEBUFF -> {
                     actualDefensiveMultiplier -= status.skillInfo.multiplier
                 }
+
+                is CharActiveStatus.Debuff if status.skillCategory == SkillCategory.OFFENSIVE_DEBUFF -> {
+                    actualOffensiveMultiplier -= status.skillInfo.multiplier
+                }
+
+                is CharActiveStatus.Buff if status.skillCategory == SkillCategory.DEFENSIVE_BUFF -> {
+                    actualDefensiveMultiplier += status.skillInfo.multiplier
+                }
+
+                is CharActiveStatus.Buff if status.skillCategory == SkillCategory.OFFENSIVE_BUFF -> {
+                    actualOffensiveMultiplier += status.skillInfo.multiplier
+                }
+
+                else -> {}
             }
         }
 
@@ -60,22 +75,49 @@ class UseCharSkillUseCase(
             }
 
             is UsedCharSkillInfo.Buff -> {
-                TODO("Not yet implemented")
+                when (skillInfo.skillCategory) {
+                    SkillCategory.OFFENSIVE_BUFF -> {
+                        val newOffensiveMultiplier = actualOffensiveMultiplier + skillInfo.multiplier
+
+                        CharSkillUsageResult.Buff(
+                            refreshTime = skillInfo.refreshTime,
+                            repeat = skillInfo.duration,
+                            skillCategory = skillInfo.skillCategory,
+                            newMultiplier = newOffensiveMultiplier
+                        )
+                    }
+
+                    SkillCategory.DEFENSIVE_BUFF -> {
+                        val newDefensiveMultiplier = actualDefensiveMultiplier + skillInfo.multiplier
+
+                        CharSkillUsageResult.Buff(
+                            refreshTime = skillInfo.refreshTime,
+                            repeat = skillInfo.duration,
+                            skillCategory = skillInfo.skillCategory,
+                            newMultiplier = newDefensiveMultiplier
+                        )
+                    }
+
+                    else -> {
+                        throw SkillException.SkillCategoryNotHandled()
+                    }
+                }
             }
 
 
             is UsedCharSkillInfo.Debuff -> {
                 when (skillInfo.skillCategory) {
-                    SkillCategory.OFFENSIVE_DEBUFF -> TODO()
-                    SkillCategory.DEFENSIVE_DEBUFF -> {
-                        val newDefensiveMultiplier = actualDefensiveMultiplier - skillInfo.multiplier
+                    SkillCategory.OFFENSIVE_DEBUFF -> {
+                        val newOffensiveMultiplier = actualOffensiveMultiplier - skillInfo.multiplier
+
+                        val battleMobInfo = battleMobInfo.copy(
+                            offensiveMultiplier = newOffensiveMultiplier
+                        )
 
                         val damage = getCharSkillDamageUseCase.executeInternal(
                             skillInfo = skillInfo,
                             battleCharInfo = battleCharInfo,
-                            battleMobInfo = battleMobInfo.copy(
-                                defensiveMultiplier = newDefensiveMultiplier
-                            )
+                            battleMobInfo = battleMobInfo
                         )
 
                         val newEnemyHealth = getNewEnemyHealth(battleMobInfo, damage)
@@ -85,7 +127,31 @@ class UseCharSkillUseCase(
                             refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
                             skillCategory = skillInfo.skillCategory,
-                            newDefensiveMultiplier = newDefensiveMultiplier
+                            newMultiplier = newOffensiveMultiplier
+                        )
+                    }
+
+                    SkillCategory.DEFENSIVE_DEBUFF -> {
+                        val newDefensiveMultiplier = actualDefensiveMultiplier - skillInfo.multiplier
+
+                        val battleMobInfo = battleMobInfo.copy(
+                            defensiveMultiplier = newDefensiveMultiplier
+                        )
+
+                        val damage = getCharSkillDamageUseCase.executeInternal(
+                            skillInfo = skillInfo,
+                            battleCharInfo = battleCharInfo,
+                            battleMobInfo = battleMobInfo
+                        )
+
+                        val newEnemyHealth = getNewEnemyHealth(battleMobInfo, damage)
+
+                        CharSkillUsageResult.Debuff(
+                            newEnemyHealth = newEnemyHealth,
+                            refreshTime = skillInfo.refreshTime,
+                            repeat = skillInfo.duration,
+                            skillCategory = skillInfo.skillCategory,
+                            newMultiplier = newDefensiveMultiplier
                         )
                     }
 

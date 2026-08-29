@@ -22,7 +22,16 @@ sealed interface MobSkillUsageResult {
         val repeat: Int,
         val skillId: String,
         val skillCategory: SkillCategory,
-        val newDefensiveMultiplier: Double,
+        val newMultiplier: Double,
+        override val refreshTime: Int
+    ) : MobSkillUsageResult
+
+    data class Buff(
+        val repeat: Int,
+        val skillId: String,
+        val mobId: String,
+        val skillCategory: SkillCategory,
+        val newMultiplier: Double,
         override val refreshTime: Int
     ) : MobSkillUsageResult
 }
