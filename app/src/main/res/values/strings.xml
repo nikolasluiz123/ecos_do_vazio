@@ -156,7 +156,7 @@
     <string name="smoke_screen_skill_name">Smoke Screen</string>
     <string name="smoke_screen_skill_description">Defensive tactic that confuses surrounding enemies, increasing your dodge by %2$s for %3$d rounds. Available again after %4$d rounds.</string>
     <string name="piercing_shot_skill_name">Piercing Shot</string>
-    <string name="piercing_shot_skill_description">Ignores 50%% of the opponent\'s Resistance only on the first hit, dealing %1$d damage. Available again after %4$d rounds.</string>
+    <string name="piercing_shot_skill_description">Ignores %2$s of the opponent\'s Resistance only on the first hit, dealing %1$d damage. Available again after %4$d rounds.</string>
 
     <string name="holy_shield_skill_name">Holy Shield</string>
     <string name="holy_shield_skill_description">Absolute defense reducing damage by 20%.</string>

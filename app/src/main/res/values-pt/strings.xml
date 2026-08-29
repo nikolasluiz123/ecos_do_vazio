@@ -156,7 +156,7 @@
     <string name="smoke_screen_skill_name">Cortina de Fumaça</string>
     <string name="smoke_screen_skill_description">Tática defensiva que confunde os inimigos ao redor, aumentando sua esquiva em %2$s por %3$d turnos. Disponível novamente após %4$d turnos.</string>
     <string name="piercing_shot_skill_name">Disparo Perfurante</string>
-    <string name="piercing_shot_skill_description">Ignora 50%% da Resistência do oponente apenas no primeiro golpe, causando %1$d de dano. Disponível novamente após %4$d turnos.</string>
+    <string name="piercing_shot_skill_description">Ignora %2$s da Resistência do oponente apenas no primeiro golpe, causando %1$d de dano. Disponível novamente após %4$d turnos.</string>
 
     <string name="holy_shield_skill_name">Escudo Sagrado</string>
     <string name="holy_shield_skill_description">Defesa absoluta que reduz o dano em 20%.</string>
