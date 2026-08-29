@@ -29,11 +29,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharD
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsBuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.ChooseMobSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttributesByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageAttributePointsUseCase
@@ -720,10 +722,14 @@ object UseCaseModule {
 
     @Provides
     fun provideUseCharSkillUseCase(
-        getCharSkillDamageUseCase: GetCharSkillDamageUseCase
+        getCharSkillDamageUseCase: GetCharSkillDamageUseCase,
+        calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
+        calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
     ): UseCharSkillUseCase {
         return UseCharSkillUseCase(
-            getCharSkillDamageUseCase = getCharSkillDamageUseCase
+            getCharSkillDamageUseCase = getCharSkillDamageUseCase,
+            calculateCharMultipliersUseCase = calculateCharMultipliersUseCase,
+            calculateMobMultipliersUseCase = calculateMobMultipliersUseCase
         )
     }
 
@@ -778,8 +784,20 @@ object UseCaseModule {
 
     @Provides
     fun provideUseMobSkillUseCase(
-        getMobSkillDamageUseCase: GetMobSkillDamageUseCase
-    ): UseMobSkillUseCase = UseMobSkillUseCase(getMobSkillDamageUseCase)
+        getMobSkillDamageUseCase: GetMobSkillDamageUseCase,
+        calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
+        calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
+    ): UseMobSkillUseCase = UseMobSkillUseCase(
+        getMobSkillDamageUseCase = getMobSkillDamageUseCase,
+        calculateCharMultipliersUseCase = calculateCharMultipliersUseCase,
+        calculateMobMultipliersUseCase = calculateMobMultipliersUseCase
+    )
+
+    @Provides
+    fun provideCalculateCharMultipliersUseCase(): CalculateCharMultipliersUseCase = CalculateCharMultipliersUseCase()
+
+    @Provides
+    fun provideCalculateMobMultipliersUseCase(): CalculateMobMultipliersUseCase = CalculateMobMultipliersUseCase()
 
     @Provides
     fun provideCalculateHistoryPhaseExperienceUseCase(): CalculateHistoryPhaseExperienceUseCase {

@@ -21,8 +21,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharD
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsBuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
@@ -65,6 +67,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val applyCharDebuffUseCase: ApplyCharDebuffUseCase,
     private val applyMobsBuffUseCase: ApplyMobsBuffUseCase,
     private val applyCharBuffUseCase: ApplyCharBuffUseCase,
+    private val calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
+    private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
     private val useCharSkillUseCase: UseCharSkillUseCase,
     private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
@@ -724,11 +728,20 @@ class HistoryModeBattleViewModel @Inject constructor(
     ): List<BattleMobUIModel> {
         return mobs.map { battleMob ->
             val actualHealth = mobsHealth[battleMob.phaseMobId] ?: battleMob.actualHealth
-
-            battleMapper.mapToUIModel(
+            val activeStatus = mobsActiveStatus[battleMob.phaseMobId] ?: emptyList()
+            val tempUIModel = battleMapper.mapToUIModel(
                 battleMob = battleMob.copy(actualHealth = actualHealth),
                 skills = battleMob.skills.map { skillMapper.mapToUIModel(it) },
-                activeStatus = mobsActiveStatus[battleMob.phaseMobId] ?: emptyList()
+                activeStatus = activeStatus
+            )
+
+            val multipliers = calculateMobMultipliersUseCase(
+                battleInfoMapper.mapToDomainInfo(tempUIModel)
+            )
+
+            tempUIModel.copy(
+                offensiveMultiplier = multipliers.offensive,
+                defensiveMultiplier = multipliers.defensive
             )
         }
     }
@@ -743,7 +756,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     ): BattleCharUIModel {
         val actualHealth = charHealth ?: char.actualHealth
 
-        return battleMapper.mapToUIModel(
+        val tempUIModel = battleMapper.mapToUIModel(
             char = char.copy(actualHealth = actualHealth),
             offensiveMultiplier = 1.0,
             defensiveMultiplier = 0.0,
@@ -751,6 +764,15 @@ class HistoryModeBattleViewModel @Inject constructor(
             buffSkills = buffSkills,
             debuffSkills = debuffSkills,
             activeStatus = charActiveStatus
+        )
+
+        val multipliers = calculateCharMultipliersUseCase(
+            battleInfoMapper.mapToDomainInfo(tempUIModel)
+        )
+
+        return tempUIModel.copy(
+            offensiveMultiplier = multipliers.offensive,
+            defensiveMultiplier = multipliers.defensive
         )
     }
 
