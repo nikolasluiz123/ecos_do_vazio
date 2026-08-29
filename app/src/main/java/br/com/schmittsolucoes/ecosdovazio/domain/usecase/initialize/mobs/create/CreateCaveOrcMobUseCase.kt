@@ -50,7 +50,7 @@ class CreateCaveOrcMobUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.THICK_SKIN_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.THICK_SKIN_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_PHYSICAL_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 mobId = mob.id,
                 multiplier = 1.3,
                 duration = 3,

@@ -30,8 +30,7 @@ class CharBuffSkillsQueryUseCase(
             specializationId = char.specializationId,
             categories = listOf(
                 SkillCategory.OFFENSIVE_BUFF,
-                SkillCategory.DEFENSIVE_MAGIC_BUFF,
-                SkillCategory.DEFENSIVE_PHYSICAL_BUFF,
+                SkillCategory.DEFENSIVE_BUFF,
             )
         )
 

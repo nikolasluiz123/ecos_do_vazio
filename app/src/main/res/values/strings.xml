@@ -110,9 +110,9 @@
     <string name="heavy_strike_skill_name">Heavy Strike</string>
     <string name="heavy_strike_skill_description">A powerful offensive attack based on pure strength, dealing %1$d physical damage to the enemy. Can be used again after %4$d rounds.</string>
     <string name="tactical_advance_skill_name">Tactical Advance</string>
-    <string name="tactical_advance_skill_description">Advances ignoring %2$s of the enemy\'s Physical Resistance, dealing %1$d damage. The effect lasts %3$d rounds and the cooldown is %4$d rounds.</string>
+    <string name="tactical_advance_skill_description">Advances ignoring %2$s of the enemy\'s Resistance, dealing %1$d damage. The effect lasts %3$d rounds and the cooldown is %4$d rounds.</string>
     <string name="defensive_stance_skill_name">Defensive Stance</string>
-    <string name="defensive_stance_skill_description">Increases Physical Resistance by %2$s for %3$d rounds, with a cooldown of %4$d rounds.</string>
+    <string name="defensive_stance_skill_description">Increases Resistance by %2$s for %3$d rounds, with a cooldown of %4$d rounds.</string>
     <string name="bloody_strike_skill_name">Bloody Strike</string>
     <string name="bloody_strike_skill_description">A strike that makes the enemy bleed, dealing %1$d damage every round for %3$d rounds. Can be used again after %4$d rounds.</string>
     <string name="battle_fury_skill_name">Battle Fury</string>
@@ -122,14 +122,14 @@
     <string name="brutal_rift_skill_name">Brutal Rift</string>
     <string name="brutal_rift_skill_description">Extremely powerful attack on the battlefield, dealing %1$d damage to all enemies, with a %4$d round cooldown.</string>
     <string name="break_armor_skill_name">Break Armor</string>
-    <string name="break_armor_skill_description">Reduces the enemy\'s Physical Resistance by %2$s and deals %1$d damage. Can be used again after %4$d rounds.</string>
+    <string name="break_armor_skill_description">Reduces the enemy\'s Resistance by %2$s and deals %1$d damage. Can be used again after %4$d rounds.</string>
 
     <string name="arcane_missile_skill_name">Arcane Missile</string>
     <string name="arcane_missile_skill_description">Fires offensive magic dealing %1$d magic damage to the enemy, with a %4$d round cooldown.</string>
     <string name="quick_freeze_skill_name">Quick Freeze</string>
-    <string name="quick_freeze_skill_description">Reduces the enemy\'s magic resistance by %2$s and deals %1$d damage with magic ice for %3$d rounds. Cooldown of %4$d rounds.</string>
+    <string name="quick_freeze_skill_description">Reduces the enemy\'s resistance by %2$s and deals %1$d damage with magic ice for %3$d rounds. Cooldown of %4$d rounds.</string>
     <string name="mana_barrier_skill_name">Mana Barrier</string>
-    <string name="mana_barrier_skill_description">A mystical barrier that increases Magic Resistance by %2$s for %3$d rounds. Can be used again after %4$d rounds.</string>
+    <string name="mana_barrier_skill_description">A mystical barrier that increases Resistance by %2$s for %3$d rounds. Can be used again after %4$d rounds.</string>
     <string name="flaming_touch_skill_name">Flaming Touch</string>
     <string name="flaming_touch_skill_description">An ancient fire magic that, upon touching your enemy, causes serious burns dealing %1$d damage every round for %3$d rounds. Can be used again after %4$d rounds.</string>
     <string name="shock_wave_skill_name">Shock Wave</string>
@@ -144,9 +144,9 @@
     <string name="precision_shot_skill_name">Precision Shot</string>
     <string name="precision_shot_skill_description">A perfect offensive shot, dealing %1$d damage. Available again after %4$d rounds.</string>
     <string name="corrosive_arrows_skill_name">Corrosive Arrows</string>
-    <string name="corrosive_arrows_skill_description">An arrow shot that corrodes the enemy\'s armor, dealing %1$d damage and reducing the enemy\'s Physical Resistance by %2$s for %3$d rounds. Can be used again in %4$d rounds.</string>
+    <string name="corrosive_arrows_skill_description">An arrow shot that corrodes the enemy\'s armor, dealing %1$d damage and reducing the enemy\'s Resistance by %2$s for %3$d rounds. Can be used again in %4$d rounds.</string>
     <string name="tactical_retreat_skill_name">Tactical Retreat</string>
-    <string name="tactical_retreat_skill_description">Uses agility to hinder enemy attacks, increasing your Physical Resistance by %2$s for %3$d rounds. Available again after %4$d rounds.</string>
+    <string name="tactical_retreat_skill_description">Uses agility to hinder enemy attacks, increasing your Resistance by %2$s for %3$d rounds. Available again after %4$d rounds.</string>
     <string name="thorn_trap_skill_name">Thorn Trap</string>
     <string name="thorn_trap_skill_description">Leaves the enemy wounded dealing %1$d damage for %3$d rounds. Can be used again after %4$d rounds.</string>
     <string name="poison_arrow_skill_name">Poison Arrow</string>
@@ -156,14 +156,14 @@
     <string name="smoke_screen_skill_name">Smoke Screen</string>
     <string name="smoke_screen_skill_description">Defensive tactic that confuses surrounding enemies, increasing your dodge by %2$s for %3$d rounds. Available again after %4$d rounds.</string>
     <string name="piercing_shot_skill_name">Piercing Shot</string>
-    <string name="piercing_shot_skill_description">Ignores 50%% of the opponent\'s Physical Resistance only on the first hit, dealing %1$d damage. Available again after %4$d rounds.</string>
+    <string name="piercing_shot_skill_description">Ignores 50%% of the opponent\'s Resistance only on the first hit, dealing %1$d damage. Available again after %4$d rounds.</string>
 
     <string name="holy_shield_skill_name">Holy Shield</string>
-    <string name="holy_shield_skill_description">Absolute defense reducing magical damage by 20%.</string>
+    <string name="holy_shield_skill_description">Absolute defense reducing damage by 20%.</string>
     <string name="counterattack_skill_name">Counterattack</string>
     <string name="counterattack_skill_description">Reflects 20% of incoming damage back to the attacker.</string>
     <string name="bastion_skill_name">Bastion</string>
-    <string name="bastion_skill_description">Increases the Guardian\'s Physical Resistance by 20%.</string>
+    <string name="bastion_skill_description">Increases the Guardian\'s Resistance by 20%.</string>
 
     <string name="brutal_cut_skill_name">Brutal Cut</string>
     <string name="brutal_cut_skill_description">A powerful and violent offensive strike with the weapon.</string>

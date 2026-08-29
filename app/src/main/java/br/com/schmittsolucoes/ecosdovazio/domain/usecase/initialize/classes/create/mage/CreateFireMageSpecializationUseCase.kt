@@ -62,7 +62,7 @@ class CreateFireMageSpecializationUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.FIRE_SKIN_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.FIRE_SKIN_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_PHYSICAL_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 specializationId = fireMage.id,
                 multiplier = 1.2,
                 duration = 3,

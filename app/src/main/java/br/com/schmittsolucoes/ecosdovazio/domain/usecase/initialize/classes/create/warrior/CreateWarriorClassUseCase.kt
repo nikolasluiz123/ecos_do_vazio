@@ -73,7 +73,7 @@ class CreateWarriorClassUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.DEFENSIVE_STANCE_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.DEFENSIVE_STANCE_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_PHYSICAL_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 classId = warrior.id,
                 multiplier = 0.2,
                 duration = 3,

@@ -51,7 +51,7 @@ class CreateWaterMageSpecializationUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.INVIGORATING_HEAL_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.INVIGORATING_HEAL_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_MAGIC_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 specializationId = waterMage.id,
                 damage = 20,
                 refreshTime = 4,

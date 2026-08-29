@@ -73,7 +73,7 @@ class CreateMageClassUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.MANA_BARRIER_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.MANA_BARRIER_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_MAGIC_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 classId = mage.id,
                 multiplier = 0.1,
                 duration = 3,

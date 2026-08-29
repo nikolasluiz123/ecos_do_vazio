@@ -61,7 +61,7 @@ class CreateGoblinShamanMobUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.ENERGY_SHIELD_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.ENERGY_SHIELD_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_MAGIC_BUFF,
+                skillCategory = SkillCategory.DEFENSIVE_BUFF,
                 mobId = mob.id,
                 multiplier = 1.2,
                 duration = 2,

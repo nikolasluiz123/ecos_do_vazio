@@ -110,9 +110,9 @@
     <string name="heavy_strike_skill_name">Golpe Pesado</string>
     <string name="heavy_strike_skill_description">Um ataque ofensivo poderoso baseado em força pura, causando %1$d de dano físico ao inimigo, podendo ser utilizado novamente após %4$d turnos.</string>
     <string name="tactical_advance_skill_name">Avanço Tático</string>
-    <string name="tactical_advance_skill_description">Avança ignorando %2$s da Resistência Física do inimigo, causando %1$d de dano. O efeito dura %3$d turnos e a recarga é de %4$d turnos.</string>
+    <string name="tactical_advance_skill_description">Avança ignorando %2$s da Resistência do inimigo, causando %1$d de dano. O efeito dura %3$d turnos e a recarga é de %4$d turnos.</string>
     <string name="defensive_stance_skill_name">Postura Defensiva</string>
-    <string name="defensive_stance_skill_description">Aumenta a Resistência Física em %2$s por %3$d turnos, com um tempo de recarga de %4$d turnos.</string>
+    <string name="defensive_stance_skill_description">Aumenta a Resistência em %2$s por %3$d turnos, com um tempo de recarga de %4$d turnos.</string>
     <string name="bloody_strike_skill_name">Golpe Sangrento</string>
     <string name="bloody_strike_skill_description">Um golpe que faz o inimigo sangrar, causando %1$d de dano a cada turno por %3$d turnos. Pode ser usado novamente após %4$d turnos.</string>
     <string name="battle_fury_skill_name">Fúria de Batalha</string>
@@ -122,14 +122,14 @@
     <string name="brutal_rift_skill_name">Fenda Brutal</string>
     <string name="brutal_rift_skill_description">Ataque extremamente poderoso no campo de batalha, causando %1$d de dano a todos os inimigos, com recarga de %4$d turnos.</string>
     <string name="break_armor_skill_name">Quebrar Armadura</string>
-    <string name="break_armor_skill_description">Reduz a Resistência Física do inimigo em %2$s e causa %1$d de dano, pode ser utilizada novamente após %4$d turnos.</string>
+    <string name="break_armor_skill_description">Reduz a Resistência do inimigo em %2$s e causa %1$d de dano, pode ser utilizada novamente após %4$d turnos.</string>
 
     <string name="arcane_missile_skill_name">Míssil Arcano</string>
     <string name="arcane_missile_skill_description">Dispara magia ofensiva causando %1$d de dano mágico ao inimigo, com tempo de recarga de %4$d turnos.</string>
     <string name="quick_freeze_skill_name">Congelamento Rápido</string>
-    <string name="quick_freeze_skill_description">Reduz a resistência mágica do inimigo em %2$s e causa %1$d de dano com gelo mágico por %3$d turnos. Tempo de recarga de %4$d turnos.</string>
+    <string name="quick_freeze_skill_description">Reduz a resistência do inimigo em %2$s e causa %1$d de dano com gelo mágico por %3$d turnos. Tempo de recarga de %4$d turnos.</string>
     <string name="mana_barrier_skill_name">Barreira de Mana</string>
-    <string name="mana_barrier_skill_description">Uma barreira mística que aumenta a Resitência Mágica em %2$s por %3$d turnos, podendo ser usada novamente após %4$d turnos.</string>
+    <string name="mana_barrier_skill_description">Uma barreira mística que aumenta a Resistência em %2$s por %3$d turnos, podendo ser usada novamente após %4$d turnos.</string>
     <string name="flaming_touch_skill_name">Toque Flamejante</string>
     <string name="flaming_touch_skill_description">Uma magia de fogo milenar que, ao tocar em seu inimigo, causa sérias queimaduras aplicando %1$d de dano a cada turno durante %3$d turnos. Pode ser utilizada novamente após %4$d turnos.</string>
     <string name="shock_wave_skill_name">Onda de Choque</string>
@@ -144,9 +144,9 @@
     <string name="precision_shot_skill_name">Tiro Preciso</string>
     <string name="precision_shot_skill_description">Um disparo ofensivo perfeito, causando %1$d de dano. Disponível novamente após %4$d turnos.</string>
     <string name="corrosive_arrows_skill_name">Flechas Corrosivas</string>
-    <string name="corrosive_arrows_skill_description">Um disparo de flechas que corrói a armadura do inimigo, causa %1$d de dano e reduz a Resistência Física do inimigo em %2$s durante %3$d turnos. Pode ser utilizda novamente em %4$d turnos.</string>
+    <string name="corrosive_arrows_skill_description">Um disparo de flechas que corrói a armadura do inimigo, causa %1$d de dano e reduz a Resistência do inimigo em %2$s durante %3$d turnos. Pode ser utilizda novamente em %4$d turnos.</string>
     <string name="tactical_retreat_skill_name">Recuo Tático</string>
-    <string name="tactical_retreat_skill_description">Utiliza sua agilidade para dificultar os ataques do inimigo, aumenta a sua Resistência Física em %2$s por %3$d turnos. Disponível novamente após %4$d turnos.</string>
+    <string name="tactical_retreat_skill_description">Utiliza sua agilidade para dificultar os ataques do inimigo, aumenta a sua Resistência em %2$s por %3$d turnos. Disponível novamente após %4$d turnos.</string>
     <string name="thorn_trap_skill_name">Armadilha de Espinhos</string>
     <string name="thorn_trap_skill_description">Deixa o inimigo ferido causando %1$d de dano por %3$d turnos. Pode ser usada novamente após %4$d turnos.</string>
     <string name="poison_arrow_skill_name">Flecha Envenenada</string>
@@ -156,14 +156,14 @@
     <string name="smoke_screen_skill_name">Cortina de Fumaça</string>
     <string name="smoke_screen_skill_description">Tática defensiva que confunde os inimigos ao redor, aumentando sua esquiva em %2$s por %3$d turnos. Disponível novamente após %4$d turnos.</string>
     <string name="piercing_shot_skill_name">Disparo Perfurante</string>
-    <string name="piercing_shot_skill_description">Ignora 50%% da Resistência Física do oponente apenas no primeiro golpe, causando %1$d de dano. Disponível novamente após %4$d turnos.</string>
+    <string name="piercing_shot_skill_description">Ignora 50%% da Resistência do oponente apenas no primeiro golpe, causando %1$d de dano. Disponível novamente após %4$d turnos.</string>
 
     <string name="holy_shield_skill_name">Escudo Sagrado</string>
-    <string name="holy_shield_skill_description">Defesa absoluta que reduz dano mágico em 20%.</string>
+    <string name="holy_shield_skill_description">Defesa absoluta que reduz o dano em 20%.</string>
     <string name="counterattack_skill_name">Contra-ataque</string>
     <string name="counterattack_skill_description">Reflete 20% do dano recebido de volta para o atacante.</string>
     <string name="bastion_skill_name">Bastião</string>
-    <string name="bastion_skill_description">Aumenta a Resistência Física do Guardião em 20%.</string>
+    <string name="bastion_skill_description">Aumenta a Resistência do Guardião em 20%.</string>
 
     <string name="brutal_cut_skill_name">Corte Brutal</string>
     <string name="brutal_cut_skill_description">Um poderoso e violento golpe ofensivo com a arma.</string>

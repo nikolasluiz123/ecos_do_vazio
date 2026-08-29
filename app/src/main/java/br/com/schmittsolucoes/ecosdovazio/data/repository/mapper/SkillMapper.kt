@@ -94,8 +94,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         )
 
         SkillCategory.OFFENSIVE_BUFF,
-        SkillCategory.DEFENSIVE_MAGIC_BUFF,
-        SkillCategory.DEFENSIVE_PHYSICAL_BUFF -> CharSkill.Buff(
+        SkillCategory.DEFENSIVE_BUFF -> CharSkill.Buff(
             id = id,
             name = name,
             description = description,
@@ -172,8 +171,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         )
 
         SkillCategory.OFFENSIVE_BUFF,
-        SkillCategory.DEFENSIVE_MAGIC_BUFF,
-        SkillCategory.DEFENSIVE_PHYSICAL_BUFF -> MobSkill.Buff(
+        SkillCategory.DEFENSIVE_BUFF -> MobSkill.Buff(
             id = id,
             name = name,
             description = description,
