@@ -30,7 +30,9 @@ class CharDamageSkillsQueryUseCase(
             specializationId = char.specializationId,
             categories = listOf(
                 SkillCategory.DAMAGE,
-                SkillCategory.DAMAGE_OVER_TIME
+                SkillCategory.DAMAGE_OVER_TIME,
+                SkillCategory.VAMPIRIC_DAMAGE,
+                SkillCategory.AREA_DAMAGE
             )
         )
 
