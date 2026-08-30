@@ -207,8 +207,11 @@
     <string name="ground_trap_skill_name">Armadilha de Solo</string>
     <string name="ground_trap_skill_description">Imobiliza o inimigo por 2 turnos com táticas de caça.</string>
 
+    <string name="quick_attack_skill_name">Ataque Rápido</string>
     <string name="quick_attack_skill_description">Um ataque físico ofensivo veloz que causa %1$d de dano e pode ser usado novamente após %2$d turnos.</string>
+    <string name="wild_instinct_skill_name">Instinto Selvagem</string>
     <string name="wild_instinct_skill_description">Aumenta instintos ofensivos melhorando suas estatísticas em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
+    <string name="charge_skill_name">Investida</string>
     <string name="charge_skill_description">Golpe ofensivo frontal descuidado e violento que causa %1$d de dano. Pode ser usado novamente após %2$d turnos.</string>
     <string name="goblin_fury_skill_name">Fúria do Goblin</string>
     <string name="goblin_fury_skill_description">Entra em um estado de raiva que fortalece atributos defensivos e ofensivos em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
