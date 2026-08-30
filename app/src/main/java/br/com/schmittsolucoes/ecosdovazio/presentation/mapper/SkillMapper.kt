@@ -55,6 +55,19 @@ class SkillMapper @Inject constructor(
                 damage = skill.damage
             )
 
+            is CharSkill.AreaDamage -> CharSkillUIModel.AreaDamage(
+                id = skill.id,
+                name = skill.name,
+                description = formatDescription(skill.description, skill.damage, null, null, skill.refreshTime),
+                refreshTime = skill.refreshTime,
+                minLevel = skill.minLevel,
+                image = image,
+                attributes = skill.attributes,
+                currentRefreshTime = currentRefreshTime,
+                blocked = blocked,
+                damage = skill.damage
+            )
+
             is CharSkill.DamageOverTime -> CharSkillUIModel.DamageOverTime(
                 id = skill.id,
                 name = skill.name,

@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.mapper
 
+import android.R.attr.duration
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobXPInfo

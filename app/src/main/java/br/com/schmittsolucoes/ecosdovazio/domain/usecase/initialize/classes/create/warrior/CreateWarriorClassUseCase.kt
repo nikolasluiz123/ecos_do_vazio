@@ -124,10 +124,10 @@ class CreateWarriorClassUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.BRUTAL_RIFT_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.BRUTAL_RIFT_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE,
+                skillCategory = SkillCategory.AREA_DAMAGE,
                 classId = warrior.id,
                 damage = 25,
-                refreshTime = 4,
+                refreshTime = 8,
                 minLevel = 12,
                 imageName = SKILL_BRUTAL_RIFT_KEY,
                 attributes = Skill.Attributes(requiredStrength = 20, requiredVitality = 7)

@@ -24,6 +24,11 @@ class BattleInfoMapper @Inject constructor(
                 damage = skillUIModel.damage
             )
 
+            is CharSkillUIModel.AreaDamage -> UsedCharSkillInfo.AreaDamage(
+                refreshTime = skillUIModel.refreshTime,
+                damage = skillUIModel.damage
+            )
+
             is CharSkillUIModel.DamageOverTime -> UsedCharSkillInfo.DamageOverTime(
                 refreshTime = skillUIModel.refreshTime,
                 damage = skillUIModel.damage,

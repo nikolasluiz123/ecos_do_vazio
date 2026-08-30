@@ -9,6 +9,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.Skill
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.SkillException
 
 fun Skill.toEntity() = SkillEntity(
     id = id,
@@ -105,6 +106,17 @@ fun CharSkillTuple.toDomain(): CharSkill {
             multiplier = multiplier ?: 0.0
         )
 
+        SkillCategory.AREA_DAMAGE -> CharSkill.AreaDamage(
+            id = id,
+            name = name,
+            description = description,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            imageName = imageName,
+            attributes = attributes,
+            damage = damage ?: 0L
+        )
+
         SkillCategory.OFFENSIVE_BUFF,
         SkillCategory.DEFENSIVE_BUFF -> CharSkill.Buff(
             id = id,
@@ -170,6 +182,8 @@ fun MobSkillTuple.toDomain(): MobSkill {
             minLevel = minLevel,
             damage = damage ?: 0L
         )
+
+        SkillCategory.AREA_DAMAGE -> throw SkillException.SkillCategoryNotHandled()
 
         SkillCategory.DAMAGE_OVER_TIME -> MobSkill.DamageOverTime(
             id = id,

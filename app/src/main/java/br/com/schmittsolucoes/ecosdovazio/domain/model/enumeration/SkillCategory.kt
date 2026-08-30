@@ -4,6 +4,7 @@ enum class SkillCategory {
     DAMAGE,
     DAMAGE_OVER_TIME,
     VAMPIRIC_DAMAGE,
+    AREA_DAMAGE,
     OFFENSIVE_BUFF,
     DEFENSIVE_BUFF,
     OFFENSIVE_DEBUFF,

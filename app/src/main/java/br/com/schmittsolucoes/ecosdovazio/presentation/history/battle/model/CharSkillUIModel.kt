@@ -32,6 +32,21 @@ sealed interface CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
 
+    data class AreaDamage(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val refreshTime: Int,
+        override val minLevel: Long,
+        @DrawableRes override val image: Int,
+        override val attributes: CharSkill.Attributes,
+        override val currentRefreshTime: Int,
+        override val blocked: Boolean,
+        val damage: Long
+    ): CharSkillUIModel {
+        override val skillCategory: SkillCategory = SkillCategory.AREA_DAMAGE
+    }
+
     data class DamageOverTime(
         override val id: String,
         override val name: String,

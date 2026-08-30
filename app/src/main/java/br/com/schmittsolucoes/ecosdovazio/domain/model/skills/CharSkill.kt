@@ -35,6 +35,19 @@ sealed interface CharSkill {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
 
+    data class AreaDamage(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val refreshTime: Int,
+        override val minLevel: Long,
+        override val imageName: String,
+        override val attributes: Attributes,
+        val damage: Long
+    ) : CharSkill {
+        override val skillCategory: SkillCategory = SkillCategory.AREA_DAMAGE
+    }
+
     data class DamageOverTime(
         override val id: String,
         override val name: String,

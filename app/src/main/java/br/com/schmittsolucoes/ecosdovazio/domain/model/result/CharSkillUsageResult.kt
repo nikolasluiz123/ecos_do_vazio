@@ -22,6 +22,11 @@ sealed interface CharSkillUsageResult {
         override val refreshTime: Int
     ) : CharSkillUsageResult
 
+    data class AreaDamage(
+        val newEnemyHealths: Map<String, Long>,
+        override val refreshTime: Int,
+    ) : CharSkillUsageResult
+
     data class Debuff(
         val newEnemyHealth: Long,
         val repeat: Int,

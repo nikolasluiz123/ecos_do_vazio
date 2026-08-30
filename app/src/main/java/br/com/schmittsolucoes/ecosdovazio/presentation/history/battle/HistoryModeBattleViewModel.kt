@@ -220,12 +220,22 @@ class HistoryModeBattleViewModel @Inject constructor(
             val result = useCharSkillUseCase(
                 skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill),
                 battleCharInfo = battleInfoMapper.mapToDomainInfo(char),
-                battleMobInfo = battleInfoMapper.mapToDomainInfo(state.selectedMob)
+                mobs = state.mobs.map { battleInfoMapper.mapToDomainInfo(it) },
+                selectedMobId = state.selectedMob.phaseMobId
             )
 
             when (result) {
                 is CharSkillUsageResult.CommonDamage -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
+                    incrementRound()
+                }
+
+                is CharSkillUsageResult.AreaDamage -> {
+                    result.newEnemyHealths.forEach { (phaseMobId, newHealth) ->
+                        val mob = getMobById(phaseMobId) ?: return@forEach
+                        updateMobHealth(mob, newHealth)
+                    }
+
                     incrementRound()
                 }
 

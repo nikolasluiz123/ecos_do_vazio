@@ -19,23 +19,21 @@ class UseCharSkillUseCase(
     operator fun invoke(
         skillInfo: UsedCharSkillInfo,
         battleCharInfo: BattleCharInfo,
-        battleMobInfo: BattleMobInfo
+        mobs: List<BattleMobInfo>,
+        selectedMobId: String?
     ): CharSkillUsageResult {
         val charMultipliers = calculateCharMultipliersUseCase(battleCharInfo)
-        val mobMultipliers = calculateMobMultipliersUseCase(battleMobInfo)
 
         val actualCharInfo = battleCharInfo.copy(
             offensiveMultiplier = charMultipliers.offensive,
             defensiveMultiplier = charMultipliers.defensive
         )
 
-        val actualMobInfo = battleMobInfo.copy(
-            offensiveMultiplier = mobMultipliers.offensive,
-            defensiveMultiplier = mobMultipliers.defensive
-        )
-
         return when (skillInfo) {
             is UsedCharSkillInfo.CommonDamage -> {
+                val selectedMob = mobs.first { it.phaseMobId == selectedMobId }
+                val actualMobInfo = getActualMobInfo(selectedMob)
+
                 val damage = getCharSkillDamageUseCase.executeInternal(
                     skillInfo = skillInfo,
                     battleCharInfo = actualCharInfo,
@@ -51,6 +49,9 @@ class UseCharSkillUseCase(
             }
 
             is UsedCharSkillInfo.VampiricDamage -> {
+                val selectedMob = mobs.first { it.phaseMobId == selectedMobId }
+                val actualMobInfo = getActualMobInfo(selectedMob)
+
                 val damage = getCharSkillDamageUseCase.executeInternal(
                     skillInfo = skillInfo,
                     battleCharInfo = actualCharInfo,
@@ -68,7 +69,33 @@ class UseCharSkillUseCase(
                 )
             }
 
+            is UsedCharSkillInfo.AreaDamage -> {
+                val liveMobs = mobs.filter { it.actualHealth > 0 }
+
+                val newEnemyHealths = liveMobs.associate { mob ->
+                    val actualMobInfo = getActualMobInfo(mob)
+
+                    val damage = getCharSkillDamageUseCase.executeInternal(
+                        skillInfo = skillInfo,
+                        battleCharInfo = actualCharInfo,
+                        battleMobInfo = actualMobInfo
+                    )
+
+                    val newEnemyHealth = getNewEnemyHealth(actualMobInfo, damage)
+
+                    mob.phaseMobId to newEnemyHealth
+                }
+
+                CharSkillUsageResult.AreaDamage(
+                    newEnemyHealths = newEnemyHealths,
+                    refreshTime = skillInfo.refreshTime
+                )
+            }
+
             is UsedCharSkillInfo.DamageOverTime -> {
+                val selectedMob = mobs.first { it.phaseMobId == selectedMobId }
+                val actualMobInfo = getActualMobInfo(selectedMob)
+
                 val damage = getCharSkillDamageUseCase.executeInternal(
                     skillInfo = skillInfo,
                     battleCharInfo = actualCharInfo,
@@ -110,9 +137,12 @@ class UseCharSkillUseCase(
 
 
             is UsedCharSkillInfo.Debuff -> {
+                val selectedMob = mobs.first { it.phaseMobId == selectedMobId }
+                val actualMobInfo = getActualMobInfo(selectedMob)
+
                 when (skillInfo.skillCategory) {
                     SkillCategory.OFFENSIVE_DEBUFF -> {
-                        val newOffensiveMultiplier = mobMultipliers.offensive - skillInfo.multiplier
+                        val newOffensiveMultiplier = actualMobInfo.offensiveMultiplier - skillInfo.multiplier
 
                         val mobWithNewDebuff = actualMobInfo.copy(
                             offensiveMultiplier = newOffensiveMultiplier
@@ -135,7 +165,7 @@ class UseCharSkillUseCase(
                     }
 
                     SkillCategory.DEFENSIVE_DEBUFF -> {
-                        val newDefensiveMultiplier = mobMultipliers.defensive - skillInfo.multiplier
+                        val newDefensiveMultiplier = actualMobInfo.defensiveMultiplier - skillInfo.multiplier
 
                         val mobWithNewDebuff = actualMobInfo.copy(
                             defensiveMultiplier = newDefensiveMultiplier
@@ -163,6 +193,15 @@ class UseCharSkillUseCase(
                 }
             }
         }
+    }
+
+    private fun getActualMobInfo(battleMobInfo: BattleMobInfo): BattleMobInfo {
+        val mobMultipliers = calculateMobMultipliersUseCase(battleMobInfo)
+
+        return battleMobInfo.copy(
+            offensiveMultiplier = mobMultipliers.offensive,
+            defensiveMultiplier = mobMultipliers.defensive
+        )
     }
 
     private fun getNewEnemyHealth(battleMobInfo: BattleMobInfo, damage: Long): Long {
