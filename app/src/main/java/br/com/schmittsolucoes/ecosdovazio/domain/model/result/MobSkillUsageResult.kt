@@ -29,7 +29,6 @@ sealed interface MobSkillUsageResult {
         val repeat: Int,
         val skillId: String,
         val skillCategory: SkillCategory,
-        val newMultiplier: Double,
         override val refreshTime: Int
     ) : MobSkillUsageResult
 
@@ -38,7 +37,6 @@ sealed interface MobSkillUsageResult {
         val skillId: String,
         val mobId: String,
         val skillCategory: SkillCategory,
-        val newMultiplier: Double,
         override val refreshTime: Int
     ) : MobSkillUsageResult
 }

@@ -87,24 +87,18 @@ class UseCharSkillUseCase(
             is UsedCharSkillInfo.Buff -> {
                 when (skillInfo.skillCategory) {
                     SkillCategory.OFFENSIVE_BUFF -> {
-                        val newOffensiveMultiplier = charMultipliers.offensive + skillInfo.multiplier
-
                         CharSkillUsageResult.Buff(
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newOffensiveMultiplier
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
                     SkillCategory.DEFENSIVE_BUFF -> {
-                        val newDefensiveMultiplier = charMultipliers.defensive + skillInfo.multiplier
-
                         CharSkillUsageResult.Buff(
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newDefensiveMultiplier
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
@@ -134,10 +128,9 @@ class UseCharSkillUseCase(
 
                         CharSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newOffensiveMultiplier
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
@@ -158,10 +151,9 @@ class UseCharSkillUseCase(
 
                         CharSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newDefensiveMultiplier
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 

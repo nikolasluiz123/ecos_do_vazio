@@ -89,28 +89,22 @@ class UseMobSkillUseCase(
             is UsedMobSkillInfo.Buff -> {
                 when (skillInfo.skillCategory) {
                     SkillCategory.OFFENSIVE_BUFF -> {
-                        val newOffensiveMultiplier = mobMultipliers.offensive + skillInfo.multiplier
-
                         MobSkillUsageResult.Buff(
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
-                            skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newOffensiveMultiplier,
                             skillId = skillInfo.skillId,
-                            mobId = actualMobInfo.phaseMobId
+                            mobId = actualMobInfo.phaseMobId,
+                            skillCategory = skillInfo.skillCategory,
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
                     SkillCategory.DEFENSIVE_BUFF -> {
-                        val newDefensiveMultiplier = mobMultipliers.defensive + skillInfo.multiplier
-
                         MobSkillUsageResult.Buff(
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
-                            skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newDefensiveMultiplier,
                             skillId = skillInfo.skillId,
-                            mobId = actualMobInfo.phaseMobId
+                            mobId = actualMobInfo.phaseMobId,
+                            skillCategory = skillInfo.skillCategory,
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
@@ -139,11 +133,10 @@ class UseMobSkillUseCase(
 
                         MobSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
+                            skillId = skillInfo.skillId,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newOffensiveMultiplier,
-                            skillId = skillInfo.skillId
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
@@ -164,11 +157,10 @@ class UseMobSkillUseCase(
 
                         MobSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
-                            refreshTime = skillInfo.refreshTime,
                             repeat = skillInfo.duration,
+                            skillId = skillInfo.skillId,
                             skillCategory = skillInfo.skillCategory,
-                            newMultiplier = newDefensiveMultiplier,
-                            skillId = skillInfo.skillId
+                            refreshTime = skillInfo.refreshTime
                         )
                     }
 
