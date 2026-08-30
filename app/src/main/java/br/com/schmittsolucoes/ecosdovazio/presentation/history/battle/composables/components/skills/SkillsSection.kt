@@ -64,6 +64,7 @@ fun SkillsLazyVerticalGrid(
     state.selectedSkill?.let { skill ->
         SkillTooltip(
             skill = skill,
+            char = state.char,
             onDismissRequest = onDismissSkillTooltip
         )
     }
@@ -106,6 +107,7 @@ fun SkillsLazyHorizontalGrid(
     state.selectedSkill?.let { skill ->
         SkillTooltip(
             skill = skill,
+            char = state.char,
             onDismissRequest = onDismissSkillTooltip
         )
     }

@@ -25,11 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 
 @Composable
 internal fun SkillTooltip(
     skill: CharSkillUIModel,
+    char: BattleCharUIModel?,
     onDismissRequest: () -> Unit,
 ) {
     Popup(
@@ -76,27 +78,36 @@ internal fun SkillTooltip(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                SkillInfoRow(stringResource(R.string.skill_tooltip_min_level, skill.minLevel))
+                if (char == null || char.level < skill.minLevel) {
+                    SkillInfoRow(stringResource(R.string.skill_tooltip_min_level, skill.minLevel))
+                }
 
-                if (skill.attributes.requiredStrength > 0) {
+                if (skill.attributes.requiredStrength > 0 &&
+                    (char == null || char.strength.totalValue < skill.attributes.requiredStrength)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_strength, skill.attributes.requiredStrength))
                 }
-                if (skill.attributes.requiredDexterity > 0) {
+                if (skill.attributes.requiredDexterity > 0 &&
+                    (char == null || char.dexterity.totalValue < skill.attributes.requiredDexterity)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_dexterity, skill.attributes.requiredDexterity))
                 }
-                if (skill.attributes.requiredIntelligence > 0) {
+                if (skill.attributes.requiredIntelligence > 0 &&
+                    (char == null || char.intelligence.totalValue < skill.attributes.requiredIntelligence)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_intelligence, skill.attributes.requiredIntelligence))
                 }
-                if (skill.attributes.requiredPhysicalResistance > 0) {
+                if (skill.attributes.requiredPhysicalResistance > 0 &&
+                    (char == null || char.physicalResistance.totalValue < skill.attributes.requiredPhysicalResistance)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_physical_resistance, skill.attributes.requiredPhysicalResistance))
                 }
-                if (skill.attributes.requiredMagicResistance > 0) {
+                if (skill.attributes.requiredMagicResistance > 0 &&
+                    (char == null || char.magicResistance.totalValue < skill.attributes.requiredMagicResistance)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_magic_resistance, skill.attributes.requiredMagicResistance))
                 }
-                if (skill.attributes.requiredVitality > 0) {
+                if (skill.attributes.requiredVitality > 0 &&
+                    (char == null || char.vitality.totalValue < skill.attributes.requiredVitality)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_vitality, skill.attributes.requiredVitality))
                 }
-                if (skill.attributes.requiredAgility > 0) {
+                if (skill.attributes.requiredAgility > 0 &&
+                    (char == null || char.agility.totalValue < skill.attributes.requiredAgility)) {
                     SkillInfoRow(stringResource(R.string.skill_tooltip_required_agility, skill.attributes.requiredAgility))
                 }
             }
