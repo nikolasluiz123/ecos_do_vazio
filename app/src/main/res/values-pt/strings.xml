@@ -72,9 +72,16 @@
     <string name="beast_master_spec_description">Foco em arco e flecha com companheiros animais. Incrementa Destreza, Agilidade, Resistência Mágica e Resistência Física.</string>
 
     <string name="goblin_warrior_mob_name">Goblin Guerreiro</string>
+    <string name="goblin_warrior_mob_description">Um combatente focado em ataques corpo a corpo e dano físico, atuando de forma similar à classe Guerreiro. Devido à sua biologia goblin, esta criatura possui baixa defesa e vitalidade, tornando-se mais frágil que guerreiros tradicionais.</string>
+
     <string name="goblin_shaman_mob_name">Goblin Xamã</string>
+    <string name="goblin_shaman_mob_description">Um monstro de estilo mago especializado em causar dano mágico e aplicar efeitos negativos (debuffs) nos adversários. Por ser uma variação mágica da espécie goblin, possui índices de defesa e vitalidade ainda menores do que a versão guerreira.</string>
+
     <string name="goblin_healer_mob_name">Goblin Curandeiro</string>
+    <string name="goblin_healer_mob_description">Uma variação de mago com foco exclusivo em suporte, utilizando magias para curar e aplicar efeitos positivos (buffs) aos seus aliados. Ele aparece em fases mais avançadas da história, atuando em conjunto com outros monstros, e compartilha a mesma extrema fragilidade física e mágica do Xamã.</string>
+
     <string name="cave_orc_mob_name">Orc das Cavernas</string>
+    <string name="cave_orc_mob_description">Uma ameaça colossal que atua quase como um chefe da história, possuindo características defensivas equivalentes a um Guerreiro da especialização Guardião. Ele empunha um porrete gigante, o que lhe garante uma força massiva para seus ataques, além de possuir altos índices de vitalidade e resistência física.</string>
 
     <string name="first_guard_phase_name">O Primeiro Guarda</string>
     <string name="magic_awakening_phase_name">Despertar Mágico</string>

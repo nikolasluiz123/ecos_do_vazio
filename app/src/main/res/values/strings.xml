@@ -72,9 +72,16 @@
     <string name="beast_master_spec_description">Focus on bow and arrow with animal companions. Increases Dexterity, Agility, Magic Resistance, and Physical Resistance.</string>
 
     <string name="goblin_warrior_mob_name">Goblin Warrior</string>
+    <string name="goblin_warrior_mob_description">A combatant focused on melee attacks and physical damage, acting similarly to the Warrior class. Due to its goblin biology, this creature has low defense and vitality, making it more fragile than traditional warriors.</string>
+
     <string name="goblin_shaman_mob_name">Goblin Shaman</string>
+    <string name="goblin_shaman_mob_description">A mage-style monster specialized in dealing magical damage and applying debuffs to adversaries. Because it is a magical variation of the goblin species, it has even lower defense and vitality stats than the warrior version.</string>
+
     <string name="goblin_healer_mob_name">Goblin Healer</string>
+    <string name="goblin_healer_mob_description">A mage variation strictly focused on support, using spells to heal and apply buffs to its allies. It appears in more advanced stages of the story, acting alongside other monsters, and shares the same extreme physical and magical frailty as the Shaman.</string>
+
     <string name="cave_orc_mob_name">Cave Orc</string>
+    <string name="cave_orc_mob_description">A colossal threat that acts almost like a story boss, possessing defensive characteristics equivalent to a Guardian specialization Warrior. It wields a giant club, which grants it massive strength for its attacks, in addition to having high levels of vitality and physical resistance.</string>
 
     <string name="first_guard_phase_name">The First Guard</string>
     <string name="magic_awakening_phase_name">Magic Awakening</string>

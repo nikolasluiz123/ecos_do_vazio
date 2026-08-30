@@ -16,7 +16,7 @@ class CreateGoblinShamanMobUseCase(
         val mob = Mob(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.GOBLIN_SHAMAN_MOB_NAME,
-            descriptionTranslationId = TranslationIdentifier.GOBLIN_SHAMAN_MOB_NAME,
+            descriptionTranslationId = TranslationIdentifier.GOBLIN_SHAMAN_MOB_DESCRIPTION,
             imageName = BATTLE_IMAGE_GOBLIN_XAMA_KEY,
             mobCategory = MobCategory.MAGE,
             attributes = Mob.Attributes(

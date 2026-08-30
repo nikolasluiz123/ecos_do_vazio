@@ -16,7 +16,7 @@ class CreateGoblinWarriorMobUseCase(
         val mob = Mob(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.GOBLIN_WARRIOR_MOB_NAME,
-            descriptionTranslationId = TranslationIdentifier.GOBLIN_WARRIOR_MOB_NAME,
+            descriptionTranslationId = TranslationIdentifier.GOBLIN_WARRIOR_MOB_DESCRIPTION,
             imageName = BATTLE_IMAGE_GOBLIN_WARRIOR_KEY,
             mobCategory = MobCategory.WARRIOR,
             attributes = Mob.Attributes(

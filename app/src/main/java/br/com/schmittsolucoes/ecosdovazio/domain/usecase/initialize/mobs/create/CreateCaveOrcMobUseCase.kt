@@ -16,7 +16,7 @@ class CreateCaveOrcMobUseCase(
         val mob = Mob(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.CAVE_ORC_MOB_NAME,
-            descriptionTranslationId = TranslationIdentifier.CAVE_ORC_MOB_NAME,
+            descriptionTranslationId = TranslationIdentifier.CAVE_ORC_MOB_DESCRIPTION,
             imageName = BATTLE_IMAGE_ORC_KEY,
             mobCategory = MobCategory.ORC_WARRIOR,
             attributes = Mob.Attributes(

@@ -16,7 +16,7 @@ class CreateGoblinHealerMobUseCase(
         val mob = Mob(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.GOBLIN_HEALER_MOB_NAME,
-            descriptionTranslationId = TranslationIdentifier.GOBLIN_HEALER_MOB_NAME,
+            descriptionTranslationId = TranslationIdentifier.GOBLIN_HEALER_MOB_DESCRIPTION,
             imageName = BATTLE_IMAGE_GOBLIN_HEALER_KEY,
             mobCategory = MobCategory.HEALER,
             attributes = Mob.Attributes(

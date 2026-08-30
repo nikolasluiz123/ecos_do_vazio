@@ -85,9 +85,13 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.BEAST_MASTER_SPEC_NAME -> R.string.beast_master_spec_name
             TranslationIdentifier.BEAST_MASTER_SPEC_DESCRIPTION -> R.string.beast_master_spec_description
             TranslationIdentifier.GOBLIN_WARRIOR_MOB_NAME -> R.string.goblin_warrior_mob_name
+            TranslationIdentifier.GOBLIN_WARRIOR_MOB_DESCRIPTION -> R.string.goblin_warrior_mob_description
             TranslationIdentifier.GOBLIN_SHAMAN_MOB_NAME -> R.string.goblin_shaman_mob_name
+            TranslationIdentifier.GOBLIN_SHAMAN_MOB_DESCRIPTION -> R.string.goblin_shaman_mob_description
             TranslationIdentifier.GOBLIN_HEALER_MOB_NAME -> R.string.goblin_healer_mob_name
+            TranslationIdentifier.GOBLIN_HEALER_MOB_DESCRIPTION -> R.string.goblin_healer_mob_description
             TranslationIdentifier.CAVE_ORC_MOB_NAME -> R.string.cave_orc_mob_name
+            TranslationIdentifier.CAVE_ORC_MOB_DESCRIPTION -> R.string.cave_orc_mob_description
             TranslationIdentifier.FIRST_GUARD_PHASE_NAME -> R.string.first_guard_phase_name
             TranslationIdentifier.MAGIC_AWAKENING_PHASE_NAME -> R.string.magic_awakening_phase_name
             TranslationIdentifier.DOUBLE_PATROL_PHASE_NAME -> R.string.double_patrol_phase_name
