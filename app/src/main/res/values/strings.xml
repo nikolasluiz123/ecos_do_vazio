@@ -222,14 +222,8 @@
 
     <string name="healing_touch_skill_name">Healing Touch</string>
     <string name="healing_touch_skill_description">Simple buff that restores allies.</string>
-    <string name="protection_aura_skill_name">Protection Aura</string>
-    <string name="protection_aura_skill_description">Emits a defensive aura for the whole team.</string>
     <string name="regeneration_skill_name">Regeneration</string>
     <string name="regeneration_skill_description">Provides gradual healing on active turns.</string>
-    <string name="light_beam_skill_name">Light Beam</string>
-    <string name="light_beam_skill_description">Elementary offensive magical shot.</string>
-    <string name="will_o_wisp_skill_name">Will-o\'-the-Wisp</string>
-    <string name="will_o_wisp_skill_description">Spectral flame that deals continuous damage over time (DoT).</string>
 
     <string name="giant_slap_skill_name">Giant Slap</string>
     <string name="giant_slap_skill_description">A strong brute attack delivered by colossal monsters.</string>

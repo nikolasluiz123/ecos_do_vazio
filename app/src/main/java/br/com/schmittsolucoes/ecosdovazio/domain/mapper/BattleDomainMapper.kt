@@ -43,6 +43,13 @@ fun MobSkill.toUsedInfo(): UsedMobSkillInfo {
             duration = duration,
             skillId = id
         )
+
+        is MobSkill.Heal -> UsedMobSkillInfo.Heal(
+            lifeRestore = lifeRestore,
+            refreshTime = refreshTime,
+            skillId = id,
+            skillCategory = skillCategory
+        )
     }
 }
 

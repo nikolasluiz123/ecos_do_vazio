@@ -8,5 +8,7 @@ enum class SkillCategory {
     OFFENSIVE_BUFF,
     DEFENSIVE_BUFF,
     OFFENSIVE_DEBUFF,
-    DEFENSIVE_DEBUFF
+    DEFENSIVE_DEBUFF,
+    HEAL,
+    AREA_HEAL
 }

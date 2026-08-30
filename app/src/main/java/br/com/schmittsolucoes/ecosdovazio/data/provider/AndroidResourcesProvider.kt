@@ -50,7 +50,7 @@ const val SKILL_FIREBALL_KEY = "skill_bola_de_fogo"
 const val SKILL_BRUTAL_SLASH_KEY = "skill_corte_brutal"
 const val SKILL_BRUTAL_RIFT_KEY = "skill_fenda_brutal"
 const val SKILL_HEAVY_STRIKE_KEY = "skill_golpe_pesado"
-const val SKILL_FOCUS_SKIN_KEY = "skill_pele_de_foco"
+const val SKILL_SKIN_ON_FIRE_KEY = "skill_pele_de_foco"
 const val SKILL_TACTICAL_RETREAT_KEY = "skill_recuo_tatico"
 const val SKILL_PRECISE_SHOT_KEY = "skill_tiro_preciso"
 const val SKILL_TACTICAL_ADVANCE_KEY = "skill_avanco_tatico"
@@ -185,7 +185,7 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
             SKILL_BRUTAL_SLASH_KEY -> R.drawable.skill_corte_brutal
             SKILL_BRUTAL_RIFT_KEY -> R.drawable.skill_fenda_brutal
             SKILL_HEAVY_STRIKE_KEY -> R.drawable.skill_golpe_pesado
-            SKILL_FOCUS_SKIN_KEY -> R.drawable.skill_pele_de_foco
+            SKILL_SKIN_ON_FIRE_KEY -> R.drawable.skill_pele_de_foco
             SKILL_TACTICAL_RETREAT_KEY -> R.drawable.skill_recuo_tatico
             SKILL_PRECISE_SHOT_KEY -> R.drawable.skill_tiro_preciso
             SKILL_TACTICAL_ADVANCE_KEY -> R.drawable.skill_avanco_tatico

@@ -9,6 +9,7 @@ data class MobSkillTuple(
     val imageName: String,
     val skillCategory: SkillCategory,
     val damage: Long?,
+    val lifeRestore: Long?,
     val multiplier: Double?,
     val duration: Int?,
     val refreshTime: Int,

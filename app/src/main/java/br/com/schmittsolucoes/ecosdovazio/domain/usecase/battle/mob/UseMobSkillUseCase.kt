@@ -19,7 +19,8 @@ class UseMobSkillUseCase(
     fun executeInternal(
         skillInfo: UsedMobSkillInfo,
         battleMobInfo: BattleMobInfo,
-        battleCharInfo: BattleCharInfo
+        battleCharInfo: BattleCharInfo,
+        liveMobs: List<BattleMobInfo>
     ): MobSkillUsageResult {
         val charMultipliers = calculateCharMultipliersUseCase(battleCharInfo)
         val mobMultipliers = calculateMobMultipliersUseCase(battleMobInfo)
@@ -42,7 +43,7 @@ class UseMobSkillUseCase(
                     battleMobInfo = actualMobInfo
                 )
 
-                val newEnemyHealth = getNewEnemyHealth(actualCharInfo, damage)
+                val newEnemyHealth = getNewEnemyHealthApplyingDamage(actualCharInfo, damage)
 
                 MobSkillUsageResult.CommonDamage(
                     newEnemyHealth = newEnemyHealth,
@@ -57,7 +58,7 @@ class UseMobSkillUseCase(
                     battleMobInfo = actualMobInfo
                 )
 
-                val newEnemyHealth = getNewEnemyHealth(actualCharInfo, damage)
+                val newEnemyHealth = getNewEnemyHealthApplyingDamage(actualCharInfo, damage)
 
                 MobSkillUsageResult.DamageOverTime(
                     newEnemyHealth = newEnemyHealth,
@@ -74,7 +75,7 @@ class UseMobSkillUseCase(
                     battleMobInfo = actualMobInfo
                 )
 
-                val newEnemyHealth = getNewEnemyHealth(actualCharInfo, damage)
+                val newEnemyHealth = getNewEnemyHealthApplyingDamage(actualCharInfo, damage)
                 val calculatedMobHealth = actualMobInfo.actualHealth + (damage * skillInfo.multiplier).roundToLong()
                 val newMobHealth = min(calculatedMobHealth, actualMobInfo.totalHealth)
 
@@ -129,7 +130,7 @@ class UseMobSkillUseCase(
                             battleMobInfo = actualMobInfo
                         )
 
-                        val newEnemyHealth = getNewEnemyHealth(charWithNewDebuff, damage)
+                        val newEnemyHealth = getNewEnemyHealthApplyingDamage(charWithNewDebuff, damage)
 
                         MobSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
@@ -153,7 +154,7 @@ class UseMobSkillUseCase(
                             battleMobInfo = actualMobInfo
                         )
 
-                        val newEnemyHealth = getNewEnemyHealth(charWithNewDebuff, damage)
+                        val newEnemyHealth = getNewEnemyHealthApplyingDamage(charWithNewDebuff, damage)
 
                         MobSkillUsageResult.Debuff(
                             newEnemyHealth = newEnemyHealth,
@@ -169,10 +170,53 @@ class UseMobSkillUseCase(
                     }
                 }
             }
+
+            is UsedMobSkillInfo.Heal -> {
+                when (skillInfo.skillCategory) {
+                    SkillCategory.HEAL -> {
+                        val targetMob = liveMobs.minBy { it.actualHealth.toDouble() / it.totalHealth }
+
+                        val newMobHealth = getNewMobHealthApplyingHeal(
+                            battleMobInfo = targetMob,
+                            heal = skillInfo.lifeRestore
+                        )
+
+                        MobSkillUsageResult.Heal(
+                            newMobHealth = newMobHealth,
+                            refreshTime = skillInfo.refreshTime,
+                            targetMobId = targetMob.phaseMobId,
+                        )
+                    }
+
+                    SkillCategory.AREA_HEAL -> {
+                        val newMobsHealth = liveMobs.associate { mob ->
+                            val newMobHealth = getNewMobHealthApplyingHeal(
+                                battleMobInfo = mob,
+                                heal = skillInfo.lifeRestore
+                            )
+
+                            mob.phaseMobId to newMobHealth
+                        }
+
+                        MobSkillUsageResult.AreaHeal(
+                            newMobsHealth = newMobsHealth,
+                            refreshTime = skillInfo.refreshTime
+                        )
+                    }
+
+                    else -> {
+                        throw SkillException.SkillCategoryNotHandled()
+                    }
+                }
+            }
         }
     }
 
-    private fun getNewEnemyHealth(battleCharInfo: BattleCharInfo, damage: Long): Long {
+    private fun getNewEnemyHealthApplyingDamage(battleCharInfo: BattleCharInfo, damage: Long): Long {
         return max(battleCharInfo.actualHealth - damage, 0)
+    }
+
+    private fun getNewMobHealthApplyingHeal(battleMobInfo: BattleMobInfo, heal: Long): Long {
+        return min(battleMobInfo.actualHealth + heal, battleMobInfo.totalHealth)
     }
 }

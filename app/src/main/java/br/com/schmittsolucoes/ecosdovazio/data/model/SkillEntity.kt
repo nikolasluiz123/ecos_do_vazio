@@ -66,6 +66,9 @@ data class SkillEntity(
 
     val damage: Long? = null,
 
+    @ColumnInfo("life_restore")
+    val lifeRestore: Long? = null,
+
     val multiplier: Double? = null,
 
     val duration: Int? = null,

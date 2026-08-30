@@ -5,7 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION
 import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIREBALL_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIRE_BLAST_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FOCUS_SKIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SKIN_ON_FIRE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CreateSpecializationResult
@@ -68,7 +68,7 @@ class CreateFireMageSpecializationUseCase(
                 duration = 3,
                 refreshTime = 6,
                 minLevel = 18,
-                imageName = SKILL_FOCUS_SKIN_KEY,
+                imageName = SKILL_SKIN_ON_FIRE_KEY,
                 attributes = Skill.Attributes(requiredIntelligence = 28) 
             )
         )

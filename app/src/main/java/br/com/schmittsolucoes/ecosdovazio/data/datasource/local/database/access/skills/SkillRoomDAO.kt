@@ -55,6 +55,7 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
                coalesce(skill_description.translated_text, skill_description_default.translated_text) as description,
                skills.skill_category as skillCategory,
                skills.damage as damage,
+               skills.life_restore as lifeRestore,
                skills.multiplier as multiplier,
                skills.duration as duration,
                skills.refresh_time as refreshTime,

@@ -198,6 +198,19 @@ class SkillMapper @Inject constructor(
                 multiplier = skill.multiplier,
                 duration = skill.duration
             )
+
+            is MobSkill.Heal -> MobSkillUIModel.Heal(
+                id = skill.id,
+                name = skill.name,
+                description = formatDescription(skill.description, null, null, null, skill.refreshTime),
+                image = image,
+                refreshTime = skill.refreshTime,
+                currentRefreshTime = skill.currentRefreshTime,
+                blocked = skill.blocked,
+                minLevel = skill.minLevel,
+                skillCategory = skill.skillCategory,
+                lifeRestore = skill.lifeRestore
+            )
         }
     }
 
@@ -267,6 +280,19 @@ class SkillMapper @Inject constructor(
                 minLevel = skillUIModel.minLevel,
                 multiplier = skillUIModel.multiplier,
                 duration = skillUIModel.duration
+            )
+
+            is MobSkillUIModel.Heal -> MobSkill.Heal(
+                id = skillUIModel.id,
+                name = skillUIModel.name,
+                description = skillUIModel.description,
+                imageName = "",
+                refreshTime = skillUIModel.refreshTime,
+                currentRefreshTime = skillUIModel.currentRefreshTime,
+                blocked = skillUIModel.blocked,
+                minLevel = skillUIModel.minLevel,
+                skillCategory = skillUIModel.skillCategory,
+                lifeRestore = skillUIModel.lifeRestore
             )
         }
     }

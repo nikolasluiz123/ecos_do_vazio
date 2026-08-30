@@ -29,7 +29,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.Transl
 import br.com.schmittsolucoes.ecosdovazio.data.model.internacionalization.TranslationIdentifierEntity
 
 @Database(
-    version = 7,
+    version = 8,
     entities = [
         UserEntity::class, CharEntity::class, ClassEntity::class, SpecializationEntity::class,
         LanguageEntity::class, TranslationEntity::class, TranslationIdentifierEntity::class,

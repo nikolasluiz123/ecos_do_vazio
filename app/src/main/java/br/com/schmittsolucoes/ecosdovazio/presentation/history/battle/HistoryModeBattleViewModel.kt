@@ -661,6 +661,20 @@ class HistoryModeBattleViewModel @Inject constructor(
             is MobSkillUsageResult.Buff -> {
                 registerMobBuff(result)
             }
+
+            is MobSkillUsageResult.Heal -> {
+                getMobById(result.targetMobId)?.let { mob ->
+                    updateMobHealth(mob, result.newMobHealth)
+                }
+            }
+
+            is MobSkillUsageResult.AreaHeal -> {
+                result.newMobsHealth.forEach { (phaseMobId, newHealth) ->
+                    getMobById(phaseMobId)?.let { mob ->
+                        updateMobHealth(mob, newHealth)
+                    }
+                }
+            }
         }
     }
 

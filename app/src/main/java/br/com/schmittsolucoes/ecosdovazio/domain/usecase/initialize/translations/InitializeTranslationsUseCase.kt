@@ -222,14 +222,8 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.ARCANE_EXPLOSION_SKILL_DESCRIPTION -> R.string.arcane_explosion_skill_description
             TranslationIdentifier.HEALING_TOUCH_SKILL_NAME -> R.string.healing_touch_skill_name
             TranslationIdentifier.HEALING_TOUCH_SKILL_DESCRIPTION -> R.string.healing_touch_skill_description
-            TranslationIdentifier.PROTECTION_AURA_SKILL_NAME -> R.string.protection_aura_skill_name
-            TranslationIdentifier.PROTECTION_AURA_SKILL_DESCRIPTION -> R.string.protection_aura_skill_description
             TranslationIdentifier.REGENERATION_SKILL_NAME -> R.string.regeneration_skill_name
             TranslationIdentifier.REGENERATION_SKILL_DESCRIPTION -> R.string.regeneration_skill_description
-            TranslationIdentifier.LIGHT_BEAM_SKILL_NAME -> R.string.light_beam_skill_name
-            TranslationIdentifier.LIGHT_BEAM_SKILL_DESCRIPTION -> R.string.light_beam_skill_description
-            TranslationIdentifier.WILL_O_WISP_SKILL_NAME -> R.string.will_o_wisp_skill_name
-            TranslationIdentifier.WILL_O_WISP_SKILL_DESCRIPTION -> R.string.will_o_wisp_skill_description
             TranslationIdentifier.GIANT_SLAP_SKILL_NAME -> R.string.giant_slap_skill_name
             TranslationIdentifier.GIANT_SLAP_SKILL_DESCRIPTION -> R.string.giant_slap_skill_description
             TranslationIdentifier.THICK_SKIN_SKILL_NAME -> R.string.thick_skin_skill_name

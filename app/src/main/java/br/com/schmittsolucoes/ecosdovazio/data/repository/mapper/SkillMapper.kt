@@ -20,6 +20,7 @@ fun Skill.toEntity() = SkillEntity(
     specializationId = specializationId,
     mobId = mobId,
     damage = damage,
+    lifeRestore = lifeRestore,
     multiplier = multiplier,
     duration = duration,
     refreshTime = refreshTime,
@@ -43,6 +44,7 @@ fun SkillEntity.toDomain() = Skill(
     specializationId = specializationId,
     mobId = mobId,
     damage = damage,
+    lifeRestore = lifeRestore,
     multiplier = multiplier,
     duration = duration,
     refreshTime = refreshTime,
@@ -145,6 +147,8 @@ fun CharSkillTuple.toDomain(): CharSkill {
             duration = duration ?: 0,
             damage = damage
         )
+
+        SkillCategory.HEAL, SkillCategory.AREA_HEAL -> throw SkillException.SkillCategoryNotHandled()
     }
 }
 
@@ -231,6 +235,17 @@ fun MobSkillTuple.toDomain(): MobSkill {
             minLevel = minLevel,
             multiplier = multiplier ?: 0.0,
             duration = duration ?: 0
+        )
+
+        SkillCategory.HEAL, SkillCategory.AREA_HEAL -> MobSkill.Heal(
+            id = id,
+            name = name,
+            description = description,
+            imageName = imageName,
+            refreshTime = refreshTime,
+            minLevel = minLevel,
+            skillCategory = skillCategory,
+            lifeRestore = lifeRestore ?: 0L
         )
     }
 }

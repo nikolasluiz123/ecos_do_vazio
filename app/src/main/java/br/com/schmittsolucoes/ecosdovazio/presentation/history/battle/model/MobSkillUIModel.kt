@@ -85,4 +85,17 @@ sealed interface MobSkillUIModel {
         val multiplier: Double,
         val duration: Int,
     ): MobSkillUIModel
+
+    data class Heal(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        @DrawableRes override val image: Int,
+        override val refreshTime: Int,
+        override val currentRefreshTime: Int,
+        override val blocked: Boolean,
+        override val minLevel: Long,
+        override val skillCategory: SkillCategory,
+        val lifeRestore: Long
+    ): MobSkillUIModel
 }

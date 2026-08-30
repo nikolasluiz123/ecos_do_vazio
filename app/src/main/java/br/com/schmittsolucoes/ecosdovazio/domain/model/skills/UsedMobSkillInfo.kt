@@ -49,4 +49,11 @@ sealed interface UsedMobSkillInfo {
         val multiplier: Double,
         val duration: Int,
     ): UsedMobSkillInfo
+
+    data class Heal(
+        val lifeRestore: Long,
+        override val refreshTime: Int,
+        override val skillId: String,
+        override val skillCategory: SkillCategory
+    ): UsedMobSkillInfo
 }

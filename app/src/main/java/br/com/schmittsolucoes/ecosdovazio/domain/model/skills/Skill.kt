@@ -12,6 +12,7 @@ data class Skill(
     val specializationId: String? = null,
     val mobId: String? = null,
     val damage: Long? = null,
+    val lifeRestore: Long? = null,
     val multiplier: Double? = null,
     val duration: Int? = null,
     val refreshTime: Int,

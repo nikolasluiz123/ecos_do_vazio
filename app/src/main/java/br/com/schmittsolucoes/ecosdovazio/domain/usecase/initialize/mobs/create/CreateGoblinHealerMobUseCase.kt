@@ -1,11 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_HEALER_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_INVIGORATING_HEAL_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HOLY_SHIELD_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FOCUS_SKIN_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_MISSILE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FLAMING_TOUCH_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -39,63 +34,24 @@ class CreateGoblinHealerMobUseCase(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.HEALING_TOUCH_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.HEALING_TOUCH_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_BUFF,
+                skillCategory = SkillCategory.HEAL,
                 mobId = mob.id,
-                multiplier = 1.2,
+                lifeRestore = 20,
                 refreshTime = 3,
                 minLevel = 1,
-                imageName = SKILL_INVIGORATING_HEAL_KEY,
-                attributes = Skill.Attributes()
-            ),
-            Skill(
-                id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.PROTECTION_AURA_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.PROTECTION_AURA_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_BUFF,
-                mobId = mob.id,
-                multiplier = 1.1,
-                duration = 3,
-                refreshTime = 5,
-                minLevel = 3,
-                imageName = SKILL_HOLY_SHIELD_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.REGENERATION_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.REGENERATION_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_BUFF,
+                skillCategory = SkillCategory.AREA_HEAL,
                 mobId = mob.id,
-                multiplier = 1.1,
-                duration = 3,
+                lifeRestore = 15,
                 refreshTime = 6,
                 minLevel = 6,
-                imageName = SKILL_FOCUS_SKIN_KEY,
-                attributes = Skill.Attributes()
-            ),
-            Skill(
-                id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.LIGHT_BEAM_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.LIGHT_BEAM_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE,
-                mobId = mob.id,
-                damage = 15,
-                refreshTime = 3,
-                minLevel = 10,
-                imageName = SKILL_ARCANE_MISSILE_KEY,
-                attributes = Skill.Attributes()
-            ),
-            Skill(
-                id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.WILL_O_WISP_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.WILL_O_WISP_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE_OVER_TIME,
-                mobId = mob.id,
-                damage = 8,
-                duration = 2,
-                refreshTime = 4,
-                minLevel = 15,
-                imageName = SKILL_FLAMING_TOUCH_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             )
         )

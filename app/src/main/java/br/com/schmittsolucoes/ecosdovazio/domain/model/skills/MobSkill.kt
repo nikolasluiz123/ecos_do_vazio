@@ -84,4 +84,17 @@ sealed interface MobSkill {
         val multiplier: Double,
         val duration: Int
     ) : MobSkill
+
+    data class Heal(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val imageName: String,
+        override val skillCategory: SkillCategory,
+        override val refreshTime: Int,
+        override val currentRefreshTime: Int = 0,
+        override val blocked: Boolean = false,
+        override val minLevel: Long,
+        val lifeRestore: Long
+    ) : MobSkill
 }

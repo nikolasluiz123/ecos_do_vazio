@@ -1,11 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ORC_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HEAVY_STRIKE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FOCUS_SKIN_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_RIFT_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_SLASH_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -43,7 +38,7 @@ class CreateCaveOrcMobUseCase(
                 damage = 30,
                 refreshTime = 1,
                 minLevel = 1,
-                imageName = SKILL_HEAVY_STRIKE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -56,7 +51,7 @@ class CreateCaveOrcMobUseCase(
                 duration = 3,
                 refreshTime = 6,
                 minLevel = 5,
-                imageName = SKILL_FOCUS_SKIN_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -68,7 +63,7 @@ class CreateCaveOrcMobUseCase(
                 damage = 40,
                 refreshTime = 4,
                 minLevel = 10,
-                imageName = SKILL_BRUTAL_RIFT_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -81,7 +76,7 @@ class CreateCaveOrcMobUseCase(
                 duration = 2,
                 refreshTime = 5,
                 minLevel = 15,
-                imageName = SKILL_BATTLE_RAGE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -93,7 +88,7 @@ class CreateCaveOrcMobUseCase(
                 damage = 50,
                 refreshTime = 6,
                 minLevel = 20,
-                imageName = SKILL_BRUTAL_SLASH_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             )
         )

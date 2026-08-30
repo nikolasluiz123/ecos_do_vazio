@@ -222,14 +222,8 @@
 
     <string name="healing_touch_skill_name">Toque de Cura</string>
     <string name="healing_touch_skill_description">Buff simples que restaura os aliados.</string>
-    <string name="protection_aura_skill_name">Aura de Proteção</string>
-    <string name="protection_aura_skill_description">Emite uma aura defensiva para toda a equipe.</string>
     <string name="regeneration_skill_name">Regeneração</string>
     <string name="regeneration_skill_description">Proporciona cura gradual nos turnos ativos.</string>
-    <string name="light_beam_skill_name">Raio de Luz</string>
-    <string name="light_beam_skill_description">Disparo mágico ofensivo elementar.</string>
-    <string name="will_o_wisp_skill_name">Fogo Fátuo</string>
-    <string name="will_o_wisp_skill_description">Chama espectral que causa dano contínuo com o tempo (DoT).</string>
 
     <string name="giant_slap_skill_name">Pancada Gigante</string>
     <string name="giant_slap_skill_description">Um forte ataque bruto desferido por monstros colossais.</string>

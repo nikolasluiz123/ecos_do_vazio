@@ -41,6 +41,7 @@ class MobsFromPhaseQueryUseCase @Inject constructor(
                         is MobSkill.VampiricDamage -> skill.copy(blocked = isBlocked)
                         is MobSkill.Buff -> skill.copy(blocked = isBlocked)
                         is MobSkill.Debuff -> skill.copy(blocked = isBlocked)
+                        is MobSkill.Heal -> skill.copy(blocked = isBlocked)
                     }
                 }
 

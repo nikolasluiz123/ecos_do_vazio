@@ -39,4 +39,15 @@ sealed interface MobSkillUsageResult {
         val skillCategory: SkillCategory,
         override val refreshTime: Int
     ) : MobSkillUsageResult
+
+    data class Heal(
+        val newMobHealth: Long,
+        val targetMobId: String,
+        override val refreshTime: Int
+    ) : MobSkillUsageResult
+
+    data class AreaHeal(
+        val newMobsHealth: Map<String, Long>,
+        override val refreshTime: Int
+    ) : MobSkillUsageResult
 }

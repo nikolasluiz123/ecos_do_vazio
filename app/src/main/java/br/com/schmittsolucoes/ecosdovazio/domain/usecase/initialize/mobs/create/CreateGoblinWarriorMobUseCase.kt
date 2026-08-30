@@ -1,11 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_WARRIOR_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_ADVANCE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_SLASH_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_RAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RELENTLESS_CHARGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -42,7 +37,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 15,
                 refreshTime = 1,
                 minLevel = 1,
-                imageName = SKILL_TACTICAL_ADVANCE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -54,7 +49,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 20,
                 refreshTime = 3,
                 minLevel = 3,
-                imageName = SKILL_BRUTAL_SLASH_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -67,7 +62,7 @@ class CreateGoblinWarriorMobUseCase(
                 duration = 2,
                 refreshTime = 4,
                 minLevel = 6,
-                imageName = SKILL_BLOOD_RAGE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -79,7 +74,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 25,
                 refreshTime = 4,
                 minLevel = 10,
-                imageName = SKILL_RELENTLESS_CHARGE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -92,7 +87,7 @@ class CreateGoblinWarriorMobUseCase(
                 duration = 3,
                 refreshTime = 5,
                 minLevel = 15,
-                imageName = SKILL_BATTLE_RAGE_KEY,
+                imageName = "",
                 attributes = Skill.Attributes()
             )
         )
