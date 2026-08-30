@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.core.formatters.NumberFormatter
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.IdentifiedSkillAttribute
@@ -21,7 +22,14 @@ class SkillMapper @Inject constructor(
         return CharSkillDetailsUIModel(
             id = skill.id,
             name = skill.name,
-            description = formatDescription(skill.description, skill.damage, skill.multiplier, skill.duration, skill.refreshTime),
+            description = formatDescription(
+                description = skill.description,
+                category = skill.skillCategory,
+                damage = skill.damage,
+                multiplier = skill.multiplier,
+                duration = skill.duration,
+                refreshTime = skill.refreshTime
+            ),
             skillCategory = skill.skillCategory,
             damage = skill.damage,
             multiplier = skill.multiplier,
@@ -45,7 +53,12 @@ class SkillMapper @Inject constructor(
             is CharSkill.CommonDamage -> CharSkillUIModel.CommonDamage(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, null, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    refreshTime = skill.refreshTime
+                ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
                 image = image,
@@ -58,7 +71,12 @@ class SkillMapper @Inject constructor(
             is CharSkill.AreaDamage -> CharSkillUIModel.AreaDamage(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, null, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    refreshTime = skill.refreshTime
+                ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
                 image = image,
@@ -71,7 +89,13 @@ class SkillMapper @Inject constructor(
             is CharSkill.DamageOverTime -> CharSkillUIModel.DamageOverTime(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, null, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
                 image = image,
@@ -85,7 +109,13 @@ class SkillMapper @Inject constructor(
             is CharSkill.VampiricDamage -> CharSkillUIModel.VampiricDamage(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, skill.multiplier, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    multiplier = skill.multiplier,
+                    refreshTime = skill.refreshTime
+                ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
                 image = image,
@@ -99,7 +129,13 @@ class SkillMapper @Inject constructor(
             is CharSkill.Buff -> CharSkillUIModel.Buff(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, null, skill.multiplier, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    multiplier = skill.multiplier,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -114,7 +150,14 @@ class SkillMapper @Inject constructor(
             is CharSkill.Debuff -> CharSkillUIModel.Debuff(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, skill.multiplier, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    multiplier = skill.multiplier,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -136,7 +179,12 @@ class SkillMapper @Inject constructor(
             is MobSkill.CommonDamage -> MobSkillUIModel.CommonDamage(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, null, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    refreshTime = skill.refreshTime
+                ),
                 image = image,
                 refreshTime = skill.refreshTime,
                 currentRefreshTime = skill.currentRefreshTime,
@@ -148,7 +196,13 @@ class SkillMapper @Inject constructor(
             is MobSkill.DamageOverTime -> MobSkillUIModel.DamageOverTime(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, null, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 image = image,
                 refreshTime = skill.refreshTime,
                 currentRefreshTime = skill.currentRefreshTime,
@@ -161,7 +215,13 @@ class SkillMapper @Inject constructor(
             is MobSkill.VampiricDamage -> MobSkillUIModel.VampiricDamage(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, skill.damage, skill.multiplier, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    damage = skill.damage,
+                    multiplier = skill.multiplier,
+                    refreshTime = skill.refreshTime
+                ),
                 image = image,
                 refreshTime = skill.refreshTime,
                 currentRefreshTime = skill.currentRefreshTime,
@@ -174,7 +234,13 @@ class SkillMapper @Inject constructor(
             is MobSkill.Buff -> MobSkillUIModel.Buff(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, null, skill.multiplier, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    multiplier = skill.multiplier,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 image = image,
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
@@ -188,7 +254,13 @@ class SkillMapper @Inject constructor(
             is MobSkill.Debuff -> MobSkillUIModel.Debuff(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, null, skill.multiplier, skill.duration, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    multiplier = skill.multiplier,
+                    duration = skill.duration,
+                    refreshTime = skill.refreshTime
+                ),
                 image = image,
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
@@ -202,7 +274,12 @@ class SkillMapper @Inject constructor(
             is MobSkill.Heal -> MobSkillUIModel.Heal(
                 id = skill.id,
                 name = skill.name,
-                description = formatDescription(skill.description, null, null, null, skill.refreshTime),
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    refreshTime = skill.refreshTime,
+                    lifeRestore = skill.lifeRestore
+                ),
                 image = image,
                 refreshTime = skill.refreshTime,
                 currentRefreshTime = skill.currentRefreshTime,
@@ -299,15 +376,41 @@ class SkillMapper @Inject constructor(
 
     private fun formatDescription(
         description: String,
-        damage: Long?,
-        multiplier: Double?,
-        duration: Int?,
-        refreshTime: Int
+        category: SkillCategory,
+        damage: Long? = null,
+        multiplier: Double? = null,
+        duration: Int? = null,
+        refreshTime: Int,
+        lifeRestore: Long? = null
     ): String {
         val multiplierStr = multiplier?.let { numberFormatter.formatPercentage(it) } ?: ""
 
         return try {
-            description.format(damage ?: 0L, multiplierStr, duration ?: 0, refreshTime)
+            when (category) {
+                SkillCategory.DAMAGE, SkillCategory.AREA_DAMAGE -> {
+                    description.format(damage ?: 0L, refreshTime)
+                }
+
+                SkillCategory.DAMAGE_OVER_TIME -> {
+                    description.format(damage ?: 0L, duration ?: 0, refreshTime)
+                }
+
+                SkillCategory.VAMPIRIC_DAMAGE -> {
+                    description.format(damage ?: 0L, multiplierStr, refreshTime)
+                }
+
+                SkillCategory.OFFENSIVE_BUFF, SkillCategory.DEFENSIVE_BUFF -> {
+                    description.format(multiplierStr, duration ?: 0, refreshTime)
+                }
+
+                SkillCategory.OFFENSIVE_DEBUFF, SkillCategory.DEFENSIVE_DEBUFF -> {
+                    description.format(damage ?: 0L, multiplierStr, duration ?: 0, refreshTime)
+                }
+
+                SkillCategory.HEAL, SkillCategory.AREA_HEAL -> {
+                    description.format(lifeRestore ?: 0L, refreshTime)
+                }
+            }
         } catch (_: Exception) {
             description
         }
