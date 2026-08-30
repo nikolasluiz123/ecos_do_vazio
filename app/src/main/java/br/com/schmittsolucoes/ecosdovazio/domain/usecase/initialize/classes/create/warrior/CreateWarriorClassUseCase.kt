@@ -1,16 +1,16 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.warrior
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARMOR_BREAK_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_STRIKE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_RIFT_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_DEFENSIVE_STANCE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HEAVY_STRIKE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RELENTLESS_CHARGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_ADVANCE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.WARRIOR_CLASS_PROFILE_IMAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HEAVY_STRIKE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_TACTICAL_ADVANCE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_DEFENSIVE_STANCE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BLOOD_STRIKE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BATTLE_RAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_RELENTLESS_CHARGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_RIFT_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARMOR_BREAK_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.Class
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
