@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.pagers.SkillsHorizontalPager
@@ -39,6 +42,8 @@ fun SkillsLazyVerticalGrid(
     onDismissSkillTooltip: () -> Unit = {}
 ) {
     val pagerState = rememberSkillsPagerState()
+    val density = LocalDensity.current
+    val exclusionHeightPx = with(density) { 200.dp.toPx() }
 
     AnimatedVisibility(
         visible = !state.isLoading,
@@ -53,7 +58,22 @@ fun SkillsLazyVerticalGrid(
                 SkillsHorizontalPager(
                     state = state,
                     pagerState = pagerState,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .systemGestureExclusion { coordinates ->
+                            val height = coordinates.size.height.toFloat()
+                            val width = coordinates.size.width.toFloat()
+
+                            val top = (height - exclusionHeightPx) / 3f
+                            val bottom = top + exclusionHeightPx
+
+                            Rect(
+                                left = 0f,
+                                top = top,
+                                right = width,
+                                bottom = bottom
+                            )
+                        },
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick
                 )
