@@ -185,6 +185,7 @@ class BattleMapper @Inject constructor(
             offensiveMultiplier = mobUIModel.offensiveMultiplier,
             defensiveMultiplier = mobUIModel.defensiveMultiplier,
             actualHealth = mobUIModel.actualHealth,
+            totalHealth = mobUIModel.totalHealth,
             attributes = mobUIModel.attributes,
             skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },
             activeStatus = mobUIModel.activeStatus.map { mapToDomain(it) }
