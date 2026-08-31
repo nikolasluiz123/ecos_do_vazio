@@ -55,7 +55,7 @@ internal const val ITEM_ASPECT_RATIO = 0.60f
 internal val ITEM_MAX_HEIGHT = 450.dp
 internal val SECTION_PADDING_VERTICAL = 12.dp
 internal val ITEM_SPACING = 8.dp
-internal val SIDE_BY_SIDE_SPACING = 8.dp
+internal val SIDE_BY_SIDE_SPACING = 16.dp
 internal val ITEM_CORNER_RADIUS = 4.dp
 internal val CHAR_AND_MOBS_BORDER_WIDTH = 3.dp
 internal val ROUND_BORDER_WIDTH = 2.dp
@@ -252,14 +252,14 @@ internal fun SideBySideLayout(
                 onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
                 modifier = Modifier.weight(enemyWeight),
-                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.CenterHorizontally)
+                horizontalArrangement = Arrangement.spacedBy(ITEM_SPACING, Alignment.End)
             )
 
             Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
 
             RoundViewer(
                 actualRound = state.actualRound,
-                isEnemyRound = state.isEnemyRound
+                isEnemyRound = state.isEnemyRound,
             )
 
             Spacer(modifier = Modifier.width(SIDE_BY_SIDE_SPACING))
@@ -268,7 +268,7 @@ internal fun SideBySideLayout(
                 char = state.char,
                 onStatusClick = onDotClick,
                 modifier = Modifier.weight(1f),
-                alignment = Alignment.Center
+                alignment = Alignment.CenterStart
             )
         }
 
