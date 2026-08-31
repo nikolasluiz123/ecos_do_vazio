@@ -70,7 +70,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResis
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceFactorUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceMaxUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetPointsCountByLevelUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCountUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
@@ -464,29 +464,29 @@ object UseCaseModule {
     )
 
     @Provides
-    fun provideGetPointsCountByLevelUseCase(): GetPointsCountByLevelUseCase = GetPointsCountByLevelUseCase()
+    fun provideGetTotalPointsCountUseCase(): GetTotalPointsCountUseCase = GetTotalPointsCountUseCase()
 
     @Provides
     fun provideCharAttributesQueryUseCase(
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository,
-        getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase
+        getTotalPointsCountUseCase: GetTotalPointsCountUseCase
     ): CharAttributesQueryUseCase = CharAttributesQueryUseCase(
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository,
-        getPointsCountByLevelUseCase = getPointsCountByLevelUseCase
+        getTotalPointsCountUseCase = getTotalPointsCountUseCase
     )
 
     @Provides
     fun provideGetAvailableAttributesUseCase(
-        getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase,
+        getTotalPointsCountUseCase: GetTotalPointsCountUseCase,
         charRepository: CharRepository,
         preferencesRepository: PreferencesRepository,
         userRepository: UserRepository
     ): GetAvailableAttributesUseCase = GetAvailableAttributesUseCase(
-        getPointsCountByLevelUseCase = getPointsCountByLevelUseCase,
+        getTotalPointsCountUseCase = getTotalPointsCountUseCase,
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository
@@ -580,9 +580,9 @@ object UseCaseModule {
 
     @Provides
     fun provideGetMobPointsCountByLevelUseCase(
-        getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase
+        getTotalPointsCountUseCase: GetTotalPointsCountUseCase
     ): GetMobPointsCountByLevelUseCase = GetMobPointsCountByLevelUseCase(
-        getPointsCountByLevelUseCase = getPointsCountByLevelUseCase
+        getTotalPointsCountUseCase = getTotalPointsCountUseCase
     )
 
     @Provides

@@ -14,7 +14,7 @@ class CharAttributesQueryUseCase(
     private val charRepository: CharRepository,
     private val preferencesRepository: PreferencesRepository,
     private val userRepository: UserRepository,
-    private val getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase
+    private val getTotalPointsCountUseCase: GetTotalPointsCountUseCase
 ) {
     operator fun invoke(): Flow<CharAttributes?> = flow {
         val userId = userRepository.getFirstUser()?.id
@@ -31,19 +31,9 @@ class CharAttributesQueryUseCase(
             return@flow
         }
 
-        val maxAttributes = getMaxGrantedAttributes()
+        val maxAttributes = getTotalPointsCountUseCase.executeInternal(MAX_PLAYER_LEVEL)
         val attributesFlow = charRepository.getCharAttributesData(charId, maxAttributes)
 
         emitAll(attributesFlow)
-    }
-
-    private fun getMaxGrantedAttributes(): Long {
-        var totalPoints = 0L
-
-        for (i in 1..MAX_PLAYER_LEVEL) {
-           totalPoints += getPointsCountByLevelUseCase.executeInternal(i)
-        }
-
-        return totalPoints
     }
 }

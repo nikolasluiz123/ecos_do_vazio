@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class GetAvailableAttributesUseCase(
-    private val getPointsCountByLevelUseCase: GetPointsCountByLevelUseCase,
+    private val getTotalPointsCountUseCase: GetTotalPointsCountUseCase,
     private val charRepository: CharRepository,
     private val preferencesRepository: PreferencesRepository,
     private val userRepository: UserRepository,
@@ -32,23 +32,13 @@ class GetAvailableAttributesUseCase(
         }
 
         val flow = charRepository.getByIdObservable(charId).map {
-            val totalGrantedAttributes = getTotalGrantedAttributes(it.level)
+            val totalGrantedAttributes = getTotalPointsCountUseCase.executeInternal(it.level)
             val totalCharAttributes = getTotalCharAttributes(it)
 
             totalGrantedAttributes - totalCharAttributes
         }
 
         emitAll(flow)
-    }
-
-    private fun getTotalGrantedAttributes(charLevel: Long): Long {
-        var totalPoints = 0L
-
-        for (i in 1..charLevel) {
-            totalPoints += getPointsCountByLevelUseCase.executeInternal(i)
-        }
-
-        return totalPoints
     }
 
     private fun getTotalCharAttributes(char: Char): Long {

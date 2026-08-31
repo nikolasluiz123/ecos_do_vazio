@@ -55,8 +55,8 @@ class GetMobAttributesByLevelUseCase(
         return mapOf(
             MobCategory.WARRIOR to mapOf(
                 AttributeIdentifier.STRENGTH to 0.6,
-                AttributeIdentifier.DEXTERITY to 0.2,
-                AttributeIdentifier.VITALITY to 0.1,
+                AttributeIdentifier.VITALITY to 0.2,
+                AttributeIdentifier.DEXTERITY to 0.1,
                 AttributeIdentifier.PHYSICAL_RESISTANCE to 0.1
             ),
             MobCategory.MAGE to mapOf(

@@ -1,10 +1,12 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob
 
+import android.util.Log
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.LanguageProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.SkillRepository
+import br.com.schmittsolucoes.ecosdovazio.presentation.DEBUG_PROCESS_TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -46,6 +48,8 @@ class MobsFromPhaseQueryUseCase @Inject constructor(
                 }
 
                 val totalHealth = getMobHPUseCase(battleMob.mobCategory, newAttributes.vitality)
+
+                Log.i(DEBUG_PROCESS_TAG, "${battleMob.name}, level: $level, atributos: $newAttributes")
 
                 mappedMobs.add(
                     battleMob.copy(
