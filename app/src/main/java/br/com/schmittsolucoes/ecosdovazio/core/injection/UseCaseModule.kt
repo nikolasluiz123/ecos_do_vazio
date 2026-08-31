@@ -23,6 +23,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobCrit
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateMobDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculatePhysicalResistanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateRawHealUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharBuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyCharDoTUseCase
@@ -41,10 +42,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobAttrib
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHPUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobHealAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobPointsCountByLevelUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillHealUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.GetMobSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
@@ -564,6 +567,11 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideGetMobHealAttributePointsUseCase(
+        getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase
+    ): GetMobHealAttributePointsUseCase = GetMobHealAttributePointsUseCase(getMobAttributesByLevelUseCase)
+
+    @Provides
     fun provideGetMobLevelUseCase(
         historyPhaseRepository: HistoryPhaseRepository
     ): GetMobLevelUseCase = GetMobLevelUseCase(
@@ -754,6 +762,9 @@ object UseCaseModule {
     fun provideCalculateRawDamageUseCase(): CalculateRawDamageUseCase = CalculateRawDamageUseCase()
 
     @Provides
+    fun provideCalculateRawHealUseCase(): CalculateRawHealUseCase = CalculateRawHealUseCase()
+
+    @Provides
     fun provideGetMobDamageAttributePointsUseCase(
         getMobAttributesByLevelUseCase: GetMobAttributesByLevelUseCase
     ): GetMobDamageAttributePointsUseCase = GetMobDamageAttributePointsUseCase(getMobAttributesByLevelUseCase)
@@ -783,12 +794,23 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideGetMobSkillHealUseCase(
+        getMobHealAttributePointsUseCase: GetMobHealAttributePointsUseCase,
+        calculateRawHealUseCase: CalculateRawHealUseCase
+    ): GetMobSkillHealUseCase = GetMobSkillHealUseCase(
+        getMobHealAttributePointsUseCase = getMobHealAttributePointsUseCase,
+        calculateRawHealUseCase = calculateRawHealUseCase
+    )
+
+    @Provides
     fun provideUseMobSkillUseCase(
         getMobSkillDamageUseCase: GetMobSkillDamageUseCase,
+        getMobSkillHealUseCase: GetMobSkillHealUseCase,
         calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
         calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
     ): UseMobSkillUseCase = UseMobSkillUseCase(
         getMobSkillDamageUseCase = getMobSkillDamageUseCase,
+        getMobSkillHealUseCase = getMobSkillHealUseCase,
         calculateCharMultipliersUseCase = calculateCharMultipliersUseCase,
         calculateMobMultipliersUseCase = calculateMobMultipliersUseCase
     )

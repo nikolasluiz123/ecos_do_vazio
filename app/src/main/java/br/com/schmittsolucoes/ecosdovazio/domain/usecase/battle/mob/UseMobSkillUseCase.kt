@@ -13,6 +13,7 @@ import kotlin.math.roundToLong
 
 class UseMobSkillUseCase(
     private val getMobSkillDamageUseCase: GetMobSkillDamageUseCase,
+    private val getMobSkillHealUseCase: GetMobSkillHealUseCase,
     private val calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
     private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
 ) {
@@ -176,9 +177,17 @@ class UseMobSkillUseCase(
                     SkillCategory.HEAL -> {
                         val targetMob = liveMobs.minBy { it.actualHealth.toDouble() / it.totalHealth }
 
+                        val heal = getMobSkillHealUseCase.executeInternal(
+                            mobCategory = actualMobInfo.mobCategory,
+                            mobAttributes = actualMobInfo.attributes,
+                            level = actualMobInfo.level,
+                            multiplier = actualMobInfo.offensiveMultiplier,
+                            lifeRestore = skillInfo.lifeRestore
+                        )
+
                         val newMobHealth = getNewMobHealthApplyingHeal(
                             battleMobInfo = targetMob,
-                            heal = skillInfo.lifeRestore
+                            heal = heal
                         )
 
                         MobSkillUsageResult.Heal(
@@ -189,10 +198,18 @@ class UseMobSkillUseCase(
                     }
 
                     SkillCategory.AREA_HEAL -> {
+                        val heal = getMobSkillHealUseCase.executeInternal(
+                            mobCategory = actualMobInfo.mobCategory,
+                            mobAttributes = actualMobInfo.attributes,
+                            level = actualMobInfo.level,
+                            multiplier = actualMobInfo.offensiveMultiplier,
+                            lifeRestore = skillInfo.lifeRestore
+                        )
+
                         val newMobsHealth = liveMobs.associate { mob ->
                             val newMobHealth = getNewMobHealthApplyingHeal(
                                 battleMobInfo = mob,
-                                heal = skillInfo.lifeRestore
+                                heal = heal
                             )
 
                             mob.phaseMobId to newMobHealth
