@@ -20,13 +20,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NegativeStatus
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PositiveStatus
 
 @Composable
 internal fun SkillTooltip(
@@ -42,7 +48,7 @@ internal fun SkillTooltip(
         Surface(
             modifier = Modifier
                 .padding(16.dp)
-                .widthIn(max = 300.dp),
+                .widthIn(max = 400.dp),
             shape = RoundedCornerShape(8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             tonalElevation = 8.dp,
@@ -72,7 +78,7 @@ internal fun SkillTooltip(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = skill.description,
+                    text = formatSkillDescription(skill.description),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -123,4 +129,28 @@ private fun SkillInfoRow(text: String) {
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
         modifier = Modifier.padding(vertical = 2.dp)
     )
+}
+
+@Composable
+private fun formatSkillDescription(description: String): AnnotatedString {
+    return buildAnnotatedString {
+        val regex = Regex("""(\+\s*\d+)|(-\s*\d+)""")
+        var lastIndex = 0
+
+        regex.findAll(description).forEach { matchResult ->
+            append(description.substring(lastIndex, matchResult.range.first))
+
+            val color = if (matchResult.value.startsWith("+")) PositiveStatus else NegativeStatus
+
+            withStyle(style = SpanStyle(color = color, fontWeight = FontWeight.Bold)) {
+                append(matchResult.value)
+            }
+
+            lastIndex = matchResult.range.last + 1
+        }
+
+        if (lastIndex < description.length) {
+            append(description.substring(lastIndex))
+        }
+    }
 }

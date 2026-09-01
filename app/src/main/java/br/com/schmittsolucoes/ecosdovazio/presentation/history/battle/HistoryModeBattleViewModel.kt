@@ -22,6 +22,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsB
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateProjectedDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
@@ -69,6 +70,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val applyCharBuffUseCase: ApplyCharBuffUseCase,
     private val calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
     private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
+    private val calculateProjectedDamageUseCase: CalculateProjectedDamageUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
     private val useCharSkillUseCase: UseCharSkillUseCase,
     private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
@@ -141,16 +143,21 @@ class HistoryModeBattleViewModel @Inject constructor(
         val selectedDot = flows[16] as ActiveStatusUIModel?
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsActiveStatus)
+        val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
+        val mobInfo = selectedMob?.let { battleInfoMapper.mapToDomainInfo(it) }
+
+        val actualCharInfo = battleInfoMapper.mapToDomainInfo(
+            mapBattleCharToUIModel(char, charHealth, charActiveStatus)
+        )
+
         val uiModelChar = mapBattleCharToUIModel(
             char = char,
             charHealth = charHealth,
             charActiveStatus = charActiveStatus,
-            damageSkills = mapCharSkillsToUIModel(char, damageSkills, skillsRefreshTime),
-            buffSkills = mapCharSkillsToUIModel(char, buffSkills, skillsRefreshTime),
-            debuffSkills = mapCharSkillsToUIModel(char, debuffSkills, skillsRefreshTime)
+            damageSkills = mapCharSkillsToUIModel(char, actualCharInfo, damageSkills, skillsRefreshTime, mobInfo),
+            buffSkills = mapCharSkillsToUIModel(char, actualCharInfo, buffSkills, skillsRefreshTime, mobInfo),
+            debuffSkills = mapCharSkillsToUIModel(char, actualCharInfo, debuffSkills, skillsRefreshTime, mobInfo)
         )
-
-        val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
 
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
@@ -802,18 +809,27 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     private fun mapCharSkillsToUIModel(
         battleChar: BattleChar,
+        charInfo: BattleCharInfo,
         skills: List<CharSkill>,
-        skillsRefreshTime: Map<String, Int>
+        skillsRefreshTime: Map<String, Int>,
+        mobInfo: BattleMobInfo? = null
     ): List<CharSkillUIModel> {
-        return skills.map {
+        return skills.map { skill ->
+            val projectedDamageInfo = calculateProjectedDamageUseCase(
+                skill = skill,
+                charInfo = charInfo,
+                mobInfo = mobInfo
+            )
+
             skillMapper.mapToUIModel(
-                skill = it,
-                currentRefreshTime = skillsRefreshTime[it.id] ?: 0,
+                skill = skill,
+                currentRefreshTime = skillsRefreshTime[skill.id] ?: 0,
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,
-                    skillRequiredAttributes = it.attributes,
-                    minLevel = it.minLevel
-                )
+                    skillRequiredAttributes = skill.attributes,
+                    minLevel = skill.minLevel
+                ),
+                projectedDamageInfo = projectedDamageInfo
             )
         }
     }

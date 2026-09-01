@@ -11,6 +11,7 @@ sealed interface CharSkill {
     val minLevel: Long
     val imageName: String
     val attributes: Attributes
+    val damage: Long get() = 0
 
     data class Attributes(
         val requiredStrength: Long,
@@ -30,7 +31,7 @@ sealed interface CharSkill {
         override val minLevel: Long,
         override val imageName: String,
         override val attributes: Attributes,
-        val damage: Long
+        override val damage: Long
     ) : CharSkill {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
@@ -43,7 +44,7 @@ sealed interface CharSkill {
         override val minLevel: Long,
         override val imageName: String,
         override val attributes: Attributes,
-        val damage: Long
+        override val damage: Long
     ) : CharSkill {
         override val skillCategory: SkillCategory = SkillCategory.AREA_DAMAGE
     }
@@ -56,7 +57,7 @@ sealed interface CharSkill {
         override val minLevel: Long,
         override val imageName: String,
         override val attributes: Attributes,
-        val damage: Long,
+        override val damage: Long,
         val duration: Int
     ) : CharSkill {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
@@ -70,7 +71,7 @@ sealed interface CharSkill {
         override val minLevel: Long,
         override val imageName: String,
         override val attributes: Attributes,
-        val damage: Long,
+        override val damage: Long,
         val multiplier: Double
     ) : CharSkill {
         override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
@@ -100,6 +101,6 @@ sealed interface CharSkill {
         override val attributes: Attributes,
         val multiplier: Double,
         val duration: Int,
-        val damage: Long? = null
+        override val damage: Long = 0
     ) : CharSkill
 }

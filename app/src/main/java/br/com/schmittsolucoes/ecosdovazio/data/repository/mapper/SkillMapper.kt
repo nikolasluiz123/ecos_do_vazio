@@ -145,7 +145,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
             attributes = attributes,
             multiplier = multiplier ?: 0.0,
             duration = duration ?: 0,
-            damage = damage
+            damage = damage ?: 0
         )
 
         SkillCategory.HEAL, SkillCategory.AREA_HEAL -> throw SkillException.SkillCategoryNotHandled()

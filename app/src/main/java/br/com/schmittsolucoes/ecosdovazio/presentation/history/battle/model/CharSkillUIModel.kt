@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model
 import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.ProjectedDamageInfo
 
 sealed interface CharSkillUIModel {
     val id: String
@@ -16,6 +17,8 @@ sealed interface CharSkillUIModel {
 
     val currentRefreshTime: Int
     val blocked: Boolean
+    val projectedDamageInfo: ProjectedDamageInfo? get() = null
+    val damage: Long get() = 0
 
     data class CommonDamage(
         override val id: String,
@@ -27,7 +30,8 @@ sealed interface CharSkillUIModel {
         override val attributes: CharSkill.Attributes,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
-        val damage: Long
+        override val projectedDamageInfo: ProjectedDamageInfo? = null,
+        override val damage: Long
     ): CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE
     }
@@ -42,7 +46,8 @@ sealed interface CharSkillUIModel {
         override val attributes: CharSkill.Attributes,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
-        val damage: Long
+        override val projectedDamageInfo: ProjectedDamageInfo? = null,
+        override val damage: Long
     ): CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.AREA_DAMAGE
     }
@@ -57,7 +62,8 @@ sealed interface CharSkillUIModel {
         override val attributes: CharSkill.Attributes,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
-        val damage: Long,
+        override val projectedDamageInfo: ProjectedDamageInfo? = null,
+        override val damage: Long,
         val duration: Int,
     ): CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.DAMAGE_OVER_TIME
@@ -73,7 +79,8 @@ sealed interface CharSkillUIModel {
         override val attributes: CharSkill.Attributes,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
-        val damage: Long,
+        override val projectedDamageInfo: ProjectedDamageInfo? = null,
+        override val damage: Long,
         val multiplier: Double,
     ): CharSkillUIModel {
         override val skillCategory: SkillCategory = SkillCategory.VAMPIRIC_DAMAGE
@@ -105,8 +112,9 @@ sealed interface CharSkillUIModel {
         override val attributes: CharSkill.Attributes,
         override val currentRefreshTime: Int,
         override val blocked: Boolean,
+        override val projectedDamageInfo: ProjectedDamageInfo? = null,
         val multiplier: Double,
         val duration: Int,
-        val damage: Long? = null
+        override val damage: Long = 0
     ): CharSkillUIModel
 }

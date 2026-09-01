@@ -3,10 +3,21 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.mapper
 import br.com.schmittsolucoes.ecosdovazio.core.formatters.NumberFormatter
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.AREA_DAMAGE
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.AREA_HEAL
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.DAMAGE
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.DAMAGE_OVER_TIME
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.DEFENSIVE_BUFF
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.DEFENSIVE_DEBUFF
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.HEAL
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.OFFENSIVE_BUFF
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.OFFENSIVE_DEBUFF
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory.VAMPIRIC_DAMAGE
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkillDetails
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.IdentifiedSkillAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.MobSkill
+import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.ProjectedDamageInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
@@ -45,7 +56,8 @@ class SkillMapper @Inject constructor(
     fun mapToUIModel(
         skill: CharSkill,
         currentRefreshTime: Int,
-        blocked: Boolean
+        blocked: Boolean,
+        projectedDamageInfo: ProjectedDamageInfo? = null
     ): CharSkillUIModel {
         val image = resourcesProvider.getSkillImage(skill.imageName) ?: 0
 
@@ -57,7 +69,8 @@ class SkillMapper @Inject constructor(
                     description = skill.description,
                     category = skill.skillCategory,
                     damage = skill.damage,
-                    refreshTime = skill.refreshTime
+                    refreshTime = skill.refreshTime,
+                    projectedDamageInfo = projectedDamageInfo
                 ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -65,7 +78,8 @@ class SkillMapper @Inject constructor(
                 attributes = skill.attributes,
                 currentRefreshTime = currentRefreshTime,
                 blocked = blocked,
-                damage = skill.damage
+                damage = skill.damage,
+                projectedDamageInfo = projectedDamageInfo
             )
 
             is CharSkill.AreaDamage -> CharSkillUIModel.AreaDamage(
@@ -75,7 +89,8 @@ class SkillMapper @Inject constructor(
                     description = skill.description,
                     category = skill.skillCategory,
                     damage = skill.damage,
-                    refreshTime = skill.refreshTime
+                    refreshTime = skill.refreshTime,
+                    projectedDamageInfo = projectedDamageInfo
                 ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -83,7 +98,8 @@ class SkillMapper @Inject constructor(
                 attributes = skill.attributes,
                 currentRefreshTime = currentRefreshTime,
                 blocked = blocked,
-                damage = skill.damage
+                damage = skill.damage,
+                projectedDamageInfo = projectedDamageInfo
             )
 
             is CharSkill.DamageOverTime -> CharSkillUIModel.DamageOverTime(
@@ -94,7 +110,8 @@ class SkillMapper @Inject constructor(
                     category = skill.skillCategory,
                     damage = skill.damage,
                     duration = skill.duration,
-                    refreshTime = skill.refreshTime
+                    refreshTime = skill.refreshTime,
+                    projectedDamageInfo = projectedDamageInfo
                 ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -103,7 +120,8 @@ class SkillMapper @Inject constructor(
                 currentRefreshTime = currentRefreshTime,
                 blocked = blocked,
                 damage = skill.damage,
-                duration = skill.duration
+                duration = skill.duration,
+                projectedDamageInfo = projectedDamageInfo
             )
 
             is CharSkill.VampiricDamage -> CharSkillUIModel.VampiricDamage(
@@ -114,7 +132,8 @@ class SkillMapper @Inject constructor(
                     category = skill.skillCategory,
                     damage = skill.damage,
                     multiplier = skill.multiplier,
-                    refreshTime = skill.refreshTime
+                    refreshTime = skill.refreshTime,
+                    projectedDamageInfo = projectedDamageInfo
                 ),
                 refreshTime = skill.refreshTime,
                 minLevel = skill.minLevel,
@@ -123,7 +142,8 @@ class SkillMapper @Inject constructor(
                 currentRefreshTime = currentRefreshTime,
                 blocked = blocked,
                 damage = skill.damage,
-                multiplier = skill.multiplier
+                multiplier = skill.multiplier,
+                projectedDamageInfo = projectedDamageInfo
             )
 
             is CharSkill.Buff -> CharSkillUIModel.Buff(
@@ -156,7 +176,8 @@ class SkillMapper @Inject constructor(
                     damage = skill.damage,
                     multiplier = skill.multiplier,
                     duration = skill.duration,
-                    refreshTime = skill.refreshTime
+                    refreshTime = skill.refreshTime,
+                    projectedDamageInfo = projectedDamageInfo
                 ),
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
@@ -167,7 +188,8 @@ class SkillMapper @Inject constructor(
                 blocked = blocked,
                 multiplier = skill.multiplier,
                 duration = skill.duration,
-                damage = skill.damage
+                damage = skill.damage,
+                projectedDamageInfo = projectedDamageInfo
             )
         }
     }
@@ -381,33 +403,37 @@ class SkillMapper @Inject constructor(
         multiplier: Double? = null,
         duration: Int? = null,
         refreshTime: Int,
-        lifeRestore: Long? = null
+        lifeRestore: Long? = null,
+        projectedDamageInfo: ProjectedDamageInfo? = null
     ): String {
         val multiplierStr = multiplier?.let { numberFormatter.formatPercentage(it) } ?: ""
 
         return try {
             when (category) {
-                SkillCategory.DAMAGE, SkillCategory.AREA_DAMAGE -> {
-                    description.format(damage ?: 0L, refreshTime)
+                DAMAGE, AREA_DAMAGE, DAMAGE_OVER_TIME,
+
+                VAMPIRIC_DAMAGE, OFFENSIVE_DEBUFF, DEFENSIVE_DEBUFF -> {
+                    val finalDamage = projectedDamageInfo?.totalDamage ?: (damage ?: 0L)
+                    val base = projectedDamageInfo?.baseDamage ?: (damage ?: 0L)
+                    val buffs = projectedDamageInfo?.buffBonus ?: 0L
+                    val defense = (projectedDamageInfo?.defenseReduction ?: 0L) + (projectedDamageInfo?.targetBuffReduction ?: 0L)
+
+                    description.format(
+                        finalDamage,
+                        base,
+                        buffs,
+                        defense,
+                        refreshTime,
+                        duration ?: 0,
+                        multiplierStr
+                    )
                 }
 
-                SkillCategory.DAMAGE_OVER_TIME -> {
-                    description.format(damage ?: 0L, duration ?: 0, refreshTime)
-                }
-
-                SkillCategory.VAMPIRIC_DAMAGE -> {
-                    description.format(damage ?: 0L, multiplierStr, refreshTime)
-                }
-
-                SkillCategory.OFFENSIVE_BUFF, SkillCategory.DEFENSIVE_BUFF -> {
+                OFFENSIVE_BUFF, DEFENSIVE_BUFF -> {
                     description.format(multiplierStr, duration ?: 0, refreshTime)
                 }
 
-                SkillCategory.OFFENSIVE_DEBUFF, SkillCategory.DEFENSIVE_DEBUFF -> {
-                    description.format(damage ?: 0L, multiplierStr, duration ?: 0, refreshTime)
-                }
-
-                SkillCategory.HEAL, SkillCategory.AREA_HEAL -> {
+                HEAL, AREA_HEAL -> {
                     description.format(lifeRestore ?: 0L, refreshTime)
                 }
             }

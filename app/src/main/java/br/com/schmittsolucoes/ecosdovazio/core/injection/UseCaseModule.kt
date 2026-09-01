@@ -31,6 +31,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsB
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDebuffUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.ApplyMobsDoTUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateProjectedDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
@@ -864,6 +865,17 @@ object UseCaseModule {
         getCharSkillBlockedUseCase = getCharSkillBlockedUseCase,
         getCharBattleUseCase = getCharBattleUseCase,
     )
+
+    @Provides
+    fun provideCalculateProjectedDamageUseCase(
+        getCharDamageAttributePointsUseCase: GetCharDamageAttributePointsUseCase,
+        getMobDamageReductionUseCase: GetMobDamageReductionUseCase
+    ): CalculateProjectedDamageUseCase {
+        return CalculateProjectedDamageUseCase(
+            getCharDamageAttributePointsUseCase = getCharDamageAttributePointsUseCase,
+            getMobDamageReductionUseCase = getMobDamageReductionUseCase
+        )
+    }
 
     @Provides
     fun provideApplyMobsDebuffUseCase(): ApplyMobsDebuffUseCase {

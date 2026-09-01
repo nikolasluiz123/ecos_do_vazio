@@ -52,7 +52,8 @@ class BattleInfoMapper @Inject constructor(
                 skillCategory = skillUIModel.skillCategory,
                 refreshTime = skillUIModel.refreshTime,
                 multiplier = skillUIModel.multiplier,
-                duration = skillUIModel.duration
+                duration = skillUIModel.duration,
+                damage = skillUIModel.damage
             )
         }
     }

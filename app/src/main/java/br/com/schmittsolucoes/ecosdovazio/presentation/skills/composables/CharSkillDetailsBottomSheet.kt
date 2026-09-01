@@ -28,9 +28,9 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
@@ -82,7 +82,7 @@ fun CharSkillDetailsBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = skill.description,
+                text = skill.description.removeDamageFormula(),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -213,4 +213,8 @@ private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
         AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
         AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
     }
+}
+
+private fun String.removeDamageFormula(): String {
+    return this.replace(Regex("""\s*\(.*?\)"""), "")
 }

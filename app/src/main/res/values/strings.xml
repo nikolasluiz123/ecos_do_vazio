@@ -115,55 +115,55 @@
     <string name="unstoppable_titans_phase_name">The Unstoppable Titans</string>
 
     <string name="heavy_strike_skill_name">Heavy Strike</string>
-    <string name="heavy_strike_skill_description">A powerful offensive attack based on pure strength, dealing %1$d physical damage to the enemy. Can be used again after %2$d rounds.</string>
+    <string name="heavy_strike_skill_description">A powerful offensive attack based on pure strength, dealing %1$d (%2$d + %3$d - %4$d) physical damage to the enemy. Can be used again after %5$d rounds.</string>
     <string name="tactical_advance_skill_name">Tactical Advance</string>
-    <string name="tactical_advance_skill_description">Advances ignoring %2$s of the enemy\'s Resistance, dealing %1$d damage. The effect lasts %3$d rounds and the cooldown is %4$d rounds.</string>
+    <string name="tactical_advance_skill_description">Advances ignoring %7$s of the enemy\'s Resistance, dealing %1$d (%2$d + %3$d - %4$d) damage. The effect lasts %6$d rounds and the cooldown is %5$d rounds.</string>
     <string name="defensive_stance_skill_name">Defensive Stance</string>
     <string name="defensive_stance_skill_description">Increases Resistance by %1$s for %2$d rounds, with a cooldown of %3$d rounds.</string>
     <string name="bloody_strike_skill_name">Bloody Strike</string>
-    <string name="bloody_strike_skill_description">A strike that makes the enemy bleed, dealing %1$d damage every round for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="bloody_strike_skill_description">A strike that makes the enemy bleed, dealing %1$d (%2$d + %3$d - %4$d) damage every round for %6$d rounds. Can be used again after %5$d rounds.</string>
     <string name="battle_fury_skill_name">Battle Fury</string>
     <string name="battle_fury_skill_description">An offensive buff that boosts attacks by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="relentless_charge_skill_name">Relentless Charge</string>
-    <string name="relentless_charge_skill_description">Charges toward the enemy, dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="relentless_charge_skill_description">Charges toward the enemy, dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="brutal_rift_skill_name">Brutal Rift</string>
-    <string name="brutal_rift_skill_description">Extremely powerful attack on the battlefield, dealing %1$d damage to all enemies, with a %2$d round cooldown.</string>
+    <string name="brutal_rift_skill_description">Extremely powerful attack on the battlefield, dealing %1$d (%2$d + %3$d - %4$d) damage to all enemies, with a %5$d round cooldown.</string>
     <string name="break_armor_skill_name">Break Armor</string>
-    <string name="break_armor_skill_description">Reduces the enemy\'s Resistance by %2$s and deals %1$d damage for %3$d rounds. Can be used again after %4$d rounds.</string>
+    <string name="break_armor_skill_description">Reduces the enemy\'s Resistance by %7$s and deals %1$d (%2$d + %3$d - %4$d) damage for %6$d rounds. Can be used again after %5$d rounds.</string>
 
     <string name="arcane_missile_skill_name">Arcane Missile</string>
-    <string name="arcane_missile_skill_description">Fires offensive magic dealing %1$d magic damage to the enemy, with a %2$d round cooldown.</string>
+    <string name="arcane_missile_skill_description">Fires offensive magic dealing %1$d (%2$d + %3$d - %4$d) magic damage to the enemy, with a %5$d round cooldown.</string>
     <string name="quick_freeze_skill_name">Quick Freeze</string>
-    <string name="quick_freeze_skill_description">Reduces the enemy\'s resistance by %2$s and deals %1$d damage with magic ice for %3$d rounds. Cooldown of %4$d rounds.</string>
+    <string name="quick_freeze_skill_description">Reduces the enemy\'s resistance by %7$s and deals %1$d (%2$d + %3$d - %4$d) damage with magic ice for %6$d rounds. Cooldown of %5$d rounds.</string>
     <string name="mana_barrier_skill_name">Mana Barrier</string>
     <string name="mana_barrier_skill_description">A mystical barrier that increases Resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="flaming_touch_skill_name">Flaming Touch</string>
-    <string name="flaming_touch_skill_description">An ancient fire magic that, upon touching your enemy, causes serious burns dealing %1$d damage every round for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="flaming_touch_skill_description">An ancient fire magic that, upon touching your enemy, causes serious burns dealing %1$d (%2$d + %3$d - %4$d) damage every round for %6$d rounds. Can be used again after %5$d rounds.</string>
     <string name="shock_wave_skill_name">Shock Wave</string>
-    <string name="shock_wave_skill_description">A massive energy wave that deals %1$d to the enemy, with a %2$d round cooldown.</string>
+    <string name="shock_wave_skill_description">A massive energy wave that deals %1$d (%2$d + %3$d - %4$d) to the enemy, with a %5$d round cooldown.</string>
     <string name="arcane_focus_skill_name">Arcane Focus</string>
     <string name="arcane_focus_skill_description">A mystical offensive enchantment that increases intellect and power by %1$s for %2$d rounds. After %3$d rounds, it can be used again.</string>
     <string name="drain_essence_skill_name">Drain Essence</string>
-    <string name="drain_essence_skill_description">A forbidden technique that drains the enemy\'s life force, dealing %1$d damage and instantly healing the caster for %2$s of the damage dealt. Can be used again after %3$d rounds.</string>
+    <string name="drain_essence_skill_description">A forbidden technique that drains the enemy\'s life force, dealing %1$d (%2$d + %3$d - %4$d) damage and instantly healing the caster for %7$s of the damage dealt. Can be used again after %5$d rounds.</string>
     <string name="meteor_shower_skill_name">Meteor Shower</string>
-    <string name="meteor_shower_skill_description">Powerful magic attack capable of devastating the battlefield, deals %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="meteor_shower_skill_description">Powerful magic attack capable of devastating the battlefield, deals %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
     <string name="precision_shot_skill_name">Precision Shot</string>
-    <string name="precision_shot_skill_description">A perfect offensive shot, dealing %1$d damage. Available again after %2$d rounds.</string>
+    <string name="precision_shot_skill_description">A perfect offensive shot, dealing %1$d (%2$d + %3$d - %4$d) damage. Available again after %5$d rounds.</string>
     <string name="corrosive_arrows_skill_name">Corrosive Arrows</string>
-    <string name="corrosive_arrows_skill_description">An arrow shot that corrodes the enemy\'s armor, dealing %1$d damage and reducing the enemy\'s Resistance by %2$s for %3$d rounds. Can be used again in %4$d rounds.</string>
+    <string name="corrosive_arrows_skill_description">An arrow shot that corrodes the enemy\'s armor, dealing %1$d (%2$d + %3$d - %4$d) damage and reducing the enemy\'s Resistance by %7$s for %6$d rounds. Can be used again in %5$d rounds.</string>
     <string name="tactical_retreat_skill_name">Tactical Retreat</string>
     <string name="tactical_retreat_skill_description">Uses agility to hinder enemy attacks, increasing your Resistance by %1$s for %2$d rounds. Available again after %3$d rounds.</string>
     <string name="thorn_trap_skill_name">Thorn Trap</string>
-    <string name="thorn_trap_skill_description">Leaves the enemy wounded dealing %1$d damage for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="thorn_trap_skill_description">Leaves the enemy wounded dealing %1$d (%2$d + %3$d - %4$d) damage for %6$d rounds. Can be used again after %5$d rounds.</string>
     <string name="poison_arrow_skill_name">Poison Arrow</string>
-    <string name="poison_arrow_skill_description">Toxic shot that inflicts %1$d damage for %2$d rounds. Available again after %3$d rounds.</string>
+    <string name="poison_arrow_skill_description">Toxic shot that inflicts %1$d (%2$d + %3$d - %4$d) damage for %6$d rounds. Available again after %5$d rounds.</string>
     <string name="perfect_aim_skill_name">Perfect Aim</string>
     <string name="perfect_aim_skill_description">Increases offensive potential by %1$s for %2$d rounds. Available again after %3$d rounds.</string>
     <string name="smoke_screen_skill_name">Smoke Screen</string>
     <string name="smoke_screen_skill_description">Defensive tactic that confuses surrounding enemies, increasing your dodge by %1$s for %2$d rounds. Available again after %3$d rounds.</string>
     <string name="piercing_shot_skill_name">Piercing Shot</string>
-    <string name="piercing_shot_skill_description">Ignores %2$s of the opponent\'s Resistance only on the first hit, dealing %1$d damage for %3$d rounds. Available again after %4$d rounds.</string>
+    <string name="piercing_shot_skill_description">Ignores %7$s of the opponent\'s Resistance only on the first hit, dealing %1$d (%2$d + %3$d - %4$d) damage for %6$d rounds. Available again after %5$d rounds.</string>
 
     <string name="holy_shield_skill_name">Holy Shield</string>
     <string name="holy_shield_skill_description">Absolute defense reducing damage by 20%.</string>
@@ -173,7 +173,7 @@
     <string name="bastion_skill_description">Increases the Guardian\'s Resistance by 20%.</string>
 
     <string name="brutal_cut_skill_name">Brutal Cut</string>
-    <string name="brutal_cut_skill_description">A powerful and violent offensive strike with the weapon dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="brutal_cut_skill_description">A powerful and violent offensive strike with the weapon dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="bloody_fury_skill_name">Bloody Fury</string>
     <string name="bloody_fury_skill_description">Increases damage dealt by 15%.</string>
     <string name="whirlwind_skill_name">Whirlwind</string>
@@ -209,24 +209,24 @@
 
 
     <string name="quick_attack_skill_name">Quick Attack</string>
-    <string name="quick_attack_skill_description">A fast physical offensive attack dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="quick_attack_skill_description">A fast physical offensive attack dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="wild_instinct_skill_name">Wild Instinct</string>
     <string name="wild_instinct_skill_description">Increases offensive instincts by improving stats by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="charge_skill_name">Charge</string>
-    <string name="charge_skill_description">A careless and violent frontal offensive strike dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="charge_skill_description">A careless and violent frontal offensive strike dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="goblin_fury_skill_name">Goblin Fury</string>
     <string name="goblin_fury_skill_description">Enters a rage state that strengthens defensive and offensive attributes by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
 
     <string name="mystic_projectile_skill_name">Mystic Projectile</string>
-    <string name="mystic_projectile_skill_description">Hurls chaotic magical energy dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="mystic_projectile_skill_description">Hurls chaotic magical energy dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="curse_skill_name">Curse</string>
-    <string name="curse_skill_description">Dark magic that drains %1$d health for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="curse_skill_description">Dark magic that drains %1$d (%2$d + %3$d - %4$d) health for %6$d rounds. Can be used again after %5$d rounds.</string>
     <string name="energy_shield_skill_name">Energy Shield</string>
     <string name="energy_shield_skill_description">Defensive skill that protects against impacts by increasing resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="mana_drain_skill_name">Mana Drain</string>
-    <string name="mana_drain_skill_description">Magic attack aiming to drain the target\'s vital energy dealing %1$d damage and restoring %2$s of the caster\'s life. Can be used again after %3$d rounds.</string>
+    <string name="mana_drain_skill_description">Magic attack aiming to drain the target\'s vital energy dealing %1$d (%2$d + %3$d - %4$d) damage and restoring %7$s of the caster\'s life. Can be used again after %5$d rounds.</string>
     <string name="arcane_explosion_skill_name">Arcane Explosion</string>
-    <string name="arcane_explosion_skill_description">Powerful arcane offensive attack dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="arcane_explosion_skill_description">Powerful arcane offensive attack dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
     <string name="healing_touch_skill_name">Healing Touch</string>
     <string name="healing_touch_skill_description">A simple blessing that restores %1$d life. Can be used again after %2$d rounds.</string>
@@ -234,15 +234,15 @@
     <string name="regeneration_skill_description">Provides healing for all allies restoring %1$d life. Can be used again after %2$d rounds.</string>
 
     <string name="giant_slap_skill_name">Giant Slap</string>
-    <string name="giant_slap_skill_description">A strong brute attack delivered by colossal monsters dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="giant_slap_skill_description">A strong brute attack delivered by colossal monsters dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="thick_skin_skill_name">Thick Skin</string>
     <string name="thick_skin_skill_description">Hardens the body for extraordinary defense increasing physical resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="smash_skill_name">Smash</string>
-    <string name="smash_skill_description">Offensive destruction hitting with devastating impact dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="smash_skill_description">Offensive destruction hitting with devastating impact dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="threatening_roar_skill_name">Threatening Roar</string>
     <string name="threatening_roar_skill_description">A roar that improves ally performance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="boss_strike_skill_name">Boss Strike</string>
-    <string name="boss_strike_skill_description">The creature\'s final and most fatal attack dealing %1$d damage. Can be used again after %2$d rounds.</string>
+    <string name="boss_strike_skill_description">The creature\'s final and most fatal attack dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
     <string name="history_phase_status_finished">Finished</string>
     <string name="history_phase_status_current">Current</string>

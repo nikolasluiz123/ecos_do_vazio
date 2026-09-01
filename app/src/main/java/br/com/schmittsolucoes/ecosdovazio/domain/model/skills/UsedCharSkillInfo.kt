@@ -47,6 +47,7 @@ sealed interface UsedCharSkillInfo {
     data class Debuff(
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
+        override val damage: Long = 0,
         val multiplier: Double,
         val duration: Int,
     ): UsedCharSkillInfo
