@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -116,20 +117,10 @@ fun HistoryModeBattleScreen(
     val useSideBySide = isExpandedWidth || isCompactHeight
 
     Scaffold { paddingValues ->
-        val layoutDirection = LocalLayoutDirection.current
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BackgroundGradient)
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = paddingValues.calculateBottomPadding(),
-                    start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = if (useSideBySide) SIDE_BY_SIDE_SPACING else paddingValues.calculateEndPadding(
-                        layoutDirection
-                    )
-                ),
+                .background(BackgroundGradient),
             contentAlignment = Alignment.TopCenter
         ) {
             if (useSideBySide) {
@@ -137,6 +128,7 @@ fun HistoryModeBattleScreen(
                     isExpandedWidth = isExpandedWidth,
                     state = state,
                     windowSizeClass = windowSizeClass,
+                    paddingValues = paddingValues,
                     onMobClick = onMobClick,
                     onDotClick = onStatusClick,
                     onDismissDotTooltip = onDismissDotTooltip,
@@ -148,6 +140,7 @@ fun HistoryModeBattleScreen(
                 StackLayout(
                     state = state,
                     windowSizeClass = windowSizeClass,
+                    paddingValues = paddingValues,
                     onMobClick = onMobClick,
                     onStatusClick = onStatusClick,
                     onDismissDotTooltip = onDismissDotTooltip,
@@ -171,6 +164,8 @@ fun HistoryModeBattleScreen(
 internal fun StackLayout(
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
     onMobClick: (BattleMobUIModel) -> Unit = {},
     onStatusClick: (ActiveStatusUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
@@ -178,13 +173,21 @@ internal fun StackLayout(
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
+    val layoutDirection = LocalLayoutDirection.current
+
     Row(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.8f),
+                .weight(0.8f)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateStartPadding(layoutDirection),
+                    end = paddingValues.calculateEndPadding(layoutDirection)
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             EnemySection(
@@ -227,6 +230,8 @@ internal fun SideBySideLayout(
     isExpandedWidth: Boolean,
     state: HistoryModeBattleUIState,
     windowSizeClass: WindowSizeClass?,
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
     onMobClick: (BattleMobUIModel) -> Unit = {},
     onDotClick: (ActiveStatusUIModel) -> Unit = {},
     onDismissDotTooltip: () -> Unit = {},
@@ -234,15 +239,22 @@ internal fun SideBySideLayout(
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.8f),
+                .weight(0.8f)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateStartPadding(layoutDirection),
+                    end = SIDE_BY_SIDE_SPACING
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             EnemySection(
@@ -382,7 +394,8 @@ private fun HistoryModeBattleScreenSideBySidePreview() {
                     onMobClick = {},
                     onDotClick = {},
                     onDismissDotTooltip = {},
-                    windowSizeClass = null
+                    windowSizeClass = null,
+                    paddingValues = paddingValues
                 )
             }
         }
