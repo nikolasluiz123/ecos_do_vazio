@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalWindowInfo
+import kotlin.math.hypot
 
 val backgroundDark = Color(0xFF121416)
 val surfaceDark = Color(0xFF0C0E10)
@@ -124,22 +126,29 @@ val HighlightedTextFieldBorder: Color
 
 @get:Composable
 val BackgroundGradient: Brush
-    get() = if (isSystemInDarkTheme()) {
-        Brush.radialGradient(
-            colors = listOf(
-                Color(0xCC1E2022),
-                Color(0xFF121416)
-            ),
-            tileMode = TileMode.Mirror
-        )
-    } else {
-        Brush.radialGradient(
-            colors = listOf(
-                Color(0xCCFFFFFF),
-                Color(0xFFF5F5F5)
-            ),
-            tileMode = TileMode.Mirror
-        )
+    get() {
+        val containerSize = LocalWindowInfo.current.containerSize
+        val screenWidthPx = containerSize.width
+        val screenHeightPx = containerSize.height
+        val radiusPx = hypot(screenWidthPx / 2f, screenHeightPx / 2f)
+
+        return if (isSystemInDarkTheme()) {
+            Brush.radialGradient(
+                0.0f to Color(0xFF1E2022),
+                0.5f to Color(0xFF181A1C),
+                1.0f to Color(0xFF121416),
+                radius = radiusPx,
+                tileMode = TileMode.Clamp
+            )
+        } else {
+            Brush.radialGradient(
+                0.0f to Color(0xFFECECE6),
+                0.5f to Color(0xFFF5F5F5),
+                1.0f to Color(0xFFFFFFFF),
+                radius = radiusPx,
+                tileMode = TileMode.Clamp
+            )
+        }
     }
 
 @get:Composable
@@ -150,7 +159,7 @@ val SurfaceVariantGradient: Brush
                 surfaceVariantDark.copy(alpha = 0.8f),
                 surfaceVariantDark
             ),
-            tileMode = TileMode.Mirror
+            tileMode = TileMode.Clamp
         )
     } else {
         Brush.radialGradient(
@@ -158,7 +167,7 @@ val SurfaceVariantGradient: Brush
                 surfaceVariantLight.copy(alpha = 0.8f),
                 surfaceVariantLight
             ),
-            tileMode = TileMode.Mirror
+            tileMode = TileMode.Clamp
         )
     }
 
