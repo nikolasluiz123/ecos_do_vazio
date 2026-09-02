@@ -2,6 +2,10 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ORC_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ORC_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_GIANT_SLAP_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SMASH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_THICK_SKIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_THREATENING_ROAR_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -40,7 +44,7 @@ class CreateCaveOrcMobUseCase(
                 damage = 30,
                 refreshTime = 1,
                 minLevel = 1,
-                imageName = "",
+                imageName = SKILL_GIANT_SLAP_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -53,7 +57,7 @@ class CreateCaveOrcMobUseCase(
                 duration = 4,
                 refreshTime = 6,
                 minLevel = 5,
-                imageName = "",
+                imageName = SKILL_THICK_SKIN_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -65,7 +69,7 @@ class CreateCaveOrcMobUseCase(
                 damage = 40,
                 refreshTime = 4,
                 minLevel = 10,
-                imageName = "",
+                imageName = SKILL_SMASH_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -78,7 +82,7 @@ class CreateCaveOrcMobUseCase(
                 duration = 4,
                 refreshTime = 5,
                 minLevel = 15,
-                imageName = "",
+                imageName = SKILL_THREATENING_ROAR_KEY,
                 attributes = Skill.Attributes()
             )
         )

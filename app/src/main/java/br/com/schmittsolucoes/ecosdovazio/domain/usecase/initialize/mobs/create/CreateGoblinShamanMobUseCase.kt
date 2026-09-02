@@ -2,6 +2,11 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_XAMA_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.GOBLIN_XAMA_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ARCANE_EXPLOSION_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_CURSE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_ENERGY_SHIELD_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_MANA_DRAIN_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_MYSTIC_PROJECTILE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -39,7 +44,7 @@ class CreateGoblinShamanMobUseCase(
                 damage = 15,
                 refreshTime = 1,
                 minLevel = 1,
-                imageName = "",
+                imageName = SKILL_MYSTIC_PROJECTILE_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -52,7 +57,7 @@ class CreateGoblinShamanMobUseCase(
                 duration = 3,
                 refreshTime = 4,
                 minLevel = 3,
-                imageName = "",
+                imageName = SKILL_CURSE_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -65,7 +70,7 @@ class CreateGoblinShamanMobUseCase(
                 duration = 4,
                 refreshTime = 6,
                 minLevel = 6,
-                imageName = "",
+                imageName = SKILL_ENERGY_SHIELD_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -78,7 +83,7 @@ class CreateGoblinShamanMobUseCase(
                 multiplier = 0.3,
                 refreshTime = 4,
                 minLevel = 10,
-                imageName = "",
+                imageName = SKILL_MANA_DRAIN_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -90,7 +95,7 @@ class CreateGoblinShamanMobUseCase(
                 damage = 30,
                 refreshTime = 5,
                 minLevel = 15,
-                imageName = "",
+                imageName = SKILL_ARCANE_EXPLOSION_KEY,
                 attributes = Skill.Attributes()
             )
         )

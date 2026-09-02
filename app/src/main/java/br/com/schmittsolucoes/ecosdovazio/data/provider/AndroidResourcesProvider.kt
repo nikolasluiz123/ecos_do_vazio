@@ -89,6 +89,20 @@ const val SKILL_RELENTLESS_CHARGE_KEY = "skill_investida_implacavel"
 const val SKILL_THORN_TRAP_KEY = "skill_armadilha_de_espinhos"
 const val SKILL_FRAGMENTATION_GRENADE_KEY = "skill_granada_de_fragmentacao"
 const val SKILL_MANA_BARRIER = "skill_barreira_de_mana"
+const val SKILL_QUICK_ATTACK_KEY = "skill_ataque_rapido"
+const val SKILL_WILD_INSTINCT_KEY = "skill_instinto_selvagem"
+const val SKILL_CHARGE_KEY = "skill_investida"
+const val SKILL_MYSTIC_PROJECTILE_KEY = "skill_projetil_mistico"
+const val SKILL_CURSE_KEY = "skill_maldicao"
+const val SKILL_ENERGY_SHIELD_KEY = "skill_escudo_de_energia"
+const val SKILL_MANA_DRAIN_KEY = "skill_dreno_de_mana"
+const val SKILL_ARCANE_EXPLOSION_KEY = "skill_explosao_arcana"
+const val SKILL_HEALING_TOUCH_KEY = "skill_toque_de_cura"
+const val SKILL_REGENERATION_KEY = "skill_regeneracao"
+const val SKILL_GIANT_SLAP_KEY = "skill_pancada_gigante"
+const val SKILL_THICK_SKIN_KEY = "skill_pele_grossa"
+const val SKILL_SMASH_KEY = "skill_esmagar"
+const val SKILL_THREATENING_ROAR_KEY = "skill_rugido_ameacador"
 
 const val PHASE_PURPLE_FLAME_ICON_KEY = "icone_fase_chama_roxa"
 const val PHASE_CRACKED_SHIELD_ICON_KEY = "icone_fase_escudo_rachado"
@@ -234,6 +248,20 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
             SKILL_THORN_TRAP_KEY -> R.drawable.skill_armadilha_de_espinhos
             SKILL_FRAGMENTATION_GRENADE_KEY -> R.drawable.skill_granada_de_fragmentacao
             SKILL_MANA_BARRIER -> R.drawable.skill_barreira_de_mana
+            SKILL_QUICK_ATTACK_KEY -> R.drawable.skill_ataque_rapido
+            SKILL_WILD_INSTINCT_KEY -> R.drawable.skill_instinto_selvagem
+            SKILL_CHARGE_KEY -> R.drawable.skill_investida
+            SKILL_MYSTIC_PROJECTILE_KEY -> R.drawable.skill_projetil_mistico
+            SKILL_CURSE_KEY -> R.drawable.skill_maldicao
+            SKILL_ENERGY_SHIELD_KEY -> R.drawable.skill_escudo_de_energia
+            SKILL_MANA_DRAIN_KEY -> R.drawable.skill_dreno_de_mana
+            SKILL_ARCANE_EXPLOSION_KEY -> R.drawable.skill_explosao_arcana
+            SKILL_HEALING_TOUCH_KEY -> R.drawable.skill_toque_de_cura
+            SKILL_REGENERATION_KEY -> R.drawable.skill_regeneracao
+            SKILL_GIANT_SLAP_KEY -> R.drawable.skill_pancada_gigante
+            SKILL_THICK_SKIN_KEY -> R.drawable.skill_pele_grossa
+            SKILL_SMASH_KEY -> R.drawable.skill_esmagar
+            SKILL_THREATENING_ROAR_KEY -> R.drawable.skill_rugido_ameacador
             else -> null
         }
     }

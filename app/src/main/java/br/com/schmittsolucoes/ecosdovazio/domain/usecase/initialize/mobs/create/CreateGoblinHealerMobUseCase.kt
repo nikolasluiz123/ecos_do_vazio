@@ -2,6 +2,8 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_HEALER_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.GOBLIN_HEALER_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_HEALING_TOUCH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_REGENERATION_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -41,7 +43,7 @@ class CreateGoblinHealerMobUseCase(
                 lifeRestore = 20,
                 refreshTime = 3,
                 minLevel = 1,
-                imageName = "",
+                imageName = SKILL_HEALING_TOUCH_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -53,7 +55,7 @@ class CreateGoblinHealerMobUseCase(
                 lifeRestore = 15,
                 refreshTime = 6,
                 minLevel = 6,
-                imageName = "",
+                imageName = SKILL_REGENERATION_KEY,
                 attributes = Skill.Attributes()
             )
         )

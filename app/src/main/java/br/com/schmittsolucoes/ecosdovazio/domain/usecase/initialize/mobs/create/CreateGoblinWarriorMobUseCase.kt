@@ -2,6 +2,10 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_WARRIOR_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.GOBLIN_WARRIOR_PROFILE_IMAGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_BRUTAL_SLASH_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_CHARGE_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_QUICK_ATTACK_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_WILD_INSTINCT_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -39,7 +43,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 15,
                 refreshTime = 1,
                 minLevel = 1,
-                imageName = "",
+                imageName = SKILL_QUICK_ATTACK_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -51,7 +55,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 20,
                 refreshTime = 3,
                 minLevel = 3,
-                imageName = "",
+                imageName = SKILL_BRUTAL_SLASH_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -64,7 +68,7 @@ class CreateGoblinWarriorMobUseCase(
                 duration = 4,
                 refreshTime = 4,
                 minLevel = 6,
-                imageName = "",
+                imageName = SKILL_WILD_INSTINCT_KEY,
                 attributes = Skill.Attributes()
             ),
             Skill(
@@ -76,7 +80,7 @@ class CreateGoblinWarriorMobUseCase(
                 damage = 25,
                 refreshTime = 4,
                 minLevel = 10,
-                imageName = "",
+                imageName = SKILL_CHARGE_KEY,
                 attributes = Skill.Attributes()
             )
         )
