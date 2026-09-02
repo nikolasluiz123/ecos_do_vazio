@@ -234,7 +234,7 @@
     <string name="giant_slap_skill_name">Giant Slap</string>
     <string name="giant_slap_skill_description">A strong brute attack delivered by colossal monsters dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="thick_skin_skill_name">Thick Skin</string>
-    <string name="thick_skin_skill_description">Hardens the body for extraordinary defense increasing physical resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="thick_skin_skill_description">Hardens the body for extraordinary defense increasing resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="smash_skill_name">Smash</string>
     <string name="smash_skill_description">Offensive destruction hitting with devastating impact dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="threatening_roar_skill_name">Threatening Roar</string>

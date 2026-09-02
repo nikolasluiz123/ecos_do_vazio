@@ -233,7 +233,7 @@
     <string name="giant_slap_skill_name">Pancada Gigante</string>
     <string name="giant_slap_skill_description">Um forte ataque bruto desferido por monstros colossais causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
     <string name="thick_skin_skill_name">Pele Grossa</string>
-    <string name="thick_skin_skill_description">Endurece o corpo para obter defesa extraordinária aumentando a resistência física em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
+    <string name="thick_skin_skill_description">Endurece o corpo para obter defesa extraordinária aumentando a resistência em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
     <string name="smash_skill_name">Esmagar</string>
     <string name="smash_skill_description">Destruição ofensiva que atinge com impacto devastador causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
     <string name="threatening_roar_skill_name">Rugido Ameaçador</string>
