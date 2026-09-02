@@ -237,7 +237,7 @@
     <string name="smash_skill_name">Esmagar</string>
     <string name="smash_skill_description">Destruição ofensiva que atinge com impacto devastador causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
     <string name="threatening_roar_skill_name">Rugido Ameaçador</string>
-    <string name="threatening_roar_skill_description">Um rugido que melhora o desempenho de aliados em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
+    <string name="threatening_roar_skill_description">Um rugido que aumenta a agressividade do Orc, concedendo um bônus de %1$s no dano por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
     <string name="boss_strike_skill_name">Golpe do Chefe</string>
     <string name="boss_strike_skill_description">O ataque final e mais fatal da criatura causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
 
