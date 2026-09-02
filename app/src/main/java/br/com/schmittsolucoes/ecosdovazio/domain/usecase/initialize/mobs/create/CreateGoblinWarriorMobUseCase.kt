@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_WARRIOR_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.GOBLIN_WARRIOR_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -17,7 +18,8 @@ class CreateGoblinWarriorMobUseCase(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.GOBLIN_WARRIOR_MOB_NAME,
             descriptionTranslationId = TranslationIdentifier.GOBLIN_WARRIOR_MOB_DESCRIPTION,
-            imageName = BATTLE_IMAGE_GOBLIN_WARRIOR_KEY,
+            battleImageName = BATTLE_IMAGE_GOBLIN_WARRIOR_KEY,
+            profileImageName = GOBLIN_WARRIOR_PROFILE_IMAGE_KEY,
             mobCategory = MobCategory.WARRIOR,
             attributes = Mob.Attributes(
                 strength = 6,

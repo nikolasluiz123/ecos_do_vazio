@@ -8,6 +8,7 @@ interface ResourcesProvider {
     fun getProfileClassImage(name: String): Int?
     fun getProfileSpecializationImage(name: String): Int?
     fun getBattleMobImage(name: String): Int?
+    fun getProfileMobImage(name: String): Int?
     fun getSkillImage(name: String): Int?
     fun getPhaseImage(name: String): Int?
     fun getCoatArmsImage(name: String): Int?

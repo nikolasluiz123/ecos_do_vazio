@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ORC_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.ORC_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -17,7 +18,8 @@ class CreateCaveOrcMobUseCase(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.CAVE_ORC_MOB_NAME,
             descriptionTranslationId = TranslationIdentifier.CAVE_ORC_MOB_DESCRIPTION,
-            imageName = BATTLE_IMAGE_ORC_KEY,
+            battleImageName = BATTLE_IMAGE_ORC_KEY,
+            profileImageName = ORC_PROFILE_IMAGE_KEY,
             mobCategory = MobCategory.ORC_WARRIOR,
             attributes = Mob.Attributes(
                 strength = 12,

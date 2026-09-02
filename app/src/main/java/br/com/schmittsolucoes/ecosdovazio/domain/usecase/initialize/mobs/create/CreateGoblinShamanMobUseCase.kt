@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.mobs.create
 
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_GOBLIN_XAMA_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.GOBLIN_XAMA_PROFILE_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -17,7 +18,8 @@ class CreateGoblinShamanMobUseCase(
             id = identifierProvider.generate(),
             nameTranslationId = TranslationIdentifier.GOBLIN_SHAMAN_MOB_NAME,
             descriptionTranslationId = TranslationIdentifier.GOBLIN_SHAMAN_MOB_DESCRIPTION,
-            imageName = BATTLE_IMAGE_GOBLIN_XAMA_KEY,
+            battleImageName = BATTLE_IMAGE_GOBLIN_XAMA_KEY,
+            profileImageName = GOBLIN_XAMA_PROFILE_IMAGE_KEY,
             mobCategory = MobCategory.MAGE,
             attributes = Mob.Attributes(
                 intelligence = 6,

@@ -12,7 +12,7 @@ data class BattleMobTuple(
     val magicResistance: Long,
     val vitality: Long,
     val agility: Long,
-    val imageName: String,
+    val battleImageName: String,
     val mobCategory: MobCategory,
     val name: String,
     val description: String,

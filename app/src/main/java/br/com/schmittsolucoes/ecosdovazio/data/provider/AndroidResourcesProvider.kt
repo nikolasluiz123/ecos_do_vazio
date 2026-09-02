@@ -21,6 +21,11 @@ const val BATTLE_IMAGE_GOBLIN_WARRIOR_KEY = "goblin_guerreiro_16_9"
 const val BATTLE_IMAGE_GOBLIN_XAMA_KEY = "goblin_xama_16_9"
 const val BATTLE_IMAGE_ORC_KEY = "orc_das_cavernas_16_9"
 
+const val GOBLIN_WARRIOR_PROFILE_IMAGE_KEY = "goblin_guerreiro_perfil"
+const val GOBLIN_XAMA_PROFILE_IMAGE_KEY = "goblin_xama_perfil"
+const val GOBLIN_HEALER_PROFILE_IMAGE_KEY = "goblin_curandeiro_perfil"
+const val ORC_PROFILE_IMAGE_KEY = "orc_das_cavernas_perfil"
+
 const val GUARDIAN_SPECIALIZATION_IMAGE_KEY = "especializacao_guardiao"
 const val GLADIATOR_SPECIALIZATION_IMAGE_KEY = "especializacao_gladiador"
 const val WATER_MAGE_SPECIALIZATION_IMAGE_KEY = "especializacao_mago_agua"
@@ -171,6 +176,16 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
             BATTLE_IMAGE_GOBLIN_WARRIOR_KEY -> R.drawable.goblin_guerreiro_16_9
             BATTLE_IMAGE_GOBLIN_XAMA_KEY -> R.drawable.goblin_xama_16_9
             BATTLE_IMAGE_ORC_KEY -> R.drawable.orc_das_cavernas_16_9
+            else -> null
+        }
+    }
+
+    override fun getProfileMobImage(name: String): Int? {
+        return when (name) {
+            GOBLIN_HEALER_PROFILE_IMAGE_KEY -> R.drawable.goblin_curandeiro_perfil
+            GOBLIN_WARRIOR_PROFILE_IMAGE_KEY -> R.drawable.goblin_guerreiro_perfil
+            GOBLIN_XAMA_PROFILE_IMAGE_KEY -> R.drawable.goblin_xama_perfil
+            ORC_PROFILE_IMAGE_KEY -> R.drawable.orc_das_cavernas_perfil
             else -> null
         }
     }

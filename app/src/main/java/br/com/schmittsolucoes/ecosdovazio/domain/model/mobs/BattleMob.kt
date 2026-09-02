@@ -9,7 +9,7 @@ data class BattleMob(
     val phaseMobId: String,
     val name: String,
     val description: String,
-    val imageName: String,
+    val battleImageName: String,
     val mobCategory: MobCategory,
     val level: Long = 1,
     val offensiveMultiplier: Double = 1.0,

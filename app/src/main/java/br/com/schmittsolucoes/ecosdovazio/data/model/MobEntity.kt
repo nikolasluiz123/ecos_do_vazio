@@ -50,8 +50,11 @@ data class MobEntity(
 
     val agility: Long = 0,
 
-    @ColumnInfo("image_name")
-    val imageName: String,
+    @ColumnInfo("battle_image_name")
+    val battleImageName: String,
+
+    @ColumnInfo("profile_image_name")
+    val profileImageName: String,
 
     @ColumnInfo("mob_category")
     val mobCategory: MobCategory,

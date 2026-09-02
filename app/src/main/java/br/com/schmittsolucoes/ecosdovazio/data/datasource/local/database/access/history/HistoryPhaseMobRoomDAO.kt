@@ -32,7 +32,7 @@ interface HistoryPhaseMobRoomDAO : HistoryPhaseMobLocalDataSource, RoomLocalData
             mobs.magic_resistance as magicResistance,
             mobs.vitality as vitality,
             mobs.agility as agility,
-            mobs.image_name as imageName,
+            mobs.battle_image_name as battleImageName,
             mobs.mob_category as mobCategory,
             t_name.translated_text as name,
             t_desc.translated_text as description

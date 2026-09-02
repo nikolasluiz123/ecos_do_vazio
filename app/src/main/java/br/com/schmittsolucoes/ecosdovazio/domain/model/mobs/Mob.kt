@@ -7,7 +7,8 @@ data class Mob(
     val id: String,
     val nameTranslationId: TranslationIdentifier,
     val descriptionTranslationId: TranslationIdentifier,
-    val imageName: String,
+    val battleImageName: String,
+    val profileImageName: String,
     val mobCategory: MobCategory,
     val attributes: Attributes
 ) {
