@@ -78,19 +78,6 @@ class CreateGoblinWarriorMobUseCase(
                 minLevel = 10,
                 imageName = "",
                 attributes = Skill.Attributes()
-            ),
-            Skill(
-                id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.GOBLIN_FURY_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.GOBLIN_FURY_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.OFFENSIVE_BUFF,
-                mobId = mob.id,
-                multiplier = 0.3,
-                duration = 4,
-                refreshTime = 6,
-                minLevel = 15,
-                imageName = "",
-                attributes = Skill.Attributes()
             )
         )
 

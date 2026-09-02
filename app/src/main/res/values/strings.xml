@@ -211,11 +211,9 @@
     <string name="quick_attack_skill_name">Quick Attack</string>
     <string name="quick_attack_skill_description">A fast physical offensive attack dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="wild_instinct_skill_name">Wild Instinct</string>
-    <string name="wild_instinct_skill_description">Increases offensive instincts by improving stats by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
+    <string name="wild_instinct_skill_description">Increases offensive instincts by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="charge_skill_name">Charge</string>
     <string name="charge_skill_description">A careless and violent frontal offensive strike dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
-    <string name="goblin_fury_skill_name">Goblin Fury</string>
-    <string name="goblin_fury_skill_description">Enters a rage state that strengthens defensive and offensive attributes by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
 
     <string name="mystic_projectile_skill_name">Mystic Projectile</string>
     <string name="mystic_projectile_skill_description">Hurls chaotic magical energy dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>

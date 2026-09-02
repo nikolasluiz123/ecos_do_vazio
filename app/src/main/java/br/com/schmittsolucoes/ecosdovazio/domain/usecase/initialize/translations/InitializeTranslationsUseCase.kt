@@ -212,8 +212,6 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.WILD_INSTINCT_SKILL_DESCRIPTION -> R.string.wild_instinct_skill_description
             TranslationIdentifier.CHARGE_SKILL_NAME -> R.string.charge_skill_name
             TranslationIdentifier.CHARGE_SKILL_DESCRIPTION -> R.string.charge_skill_description
-            TranslationIdentifier.GOBLIN_FURY_SKILL_NAME -> R.string.goblin_fury_skill_name
-            TranslationIdentifier.GOBLIN_FURY_SKILL_DESCRIPTION -> R.string.goblin_fury_skill_description
             TranslationIdentifier.MYSTIC_PROJECTILE_SKILL_NAME -> R.string.mystic_projectile_skill_name
             TranslationIdentifier.MYSTIC_PROJECTILE_SKILL_DESCRIPTION -> R.string.mystic_projectile_skill_description
             TranslationIdentifier.CURSE_SKILL_NAME -> R.string.curse_skill_name

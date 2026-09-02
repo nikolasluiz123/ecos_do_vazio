@@ -210,11 +210,9 @@
     <string name="quick_attack_skill_name">Ataque Rápido</string>
     <string name="quick_attack_skill_description">Um ataque físico ofensivo veloz que causa %1$d (%2$d + %3$d - %4$d) de dano e pode ser usado novamente após %5$d turnos.</string>
     <string name="wild_instinct_skill_name">Instinto Selvagem</string>
-    <string name="wild_instinct_skill_description">Aumenta instintos ofensivos melhorando suas estatísticas em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
+    <string name="wild_instinct_skill_description">Aumenta instintos ofensivos em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
     <string name="charge_skill_name">Investida</string>
     <string name="charge_skill_description">Golpe ofensivo frontal descuidado e violento que causa %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
-    <string name="goblin_fury_skill_name">Fúria do Goblin</string>
-    <string name="goblin_fury_skill_description">Entra em um estado de raiva que fortalece atributos defensivos e ofensivos em %1$s por %2$d turnos. Pode ser usado novamente após %3$d turnos.</string>
 
     <string name="mystic_projectile_skill_name">Projétil Místico</string>
     <string name="mystic_projectile_skill_description">Arremessa energia mágica caótica causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
