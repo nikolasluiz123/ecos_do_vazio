@@ -16,7 +16,7 @@ interface HistoryPhaseMobRoomDAO : HistoryPhaseMobLocalDataSource, RoomLocalData
                mobs.mob_category as mobCategory, 
                count(*) as count
         from history_phase_mobs
-        join mobs on history_phase_mobs.mob_id = mobs.id
+        inner join mobs on history_phase_mobs.mob_id = mobs.id
         group by history_phase_mobs.history_phase_id, mobs.mob_category
     """)
     override suspend fun getMobCategoryCountsPerPhase(): List<PhaseMobCategoryCountTuple>
@@ -34,13 +34,15 @@ interface HistoryPhaseMobRoomDAO : HistoryPhaseMobLocalDataSource, RoomLocalData
             mobs.agility as agility,
             mobs.battle_image_name as battleImageName,
             mobs.mob_category as mobCategory,
-            t_name.translated_text as name,
-            t_desc.translated_text as description
+            coalesce(mob_name.translated_text, mob_name_default.translated_text) as name,
+            coalesce(mob_desc.translated_text, mob_desc_default.translated_text) as description
         from history_phases
         join history_phase_mobs on history_phase_mobs.history_phase_id = history_phases.id
         join mobs on mobs.id = history_phase_mobs.mob_id
-        join translations t_name on t_name.id = mobs.name_translation_id and t_name.language_id = :languageId
-        join translations t_desc on t_desc.id = mobs.description_translation_id and t_desc.language_id = :languageId
+        left join translations mob_name on mob_name.id = mobs.name_translation_id and mob_name.language_id = :languageId
+        left join translations mob_name_default on mob_name_default.id = mobs.name_translation_id and mob_name_default.language_id = (select id from languages where is_default = 1 limit 1)
+        left join translations mob_desc on mob_desc.id = mobs.description_translation_id and mob_desc.language_id = :languageId
+        left join translations mob_desc_default on mob_desc_default.id = mobs.description_translation_id and mob_desc_default.language_id = (select id from languages where is_default = 1 limit 1)
         where history_phases.id = :phaseId
     """)
     override fun getMobsFromPhase(phaseId: String, languageId: String): Flow<List<BattleMobTuple>>
