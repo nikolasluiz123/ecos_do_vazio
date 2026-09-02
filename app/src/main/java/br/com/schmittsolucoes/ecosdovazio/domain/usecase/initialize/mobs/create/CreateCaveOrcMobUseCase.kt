@@ -80,18 +80,6 @@ class CreateCaveOrcMobUseCase(
                 minLevel = 15,
                 imageName = "",
                 attributes = Skill.Attributes()
-            ),
-            Skill(
-                id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.BOSS_STRIKE_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.BOSS_STRIKE_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE,
-                mobId = mob.id,
-                damage = 50,
-                refreshTime = 6,
-                minLevel = 20,
-                imageName = "",
-                attributes = Skill.Attributes()
             )
         )
 

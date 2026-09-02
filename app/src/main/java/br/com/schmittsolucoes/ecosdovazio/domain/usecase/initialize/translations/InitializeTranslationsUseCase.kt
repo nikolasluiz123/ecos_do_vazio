@@ -234,8 +234,6 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.SMASH_SKILL_DESCRIPTION -> R.string.smash_skill_description
             TranslationIdentifier.THREATENING_ROAR_SKILL_NAME -> R.string.threatening_roar_skill_name
             TranslationIdentifier.THREATENING_ROAR_SKILL_DESCRIPTION -> R.string.threatening_roar_skill_description
-            TranslationIdentifier.BOSS_STRIKE_SKILL_NAME -> R.string.boss_strike_skill_name
-            TranslationIdentifier.BOSS_STRIKE_SKILL_DESCRIPTION -> R.string.boss_strike_skill_description
         }
     }
 }

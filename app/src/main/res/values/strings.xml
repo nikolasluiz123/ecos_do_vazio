@@ -239,8 +239,6 @@
     <string name="smash_skill_description">Offensive destruction hitting with devastating impact dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
     <string name="threatening_roar_skill_name">Threatening Roar</string>
     <string name="threatening_roar_skill_description">A roar that increases the Orc aggression, granting a %1$s damage bonus for %2$d turns. Can be used again after %3$d turns.</string>
-    <string name="boss_strike_skill_name">Boss Strike</string>
-    <string name="boss_strike_skill_description">The creature\'s final and most fatal attack dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
     <string name="history_phase_status_finished">Finished</string>
     <string name="history_phase_status_current">Current</string>
