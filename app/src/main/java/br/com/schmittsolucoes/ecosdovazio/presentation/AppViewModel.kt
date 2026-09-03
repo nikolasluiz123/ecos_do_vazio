@@ -42,6 +42,7 @@ class AppViewModel @Inject constructor(
     private val _isInitializing = MutableStateFlow(true)
     private val _startDestination = MutableStateFlow<Any>(CharSelectionRoute)
     private val _errorMessage = MutableStateFlow<String?>(null)
+    private val _isToolbarExpanded = MutableStateFlow(true)
 
     private val _logoutEvent = MutableSharedFlow<Unit>()
     val logoutEvent: SharedFlow<Unit> = _logoutEvent.asSharedFlow()
@@ -53,7 +54,8 @@ class AppViewModel @Inject constructor(
         loadingManager.isLoading,
         loadingManager.message,
         snackbarManager.message,
-        getCharHeaderUseCase()
+        getCharHeaderUseCase(),
+        _isToolbarExpanded
     ) { flows ->
         AppUIState(
             isInitializing = flows[0] as Boolean,
@@ -63,7 +65,8 @@ class AppViewModel @Inject constructor(
             loadingMessage = flows[4] as String?,
             snackbarMessage = flows[5] as String?,
             charHeader = flows[6] as CharHeader?,
-            profileImageRes = (flows[6] as? CharHeader)?.let { resourcesProvider.getProfileClassImage(it.profileImageName) }
+            profileImageRes = (flows[6] as? CharHeader)?.let { resourcesProvider.getProfileClassImage(it.profileImageName) },
+            isToolbarExpanded = flows[7] as Boolean
         )
     }.stateIn(
         scope = viewModelScope,
@@ -109,6 +112,10 @@ class AppViewModel @Inject constructor(
 
     fun onDismissSnackbar() {
         snackbarManager.hideSnackbar()
+    }
+
+    fun toggleToolbarExpanded() {
+        _isToolbarExpanded.value = !_isToolbarExpanded.value
     }
 
     fun logout() {

@@ -11,5 +11,6 @@ data class AppUIState(
     val loadingMessage: String? = null,
     val snackbarMessage: String? = null,
     val charHeader: CharHeader? = null,
-    val profileImageRes: Int? = null
+    val profileImageRes: Int? = null,
+    val isToolbarExpanded: Boolean = true
 )
