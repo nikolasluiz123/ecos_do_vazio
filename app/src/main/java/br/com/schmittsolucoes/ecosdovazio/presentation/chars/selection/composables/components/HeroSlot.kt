@@ -34,13 +34,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.CharSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundBottom
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundTop
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NewCharacterButtonBackground
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.pictureTextHighlightBackground
-import coil.compose.SubcomposeAsyncImage
 
 private const val ROUNDED_CORNER_SHAPE = 4
 private const val NEW_CHAR_ROUNDED_CORNER_SHAPE = 8
@@ -101,23 +101,12 @@ fun HeroSlot(
 
 @Composable
 private fun HeroImage(image: Int) {
-    SubcomposeAsyncImage(
+    AppAsyncImage(
         model = image,
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop,
         filterQuality = FilterQuality.Medium,
-        loading = {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(
-                    color = Highlight,
-                    strokeWidth = 2.dp
-                )
-            }
-        }
     )
 }
 

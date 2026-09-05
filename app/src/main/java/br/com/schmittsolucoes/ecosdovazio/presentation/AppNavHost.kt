@@ -12,6 +12,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigat
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.navigation.navigateToClassSelection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.historyModeBattleScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.navigateToHistoryModeBattle
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.navigation.historyMobsInfoScreen
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.navigation.navigateToHistoryMobsInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.historyScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.homeScreen
@@ -52,7 +54,11 @@ fun AppNavHost(
             charSkillsScreen(windowSizeClass = windowSizeClass)
             historyScreen(
                 windowSizeClass = windowSizeClass,
-                onNavigateToBattle = navController::navigateToHistoryModeBattle
+                onNavigateToBattle = navController::navigateToHistoryModeBattle,
+                onNavigateToMobsInfo = navController::navigateToHistoryMobsInfo
+            )
+            historyMobsInfoScreen(
+                windowSizeClass = windowSizeClass
             )
         }
     }

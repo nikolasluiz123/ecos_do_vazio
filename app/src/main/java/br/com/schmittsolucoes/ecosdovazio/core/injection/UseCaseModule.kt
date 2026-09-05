@@ -74,6 +74,8 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalRe
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCountUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetPhaseDataByIdUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhaseInfoQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.InitializeClassesUseCase
@@ -290,6 +292,26 @@ object UseCaseModule {
         preferencesRepository = preferencesRepository,
         userRepository = userRepository,
         languageProvider = languageProvider
+    )
+
+    @Provides
+    fun provideHistoryPhaseInfoQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        skillRepository: SkillRepository,
+        languageProvider: LanguageProvider,
+    ): HistoryPhaseInfoQueryUseCase = HistoryPhaseInfoQueryUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        skillRepository = skillRepository,
+        languageProvider = languageProvider,
+    )
+
+    @Provides
+    fun provideGetPhaseByIdUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        languageProvider: LanguageProvider,
+    ): GetPhaseDataByIdUseCase = GetPhaseDataByIdUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        languageProvider = languageProvider,
     )
 
     @Provides

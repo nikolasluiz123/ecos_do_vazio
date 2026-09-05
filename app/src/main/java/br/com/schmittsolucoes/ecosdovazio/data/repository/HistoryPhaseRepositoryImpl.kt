@@ -8,9 +8,11 @@ import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.MobPhaseInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.HistoryPhaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +22,7 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
     private val historyPhaseLocalDataSource: HistoryPhaseLocalDataSource,
     private val historyPhaseMobLocalDataSource: HistoryPhaseMobLocalDataSource,
     private val historyPhaseInfoLocalDataSource: HistoryPhaseInfoLocalDataSource,
-    private val databaseTransaction: DatabaseTransaction
+    private val databaseTransaction: DatabaseTransaction,
 ): HistoryPhaseRepository {
 
     override suspend fun save(historyPhases: List<HistoryPhase>) {
@@ -61,11 +63,23 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
         return historyPhaseLocalDataSource.getById(id)?.toDomain(emptyList())
     }
 
+    override fun getHistoryPhaseDataById(phaseId: String, languageTag: String): Flow<HistoryPhaseData?> {
+        return historyPhaseLocalDataSource.getHistoryPhaseDataById(phaseId, languageTag).map {
+            it?.toDomain()
+        }
+    }
+
     override suspend fun getHistoryPhaseInfo(charId: String, phaseId: String): HistoryPhaseInfo? {
         return historyPhaseInfoLocalDataSource.getByCharAndPhase(charId, phaseId)?.toDomain()
     }
 
     override suspend fun saveHistoryPhaseInfo(historyPhaseInfo: HistoryPhaseInfo) {
         historyPhaseInfoLocalDataSource.upsert(listOf(historyPhaseInfo.toEntity()))
+    }
+
+    override suspend fun getPhaseMobsInfo(phaseId: String, languageTag: String): List<MobPhaseInfo> {
+        return historyPhaseMobLocalDataSource.getPhaseMobsInfo(phaseId, languageTag).map {
+            it.toDomain()
+        }
     }
 }

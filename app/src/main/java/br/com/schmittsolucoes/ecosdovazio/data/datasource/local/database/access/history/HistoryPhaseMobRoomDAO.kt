@@ -5,6 +5,7 @@ import androidx.room.Query
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.RoomLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseMobEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.BattleMobTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobPhaseInfoTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.PhaseMobCategoryCountTuple
 import kotlinx.coroutines.flow.Flow
 
@@ -46,4 +47,21 @@ interface HistoryPhaseMobRoomDAO : HistoryPhaseMobLocalDataSource, RoomLocalData
         where history_phases.id = :phaseId
     """)
     override fun getMobsFromPhase(phaseId: String, languageId: String): Flow<List<BattleMobTuple>>
+
+    @Query("""
+        select mobs.id as mobId,
+               coalesce(mob_name.translated_text, mob_name_default.translated_text) as mobName,
+               coalesce(mob_desc.translated_text, mob_desc_default.translated_text) as mobDescription,
+               mobs.profile_image_name as mobProfileImageName,
+               count(history_phase_mobs.mob_id) as mobCount
+        from mobs
+        inner join history_phase_mobs on mobs.id = history_phase_mobs.mob_id
+        left join translations mob_name on mob_name.id = mobs.name_translation_id and mob_name.language_id = :languageId
+        left join translations mob_name_default on mob_name_default.id = mobs.name_translation_id and mob_name_default.language_id = (select id from languages where is_default = 1 limit 1)
+        left join translations mob_desc on mob_desc.id = mobs.description_translation_id and mob_desc.language_id = :languageId
+        left join translations mob_desc_default on mob_desc_default.id = mobs.description_translation_id and mob_desc_default.language_id = (select id from languages where is_default = 1 limit 1)
+        where history_phase_mobs.history_phase_id = :phaseId
+        group by mobs.id
+    """)
+    override suspend fun getPhaseMobsInfo(phaseId: String, languageId: String): List<MobPhaseInfoTuple>
 }

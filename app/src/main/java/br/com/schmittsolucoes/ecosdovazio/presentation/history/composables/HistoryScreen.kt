@@ -37,7 +37,8 @@ private const val DEFAULT_COLUMNS = 1
 fun HistoryScreen(
     viewModel: HistoryViewModel,
     windowSizeClass: WindowSizeClass,
-    onPhaseClick: (String) -> Unit
+    onPhaseClick: (String) -> Unit,
+    onInfoClick: (String) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -45,7 +46,8 @@ fun HistoryScreen(
         state = state,
         windowSizeClass = windowSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onPhaseClick = onPhaseClick
+        onPhaseClick = onPhaseClick,
+        onInfoClick = onInfoClick
     )
 }
 
@@ -54,7 +56,8 @@ fun HistoryScreen(
     state: HistoryUIState = HistoryUIState(),
     windowSizeClass: WindowSizeClass? = null,
     onDismissErrorDialog: () -> Unit = {},
-    onPhaseClick: (String) -> Unit = {}
+    onPhaseClick: (String) -> Unit = {},
+    onInfoClick: (String) -> Unit = {}
 ) {
     val columns = when (windowSizeClass?.widthSizeClass) {
         WindowWidthSizeClass.Compact -> COMPACT_COLUMNS
@@ -89,7 +92,8 @@ fun HistoryScreen(
                 items(state.phases) { phase ->
                     HistoryPhaseItem(
                         phase = phase,
-                        onPhaseClick = onPhaseClick
+                        onPhaseClick = onPhaseClick,
+                        onInfoClick = onInfoClick
                     )
                 }
             }
@@ -103,4 +107,3 @@ fun HistoryScreen(
         }
     }
 }
-

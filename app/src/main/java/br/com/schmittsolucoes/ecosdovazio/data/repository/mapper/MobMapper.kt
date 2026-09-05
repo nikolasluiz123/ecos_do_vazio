@@ -2,9 +2,11 @@ package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.MobEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.BattleMobTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.MobPhaseInfoTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.MobPhaseInfo
 
 fun Mob.toEntity() = MobEntity(
     id = id,
@@ -56,4 +58,12 @@ fun BattleMobTuple.toDomain() = BattleMob(
         vitality = vitality,
         agility = agility
     )
+)
+
+fun MobPhaseInfoTuple.toDomain() = MobPhaseInfo(
+    mobId = mobId,
+    mobName = mobName,
+    mobDescription = mobDescription,
+    mobProfileImageName = mobProfileImageName,
+    mobCount = mobCount,
 )

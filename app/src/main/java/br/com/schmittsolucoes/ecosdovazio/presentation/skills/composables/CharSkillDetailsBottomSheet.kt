@@ -32,6 +32,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttribute
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.extensions.removeDamageFormula
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
@@ -214,8 +215,4 @@ private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
         AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
         AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
     }
-}
-
-private fun String.removeDamageFormula(): String {
-    return this.replace(Regex("""\s*\(.*?\)"""), "")
 }

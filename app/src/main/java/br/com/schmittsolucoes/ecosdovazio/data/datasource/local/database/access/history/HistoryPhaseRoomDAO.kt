@@ -5,6 +5,7 @@ import androidx.room.Query
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.RoomLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharHistoryPhaseTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.HistoryPhaseDataTuple
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,6 +16,16 @@ interface HistoryPhaseRoomDAO : HistoryPhaseLocalDataSource, RoomLocalDataSource
 
     @Query("select * from history_phases where id = :id")
     override suspend fun getById(id: String): HistoryPhaseEntity?
+
+    @Query("""
+        select history_phases.id as phaseId, 
+               coalesce(phase_name.translated_text, phase_name_default.translated_text) as phaseName
+        from history_phases
+        left join translations phase_name on phase_name.id = history_phases.name_translation_id and phase_name.language_id = :languageTag
+        left join translations phase_name_default on phase_name_default.id = history_phases.name_translation_id and phase_name_default.language_id = (select id from languages where is_default = 1 limit 1)
+        where history_phases.id = :phaseId
+    """)
+    override fun getHistoryPhaseDataById(phaseId: String, languageTag: String): Flow<HistoryPhaseDataTuple?>
 
     @Query("""
         select history_phases.id as phaseId, 

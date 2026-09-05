@@ -3,7 +3,6 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.compos
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -33,11 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighlightedElevatedButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
-import coil.compose.SubcomposeAsyncImage
 
 @Composable
 fun ClassCard(
@@ -62,7 +59,7 @@ fun ClassCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (showVisualElements) {
-                    SubcomposeAsyncImage(
+                    AppAsyncImage(
                         model = classModel.presentationDrawableId,
                         contentDescription = null,
                         modifier = Modifier
@@ -71,17 +68,6 @@ fun ClassCard(
                             .clip(ShapeDefaults.Small),
                         contentScale = ContentScale.Crop,
                         filterQuality = FilterQuality.Medium,
-                        loading = {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    color = Highlight,
-                                    strokeWidth = 2.dp
-                                )
-                            }
-                        }
                     )
 
                     ClassSelectionDivider(
@@ -137,7 +123,7 @@ fun ClassCardPreviewLight() {
                 id = "1",
                 name = "Guerreiro",
                 description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.",
-                presentationDrawableId = android.R.drawable.ic_menu_gallery
+                presentationDrawableId = R.drawable.classe_guerreiro
             ),
             modifier = Modifier.padding(16.dp)
         )
@@ -153,10 +139,9 @@ fun ClassCardPreviewDark() {
                 id = "1",
                 name = "Guerreiro",
                 description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.",
-                presentationDrawableId = android.R.drawable.ic_menu_gallery
+                presentationDrawableId = R.drawable.classe_guerreiro
             ),
             modifier = Modifier.padding(16.dp)
         )
     }
 }
-

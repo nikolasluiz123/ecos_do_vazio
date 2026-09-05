@@ -264,4 +264,6 @@
     <string name="history_mode_battle_screen_select_mob_message">You must select the Mob you want to attack.</string>
     <string name="history_mode_battle_screen_label_enemy_round">Enemy Turn</string>
     <string name="history_mode_battle_screen_label_player_round">Your Turn</string>
+    <string name="history_mobs_info_title">Enemies Information</string>
+    <string name="history_mobs_info_content_description">Enemies info</string>
 </resources>
