@@ -32,8 +32,10 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -70,11 +72,13 @@ fun AppBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val collapsedItems = getCollapsedItemsForDestination(currentDestination)
+    var previousDestination by remember { mutableStateOf<NavDestination?>(null) }
 
-    LaunchedEffect(currentDestination) {
-        if (collapsedItems.isNotEmpty() && isExpanded) {
-            onToggleExpanded()
-        } else if (!isExpanded) {
+    if (currentDestination != previousDestination) {
+        previousDestination = currentDestination
+        val shouldBeExpanded = collapsedItems.isEmpty()
+
+        if (isExpanded != shouldBeExpanded) {
             onToggleExpanded()
         }
     }
@@ -83,7 +87,7 @@ fun AppBottomBar(
         targetValue = if (isExpanded) 0f else -1f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessMediumLow
+            stiffness = Spring.StiffnessMedium
         ),
         label = "fabHorizontalBias"
     )
@@ -128,17 +132,19 @@ fun AppBottomBar(
                     }
                 }
 
-                if (!isExpanded) {
-                    collapsedItems.forEach { item ->
-                        val selected = isItemSelected(item, currentDestination)
+                CollapsedToolbarVisibility(isExpanded = isExpanded) {
+                    Row {
+                        collapsedItems.forEach { item ->
+                            val selected = isItemSelected(item, currentDestination)
 
-                        BottomBarItemTooltipBox(
-                            item = item,
-                            selected = selected,
-                            onClick = {
-                                navigateToBottomBarItem(navController, item, currentDestination)
-                            }
-                        )
+                            BottomBarItemTooltipBox(
+                                item = item,
+                                selected = selected,
+                                onClick = {
+                                    navigateToBottomBarItem(navController, item, currentDestination)
+                                }
+                            )
+                        }
                     }
                 }
 
@@ -214,6 +220,20 @@ private fun ExpandableToolbarVisibility(
 ) {
     AnimatedVisibility(
         visible = isExpanded,
+        enter = FloatingToolbarDefaults.horizontalEnterTransition(expandFrom = Alignment.Start),
+        exit = FloatingToolbarDefaults.horizontalExitTransition(shrinkTowards = Alignment.Start),
+        content = { content() }
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun CollapsedToolbarVisibility(
+    isExpanded: Boolean,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = !isExpanded,
         enter = FloatingToolbarDefaults.horizontalEnterTransition(expandFrom = Alignment.Start),
         exit = FloatingToolbarDefaults.horizontalExitTransition(shrinkTowards = Alignment.Start),
         content = { content() }
