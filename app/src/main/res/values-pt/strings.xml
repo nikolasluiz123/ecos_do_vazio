@@ -265,4 +265,10 @@
     <string name="history_mode_battle_screen_label_player_round">Seu Turno</string>
     <string name="history_mobs_info_title">Informações dos Inimigos</string>
     <string name="history_mobs_info_content_description">Informações dos inimigos</string>
+
+    <string name="char_error_specialization_required">Por favor, selecione uma especialização.</string>
+    <string name="specialization_banner_title">Especialização Disponível!</string>
+    <string name="specialization_banner_description">Seu herói atingiu o nível necessário. Escolha uma especialização para evoluir seus poderes!</string>
+    <string name="specialization_banner_button">Escolher Especialização</string>
+    <string name="specialization_selection_title">Escolha sua Especialização</string>
 </resources>

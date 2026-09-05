@@ -1,7 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.data.repository.mapper
 
 import br.com.schmittsolucoes.ecosdovazio.data.model.SpecializationEntity
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.SpecializationSelectionTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.specialization.Specialization
+import br.com.schmittsolucoes.ecosdovazio.domain.model.specialization.SpecializationSelection
 
 fun Specialization.toEntity() = SpecializationEntity(
     id = id,
@@ -39,4 +41,11 @@ fun SpecializationEntity.toDomain() = Specialization(
         incrementVitality = incrementVitality,
         incrementAgility = incrementAgility
     )
+)
+
+fun SpecializationSelectionTuple.toDomain(): SpecializationSelection = SpecializationSelection(
+    id = id,
+    name = name,
+    description = description,
+    presentationImageName = presentationImageName
 )

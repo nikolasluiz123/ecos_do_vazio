@@ -1,5 +1,6 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components
+package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
+import android.R
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
@@ -14,13 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
-fun ClassList(
-    classes: List<ClassSelectionUIModel>,
-    onSelectClass: (String) -> Unit,
+fun SelectionList(
+    items: List<SelectionItemUIModel>,
+    onSelectItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -29,11 +30,13 @@ fun ClassList(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(classes) { classModel ->
-            ClassCard(
-                classModel = classModel,
-                onSelect = onSelectClass,
-                modifier = Modifier.width(420.dp).fillMaxHeight()
+        items(items) { item ->
+            SelectionCard(
+                item = item,
+                onSelect = onSelectItem,
+                modifier = Modifier
+                    .width(420.dp)
+                    .fillMaxHeight()
             )
         }
     }
@@ -41,24 +44,24 @@ fun ClassList(
 
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO, showBackground = true, widthDp = 1000)
 @Composable
-fun ClassListPreviewLight() {
+fun SelectionListPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
-        ClassList(
-            classes = listOf(
-                ClassSelectionUIModel(
+        SelectionList(
+            items = listOf(
+                SelectionItemUIModel(
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 ),
-                ClassSelectionUIModel(
+                SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 )
             ),
-            onSelectClass = {},
+            onSelectItem = {},
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -66,24 +69,24 @@ fun ClassListPreviewLight() {
 
 @Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES, showBackground = true, widthDp = 1000)
 @Composable
-fun ClassListPreviewDark() {
+fun SelectionListPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
-        ClassList(
-            classes = listOf(
-                ClassSelectionUIModel(
+        SelectionList(
+            items = listOf(
+                SelectionItemUIModel(
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 ),
-                ClassSelectionUIModel(
+                SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 )
             ),
-            onSelectClass = {},
+            onSelectItem = {},
             modifier = Modifier.fillMaxSize()
         )
     }

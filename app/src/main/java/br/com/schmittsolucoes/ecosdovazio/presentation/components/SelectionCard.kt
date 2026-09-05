@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components
+package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -29,16 +29,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
-import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighlightedElevatedButton
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.ClassSelectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 
 @Composable
-fun ClassCard(
-    classModel: ClassSelectionUIModel,
+fun SelectionCard(
+    item: SelectionItemUIModel,
     modifier: Modifier = Modifier,
     onSelect: (String) -> Unit = {}
 ) {
@@ -60,7 +59,7 @@ fun ClassCard(
             ) {
                 if (showVisualElements) {
                     AppAsyncImage(
-                        model = classModel.presentationDrawableId,
+                        model = item.presentationDrawableId,
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,7 +77,7 @@ fun ClassCard(
                 }
 
                 Text(
-                    text = classModel.name,
+                    text = item.name,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.Bold,
@@ -89,7 +88,7 @@ fun ClassCard(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = classModel.description,
+                    text = item.description,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = SecondaryTextColor,
@@ -104,7 +103,7 @@ fun ClassCard(
 
                 FilledHighlightedElevatedButton(
                     text = stringResource(id = R.string.select_button),
-                    onClick = { onSelect(classModel.id) },
+                    onClick = { onSelect(item.id) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -116,14 +115,14 @@ fun ClassCard(
 
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
-fun ClassCardPreviewLight() {
+fun SelectionCardPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
-        ClassCard(
-            classModel = ClassSelectionUIModel(
+        SelectionCard(
+            item = SelectionItemUIModel(
                 id = "1",
                 name = "Guerreiro",
-                description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.",
-                presentationDrawableId = R.drawable.classe_guerreiro
+                description = "Especialista em combate corpo a corpo.",
+                presentationDrawableId = android.R.drawable.ic_menu_gallery
             ),
             modifier = Modifier.padding(16.dp)
         )
@@ -132,14 +131,14 @@ fun ClassCardPreviewLight() {
 
 @Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun ClassCardPreviewDark() {
+fun SelectionCardPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
-        ClassCard(
-            classModel = ClassSelectionUIModel(
+        SelectionCard(
+            item = SelectionItemUIModel(
                 id = "1",
                 name = "Guerreiro",
-                description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas. O nível de proteção e o estilo de jogo variam de acordo com o caminho escolhido.",
-                presentationDrawableId = R.drawable.classe_guerreiro
+                description = "Especialista em combate corpo a corpo.",
+                presentationDrawableId = android.R.drawable.ic_menu_gallery
             ),
             modifier = Modifier.padding(16.dp)
         )

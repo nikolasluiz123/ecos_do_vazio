@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables
+package br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.composables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -11,26 +11,23 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionUIState
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.CharNamingBottomSheet
+import br.com.schmittsolucoes.ecosdovazio.R.drawable
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionList
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionPager
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.SpecializationSelectionUIState
+import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.SpecializationSelectionViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
-fun ClassSelectionScreen(
-    viewModel: ClassSelectionViewModel,
+fun SpecializationSelectionScreen(
+    viewModel: SpecializationSelectionViewModel,
     windowWidthSizeClass: WindowWidthSizeClass,
     onNavigateToHome: () -> Unit
 ) {
@@ -44,25 +41,21 @@ fun ClassSelectionScreen(
         }
     }
 
-    ClassSelectionScreen(
+    SpecializationSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onSelectClass = viewModel::onSelectClass,
-        onConfirmName = viewModel::onConfirmName
+        onSelectSpecialization = viewModel::onSelectSpecialization
     )
 }
 
 @Composable
-fun ClassSelectionScreen(
-    state: ClassSelectionUIState = ClassSelectionUIState(),
+fun SpecializationSelectionScreen(
+    state: SpecializationSelectionUIState = SpecializationSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {},
-    onSelectClass: (String) -> Unit = {},
-    onConfirmName: (String) -> Unit = {}
+    onSelectSpecialization: (String) -> Unit = {}
 ) {
-    var showNamingBottomSheet by remember { mutableStateOf(false) }
-
     val isCompact = windowWidthSizeClass == WindowWidthSizeClass.Compact
 
     Scaffold { paddingValues ->
@@ -75,20 +68,14 @@ fun ClassSelectionScreen(
         ) {
             if (isCompact) {
                 SelectionPager(
-                    items = state.classes,
-                    onSelectItem = {
-                        onSelectClass(it)
-                        showNamingBottomSheet = true
-                    },
+                    items = state.specializations,
+                    onSelectItem = onSelectSpecialization,
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
                 SelectionList(
-                    items = state.classes,
-                    onSelectItem = {
-                        onSelectClass(it)
-                        showNamingBottomSheet = true
-                    },
+                    items = state.specializations,
+                    onSelectItem = onSelectSpecialization,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -101,36 +88,26 @@ fun ClassSelectionScreen(
             }
         }
     }
-
-    if (showNamingBottomSheet) {
-        CharNamingBottomSheet(
-            onDismissRequest = { showNamingBottomSheet = false },
-            onConfirm = { name ->
-                onConfirmName(name)
-                showNamingBottomSheet = false
-            }
-        )
-    }
 }
 
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO)
 @Composable
-fun ClassSelectionScreenPreviewLight() {
+fun SpecializationSelectionScreenPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
-        ClassSelectionScreen(
-            state = ClassSelectionUIState(
-                classes = listOf(
+        SpecializationSelectionScreen(
+            state = SpecializationSelectionUIState(
+                specializations = listOf(
                     SelectionItemUIModel(
                         id = "1",
-                        name = "Guerreiro",
-                        description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
+                        name = "Guardião",
+                        description = "Foco em defesa e buffs. Incrementa Resistência Física, Resistência Mágica e Vitalidade.",
+                        presentationDrawableId = drawable.especializacao_guardiao_16_9
                     ),
                     SelectionItemUIModel(
                         id = "2",
-                        name = "Mago",
-                        description = "Mestre em feitiços e ataques à distância, veste armaduras leves de tecido.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
+                        name = "Gladiador",
+                        description = "Foco em dano e debuffs. Incrementa Força e Vitalidade.",
+                        presentationDrawableId = drawable.especializacao_gladiador_16_9
                     )
                 )
             )
@@ -140,16 +117,16 @@ fun ClassSelectionScreenPreviewLight() {
 
 @Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun ClassSelectionScreenPreviewDark() {
+fun SpecializationSelectionScreenPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
-        ClassSelectionScreen(
-            state = ClassSelectionUIState(
-                classes = listOf(
+        SpecializationSelectionScreen(
+            state = SpecializationSelectionUIState(
+                specializations = listOf(
                     SelectionItemUIModel(
                         id = "1",
-                        name = "Guerreiro",
-                        description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
+                        name = "Guardião",
+                        description = "Foco em defesa e buffs. Incrementa Resistência Física, Resistência Mágica e Vitalidade.",
+                        presentationDrawableId = drawable.especializacao_guardiao_16_9
                     )
                 )
             )

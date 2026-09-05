@@ -1,5 +1,6 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components
+package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
+import android.R
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
@@ -22,17 +23,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 
 @Composable
-fun ClassPager(
-    classes: List<ClassSelectionUIModel>,
-    onSelectClass: (String) -> Unit,
+fun SelectionPager(
+    items: List<SelectionItemUIModel>,
+    onSelectItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState(pageCount = { classes.size })
+    val pagerState = rememberPagerState(pageCount = { items.size })
 
     Column(
         modifier = modifier,
@@ -46,9 +47,9 @@ fun ClassPager(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) { page ->
-            ClassCard(
-                classModel = classes[page],
-                onSelect = onSelectClass,
+            SelectionCard(
+                item = items[page],
+                onSelect = onSelectItem,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -60,7 +61,7 @@ fun ClassPager(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            repeat(classes.size) { iteration ->
+            repeat(items.size) { iteration ->
                 val color = if (pagerState.currentPage == iteration) OrangeForDetails else Color.Gray.copy(alpha = 0.3f)
                 Box(
                     modifier = Modifier
@@ -76,24 +77,24 @@ fun ClassPager(
 
 @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
-fun ClassPagerPreviewLight() {
+fun SelectionPagerPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
-        ClassPager(
-            classes = listOf(
-                ClassSelectionUIModel(
+        SelectionPager(
+            items = listOf(
+                SelectionItemUIModel(
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 ),
-                ClassSelectionUIModel(
+                SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 )
             ),
-            onSelectClass = {},
+            onSelectItem = {},
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -101,24 +102,24 @@ fun ClassPagerPreviewLight() {
 
 @Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun ClassPagerPreviewDark() {
+fun SelectionPagerPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
-        ClassPager(
-            classes = listOf(
-                ClassSelectionUIModel(
+        SelectionPager(
+            items = listOf(
+                SelectionItemUIModel(
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 ),
-                ClassSelectionUIModel(
+                SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = android.R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.ic_menu_gallery
                 )
             ),
-            onSelectClass = {},
+            onSelectItem = {},
             modifier = Modifier.fillMaxSize()
         )
     }

@@ -4,6 +4,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.charScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
@@ -19,6 +20,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.homeScreen
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.navigateToHome
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.navigation.charSkillsScreen
+import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.navigation.navigateToSpecializationSelection
+import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.navigation.specializationSelectionScreen
 
 @Composable
 fun AppNavHost(
@@ -33,12 +36,35 @@ fun AppNavHost(
         charSelectionScreen(
             windowSizeClass = windowSizeClass,
             onNavigateToClassSelection = navController::navigateToClassSelection,
-            onNavigateToHome = navController::navigateToHome
+            onNavigateToHome = {
+                navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(0) { inclusive = true }
+                    }
+                )
+            }
         )
 
         classSelectionScreen(
             windowSizeClass = windowSizeClass,
-            onNavigateToHome = navController::navigateToHome
+            onNavigateToHome = {
+                navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(0) { inclusive = true }
+                    }
+                )
+            }
+        )
+
+        specializationSelectionScreen(
+            windowSizeClass = windowSizeClass,
+            onNavigateToHome = {
+                navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(0) { inclusive = true }
+                    }
+                )
+            }
         )
 
         historyModeBattleScreen(
@@ -49,9 +75,15 @@ fun AppNavHost(
         navigation<MainGraph>(
             startDestination = HomeRoute
         ) {
-            homeScreen()
-            charScreen(windowSizeClass = windowSizeClass)
-            charSkillsScreen(windowSizeClass = windowSizeClass)
+            homeScreen(
+                onNavigateToSpecializationSelection = navController::navigateToSpecializationSelection
+            )
+            charScreen(
+                windowSizeClass = windowSizeClass
+            )
+            charSkillsScreen(
+                windowSizeClass = windowSizeClass
+            )
             historyScreen(
                 windowSizeClass = windowSizeClass,
                 onNavigateToBattle = navController::navigateToHistoryModeBattle,

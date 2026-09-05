@@ -10,7 +10,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharExceptio
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
-import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.model.ClassSelectionUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.ClassMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -59,7 +59,7 @@ class ClassSelectionViewModel @Inject constructor(
         initialValue = ClassSelectionUIState()
     )
 
-    private fun mapDomainToUIModel(classSelection: ClassSelection): ClassSelectionUIModel {
+    private fun mapDomainToUIModel(classSelection: ClassSelection): SelectionItemUIModel {
         return classMapper.mapToUIModel(classSelection)
     }
 

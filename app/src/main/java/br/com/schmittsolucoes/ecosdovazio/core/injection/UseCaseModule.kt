@@ -14,6 +14,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.repository.SpecializationReposi
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.TranslationRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.SpecializationsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateCharCriticalChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateCharDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.CalculateEffectiveDamageUseCase
@@ -71,8 +72,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResis
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceFactorUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceMaxUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetShowSpecializationBannerUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCountUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.SetCharSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetPhaseDataByIdUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhaseInfoQueryUseCase
@@ -321,6 +324,41 @@ object UseCaseModule {
     ): ClassesQueryUseCase = ClassesQueryUseCase(
         classRepository = classRepository,
         languageProvider = languageProvider
+    )
+
+    @Provides
+    fun provideSpecializationsQueryUseCase(
+        specializationRepository: SpecializationRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        languageProvider: LanguageProvider
+    ): SpecializationsQueryUseCase = SpecializationsQueryUseCase(
+        specializationRepository = specializationRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        languageProvider = languageProvider
+    )
+
+    @Provides
+    fun provideSetCharSpecializationUseCase(
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository
+    ): SetCharSpecializationUseCase = SetCharSpecializationUseCase(
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository
+    )
+
+    @Provides
+    fun provideGetShowSpecializationBannerUseCase(
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository
+    ): GetShowSpecializationBannerUseCase = GetShowSpecializationBannerUseCase(
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository
     )
 
     @Provides
