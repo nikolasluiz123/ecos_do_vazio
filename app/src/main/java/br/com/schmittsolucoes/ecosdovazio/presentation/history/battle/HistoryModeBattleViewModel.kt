@@ -142,7 +142,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val shouldPop = flows[15] as Boolean
         val selectedDot = flows[16] as ActiveStatusUIModel?
 
-        val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsActiveStatus)
+        val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsActiveStatus, skillsRefreshTime)
         val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
         val mobInfo = selectedMob?.let { battleInfoMapper.mapToDomainInfo(it) }
 
@@ -683,6 +683,8 @@ class HistoryModeBattleViewModel @Inject constructor(
                 }
             }
         }
+
+        updateSkillRefreshTime(result.skillId, result.refreshTime)
     }
 
     private fun registerMobBuff(result: MobSkillUsageResult.Buff) {
@@ -755,14 +757,20 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun mapBattleMobsToUIModel(
         mobs: List<BattleMob>,
         mobsHealth: Map<String, Long>,
-        mobsActiveStatus: Map<String, List<ActiveStatusUIModel>>
+        mobsActiveStatus: Map<String, List<ActiveStatusUIModel>>,
+        skillsRefreshTime: Map<String, Int> = emptyMap()
     ): List<BattleMobUIModel> {
         return mobs.map { battleMob ->
             val actualHealth = mobsHealth[battleMob.phaseMobId] ?: battleMob.actualHealth
             val activeStatus = mobsActiveStatus[battleMob.phaseMobId] ?: emptyList()
             val tempUIModel = battleMapper.mapToUIModel(
                 battleMob = battleMob.copy(actualHealth = actualHealth),
-                skills = battleMob.skills.map { skillMapper.mapToUIModel(it) },
+                skills = battleMob.skills.map { skill ->
+                    skillMapper.mapToUIModel(
+                        skill = skill,
+                        currentRefreshTime = skillsRefreshTime[skill.id] ?: skill.currentRefreshTime
+                    )
+                },
                 activeStatus = activeStatus
             )
 

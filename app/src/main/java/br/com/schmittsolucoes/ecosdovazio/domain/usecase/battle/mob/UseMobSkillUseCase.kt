@@ -48,7 +48,8 @@ class UseMobSkillUseCase(
 
                 MobSkillUsageResult.CommonDamage(
                     newEnemyHealth = newEnemyHealth,
-                    refreshTime = skillInfo.refreshTime
+                    refreshTime = skillInfo.refreshTime,
+                    skillId = skillInfo.skillId
                 )
             }
 
@@ -84,7 +85,8 @@ class UseMobSkillUseCase(
                     newEnemyHealth = newEnemyHealth,
                     newCharHealth = newMobHealth,
                     mobId = actualMobInfo.phaseMobId,
-                    refreshTime = skillInfo.refreshTime
+                    refreshTime = skillInfo.refreshTime,
+                    skillId = skillInfo.skillId
                 )
             }
 
@@ -194,6 +196,7 @@ class UseMobSkillUseCase(
                             newMobHealth = newMobHealth,
                             refreshTime = skillInfo.refreshTime,
                             targetMobId = targetMob.phaseMobId,
+                            skillId = skillInfo.skillId
                         )
                     }
 
@@ -217,7 +220,8 @@ class UseMobSkillUseCase(
 
                         MobSkillUsageResult.AreaHeal(
                             newMobsHealth = newMobsHealth,
-                            refreshTime = skillInfo.refreshTime
+                            refreshTime = skillInfo.refreshTime,
+                            skillId = skillInfo.skillId
                         )
                     }
 

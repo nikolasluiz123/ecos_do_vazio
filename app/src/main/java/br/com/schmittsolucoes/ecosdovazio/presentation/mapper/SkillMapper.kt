@@ -194,7 +194,10 @@ class SkillMapper @Inject constructor(
         }
     }
 
-    fun mapToUIModel(skill: MobSkill): MobSkillUIModel {
+    fun mapToUIModel(
+        skill: MobSkill,
+        currentRefreshTime: Int = skill.currentRefreshTime
+    ): MobSkillUIModel {
         val image = resourcesProvider.getSkillImage(skill.imageName) ?: 0
 
         return when (skill) {
@@ -209,7 +212,7 @@ class SkillMapper @Inject constructor(
                 ),
                 image = image,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 damage = skill.damage
@@ -227,7 +230,7 @@ class SkillMapper @Inject constructor(
                 ),
                 image = image,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 damage = skill.damage,
@@ -246,7 +249,7 @@ class SkillMapper @Inject constructor(
                 ),
                 image = image,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 damage = skill.damage,
@@ -266,7 +269,7 @@ class SkillMapper @Inject constructor(
                 image = image,
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 multiplier = skill.multiplier,
@@ -286,7 +289,7 @@ class SkillMapper @Inject constructor(
                 image = image,
                 skillCategory = skill.skillCategory,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 multiplier = skill.multiplier,
@@ -304,7 +307,7 @@ class SkillMapper @Inject constructor(
                 ),
                 image = image,
                 refreshTime = skill.refreshTime,
-                currentRefreshTime = skill.currentRefreshTime,
+                currentRefreshTime = currentRefreshTime,
                 blocked = skill.blocked,
                 minLevel = skill.minLevel,
                 skillCategory = skill.skillCategory,
