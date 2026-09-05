@@ -135,10 +135,16 @@ fun App(
         exitDirection = FloatingToolbarExitDirection.Bottom
     )
 
+    LaunchedEffect(currentDestination, isMainGraph) {
+        if (isMainGraph) {
+            scrollBehavior.state.offset = 0f
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior),
+            .then(if (isMainGraph) Modifier.nestedScroll(scrollBehavior) else Modifier),
         topBar = {
             AppTopBar(
                 uiState = uiState,
