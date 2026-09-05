@@ -32,6 +32,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -40,11 +41,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.CharRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.navigation.navigateToChar
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.navigation.HistoryMobsInfoRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.HistoryRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.navigation.navigateToHistory
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation.HomeRoute
@@ -63,6 +67,18 @@ fun AppBottomBar(
     visible: Boolean = true,
     scrollBehavior: FloatingToolbarScrollBehavior? = null
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val collapsedItems = getCollapsedItemsForDestination(currentDestination)
+
+    LaunchedEffect(currentDestination) {
+        if (collapsedItems.isNotEmpty() && isExpanded) {
+            onToggleExpanded()
+        } else if (!isExpanded) {
+            onToggleExpanded()
+        }
+    }
+
     val fabHorizontalBias by animateFloatAsState(
         targetValue = if (isExpanded) 0f else -1f,
         animationSpec = spring(
@@ -83,8 +99,6 @@ fun AppBottomBar(
                 .padding(horizontal = 16.dp),
             contentAlignment = BiasAlignment(fabHorizontalBias, 0f)
         ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
             val animatedAlpha = calculateBottomBarAlpha(scrollBehavior)
 
             HorizontalFloatingToolbar(
@@ -98,23 +112,30 @@ fun AppBottomBar(
                 ExpandableToolbarVisibility(isExpanded = isExpanded) {
                     Row {
                         BottomBarItem.entries.forEach { item ->
-                            val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
+                            val selected = isItemSelected(item, currentDestination)
 
                             BottomBarItemTooltipBox(
                                 item = item,
                                 selected = selected,
                                 onClick = {
-                                    if (!selected) {
-                                        when (item) {
-                                            BottomBarItem.Home -> navController.navigateToHome()
-                                            BottomBarItem.Char -> navController.navigateToChar()
-                                            BottomBarItem.Skills -> navController.navigateToCharSkills()
-                                            BottomBarItem.History -> navController.navigateToHistory()
-                                        }
-                                    }
+                                    navigateToBottomBarItem(navController, item, currentDestination)
                                 }
                             )
                         }
+                    }
+                }
+
+                if (!isExpanded) {
+                    collapsedItems.forEach { item ->
+                        val selected = isItemSelected(item, currentDestination)
+
+                        BottomBarItemTooltipBox(
+                            item = item,
+                            selected = selected,
+                            onClick = {
+                                navigateToBottomBarItem(navController, item, currentDestination)
+                            }
+                        )
                     }
                 }
 
@@ -123,6 +144,39 @@ fun AppBottomBar(
                     onToggleExpanded = onToggleExpanded
                 )
             }
+        }
+    }
+}
+
+private fun getCollapsedItemsForDestination(destination: NavDestination?): List<BottomBarItem> {
+    return when {
+        destination?.hasRoute<HistoryMobsInfoRoute>() == true -> listOf(BottomBarItem.History)
+        else -> emptyList()
+    }
+}
+
+private fun isItemSelected(item: BottomBarItem, destination: NavDestination?): Boolean {
+    if (destination?.hasRoute(item.route::class) == true) return true
+
+    return when (item) {
+        BottomBarItem.History -> destination?.hasRoute<HistoryMobsInfoRoute>() == true
+        else -> false
+    }
+}
+
+private fun navigateToBottomBarItem(
+    navController: NavHostController,
+    item: BottomBarItem,
+    destination: NavDestination?
+) {
+    val isExactDestination = destination?.hasRoute(item.route::class) == true
+
+    if (!isExactDestination) {
+        when (item) {
+            BottomBarItem.Home -> navController.navigateToHome()
+            BottomBarItem.Char -> navController.navigateToChar()
+            BottomBarItem.Skills -> navController.navigateToCharSkills()
+            BottomBarItem.History -> navController.navigateToHistory()
         }
     }
 }
