@@ -5,13 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -28,10 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -141,15 +135,6 @@ fun App(
         exitDirection = FloatingToolbarExitDirection.Bottom
     )
 
-    val fabHorizontalBias by animateFloatAsState(
-        targetValue = if (uiState.isToolbarExpanded) 0f else -1f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessMediumLow
-        ),
-        label = "fabHorizontalBias"
-    )
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -162,20 +147,13 @@ fun App(
             )
         },
         floatingActionButton = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentAlignment = BiasAlignment(fabHorizontalBias, 0f)
-            ) {
-                AppBottomBar(
-                    navController = navController,
-                    isExpanded = uiState.isToolbarExpanded,
-                    onToggleExpanded = onToggleToolbarExpanded,
-                    visible = isMainGraph,
-                    scrollBehavior = scrollBehavior
-                )
-            }
+            AppBottomBar(
+                navController = navController,
+                isExpanded = uiState.isToolbarExpanded,
+                onToggleExpanded = onToggleToolbarExpanded,
+                visible = isMainGraph,
+                scrollBehavior = scrollBehavior
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
         snackbarHost = { SnackbarHost(snackbarHostState) }

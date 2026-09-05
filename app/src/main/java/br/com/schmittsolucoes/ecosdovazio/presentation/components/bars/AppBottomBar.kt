@@ -5,9 +5,14 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -29,6 +34,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
@@ -57,50 +63,66 @@ fun AppBottomBar(
     visible: Boolean = true,
     scrollBehavior: FloatingToolbarScrollBehavior? = null
 ) {
+    val fabHorizontalBias by animateFloatAsState(
+        targetValue = if (isExpanded) 0f else -1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessMediumLow
+        ),
+        label = "fabHorizontalBias"
+    )
+
     AnimatedVisibility(
         visible = visible,
         enter = BarEnterTransition,
         exit = BarExitTransition
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        val animatedAlpha = calculateBottomBarAlpha(scrollBehavior)
-
-        HorizontalFloatingToolbar(
-            modifier = Modifier.graphicsLayer {
-                alpha = animatedAlpha
-                translationY = (1f - animatedAlpha) * 16.dp.toPx()
-            },
-            expanded = isExpanded,
-            scrollBehavior = scrollBehavior,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            contentAlignment = BiasAlignment(fabHorizontalBias, 0f)
         ) {
-            ExpandableToolbarVisibility(isExpanded = isExpanded) {
-                Row {
-                    BottomBarItem.entries.forEach { item ->
-                        val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            val animatedAlpha = calculateBottomBarAlpha(scrollBehavior)
 
-                        BottomBarItemTooltipBox(
-                            item = item,
-                            selected = selected,
-                            onClick = {
-                                if (!selected) {
-                                    when (item) {
-                                        BottomBarItem.Home -> navController.navigateToHome()
-                                        BottomBarItem.Char -> navController.navigateToChar()
-                                        BottomBarItem.Skills -> navController.navigateToCharSkills()
-                                        BottomBarItem.History -> navController.navigateToHistory()
+            HorizontalFloatingToolbar(
+                modifier = Modifier.graphicsLayer {
+                    alpha = animatedAlpha
+                    translationY = (1f - animatedAlpha) * 16.dp.toPx()
+                },
+                expanded = isExpanded,
+                scrollBehavior = scrollBehavior,
+            ) {
+                ExpandableToolbarVisibility(isExpanded = isExpanded) {
+                    Row {
+                        BottomBarItem.entries.forEach { item ->
+                            val selected = currentDestination?.route?.contains(item.route::class.qualifiedName.orEmpty()) == true
+
+                            BottomBarItemTooltipBox(
+                                item = item,
+                                selected = selected,
+                                onClick = {
+                                    if (!selected) {
+                                        when (item) {
+                                            BottomBarItem.Home -> navController.navigateToHome()
+                                            BottomBarItem.Char -> navController.navigateToChar()
+                                            BottomBarItem.Skills -> navController.navigateToCharSkills()
+                                            BottomBarItem.History -> navController.navigateToHistory()
+                                        }
                                     }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
-            }
 
-            MoreHorizTooltipBox(
-                isExpanded = isExpanded,
-                onToggleExpanded = onToggleExpanded
-            )
+                MoreHorizTooltipBox(
+                    isExpanded = isExpanded,
+                    onToggleExpanded = onToggleExpanded
+                )
+            }
         }
     }
 }
