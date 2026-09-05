@@ -107,6 +107,9 @@ fun AppBottomBar(
                     translationY = (1f - animatedAlpha) * 16.dp.toPx()
                 },
                 expanded = isExpanded,
+                colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
+                    toolbarContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f)
+                ),
                 scrollBehavior = scrollBehavior,
             ) {
                 ExpandableToolbarVisibility(isExpanded = isExpanded) {
