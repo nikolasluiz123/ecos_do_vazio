@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,10 +33,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.composables.CharSelectionPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.CharSelectionUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundBottom
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroSlotBackgroundTop
@@ -48,7 +54,7 @@ private const val NEW_CHAR_ROUNDED_CORNER_SHAPE = 8
 @Composable
 fun HeroSlot(
     charModel: CharSelectionUIModel,
-    onClick: (CharSelectionUIModel) -> Unit = {}
+    onClick: (CharSelectionUIModel) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -62,21 +68,21 @@ fun HeroSlot(
                 Brush.linearGradient(
                     colors = listOf(
                         HeroSlotBackgroundTop,
-                        HeroSlotBackgroundBottom
-                    )
+                        HeroSlotBackgroundBottom,
+                    ),
                 )
             )
             .border(
                 width = 1.dp,
                 color = HeroButtonStrokeColor,
-                shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp)
+                shape = RoundedCornerShape(ROUNDED_CORNER_SHAPE.dp),
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         if (charModel.isLoading) {
             CircularProgressIndicator(
                 color = Highlight,
-                strokeWidth = 2.dp
+                strokeWidth = 2.dp,
             )
         } else {
             charModel.presentationImage?.let { image ->
@@ -86,7 +92,7 @@ fun HeroSlot(
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = if (charModel.name == null) Arrangement.Center else Arrangement.Bottom
+                verticalArrangement = if (charModel.name == null) Arrangement.Center else Arrangement.Bottom,
             ) {
                 if (charModel.name == null) {
                     AddHeroIcon()
@@ -118,19 +124,19 @@ private fun AddHeroIcon() {
             .border(
                 width = 1.dp,
                 color = HeroButtonStrokeColor,
-                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
+                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp),
             )
             .background(
                 color = NewCharacterButtonBackground,
-                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp)
+                shape = RoundedCornerShape(NEW_CHAR_ROUNDED_CORNER_SHAPE.dp),
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = null,
             tint = HeroButtonStrokeColor,
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(28.dp),
         )
     }
 }
@@ -148,6 +154,48 @@ private fun HeroName(charModel: CharSelectionUIModel) {
                 .padding(12.dp, 4.dp)
         } else {
             Modifier
-        }
+        },
     )
+}
+
+@Preview(name = "Character Loaded - Light", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Composable
+private fun HeroSlotLoadedPreviewLight() {
+    EcosDoVazioTheme(darkTheme = false) {
+        Box(
+            modifier = Modifier
+                .background(BackgroundGradient)
+                .padding(16.dp),
+        ) {
+            HeroSlot(charModel = CharSelectionPreviewData.warrior)
+        }
+    }
+}
+
+@Preview(name = "New Character - Light", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Composable
+private fun HeroSlotNewCharPreviewLight() {
+    EcosDoVazioTheme(darkTheme = false) {
+        Box(
+            modifier = Modifier
+                .background(BackgroundGradient)
+                .padding(16.dp),
+        ) {
+            HeroSlot(charModel = CharSelectionPreviewData.newHero)
+        }
+    }
+}
+
+@Preview(name = "Character Loading - Dark", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun HeroSlotLoadingPreviewDark() {
+    EcosDoVazioTheme(darkTheme = true) {
+        Box(
+            modifier = Modifier
+                .background(BackgroundGradient)
+                .padding(16.dp),
+        ) {
+            HeroSlot(charModel = CharSelectionPreviewData.loadingHero)
+        }
+    }
 }

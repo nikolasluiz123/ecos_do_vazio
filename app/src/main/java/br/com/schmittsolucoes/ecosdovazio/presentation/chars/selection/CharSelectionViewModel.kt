@@ -13,47 +13,50 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.model.Cha
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.CharMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class CharSelectionInternalState(
+    val errorMessage: String? = null,
+)
+
+sealed interface CharSelectionNavigationEvent {
+    data object NavigateToHome : CharSelectionNavigationEvent
+}
 
 @HiltViewModel
 class CharSelectionViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val userCharsQueryUseCase: UserCharsQueryUseCase,
     private val selectCharUseCase: SelectCharUseCase,
-    private val charMapper: CharMapper
+    private val charMapper: CharMapper,
+    userCharsQueryUseCase: UserCharsQueryUseCase,
 ): CommonViewModel() {
 
-    private val _navigateToHome = MutableStateFlow(false)
-    val navigateToHome: StateFlow<Boolean> = _navigateToHome
+    private val _internalState = MutableStateFlow(CharSelectionInternalState())
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-
-    private val _chars = flow {
-        emitAll(userCharsQueryUseCase())
-    }.map { chars ->
-        mapCharSelectionToUIModel(chars)
-    }
+    private val _navigationChannel = Channel<CharSelectionNavigationEvent>(Channel.BUFFERED)
+    val navigationEvent: Flow<CharSelectionNavigationEvent> = _navigationChannel.receiveAsFlow()
 
     val uiState: StateFlow<CharSelectionUIState> = combine(
-        _errorMessage,
-        _chars
-    ) { errorMessage, chars ->
+        _internalState,
+        userCharsQueryUseCase(),
+    ) { internalState, chars ->
         CharSelectionUIState(
-            errorMessage = errorMessage,
-            chars = chars
+            errorMessage = internalState.errorMessage,
+            chars = mapCharSelectionToUIModel(chars),
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
-        initialValue = CharSelectionUIState()
+        initialValue = CharSelectionUIState(),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
@@ -64,22 +67,18 @@ class CharSelectionViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     fun onCharSelected(charId: String) {
         launch {
             selectCharUseCase(charId)
-            _navigateToHome.value = true
+            _navigationChannel.send(CharSelectionNavigationEvent.NavigateToHome)
         }
-    }
-
-    fun onNavigatedToHome() {
-        _navigateToHome.value = false
     }
 
     private fun mapCharSelectionToUIModel(chars: List<CharSelection>): List<CharSelectionUIModel> {
