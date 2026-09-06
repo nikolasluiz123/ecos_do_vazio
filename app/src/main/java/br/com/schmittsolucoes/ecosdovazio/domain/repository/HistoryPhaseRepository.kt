@@ -4,6 +4,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.LastUnfinishedHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.MobPhaseInfo
@@ -20,4 +21,7 @@ interface HistoryPhaseRepository {
     suspend fun getHistoryPhaseInfo(charId: String, phaseId: String): HistoryPhaseInfo?
     suspend fun saveHistoryPhaseInfo(historyPhaseInfo: HistoryPhaseInfo)
     suspend fun getPhaseMobsInfo(phaseId: String, languageTag: String): List<MobPhaseInfo>
+    fun getLastUnfinishedHistoryPhase(charId: String, languageTag: String): Flow<LastUnfinishedHistoryPhase?>
+    fun getTotalHistoryPhasesCount(): Flow<Int>
+    fun getCompletedHistoryPhasesCount(charId: String): Flow<Int>
 }

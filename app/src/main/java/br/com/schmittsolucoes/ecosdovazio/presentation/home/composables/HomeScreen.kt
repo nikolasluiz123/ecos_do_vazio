@@ -19,8 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.model.LastUnfinishedHistoryPhaseUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.HomeUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.HomeViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.home.composables.components.HistoryBanner
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.composables.components.SpecializationBanner
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
@@ -28,14 +30,18 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    onNavigateToSpecializationSelection: () -> Unit = {}
+    onNavigateToSpecializationSelection: () -> Unit = {},
+    onNavigateToBattle: (String) -> Unit = {},
+    onNavigateToMobsInfo: (String) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onNavigateToSpecializationSelection = onNavigateToSpecializationSelection
+        onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+        onNavigateToBattle = onNavigateToBattle,
+        onNavigateToMobsInfo = onNavigateToMobsInfo
     )
 }
 
@@ -43,7 +49,9 @@ fun HomeScreen(
 fun HomeScreen(
     state: HomeUIState = HomeUIState(),
     onDismissErrorDialog: () -> Unit = {},
-    onNavigateToSpecializationSelection: () -> Unit = {}
+    onNavigateToSpecializationSelection: () -> Unit = {},
+    onNavigateToBattle: (String) -> Unit = {},
+    onNavigateToMobsInfo: (String) -> Unit = {}
 ) {
     Scaffold { paddingValues ->
         Box(
@@ -55,7 +63,9 @@ fun HomeScreen(
         ) {
             BannersContainer(
                 state = state,
-                onNavigateToSpecializationSelection = onNavigateToSpecializationSelection
+                onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+                onNavigateToBattle = onNavigateToBattle,
+                onNavigateToMobsInfo = onNavigateToMobsInfo
             )
 
             state.errorMessage?.let { message ->
@@ -71,7 +81,9 @@ fun HomeScreen(
 @Composable
 private fun BannersContainer(
     state: HomeUIState,
-    onNavigateToSpecializationSelection: () -> Unit
+    onNavigateToSpecializationSelection: () -> Unit,
+    onNavigateToBattle: (String) -> Unit,
+    onNavigateToMobsInfo: (String) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,10 +93,18 @@ private fun BannersContainer(
             .padding(16.dp)
     ) {
         if (state.showSpecializationBanner) {
-            Spacer(modifier = Modifier.height(12.dp))
-
             SpecializationBanner(
                 onClickSelectSpecialization = onNavigateToSpecializationSelection
+            )
+        }
+
+        state.lastUnfinishedHistoryPhase?.let { lastUnfinishedHistoryPhase ->
+            Spacer(modifier = Modifier.height(12.dp))
+
+            HistoryBanner(
+                model = lastUnfinishedHistoryPhase,
+                onNavigateToBattle = onNavigateToBattle,
+                onNavigateToMobsInfo = onNavigateToMobsInfo
             )
         }
     }
@@ -96,7 +116,15 @@ fun HomeScreenPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
         HomeScreen(
             state = HomeUIState(
-                showSpecializationBanner = true
+                showSpecializationBanner = true,
+                lastUnfinishedHistoryPhase = LastUnfinishedHistoryPhaseUIModel(
+                    phaseId = "1",
+                    phaseName = "Espada Lascada",
+                    completedPhasesCount = 2,
+                    totalPhasesCount = 10,
+                    progress = 0.2f,
+                    isCompleted = false
+                )
             )
         )
     }
@@ -108,7 +136,15 @@ fun HomeScreenPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
         HomeScreen(
             state = HomeUIState(
-                showSpecializationBanner = true
+                showSpecializationBanner = true,
+                lastUnfinishedHistoryPhase = LastUnfinishedHistoryPhaseUIModel(
+                    phaseId = null,
+                    phaseName = "",
+                    completedPhasesCount = 10,
+                    totalPhasesCount = 10,
+                    progress = 1f,
+                    isCompleted = true
+                )
             )
         )
     }

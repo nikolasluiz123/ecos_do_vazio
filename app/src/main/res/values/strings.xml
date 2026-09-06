@@ -266,6 +266,10 @@
     <string name="history_mode_battle_screen_label_player_round">Your Turn</string>
     <string name="history_mobs_info_title">Enemies Information</string>
     <string name="history_mobs_info_content_description">Enemies info</string>
+    <string name="history_banner_title">History Mode</string>
+    <string name="history_banner_progress">%1$d of %2$d</string>
+    <string name="history_banner_play_button">Play Phase</string>
+    <string name="history_banner_completed_description">Congratulations! You have completed all history mode phases with this hero.</string>
 
     <string name="char_error_specialization_required">Please select a specialization.</string>
     <string name="specialization_banner_title">Specialization Available!</string>

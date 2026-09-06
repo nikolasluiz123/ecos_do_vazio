@@ -265,6 +265,10 @@
     <string name="history_mode_battle_screen_label_player_round">Seu Turno</string>
     <string name="history_mobs_info_title">Informações dos Inimigos</string>
     <string name="history_mobs_info_content_description">Informações dos inimigos</string>
+    <string name="history_banner_title">Modo História</string>
+    <string name="history_banner_progress">%1$d de %2$d</string>
+    <string name="history_banner_play_button">Jogar Fase</string>
+    <string name="history_banner_completed_description">Parabéns! Você concluiu todas as fases do modo história com este herói.</string>
 
     <string name="char_error_specialization_required">Por favor, selecione uma especialização.</string>
     <string name="specialization_banner_title">Especialização Disponível!</string>

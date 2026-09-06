@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
-import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AppProgressBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
@@ -153,7 +153,7 @@ private fun SkillAttributeAdjustmentItem(
                 )
             }
 
-            AttributeProgressBar(progress = { attribute.progress })
+            AppProgressBar(progress = { attribute.progress })
         }
 
         Spacer(modifier = Modifier.width(16.dp))

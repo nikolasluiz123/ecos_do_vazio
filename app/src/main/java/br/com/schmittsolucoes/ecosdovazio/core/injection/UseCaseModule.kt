@@ -77,9 +77,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCou
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.SetCharSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.CompletedHistoryPhasesCountQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetLastUnfinishedHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetPhaseDataByIdUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhaseInfoQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.TotalHistoryPhasesCountQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDatabaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.InitializeClassesUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.create.archer.CreateArcherClassUseCase
@@ -976,4 +979,35 @@ object UseCaseModule {
     fun provideApplyCharBuffUseCase(): ApplyCharBuffUseCase {
         return ApplyCharBuffUseCase()
     }
+
+    @Provides
+    fun provideLastUnfinishedHistoryPhaseQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        languageProvider: LanguageProvider,
+    ): GetLastUnfinishedHistoryPhaseUseCase = GetLastUnfinishedHistoryPhaseUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        languageProvider = languageProvider,
+    )
+
+    @Provides
+    fun provideTotalHistoryPhasesCountQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+    ): TotalHistoryPhasesCountQueryUseCase = TotalHistoryPhasesCountQueryUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+    )
+
+    @Provides
+    fun provideCompletedHistoryPhasesCountQueryUseCase(
+        historyPhaseRepository: HistoryPhaseRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+    ): CompletedHistoryPhasesCountQueryUseCase = CompletedHistoryPhasesCountQueryUseCase(
+        historyPhaseRepository = historyPhaseRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+    )
 }

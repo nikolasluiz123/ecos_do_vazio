@@ -13,13 +13,17 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeScreen(
-    onNavigateToSpecializationSelection: () -> Unit = {}
+    onNavigateToSpecializationSelection: () -> Unit = {},
+    onNavigateToBattle: (String) -> Unit = {},
+    onNavigateToMobsInfo: (String) -> Unit = {}
 ) {
     composable<HomeRoute> {
         val viewModel = hiltViewModel<HomeViewModel>()
         HomeScreen(
             viewModel = viewModel,
-            onNavigateToSpecializationSelection = onNavigateToSpecializationSelection
+            onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+            onNavigateToBattle = onNavigateToBattle,
+            onNavigateToMobsInfo = onNavigateToMobsInfo
         )
     }
 }

@@ -121,7 +121,7 @@ private fun AttributeItem(
                 )
             }
 
-            AttributeProgressBar(progress = { attribute.progress })
+            AppProgressBar(progress = { attribute.progress })
         }
 
         Spacer(modifier = Modifier.size(8.dp))

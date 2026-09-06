@@ -10,6 +10,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.LastUnfinishedHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.MobPhaseInfo
@@ -81,5 +82,19 @@ class HistoryPhaseRepositoryImpl @Inject constructor(
         return historyPhaseMobLocalDataSource.getPhaseMobsInfo(phaseId, languageTag).map {
             it.toDomain()
         }
+    }
+
+    override fun getLastUnfinishedHistoryPhase(charId: String, languageTag: String): Flow<LastUnfinishedHistoryPhase?> {
+        return historyPhaseLocalDataSource.getLastUnfinishedHistoryPhase(charId, languageTag).map {
+            it?.toDomain()
+        }
+    }
+
+    override fun getTotalHistoryPhasesCount(): Flow<Int> {
+        return historyPhaseLocalDataSource.getTotalHistoryPhasesCount()
+    }
+
+    override fun getCompletedHistoryPhasesCount(charId: String): Flow<Int> {
+        return historyPhaseLocalDataSource.getCompletedHistoryPhasesCount(charId)
     }
 }

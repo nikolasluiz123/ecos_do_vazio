@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseInfoEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.HistoryPhaseMobEntity
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.CharHistoryPhaseTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.HistoryPhaseDataTuple
+import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.LastUnfinishedHistoryPhaseTuple
 import br.com.schmittsolucoes.ecosdovazio.data.model.tuples.PhaseMobCategoryCountTuple
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
@@ -12,6 +13,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseData
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.HistoryPhaseMob
+import br.com.schmittsolucoes.ecosdovazio.domain.model.history.LastUnfinishedHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.PhaseMobCategoryCount
 
 fun HistoryPhase.toEntity() = HistoryPhaseEntity(
@@ -72,4 +74,10 @@ fun PhaseMobCategoryCountTuple.toDomain() = PhaseMobCategoryCount(
 fun HistoryPhaseDataTuple.toDomain() = HistoryPhaseData(
     phaseId = phaseId,
     phaseName = phaseName
+)
+
+fun LastUnfinishedHistoryPhaseTuple.toDomain() = LastUnfinishedHistoryPhase(
+    phaseId = phaseId,
+    phaseName = phaseName,
+    tryNumber = tryNumber ?: 0
 )

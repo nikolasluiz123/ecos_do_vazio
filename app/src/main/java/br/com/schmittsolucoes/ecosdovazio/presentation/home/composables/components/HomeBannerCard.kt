@@ -31,12 +31,10 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 @Composable
 fun HomeBannerCard(
     title: String,
-    description: String,
-    buttonText: String,
-    onClickButton: () -> Unit,
     modifier: Modifier = Modifier,
     titleColor: Color = Highlight,
     borderStroke: BorderStroke? = BorderStroke(1.dp, Highlight.copy(alpha = 0.5f)),
+    content: @Composable () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -52,7 +50,7 @@ fun HomeBannerCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = title,
@@ -66,20 +64,7 @@ fun HomeBannerCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = SecondaryTextColor,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            FilledHighlightedElevatedButton(
-                text = buttonText,
-                onClick = onClickButton,
-                modifier = Modifier.fillMaxWidth()
-            )
+            content()
         }
     }
 }
@@ -89,11 +74,23 @@ fun HomeBannerCard(
 fun HomeBannerCardPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
         HomeBannerCard(
-            title = "Especialização Disponível!",
-            description = "Seu herói atingiu o nível necessário. Escolha uma especialização para evoluir seus poderes!",
-            buttonText = "Escolher Especialização",
-            onClickButton = {}
-        )
+            title = "Especialização Disponível!"
+        ) {
+            Text(
+                text = "Seu herói atingiu o nível necessário. Escolha uma especialização para evoluir seus poderes!",
+                style = MaterialTheme.typography.bodyMedium,
+                color = SecondaryTextColor,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            FilledHighlightedElevatedButton(
+                text = "Escolher Especialização",
+                onClick = {},
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -102,10 +99,22 @@ fun HomeBannerCardPreviewLight() {
 fun HomeBannerCardPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
         HomeBannerCard(
-            title = "Especialização Disponível!",
-            description = "Seu herói atingiu o nível necessário. Escolha uma especialização para evoluir seus poderes!",
-            buttonText = "Escolher Especialização",
-            onClickButton = {}
-        )
+            title = "Especialização Disponível!"
+        ) {
+            Text(
+                text = "Seu herói atingiu o nível necessário. Escolha uma especialização para evoluir seus poderes!",
+                style = MaterialTheme.typography.bodyMedium,
+                color = SecondaryTextColor,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            FilledHighlightedElevatedButton(
+                text = "Escolher Especialização",
+                onClick = {},
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }

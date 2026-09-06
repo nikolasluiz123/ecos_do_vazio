@@ -45,7 +45,7 @@ internal fun CharLevelInfo(
                 )
             )
         }
-        AttributeProgressBar(
+        AppProgressBar(
             progress = { levelInfo.progress }
         )
     }
