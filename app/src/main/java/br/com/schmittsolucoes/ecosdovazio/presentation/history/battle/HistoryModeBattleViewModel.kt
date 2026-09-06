@@ -255,6 +255,10 @@ class HistoryModeBattleViewModel @Inject constructor(
                 is CharSkillUsageResult.Debuff -> {
                     updateMobHealth(state.selectedMob, result.newEnemyHealth)
                     registerMobDebuff(state.selectedMob, skill, result)
+
+                    if (allMobsIsDead()) {
+                        incrementRound()
+                    }
                 }
 
                 is CharSkillUsageResult.VampiricDamage -> {
