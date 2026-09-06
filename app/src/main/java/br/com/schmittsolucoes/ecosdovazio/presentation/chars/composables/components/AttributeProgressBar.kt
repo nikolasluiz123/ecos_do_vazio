@@ -16,7 +16,6 @@ fun AttributeProgressBar(
         progress = progress,
         modifier = modifier
             .fillMaxWidth()
-            .height(8.dp),
-        drawStopIndicator = { }
+            .height(8.dp)
     )
 }
