@@ -158,12 +158,15 @@ private fun EnemyHorizontalPager(
 ) {
     val pagerState = rememberPagerState { mobs.size }
 
-    LaunchedEffect(selectedMob) {
+    LaunchedEffect(selectedMob?.phaseMobId) {
         selectedMob?.let { mob ->
             val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
 
             if (index != -1 && index != pagerState.currentPage) {
-                pagerState.animateScrollToPage(index, animationSpec = spring(stiffness = Spring.StiffnessVeryLow))
+                pagerState.animateScrollToPage(
+                    page = index,
+                    animationSpec = spring(stiffness = Spring.StiffnessVeryLow)
+                )
             }
         }
     }
@@ -171,40 +174,38 @@ private fun EnemyHorizontalPager(
     Box(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth(),
+            key = { page -> mobs.getOrNull(page)?.phaseMobId ?: page },
+            modifier = Modifier.fillMaxWidth(),
         ) { page ->
-            val mob = mobs[page]
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                EnemyItem(
-                    mob = mob,
-                    isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
-                    onMobClick = onMobClick,
-                    onDotClick = onStatusClick,
-                    modifier = Modifier
-                        .heightIn(max = ITEM_MAX_HEIGHT)
-                        .fillMaxHeight()
-                        .padding(vertical = SECTION_PADDING_VERTICAL)
-                )
+            mobs.getOrNull(page)?.let { mob ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EnemyItem(
+                        mob = mob,
+                        isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
+                        onMobClick = onMobClick,
+                        onDotClick = onStatusClick,
+                        modifier = Modifier
+                            .heightIn(max = ITEM_MAX_HEIGHT)
+                            .fillMaxHeight()
+                            .padding(vertical = SECTION_PADDING_VERTICAL)
+                    )
+                }
             }
         }
 
         PulsingArrow(
             icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             isVisible = pagerState.canScrollBackward,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart)
         )
 
         PulsingArrow(
             icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             isVisible = pagerState.canScrollForward,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
+            modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
 }
