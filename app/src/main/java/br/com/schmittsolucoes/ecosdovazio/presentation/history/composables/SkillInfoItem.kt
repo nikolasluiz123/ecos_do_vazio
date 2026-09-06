@@ -1,5 +1,8 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.history.info.composables.components
+package br.com.schmittsolucoes.ecosdovazio.presentation.history.composables
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,10 +21,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.BattleAsyncImage
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.extensions.removeDamageFormula
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 
@@ -30,9 +35,13 @@ private val IMAGE_CORNER_RADIUS = 4.dp
 private val IMAGE_BORDER_WIDTH = 2.dp
 
 @Composable
-internal fun MobSkillInfoItem(
-    skill: MobSkillUIModel,
+fun SkillInfoItem(
+    @DrawableRes drawableRes: Int,
+    name: String,
+    description: String,
+    blocked: Boolean,
     modifier: Modifier = Modifier,
+    filterQuality: FilterQuality = FilterQuality.Medium,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -49,12 +58,12 @@ internal fun MobSkillInfoItem(
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            BattleAsyncImage(
-                model = skill.image,
-                contentDescription = skill.name,
+            AppAsyncImage(
+                model = drawableRes,
+                contentDescription = name,
                 modifier = Modifier.fillMaxSize(),
-                filterQuality = FilterQuality.Medium,
-                colorFilter = if (skill.blocked) {
+                filterQuality = filterQuality,
+                colorFilter = if (blocked) {
                     ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                 } else null,
             )
@@ -63,11 +72,25 @@ internal fun MobSkillInfoItem(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = skill.description.removeDamageFormula(),
+            text = description.removeDamageFormula(),
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = SecondaryTextColor,
             ),
             modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun SkillInfoItemPreview() {
+    EcosDoVazioTheme {
+        SkillInfoItem(
+            drawableRes = R.drawable.skill_ataque_rapido,
+            name = "Ataque Rápido",
+            description = "Um ataque rápido que causa dano ao alvo.",
+            blocked = false,
         )
     }
 }

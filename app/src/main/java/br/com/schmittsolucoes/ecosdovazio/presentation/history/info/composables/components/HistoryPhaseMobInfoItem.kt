@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.SkillInfoItem
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.model.HistoryPhaseMobInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PhaseCardBorderColor
 
@@ -50,7 +51,12 @@ internal fun HistoryPhaseMobInfoItem(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     mobInfo.skills.forEach { skill ->
-                        MobSkillInfoItem(skill = skill)
+                        SkillInfoItem(
+                            drawableRes = skill.image,
+                            name = skill.name,
+                            description = skill.description,
+                            blocked = skill.blocked,
+                        )
                     }
                 }
             }
