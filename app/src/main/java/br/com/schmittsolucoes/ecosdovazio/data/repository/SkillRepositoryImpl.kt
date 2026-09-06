@@ -24,7 +24,7 @@ class SkillRepositoryImpl @Inject constructor(
 
     override fun getCharSkills(
         languageTag: String,
-        classId: String,
+        classId: String?,
         specializationId: String?,
         categories: List<SkillCategory>
     ): Flow<List<CharSkill>> {

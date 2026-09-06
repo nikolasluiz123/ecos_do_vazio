@@ -3,23 +3,15 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.compos
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
-import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighlightedElevatedButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightedTextFieldBackground
@@ -47,58 +39,36 @@ fun CharNamingBottomSheet(
     onDismissRequest: () -> Unit,
     onConfirm: (String) -> Unit
 ) {
-    val scrollState = rememberScrollState()
     var name by remember { mutableStateOf("") }
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Expanded)
 
-    ModalBottomSheet(
-        modifier = Modifier.navigationBarsPadding(),
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        dragHandle = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(18.dp))
-                CustomSectionDivider(
-                    modifier = Modifier.width(120.dp)
-                )
-                Spacer(modifier = Modifier.height(18.dp))
-            }
-        },
+    AppBottomSheet(
+        onDismissRequest = onDismissRequest
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(R.string.char_selection_how_will_it_be_recognized),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                    color = Highlight,
-                    textAlign = TextAlign.Center
-                )
+        Text(
+            text = stringResource(R.string.char_selection_how_will_it_be_recognized),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.Bold,
+                color = Highlight,
+                textAlign = TextAlign.Center
             )
+        )
 
-            Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-            HeroNameTextField(
-                value = name,
-                onValueChange = { name = it },
-                modifier = Modifier.fillMaxWidth()
-            )
+        HeroNameTextField(
+            value = name,
+            onValueChange = { name = it },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-            FilledHighlightedElevatedButton(
-                text = stringResource(R.string.confirm_button),
-                onClick = { onConfirm(name) },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        FilledHighlightedElevatedButton(
+            text = stringResource(R.string.confirm_button),
+            onClick = { onConfirm(name) },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

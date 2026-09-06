@@ -24,6 +24,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composa
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionList
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionPager
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.SkillsListBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
@@ -49,7 +50,9 @@ fun ClassSelectionScreen(
         windowWidthSizeClass = windowWidthSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
         onSelectClass = viewModel::onSelectClass,
-        onConfirmName = viewModel::onConfirmName
+        onConfirmName = viewModel::onConfirmName,
+        onCardClick = viewModel::onClassCardClick,
+        onDismissSkillsBottomSheet = viewModel::onDismissSkillsBottomSheet
     )
 }
 
@@ -59,7 +62,9 @@ fun ClassSelectionScreen(
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {},
     onSelectClass: (String) -> Unit = {},
-    onConfirmName: (String) -> Unit = {}
+    onConfirmName: (String) -> Unit = {},
+    onCardClick: (SelectionItemUIModel) -> Unit = {},
+    onDismissSkillsBottomSheet: () -> Unit = {}
 ) {
     var showNamingBottomSheet by remember { mutableStateOf(false) }
 
@@ -80,6 +85,7 @@ fun ClassSelectionScreen(
                         onSelectClass(it)
                         showNamingBottomSheet = true
                     },
+                    onCardClick = onCardClick,
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
@@ -89,6 +95,7 @@ fun ClassSelectionScreen(
                         onSelectClass(it)
                         showNamingBottomSheet = true
                     },
+                    onCardClick = onCardClick,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -109,6 +116,14 @@ fun ClassSelectionScreen(
                 onConfirmName(name)
                 showNamingBottomSheet = false
             }
+        )
+    }
+
+    state.selectedClassSkills?.let { skills ->
+        SkillsListBottomSheet(
+            title = state.selectedClassName.orEmpty(),
+            skills = skills,
+            onDismissRequest = onDismissSkillsBottomSheet
         )
     }
 }

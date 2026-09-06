@@ -105,7 +105,9 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQu
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetailsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.ClassSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.SpecializationSkillsQueryUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -730,6 +732,24 @@ object UseCaseModule {
         userRepository = userRepository,
         preferencesRepository = preferencesRepository,
         charRepository = charRepository,
+        languageProvider = languageProvider,
+    )
+
+    @Provides
+    fun provideClassSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        languageProvider: LanguageProvider,
+    ): ClassSkillsQueryUseCase = ClassSkillsQueryUseCase(
+        skillRepository = skillRepository,
+        languageProvider = languageProvider,
+    )
+
+    @Provides
+    fun provideSpecializationSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        languageProvider: LanguageProvider,
+    ): SpecializationSkillsQueryUseCase = SpecializationSkillsQueryUseCase(
+        skillRepository = skillRepository,
         languageProvider = languageProvider,
     )
 

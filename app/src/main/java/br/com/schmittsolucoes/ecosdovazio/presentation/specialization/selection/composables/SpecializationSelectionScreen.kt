@@ -19,6 +19,7 @@ import br.com.schmittsolucoes.ecosdovazio.R.drawable
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionList
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionPager
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.SkillsListBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.SpecializationSelectionUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.specialization.selection.SpecializationSelectionViewModel
@@ -45,7 +46,9 @@ fun SpecializationSelectionScreen(
         state = state,
         windowWidthSizeClass = windowWidthSizeClass,
         onDismissErrorDialog = viewModel::onDismissErrorDialog,
-        onSelectSpecialization = viewModel::onSelectSpecialization
+        onSelectSpecialization = viewModel::onSelectSpecialization,
+        onCardClick = viewModel::onSpecializationCardClick,
+        onDismissSkillsBottomSheet = viewModel::onDismissSkillsBottomSheet
     )
 }
 
@@ -54,7 +57,9 @@ fun SpecializationSelectionScreen(
     state: SpecializationSelectionUIState = SpecializationSelectionUIState(),
     windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onDismissErrorDialog: () -> Unit = {},
-    onSelectSpecialization: (String) -> Unit = {}
+    onSelectSpecialization: (String) -> Unit = {},
+    onCardClick: (SelectionItemUIModel) -> Unit = {},
+    onDismissSkillsBottomSheet: () -> Unit = {}
 ) {
     val isCompact = windowWidthSizeClass == WindowWidthSizeClass.Compact
 
@@ -70,12 +75,14 @@ fun SpecializationSelectionScreen(
                 SelectionPager(
                     items = state.specializations,
                     onSelectItem = onSelectSpecialization,
+                    onCardClick = onCardClick,
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
                 SelectionList(
                     items = state.specializations,
                     onSelectItem = onSelectSpecialization,
+                    onCardClick = onCardClick,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -87,6 +94,14 @@ fun SpecializationSelectionScreen(
                 )
             }
         }
+    }
+
+    state.selectedSpecializationSkills?.let { skills ->
+        SkillsListBottomSheet(
+            title = state.selectedSpecializationName.orEmpty(),
+            skills = skills,
+            onDismissRequest = onDismissSkillsBottomSheet
+        )
     }
 }
 

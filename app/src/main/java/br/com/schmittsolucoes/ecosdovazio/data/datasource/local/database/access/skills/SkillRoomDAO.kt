@@ -36,15 +36,15 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
         left join translations skill_description on skill_description.id = skills.description_translation_id and skill_description.language_id = :languageTag
         left join translations skill_description_default on skill_description_default.id = skills.description_translation_id and skill_description_default.language_id = (select id from languages where is_default = 1 limit 1)
         where (
-            skills.class_id = :classId 
-            or (skills.specialization_id is not null and skills.specialization_id = :specializationId)
+            (:classId is not null and skills.class_id = :classId)
+            or (:specializationId is not null and skills.specialization_id = :specializationId)
         )
         and skills.skill_category in (:categories)
         order by skills.min_level
     """)
     override fun getCharSkills(
         languageTag: String,
-        classId: String,
+        classId: String?,
         specializationId: String?,
         categories: List<SkillCategory>
     ): Flow<List<CharSkillTuple>>

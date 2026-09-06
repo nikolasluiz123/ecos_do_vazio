@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
-import android.R
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
@@ -22,7 +22,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 fun SelectionList(
     items: List<SelectionItemUIModel>,
     onSelectItem: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCardClick: (SelectionItemUIModel) -> Unit = {}
 ) {
     LazyRow(
         modifier = modifier,
@@ -34,6 +35,7 @@ fun SelectionList(
             SelectionCard(
                 item = item,
                 onSelect = onSelectItem,
+                onCardClick = onCardClick,
                 modifier = Modifier
                     .width(420.dp)
                     .fillMaxHeight()
@@ -52,13 +54,13 @@ fun SelectionListPreviewLight() {
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_guerreiro
                 ),
                 SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_mago
                 )
             ),
             onSelectItem = {},
@@ -77,13 +79,13 @@ fun SelectionListPreviewDark() {
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_guerreiro
                 ),
                 SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_mago
                 )
             ),
             onSelectItem = {},

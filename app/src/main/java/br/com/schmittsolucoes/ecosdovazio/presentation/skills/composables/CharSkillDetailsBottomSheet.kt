@@ -6,17 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,9 +22,9 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components.AttributeProgressBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
-import br.com.schmittsolucoes.ecosdovazio.presentation.components.CustomSectionDivider
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.extensions.removeDamageFormula
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
@@ -46,79 +39,56 @@ fun CharSkillDetailsBottomSheet(
     onIncrementAttribute: (AttributeIdentifier) -> Unit,
     onDecrementAttribute: (AttributeIdentifier) -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Expanded)
-
-    ModalBottomSheet(
-        modifier = Modifier.navigationBarsPadding(),
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        dragHandle = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(18.dp))
-                CustomSectionDivider(
-                    modifier = Modifier.width(120.dp)
-                )
-                Spacer(modifier = Modifier.height(18.dp))
-            }
-        },
+    AppBottomSheet(
+        onDismissRequest = onDismissRequest
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Text(
+            text = skill.name,
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.Bold,
+                color = Highlight,
+                textAlign = TextAlign.Center
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = skill.description.removeDamageFormula(),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        SkillInfoGrid(skill = skill)
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        if (availablePoints > 0) {
             Text(
-                text = skill.name,
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
+                text = stringResource(R.string.char_available_points, availablePoints),
+                style = MaterialTheme.typography.labelLarge.copy(
                     color = Highlight,
-                    textAlign = TextAlign.Center
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = FontFamily.Serif
                 )
             )
-
             Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            Text(
-                text = skill.description.removeDamageFormula(),
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        attributes.forEach { attribute ->
+            SkillAttributeAdjustmentItem(
+                attribute = attribute,
+                canIncrement = attribute.canIncrement,
+                canDecrement = attribute.canDecrement,
+                onIncrement = { onIncrementAttribute(attribute.identifier) },
+                onDecrement = { onDecrementAttribute(attribute.identifier) }
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SkillInfoGrid(skill = skill)
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            if (availablePoints > 0) {
-                Text(
-                    text = stringResource(R.string.char_available_points, availablePoints),
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = Highlight,
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = FontFamily.Serif
-                    )
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            attributes.forEach { attribute ->
-                SkillAttributeAdjustmentItem(
-                    attribute = attribute,
-                    canIncrement = attribute.canIncrement,
-                    canDecrement = attribute.canDecrement,
-                    onIncrement = { onIncrementAttribute(attribute.identifier) },
-                    onDecrement = { onDecrementAttribute(attribute.identifier) }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

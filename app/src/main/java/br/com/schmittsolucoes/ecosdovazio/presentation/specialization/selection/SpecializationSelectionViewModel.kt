@@ -8,9 +8,12 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.SpecializationsQueryUse
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.SetCharSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.SpecializationSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SpecializationMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -27,11 +31,15 @@ class SpecializationSelectionViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val specializationMapper: SpecializationMapper,
     private val setCharSpecializationUseCase: SetCharSpecializationUseCase,
+    private val specializationSkillsQueryUseCase: SpecializationSkillsQueryUseCase,
+    private val skillMapper: SkillMapper,
     specializationsQueryUseCase: SpecializationsQueryUseCase
 ) : CommonViewModel() {
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _selectedSpecializationId = MutableStateFlow<String?>(null)
+    private val _selectedSpecializationSkills = MutableStateFlow<List<CharSkillUIModel>?>(null)
+    private val _selectedSpecializationName = MutableStateFlow<String?>(null)
 
     private val _navigateToHome = MutableStateFlow(false)
     val navigateToHome: StateFlow<Boolean> = _navigateToHome
@@ -43,12 +51,16 @@ class SpecializationSelectionViewModel @Inject constructor(
     val uiState: StateFlow<SpecializationSelectionUIState> = combine(
         _specializations,
         _errorMessage,
-        _selectedSpecializationId
-    ) { specializations, errorMessage, selectedSpecializationId ->
+        _selectedSpecializationId,
+        _selectedSpecializationSkills,
+        _selectedSpecializationName
+    ) { specializations, errorMessage, selectedSpecializationId, selectedSpecializationSkills, selectedSpecializationName ->
         SpecializationSelectionUIState(
             specializations = specializations,
             errorMessage = errorMessage,
-            selectedSpecializationId = selectedSpecializationId
+            selectedSpecializationId = selectedSpecializationId,
+            selectedSpecializationSkills = selectedSpecializationSkills,
+            selectedSpecializationName = selectedSpecializationName
         )
     }.stateIn(
         scope = viewModelScope,
@@ -84,6 +96,23 @@ class SpecializationSelectionViewModel @Inject constructor(
                 .onSuccess { _navigateToHome.value = true }
                 .onFailure { onShowErrorDialog(getErrorMessageFrom(it)) }
         }
+    }
+
+    fun onSpecializationCardClick(item: SelectionItemUIModel) {
+        launch {
+            val skills = specializationSkillsQueryUseCase(item.id).first()
+
+            _selectedSpecializationSkills.value = skills.map {
+                skillMapper.mapToUIModel(it, currentRefreshTime = 0, blocked = false)
+            }
+
+            _selectedSpecializationName.value = item.name
+        }
+    }
+
+    fun onDismissSkillsBottomSheet() {
+        _selectedSpecializationSkills.value = null
+        _selectedSpecializationName.value = null
     }
 
     fun onNavigatedToHome() {

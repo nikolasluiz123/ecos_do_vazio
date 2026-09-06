@@ -39,9 +39,11 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 fun SelectionCard(
     item: SelectionItemUIModel,
     modifier: Modifier = Modifier,
-    onSelect: (String) -> Unit = {}
+    onSelect: (String) -> Unit = {},
+    onCardClick: (SelectionItemUIModel) -> Unit = {}
 ) {
     Card(
+        onClick = { onCardClick(item) },
         modifier = modifier,
         shape = ShapeDefaults.Medium,
         border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.2f))

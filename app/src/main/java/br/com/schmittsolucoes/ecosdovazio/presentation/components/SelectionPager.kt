@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.components
 
-import android.R
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
@@ -31,7 +31,8 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 fun SelectionPager(
     items: List<SelectionItemUIModel>,
     onSelectItem: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCardClick: (SelectionItemUIModel) -> Unit = {}
 ) {
     val pagerState = rememberPagerState(pageCount = { items.size })
 
@@ -50,6 +51,7 @@ fun SelectionPager(
             SelectionCard(
                 item = items[page],
                 onSelect = onSelectItem,
+                onCardClick = onCardClick,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -85,13 +87,13 @@ fun SelectionPagerPreviewLight() {
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_guerreiro
                 ),
                 SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_mago
                 )
             ),
             onSelectItem = {},
@@ -110,13 +112,13 @@ fun SelectionPagerPreviewDark() {
                     id = "1",
                     name = "Guerreiro",
                     description = "Especialista em combate corpo a corpo.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_guerreiro
                 ),
                 SelectionItemUIModel(
                     id = "2",
                     name = "Mago",
                     description = "Mestre em feitiços.",
-                    presentationDrawableId = R.drawable.ic_menu_gallery
+                    presentationDrawableId = R.drawable.classe_mago
                 )
             ),
             onSelectItem = {},
