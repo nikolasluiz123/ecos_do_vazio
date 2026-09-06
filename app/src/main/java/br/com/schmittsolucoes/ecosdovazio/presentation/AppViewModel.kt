@@ -65,7 +65,7 @@ class AppViewModel @Inject constructor(
             loadingMessage = flows[4] as String?,
             snackbarMessage = flows[5] as String?,
             charHeader = flows[6] as CharHeader?,
-            profileImageRes = (flows[6] as? CharHeader)?.let { resourcesProvider.getProfileClassImage(it.profileImageName) },
+            profileImageRes = (flows[6] as? CharHeader)?.let { resourcesProvider.getCharProfileImage(it.profileImageName) },
             isToolbarExpanded = flows[7] as Boolean
         )
     }.stateIn(

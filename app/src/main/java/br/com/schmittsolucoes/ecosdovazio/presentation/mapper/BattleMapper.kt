@@ -30,9 +30,7 @@ class BattleMapper @Inject constructor(
         debuffSkills: List<CharSkillUIModel> = emptyList(),
         activeStatus: List<ActiveStatusUIModel> = emptyList()
     ): BattleCharUIModel {
-        val battleImage = resourcesProvider.getBattleClassImage(char.battleImageName)
-            ?: resourcesProvider.getBattleSpecializationImage(char.battleImageName)
-            ?: 0
+        val battleImage = resourcesProvider.getCharBattleImage(char.battleImageName) ?: 0
 
         return BattleCharUIModel(
             level = char.level,

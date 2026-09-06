@@ -142,7 +142,11 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
         }
     }
 
-    override fun getBattleClassImage(name: String): Int? {
+    override fun getCharBattleImage(name: String): Int? {
+        return getBattleSpecializationImage(name) ?: getBattleClassImage(name)
+    }
+
+    private fun getBattleClassImage(name: String): Int? {
         return when (name) {
             BATTLE_IMAGE_ARCHER_CLASS_IMAGE_KEY -> R.drawable.classe_arqueiro_16_9
             BATTLE_IMAGE_WARRIOR_CLASS_IMAGE_KEY -> R.drawable.classe_guerreiro_16_9
@@ -151,7 +155,7 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
         }
     }
 
-    override fun getBattleSpecializationImage(name: String): Int? {
+    private fun getBattleSpecializationImage(name: String): Int? {
         return when (name) {
             BATTLE_IMAGE_GUARDIAN_SPECIALIZATION_IMAGE_KEY -> R.drawable.especializacao_guardiao_16_9
             BATTLE_IMAGE_GLADIATOR_SPECIALIZATION_IMAGE_KEY -> R.drawable.especializacao_gladiador_16_9
@@ -163,7 +167,11 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
         }
     }
 
-    override fun getProfileClassImage(name: String): Int? {
+    override fun getCharProfileImage(name: String): Int? {
+        return getProfileSpecializationImage(name) ?: getProfileClassImage(name)
+    }
+
+    private fun getProfileClassImage(name: String): Int? {
         return when (name) {
             ARCHER_CLASS_PROFILE_IMAGE_KEY -> R.drawable.classe_arqueiro_perfil
             WARRIOR_CLASS_PROFILE_IMAGE_KEY -> R.drawable.classe_guerreiro_perfil
@@ -172,7 +180,7 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
         }
     }
 
-    override fun getProfileSpecializationImage(name: String): Int? {
+    private fun getProfileSpecializationImage(name: String): Int? {
         return when (name) {
             GUARDIAN_SPECIALIZATION_PROFILE_IMAGE_KEY -> R.drawable.especializacao_guardiao_perfil
             GLADIATOR_SPECIALIZATION_PROFILE_IMAGE_KEY -> R.drawable.especializacao_gladiador_perfil

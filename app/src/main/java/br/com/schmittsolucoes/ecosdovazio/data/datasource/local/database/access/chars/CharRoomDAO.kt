@@ -35,9 +35,10 @@ interface CharRoomDAO: CharLocalDataSource, RoomLocalDataSource<CharEntity> {
 
     @Query("""
         select chars.name as name, 
-               classes.profile_image_name as profileImageName
+               coalesce(specializations.profile_image_name, classes.profile_image_name) as profileImageName
         from chars
         inner join classes on classes.id = chars.class_id
+        left join specializations on specializations.id = chars.specialization_id
         where chars.id = :charId
     """)
     override fun getCharHeader(charId: String): Flow<CharHeaderTuple?>
