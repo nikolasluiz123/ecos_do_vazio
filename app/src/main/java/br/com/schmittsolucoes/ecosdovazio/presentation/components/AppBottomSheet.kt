@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 fun AppBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Expanded),
+    sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
     scrollable: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
 ) {
