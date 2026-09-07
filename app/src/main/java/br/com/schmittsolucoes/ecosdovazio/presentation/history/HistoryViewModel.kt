@@ -11,31 +11,34 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class HistoryInternalState(
+    val errorMessage: String? = null,
+)
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     historyPhasesQueryUseCase: HistoryPhasesQueryUseCase,
-    private val historyMapper: HistoryMapper
+    private val historyMapper: HistoryMapper,
 ) : CommonViewModel() {
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    private val _isLoading = MutableStateFlow(false)
+    private val _internalState = MutableStateFlow(HistoryInternalState())
 
     val uiState: StateFlow<HistoryUIState> = combine(
         historyPhasesQueryUseCase(),
-        _errorMessage,
-        _isLoading
-    ) { phases, errorMessage, isLoading ->
+        _internalState,
+    ) { phases, internalState ->
         HistoryUIState(
             phases = mapPhaseToUIModel(phases),
             actualPhaseIndex = getActualPhaseIndex(phases),
-            errorMessage = errorMessage,
-            isLoading = isLoading
+            errorMessage = internalState.errorMessage,
+            isLoading = false,
         )
     }.stateInWithCommonError(
-        initialValue = HistoryUIState(isLoading = true)
+        initialValue = HistoryUIState(isLoading = true),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
@@ -43,11 +46,11 @@ class HistoryViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     private fun mapPhaseToUIModel(phases: List<CharHistoryPhase>): List<HistoryPhaseUIModel> {
@@ -58,7 +61,7 @@ class HistoryViewModel @Inject constructor(
 
     private fun getActualPhaseIndex(phases: List<CharHistoryPhase>): Int {
         return phases.indexOf(
-            element = phases.firstOrNull { it.isActual } ?: 0
+            element = phases.firstOrNull { it.isActual } ?: 0,
         )
     }
 }

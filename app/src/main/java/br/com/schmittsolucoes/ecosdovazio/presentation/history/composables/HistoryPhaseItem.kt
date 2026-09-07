@@ -125,7 +125,7 @@ private fun PhaseImage(
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize(),
-            filterQuality = FilterQuality.Medium,
+            filterQuality = FilterQuality.Low,
             colorFilter = if (phase.isLocked) {
                 ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
             } else null,

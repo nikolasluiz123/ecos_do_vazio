@@ -1,37 +1,29 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.composables
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.HistoryUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.HistoryViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.components.HistoryPhasesGrid
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
-
-private val GridContentPadding = 16.dp
-private val GridVerticalSpacing = 32.dp
-private val GridHorizontalSpacing = 16.dp
-
-private const val COMPACT_COLUMNS = 1
-private const val MEDIUM_COLUMNS = 2
-private const val EXPANDED_COLUMNS = 3
-private const val DEFAULT_COLUMNS = 1
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
 fun HistoryScreen(
@@ -59,21 +51,6 @@ fun HistoryScreen(
     onPhaseClick: (String) -> Unit = {},
     onInfoClick: (String) -> Unit = {}
 ) {
-    val columns = when (windowSizeClass?.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> COMPACT_COLUMNS
-        WindowWidthSizeClass.Medium -> MEDIUM_COLUMNS
-        WindowWidthSizeClass.Expanded -> EXPANDED_COLUMNS
-        else -> DEFAULT_COLUMNS
-    }
-
-    val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = state.actualPhaseIndex)
-
-    LaunchedEffect(state.actualPhaseIndex, state.phases.isNotEmpty()) {
-        if (state.phases.isNotEmpty() && state.actualPhaseIndex in state.phases.indices) {
-            gridState.animateScrollToItem(state.actualPhaseIndex)
-        }
-    }
-
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -81,22 +58,13 @@ fun HistoryScreen(
                 .padding(paddingValues)
                 .background(BackgroundGradient)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(columns),
-                contentPadding = PaddingValues(GridContentPadding),
-                verticalArrangement = Arrangement.spacedBy(GridVerticalSpacing),
-                horizontalArrangement = Arrangement.spacedBy(GridHorizontalSpacing),
-                state = gridState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(state.phases) { phase ->
-                    HistoryPhaseItem(
-                        phase = phase,
-                        onPhaseClick = onPhaseClick,
-                        onInfoClick = onInfoClick
-                    )
-                }
-            }
+            HistoryPhasesGrid(
+                phases = state.phases,
+                actualPhaseIndex = state.actualPhaseIndex,
+                windowSizeClass = windowSizeClass,
+                onPhaseClick = onPhaseClick,
+                onInfoClick = onInfoClick
+            )
 
             state.errorMessage?.let { message ->
                 ErrorDialog(
@@ -105,5 +73,117 @@ fun HistoryScreen(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Compact (1 Column) - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Compact (1 Column) - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryScreenPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryScreen(
+            state = HistoryPreviewData.uiStateLoaded,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Foldable - Medium (2 Columns) - Light",
+    device = Devices.FOLDABLE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Foldable - Medium (2 Columns) - Dark",
+    device = Devices.FOLDABLE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryScreenPreviewFoldable() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryScreen(
+            state = HistoryPreviewData.uiStateLoaded,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Tablet - Expanded (3 Columns) - Light",
+    device = Devices.TABLET,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Tablet - Expanded (3 Columns) - Dark",
+    device = Devices.TABLET,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryScreenPreviewTablet() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryScreen(
+            state = HistoryPreviewData.uiStateLoaded,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Error State - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Error State - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryScreenWithErrorPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryScreen(
+            state = HistoryPreviewData.uiStateWithError,
+            windowSizeClass = windowSizeClass,
+        )
     }
 }
