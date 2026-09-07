@@ -1,7 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler
 
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleInternalState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
 import javax.inject.Inject
 

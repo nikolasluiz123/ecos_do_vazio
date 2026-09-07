@@ -12,11 +12,11 @@ import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_PADDING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_SPACING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SKILL_ITEM_MIN_SIZE
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 
 @Composable
 fun SkillsVerticalPager(

@@ -1,4 +1,4 @@
-package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle
+package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state
 
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel

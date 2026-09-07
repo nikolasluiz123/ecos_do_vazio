@@ -9,13 +9,11 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateProjectedDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
@@ -31,14 +29,13 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Acti
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation.HistoryModeBattleRoute
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleInternalState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.CharSkillUsageExecutionResult
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleActiveStatusStateHandler
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleCharActiveStatusStateHandler
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleCharHealthStateHandler
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleMobsActiveStatusStateHandler
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleMobsHealthStateHandler
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleCharSkillUsageStateHandler
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleMobSkillUsageStateHandler
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
@@ -58,18 +55,15 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
     private val calculateProjectedDamageUseCase: CalculateProjectedDamageUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
-    private val useCharSkillUseCase: UseCharSkillUseCase,
     private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
     private val startHistoryPhaseUseCase: StartHistoryPhaseUseCase,
     private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
     private val snackbarManager: SnackbarManager,
     private val skillMapper: SkillMapper,
     private val battleInfoMapper: BattleInfoMapper,
-    private val charHealthStateHandler: HistoryModeBattleCharHealthStateHandler,
-    private val mobsHealthStateHandler: HistoryModeBattleMobsHealthStateHandler,
-    private val charActiveStatusStateHandler: HistoryModeBattleCharActiveStatusStateHandler,
-    private val mobsActiveStatusStateHandler: HistoryModeBattleMobsActiveStatusStateHandler,
     private val activeStatusStateHandler: HistoryModeBattleActiveStatusStateHandler,
+    private val charSkillUsageStateHandler: HistoryModeBattleCharSkillUsageStateHandler,
+    private val mobSkillUsageStateHandler: HistoryModeBattleMobSkillUsageStateHandler,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -171,111 +165,23 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     fun onSkillClick(skill: CharSkillUIModel) {
-        val state = uiState.value
+        val result = charSkillUsageStateHandler.executeSkillUsage(
+            currentState = _internalState.value,
+            uiState = uiState.value,
+            skill = skill
+        )
 
-        if (skill.currentRefreshTime > 0 || skill.blocked) return
-
-        if (state.selectedMob != null) {
-            val char = state.char ?: return
-
-            val result = useCharSkillUseCase(
-                skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill),
-                battleCharInfo = battleInfoMapper.mapToDomainInfo(char),
-                mobs = state.mobs.map { battleInfoMapper.mapToDomainInfo(it) },
-                selectedMobId = state.selectedMob.phaseMobId
-            )
-
-            when (result) {
-                is CharSkillUsageResult.CommonDamage -> {
-                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
-                    incrementRound()
-                }
-
-                is CharSkillUsageResult.AreaDamage -> {
-                    result.newEnemyHealths.forEach { (phaseMobId, newHealth) ->
-                        val mob = getMobById(phaseMobId) ?: return@forEach
-                        updateMobHealth(mob, newHealth)
-                    }
-
-                    incrementRound()
-                }
-
-                is CharSkillUsageResult.DamageOverTime -> {
-                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
-                    registerMobDot(state.selectedMob, skill, result)
-                    incrementRound()
-                }
-
-                is CharSkillUsageResult.Debuff -> {
-                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
-                    registerMobDebuff(state.selectedMob, skill, result)
-
-                    if (allMobsIsDead()) {
-                        incrementRound()
-                    }
-                }
-
-                is CharSkillUsageResult.VampiricDamage -> {
-                    updateMobHealth(state.selectedMob, result.newEnemyHealth)
-                    updateCharHealth(result.newCharHealth)
-                    incrementRound()
-                }
-
-                is CharSkillUsageResult.Buff -> {
-                    registerCharBuff(skill, result)
-                }
+        when (result) {
+            is CharSkillUsageExecutionResult.Executed -> {
+                _internalState.value = result.newState
             }
 
-            updateSkillRefreshTime(skill.id, result.refreshTime)
-        } else {
-            val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
-            snackbarManager.showSnackbar(message)
-        }
-    }
+            is CharSkillUsageExecutionResult.NoSelectedMob -> {
+                val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
+                snackbarManager.showSnackbar(message)
+            }
 
-    private fun registerMobDot(
-        selectedMob: BattleMobUIModel,
-        skill: CharSkillUIModel,
-        result: CharSkillUsageResult.DamageOverTime
-    ) {
-        _internalState.update { currentState ->
-            mobsActiveStatusStateHandler.registerMobDot(
-                currentState = currentState,
-                selectedMob = selectedMob,
-                skill = skill,
-                result = result
-            )
-        }
-    }
-
-    private fun registerMobDebuff(
-        selectedMob: BattleMobUIModel,
-        skill: CharSkillUIModel,
-        result: CharSkillUsageResult.Debuff
-    ) {
-        _internalState.update { currentState ->
-            mobsActiveStatusStateHandler.registerMobDebuff(
-                currentState = currentState,
-                selectedMob = selectedMob,
-                skill = skill,
-                result = result
-            )
-        }
-    }
-
-    private fun registerCharBuff(skill: CharSkillUIModel, result: CharSkillUsageResult.Buff) {
-        _internalState.update { currentState ->
-            charActiveStatusStateHandler.registerCharBuff(
-                currentState = currentState,
-                skill = skill,
-                result = result
-            )
-        }
-    }
-
-    private fun updateSkillRefreshTime(skillId: String, refreshTime: Int) {
-        _internalState.update { state ->
-            state.copy(skillsRefreshTime = state.skillsRefreshTime + (skillId to refreshTime))
+            is CharSkillUsageExecutionResult.Ignored -> { }
         }
     }
 
@@ -286,26 +192,6 @@ class HistoryModeBattleViewModel @Inject constructor(
             }.filterValues { it > 0 }
 
             state.copy(skillsRefreshTime = updatedMap)
-        }
-    }
-
-    private fun updateMobHealth(selectedMob: BattleMobUIModel, newEnemyHealth: Long) {
-        _internalState.update { currentState ->
-            mobsHealthStateHandler.updateMobHealth(
-                currentState = currentState,
-                mobs = uiState.value.mobs,
-                mobToUpdate = selectedMob,
-                newEnemyHealth = newEnemyHealth
-            )
-        }
-    }
-
-    private fun updateCharHealth(newHealth: Long) {
-        _internalState.update { currentState ->
-            charHealthStateHandler.updateCharHealth(
-                currentState = currentState,
-                newHealth = newHealth
-            )
         }
     }
 
@@ -381,104 +267,13 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun handleMobSkillResult(result: MobSkillUsageResult) {
-        when (result) {
-            is MobSkillUsageResult.CommonDamage -> {
-                updateCharHealth(result.newEnemyHealth)
-            }
-
-            is MobSkillUsageResult.DamageOverTime -> {
-                updateCharHealth(result.newEnemyHealth)
-                registerCharDot(result)
-            }
-
-            is MobSkillUsageResult.Debuff -> {
-                updateCharHealth(result.newEnemyHealth)
-                registerCharDebuff(result)
-            }
-
-            is MobSkillUsageResult.VampiricDamage -> {
-                updateCharHealth(result.newEnemyHealth)
-                getMobById(result.mobId)?.let { mob ->
-                    updateMobHealth(mob, result.newCharHealth)
-                }
-            }
-
-            is MobSkillUsageResult.Buff -> {
-                registerMobBuff(result)
-            }
-
-            is MobSkillUsageResult.Heal -> {
-                getMobById(result.targetMobId)?.let { mob ->
-                    updateMobHealth(mob, result.newMobHealth)
-                }
-            }
-
-            is MobSkillUsageResult.AreaHeal -> {
-                result.newMobsHealth.forEach { (phaseMobId, newHealth) ->
-                    getMobById(phaseMobId)?.let { mob ->
-                        updateMobHealth(mob, newHealth)
-                    }
-                }
-            }
-        }
-
-        updateSkillRefreshTime(result.skillId, result.refreshTime)
-    }
-
-    private fun registerMobBuff(result: MobSkillUsageResult.Buff) {
-        val mob = getMobById(result.mobId) ?: return
-        val skill = getMobSkill(mob, result.skillId) ?: return
-
         _internalState.update { currentState ->
-            mobsActiveStatusStateHandler.registerMobBuff(
+            mobSkillUsageStateHandler.handleMobSkillResult(
                 currentState = currentState,
-                mob = mob,
-                skill = skill,
+                uiState = uiState.value,
                 result = result
             )
         }
-    }
-
-    private fun registerCharDot(result: MobSkillUsageResult.DamageOverTime) {
-        val state = uiState.value
-        val mob = getSelectedMobOrFirst(state) ?: return
-        val skill = getMobSkill(mob, result.skillId) ?: return
-
-        _internalState.update { currentState ->
-            charActiveStatusStateHandler.registerCharDot(
-                currentState = currentState,
-                mob = mob,
-                skill = skill,
-                result = result
-            )
-        }
-    }
-
-    private fun registerCharDebuff(result: MobSkillUsageResult.Debuff) {
-        val state = uiState.value
-        val mob = getSelectedMobOrFirst(state) ?: return
-        val skill = getMobSkill(mob, result.skillId) ?: return
-
-        _internalState.update { currentState ->
-            charActiveStatusStateHandler.registerCharDebuff(
-                currentState = currentState,
-                mob = mob,
-                skill = skill,
-                result = result
-            )
-        }
-    }
-
-    private fun getMobSkill(mob: BattleMobUIModel, skillId: String): MobSkillUIModel? {
-        return mob.skills.firstOrNull { it.id == skillId }
-    }
-
-    private fun getSelectedMobOrFirst(state: HistoryModeBattleUIState): BattleMobUIModel? {
-        return state.mobs.firstOrNull { it.phaseMobId == _internalState.value.selectedMobId } ?: state.mobs.firstOrNull()
-    }
-
-    private fun getMobById(id: String): BattleMobUIModel? {
-        return uiState.value.mobs.firstOrNull { it.phaseMobId == id }
     }
 
     private fun mapBattleMobsToUIModel(

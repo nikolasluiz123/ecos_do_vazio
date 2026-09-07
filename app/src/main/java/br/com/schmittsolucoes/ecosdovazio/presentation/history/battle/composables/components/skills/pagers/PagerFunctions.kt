@@ -1,8 +1,8 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.pagers
 
 import androidx.compose.ui.unit.Dp
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 
 internal fun calculateFixedAxisCells(
     availableFixedAxisLimit: Dp,

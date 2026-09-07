@@ -15,13 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.pagers.SkillsHorizontalPager
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.pagers.SkillsVerticalPager
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.SkillsHorizontalTabRow
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.SkillsVerticalTabRow
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.tabs.rememberSkillsPagerState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SurfaceVariantGradient
 
 internal const val SKILLS_ANIMATION_DURATION = 600
