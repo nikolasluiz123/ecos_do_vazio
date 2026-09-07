@@ -9,17 +9,13 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.BattleMobInfo
-import br.com.schmittsolucoes.ecosdovazio.domain.model.result.MobSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateCharMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateProjectedDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.MobsFromPhaseQueryUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.EndHistoryPhaseUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.StartHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
@@ -33,9 +29,9 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.navigation
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleInternalState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.CharSkillUsageExecutionResult
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleActiveStatusStateHandler
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleCharSkillUsageStateHandler
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleMobSkillUsageStateHandler
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.HistoryModeBattleRoundStateHandler
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler.PhaseFinishResult
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
@@ -55,15 +51,11 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
     private val calculateProjectedDamageUseCase: CalculateProjectedDamageUseCase,
     private val getCharSkillBlockedUseCase: GetCharSkillBlockedUseCase,
-    private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
-    private val startHistoryPhaseUseCase: StartHistoryPhaseUseCase,
-    private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
     private val snackbarManager: SnackbarManager,
     private val skillMapper: SkillMapper,
     private val battleInfoMapper: BattleInfoMapper,
-    private val activeStatusStateHandler: HistoryModeBattleActiveStatusStateHandler,
     private val charSkillUsageStateHandler: HistoryModeBattleCharSkillUsageStateHandler,
-    private val mobSkillUsageStateHandler: HistoryModeBattleMobSkillUsageStateHandler,
+    private val roundStateHandler: HistoryModeBattleRoundStateHandler,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -121,7 +113,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             selectedSkill = internalState.selectedSkill,
             selectedActiveStatus = internalState.selectedDot,
             actualRound = internalState.actualRound,
-            isEnemyRound = isEnemyRound(internalState.actualRound),
+            isEnemyRound = roundStateHandler.isEnemyRound(actualRound = internalState.actualRound),
         )
     }.stateInWithCommonError(
         initialValue = HistoryModeBattleUIState(
@@ -168,7 +160,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val result = charSkillUsageStateHandler.executeSkillUsage(
             currentState = _internalState.value,
             uiState = uiState.value,
-            skill = skill
+            skill = skill,
         )
 
         when (result) {
@@ -178,101 +170,40 @@ class HistoryModeBattleViewModel @Inject constructor(
 
             is CharSkillUsageExecutionResult.NoSelectedMob -> {
                 val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
-                snackbarManager.showSnackbar(message)
+                snackbarManager.showSnackbar(message = message)
             }
 
             is CharSkillUsageExecutionResult.Ignored -> { }
         }
     }
 
-    private fun decrementSkillsRefreshTime() {
-        _internalState.update { state ->
-            val updatedMap = state.skillsRefreshTime.mapValues { (_, time) ->
-                if (time > 0) time - 1 else 0
-            }.filterValues { it > 0 }
-
-            state.copy(skillsRefreshTime = updatedMap)
-        }
-    }
-
     fun onRoundUpdate() {
         launch {
-            if (!isPhaseStarted) {
-                startHistoryPhaseUseCase(route.phaseId)
-                isPhaseStarted = true
-            }
-
-            if (allMobsIsDead() || charIsDead()) {
-                tryFinishBattle()
-                return@launch
-            }
-
-            _internalState.update { currentState ->
-                activeStatusStateHandler.applyAllTurnStatuses(
-                    currentState = currentState,
-                    uiState = uiState.value,
-                    battleInfoMapper = battleInfoMapper
-                )
-            }
-
-            if (isEnemyRound()) {
-                runEnemyRoundUseCase(
-                    getCharInfo = { battleInfoMapper.mapToDomainInfo(uiState.value.char!!) },
-                    mobs = uiState.value.mobs.map { battleMapper.mapToDomain(it) },
-                    onMobUseSkill = ::handleMobSkillResult
-                )
-
-                if (!allMobsIsDead()) {
-                    incrementRound()
-                }
-            } else {
-                decrementSkillsRefreshTime()
-            }
-
-            tryFinishBattle()
-        }
-    }
-
-    private suspend fun tryFinishBattle() {
-        if (_internalState.value.shouldPop) return
-
-        val char = uiState.value.char ?: return
-
-        val result = endHistoryPhaseUseCase(
-            phaseId = route.phaseId,
-            battleCharInfo = battleInfoMapper.mapToDomainInfo(char),
-            mobs = uiState.value.mobs.map { battleInfoMapper.mapToDomainInfo(it) }
-        )
-
-        if (result.isHistoryFinished) {
-            if (allMobsIsDead()) {
-                val message = if (result.levelInfo.levelUp) {
-                    context.getString(
-                        R.string.history_mode_battle_victory_level_up,
-                        result.levelInfo.currentLevel
-                    )
-                } else {
-                    context.getString(R.string.history_mode_battle_victory)
-                }
-
-                snackbarManager.showSnackbar(message)
-            }
-
-            _internalState.update { it.copy(shouldPop = true) }
-        }
-    }
-
-    private fun isEnemyRound(actualRound: Long = uiState.value.actualRound): Boolean {
-        return actualRound % 2 == 0L
-    }
-
-    private fun handleMobSkillResult(result: MobSkillUsageResult) {
-        _internalState.update { currentState ->
-            mobSkillUsageStateHandler.handleMobSkillResult(
-                currentState = currentState,
+            val result = roundStateHandler.executeRoundUpdate(
+                phaseId = route.phaseId,
+                isPhaseStarted = isPhaseStarted,
+                currentState = _internalState.value,
                 uiState = uiState.value,
-                result = result
             )
+
+            isPhaseStarted = result.isPhaseStarted
+            _internalState.value = result.newState
+
+            result.finishResult?.let { finishResult ->
+                when (finishResult) {
+                    is PhaseFinishResult.Victory -> {
+                        val message = if (finishResult.levelUp) {
+                            context.getString(
+                                R.string.history_mode_battle_victory_level_up,
+                                finishResult.currentLevel,
+                            )
+                        } else {
+                            context.getString(R.string.history_mode_battle_victory)
+                        }
+                        snackbarManager.showSnackbar(message = message)
+                    }
+                }
+            }
         }
     }
 
@@ -280,7 +211,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         mobs: List<BattleMob>,
         mobsHealth: Map<String, Long>,
         mobsActiveStatus: Map<String, List<ActiveStatusUIModel>>,
-        skillsRefreshTime: Map<String, Int> = emptyMap()
+        skillsRefreshTime: Map<String, Int> = emptyMap(),
     ): List<BattleMobUIModel> {
         return mobs.map { battleMob ->
             val actualHealth = mobsHealth[battleMob.phaseMobId] ?: battleMob.actualHealth
@@ -290,19 +221,19 @@ class HistoryModeBattleViewModel @Inject constructor(
                 skills = battleMob.skills.map { skill ->
                     skillMapper.mapToUIModel(
                         skill = skill,
-                        currentRefreshTime = skillsRefreshTime[skill.id] ?: skill.currentRefreshTime
+                        currentRefreshTime = skillsRefreshTime[skill.id] ?: skill.currentRefreshTime,
                     )
                 },
-                activeStatus = activeStatus
+                activeStatus = activeStatus,
             )
 
             val multipliers = calculateMobMultipliersUseCase(
-                battleInfoMapper.mapToDomainInfo(tempUIModel)
+                battleInfoMapper.mapToDomainInfo(mobUIModel = tempUIModel),
             )
 
             tempUIModel.copy(
                 offensiveMultiplier = multipliers.offensive,
-                defensiveMultiplier = multipliers.defensive
+                defensiveMultiplier = multipliers.defensive,
             )
         }
     }
@@ -313,7 +244,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         charActiveStatus: List<ActiveStatusUIModel> = emptyList(),
         damageSkills: List<CharSkillUIModel> = emptyList(),
         buffSkills: List<CharSkillUIModel> = emptyList(),
-        debuffSkills: List<CharSkillUIModel> = emptyList()
+        debuffSkills: List<CharSkillUIModel> = emptyList(),
     ): BattleCharUIModel {
         val actualHealth = charHealth ?: char.actualHealth
 
@@ -324,16 +255,16 @@ class HistoryModeBattleViewModel @Inject constructor(
             damageSkills = damageSkills,
             buffSkills = buffSkills,
             debuffSkills = debuffSkills,
-            activeStatus = charActiveStatus
+            activeStatus = charActiveStatus,
         )
 
         val multipliers = calculateCharMultipliersUseCase(
-            battleInfoMapper.mapToDomainInfo(tempUIModel)
+            battleInfoMapper.mapToDomainInfo(charUIModel = tempUIModel),
         )
 
         return tempUIModel.copy(
             offensiveMultiplier = multipliers.offensive,
-            defensiveMultiplier = multipliers.defensive
+            defensiveMultiplier = multipliers.defensive,
         )
     }
 
@@ -342,13 +273,13 @@ class HistoryModeBattleViewModel @Inject constructor(
         charInfo: BattleCharInfo,
         skills: List<CharSkill>,
         skillsRefreshTime: Map<String, Int>,
-        mobInfo: BattleMobInfo? = null
+        mobInfo: BattleMobInfo? = null,
     ): List<CharSkillUIModel> {
         return skills.map { skill ->
             val projectedDamageInfo = calculateProjectedDamageUseCase(
                 skill = skill,
                 charInfo = charInfo,
-                mobInfo = mobInfo
+                mobInfo = mobInfo,
             )
 
             skillMapper.mapToUIModel(
@@ -357,34 +288,10 @@ class HistoryModeBattleViewModel @Inject constructor(
                 blocked = getCharSkillBlockedUseCase(
                     battleChar = battleChar,
                     skillRequiredAttributes = skill.attributes,
-                    minLevel = skill.minLevel
+                    minLevel = skill.minLevel,
                 ),
-                projectedDamageInfo = projectedDamageInfo
+                projectedDamageInfo = projectedDamageInfo,
             )
         }
-    }
-
-    private fun incrementRound() {
-        _internalState.update { it.copy(actualRound = it.actualRound + 1) }
-    }
-
-    private fun charIsDead(): Boolean {
-        val state = _internalState.value
-        val notLoaded = state.charHealth == null && uiState.value.char?.actualHealth == null
-        if (notLoaded) return false
-
-        return (state.charHealth ?: uiState.value.char?.actualHealth ?: 0) <= 0
-    }
-
-    private fun allMobsIsDead(): Boolean {
-        val state = _internalState.value
-        val notLoaded = state.mobsHealth.isEmpty() && uiState.value.mobs.all { it.actualHealth <= 0 }
-        if (notLoaded) return false
-
-        val mobsHealth = state.mobsHealth.ifEmpty {
-            uiState.value.mobs.associate { it.phaseMobId to it.actualHealth }
-        }
-
-        return mobsHealth.all { it.value <= 0 }
     }
 }
