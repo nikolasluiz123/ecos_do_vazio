@@ -77,7 +77,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCou
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.SetCharSpecializationUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.UserCharsQueryUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.CompletedHistoryPhasesCountQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetCompletedHistoryPhasesCountQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetLastUnfinishedHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetPhaseDataByIdUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhaseInfoQueryUseCase
@@ -1005,7 +1005,7 @@ object UseCaseModule {
         historyPhaseRepository: HistoryPhaseRepository,
         userRepository: UserRepository,
         preferencesRepository: PreferencesRepository,
-    ): CompletedHistoryPhasesCountQueryUseCase = CompletedHistoryPhasesCountQueryUseCase(
+    ): GetCompletedHistoryPhasesCountQueryUseCase = GetCompletedHistoryPhasesCountQueryUseCase(
         historyPhaseRepository = historyPhaseRepository,
         userRepository = userRepository,
         preferencesRepository = preferencesRepository,

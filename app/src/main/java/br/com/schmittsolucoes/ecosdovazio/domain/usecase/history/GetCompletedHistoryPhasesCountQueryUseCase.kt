@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
-class CompletedHistoryPhasesCountQueryUseCase(
+class GetCompletedHistoryPhasesCountQueryUseCase(
     private val historyPhaseRepository: HistoryPhaseRepository,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository,

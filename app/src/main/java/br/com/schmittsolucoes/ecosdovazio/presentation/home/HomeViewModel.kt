@@ -1,56 +1,55 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.home
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetShowSpecializationBannerUseCase
-import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.CompletedHistoryPhasesCountQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetCompletedHistoryPhasesCountQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.GetLastUnfinishedHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.TotalHistoryPhasesCountQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.HistoryMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class HomeInternalState(
+    val errorMessage: String? = null,
+)
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     getShowSpecializationBannerUseCase: GetShowSpecializationBannerUseCase,
-    completedHistoryPhasesCountQueryUseCase: CompletedHistoryPhasesCountQueryUseCase,
+    getCompletedHistoryPhasesCountQueryUseCase: GetCompletedHistoryPhasesCountQueryUseCase,
     totalHistoryPhasesCountQueryUseCase: TotalHistoryPhasesCountQueryUseCase,
     getLastUnfinishedHistoryPhaseUseCase: GetLastUnfinishedHistoryPhaseUseCase,
-    historyMapper: HistoryMapper
+    historyMapper: HistoryMapper,
 ) : CommonViewModel() {
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
+    private val _internalState = MutableStateFlow(HomeInternalState())
 
     val uiState: StateFlow<HomeUIState> = combine(
         getShowSpecializationBannerUseCase(),
         getLastUnfinishedHistoryPhaseUseCase(),
-        completedHistoryPhasesCountQueryUseCase(),
+        getCompletedHistoryPhasesCountQueryUseCase(),
         totalHistoryPhasesCountQueryUseCase(),
-        _errorMessage
-    ) { showSpecializationBanner, lastUnfinishedPhase, completedCount, totalCount, errorMessage ->
+        _internalState,
+    ) { showSpecializationBanner, lastUnfinishedPhase, completedCount, totalCount, internalState ->
         HomeUIState(
             showSpecializationBanner = showSpecializationBanner,
             lastUnfinishedHistoryPhase = historyMapper.mapToLastUnfinishedUIModel(
                 phase = lastUnfinishedPhase,
                 completedPhasesCount = completedCount,
-                totalPhasesCount = totalCount
+                totalPhasesCount = totalCount,
             ),
-            errorMessage = errorMessage
+            errorMessage = internalState.errorMessage,
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
-        initialValue = HomeUIState()
+    }.stateInWithCommonError(
+        initialValue = HomeUIState(),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
@@ -58,10 +57,10 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 }
