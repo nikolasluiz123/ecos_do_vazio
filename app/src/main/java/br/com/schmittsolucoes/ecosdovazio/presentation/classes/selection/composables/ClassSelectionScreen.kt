@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionNavigationEvent
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.ClassSelectionViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection.composables.components.CharNamingBottomSheet
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.ObserveAsEvents
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionList
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SelectionPager
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.SkillsListBottomSheet
@@ -33,15 +34,13 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 fun ClassSelectionScreen(
     viewModel: ClassSelectionViewModel,
     windowWidthSizeClass: WindowWidthSizeClass,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val navigateToHome by viewModel.navigateToHome.collectAsStateWithLifecycle()
 
-    LaunchedEffect(navigateToHome) {
-        if (navigateToHome) {
-            onNavigateToHome()
-            viewModel.onNavigatedToHome()
+    ObserveAsEvents(viewModel.navigationEvent) { event ->
+        when (event) {
+            ClassSelectionNavigationEvent.NavigateToHome -> onNavigateToHome()
         }
     }
 
@@ -52,7 +51,7 @@ fun ClassSelectionScreen(
         onSelectClass = viewModel::onSelectClass,
         onConfirmName = viewModel::onConfirmName,
         onCardClick = viewModel::onClassCardClick,
-        onDismissSkillsBottomSheet = viewModel::onDismissSkillsBottomSheet
+        onDismissSkillsBottomSheet = viewModel::onDismissSkillsBottomSheet,
     )
 }
 
@@ -64,9 +63,9 @@ fun ClassSelectionScreen(
     onSelectClass: (String) -> Unit = {},
     onConfirmName: (String) -> Unit = {},
     onCardClick: (SelectionItemUIModel) -> Unit = {},
-    onDismissSkillsBottomSheet: () -> Unit = {}
+    onDismissSkillsBottomSheet: () -> Unit = {},
 ) {
-    var showNamingBottomSheet by remember { mutableStateOf(false) }
+    var showNamingBottomSheet by remember { mutableStateOf(value = false) }
 
     val isCompact = windowWidthSizeClass == WindowWidthSizeClass.Compact
 
@@ -76,7 +75,7 @@ fun ClassSelectionScreen(
                 .fillMaxSize()
                 .background(BackgroundGradient)
                 .padding(paddingValues),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (isCompact) {
                 SelectionPager(
@@ -86,7 +85,7 @@ fun ClassSelectionScreen(
                         showNamingBottomSheet = true
                     },
                     onCardClick = onCardClick,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             } else {
                 SelectionList(
@@ -96,14 +95,14 @@ fun ClassSelectionScreen(
                         showNamingBottomSheet = true
                     },
                     onCardClick = onCardClick,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             state.errorMessage?.let { message ->
                 ErrorDialog(
                     message = message,
-                    onDismiss = onDismissErrorDialog
+                    onDismiss = onDismissErrorDialog,
                 )
             }
         }
@@ -115,7 +114,7 @@ fun ClassSelectionScreen(
             onConfirm = { name ->
                 onConfirmName(name)
                 showNamingBottomSheet = false
-            }
+            },
         )
     }
 
@@ -123,7 +122,7 @@ fun ClassSelectionScreen(
         SkillsListBottomSheet(
             title = state.selectedClassName.orEmpty(),
             skills = skills,
-            onDismissRequest = onDismissSkillsBottomSheet
+            onDismissRequest = onDismissSkillsBottomSheet,
         )
     }
 }
@@ -133,22 +132,7 @@ fun ClassSelectionScreen(
 fun ClassSelectionScreenPreviewLight() {
     EcosDoVazioTheme(darkTheme = false) {
         ClassSelectionScreen(
-            state = ClassSelectionUIState(
-                classes = listOf(
-                    SelectionItemUIModel(
-                        id = "1",
-                        name = "Guerreiro",
-                        description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
-                    ),
-                    SelectionItemUIModel(
-                        id = "2",
-                        name = "Mago",
-                        description = "Mestre em feitiços e ataques à distância, veste armaduras leves de tecido.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
-                    )
-                )
-            )
+            state = ClassSelectionPreviewData.uiStateLoaded,
         )
     }
 }
@@ -158,16 +142,7 @@ fun ClassSelectionScreenPreviewLight() {
 fun ClassSelectionScreenPreviewDark() {
     EcosDoVazioTheme(darkTheme = true) {
         ClassSelectionScreen(
-            state = ClassSelectionUIState(
-                classes = listOf(
-                    SelectionItemUIModel(
-                        id = "1",
-                        name = "Guerreiro",
-                        description = "Especialista em combate corpo a corpo, atua na linha de frente equipado com armaduras pesadas.",
-                        presentationDrawableId = android.R.drawable.ic_menu_gallery
-                    )
-                )
-            )
+            state = ClassSelectionPreviewData.uiStateLoaded,
         )
     }
 }

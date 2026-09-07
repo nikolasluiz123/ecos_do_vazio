@@ -1,7 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.classes.selection
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.classes.ClassSelection
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.ClassesQueryUseCase
@@ -10,21 +9,33 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.CharExceptio
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.ClassSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.models.SelectionItemUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.ClassMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class ClassSelectionInternalState(
+    val errorMessage: String? = null,
+    val selectedClassId: String? = null,
+    val charName: String? = null,
+    val selectedClassSkills: List<CharSkillUIModel>? = null,
+    val selectedClassName: String? = null,
+)
+
+sealed interface ClassSelectionNavigationEvent {
+    data object NavigateToHome : ClassSelectionNavigationEvent
+}
 
 @HiltViewModel
 class ClassSelectionViewModel @Inject constructor(
@@ -36,45 +47,24 @@ class ClassSelectionViewModel @Inject constructor(
     classesQueryUseCase: ClassesQueryUseCase
 ) : CommonViewModel() {
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    private val _selectedClassId = MutableStateFlow<String?>(null)
-    private val _charName = MutableStateFlow<String?>(null)
-    private val _selectedClassSkills = MutableStateFlow<List<CharSkillUIModel>?>(null)
-    private val _selectedClassName = MutableStateFlow<String?>(null)
+    private val _internalState = MutableStateFlow(ClassSelectionInternalState())
 
-    private val _navigateToHome = MutableStateFlow(false)
-    val navigateToHome: StateFlow<Boolean> = _navigateToHome
+    private val _navigationChannel = Channel<ClassSelectionNavigationEvent>(Channel.BUFFERED)
+    val navigationEvent: Flow<ClassSelectionNavigationEvent> = _navigationChannel.receiveAsFlow()
 
-    private val _classes = classesQueryUseCase().map { list ->
-        list.map { mapDomainToUIModel(it) }
-    }
-
-    @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<ClassSelectionUIState> = combine(
-        _classes,
-        _errorMessage,
-        _selectedClassId,
-        _charName,
-        _selectedClassSkills,
-        _selectedClassName
-    ) { array ->
+        classesQueryUseCase(),
+        _internalState,
+    ) { classes, internalState ->
         ClassSelectionUIState(
-            classes = array[0] as List<SelectionItemUIModel>,
-            errorMessage = array[1] as String?,
-            selectedClassId = array[2] as String?,
-            charName = array[3] as String?,
-            selectedClassSkills = array[4] as List<CharSkillUIModel>?,
-            selectedClassName = array[5] as String?
+            classes = mapDomainToUIModelList(classes),
+            errorMessage = internalState.errorMessage,
+            selectedClassId = internalState.selectedClassId,
+            charName = internalState.charName,
+            selectedClassSkills = internalState.selectedClassSkills,
+            selectedClassName = internalState.selectedClassName,
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
-        initialValue = ClassSelectionUIState()
-    )
-
-    private fun mapDomainToUIModel(classSelection: ClassSelection): SelectionItemUIModel {
-        return classMapper.mapToUIModel(classSelection)
-    }
+    }.stateInWithCommonError(initialValue = ClassSelectionUIState())
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
         return when (throwable) {
@@ -94,29 +84,34 @@ class ClassSelectionViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     fun onSelectClass(classId: String) {
-        _selectedClassId.value = classId
+        _internalState.update { it.copy(selectedClassId = classId) }
     }
 
     fun onConfirmName(name: String) {
-        _charName.value = name
+        _internalState.update { it.copy(charName = name) }
 
         launch {
-            val result = createNewUserCharUseCase.invoke(
-                classId = _selectedClassId.value,
-                charName = _charName.value
+            val selectedClassId = _internalState.value.selectedClassId
+            val result = createNewUserCharUseCase(
+                classId = selectedClassId,
+                charName = name
             )
 
             result
-                .onSuccess { _navigateToHome.value = true }
-                .onFailure { onShowErrorDialog(getErrorMessageFrom(it)) }
+                .onSuccess {
+                    _navigationChannel.send(ClassSelectionNavigationEvent.NavigateToHome)
+                }
+                .onFailure { throwable ->
+                    onShowCommonError(throwable)
+                }
         }
     }
 
@@ -124,21 +119,29 @@ class ClassSelectionViewModel @Inject constructor(
         launch {
             val skills = classSkillsQueryUseCase(item.id).first()
 
-            _selectedClassSkills.value = skills.map {
+            val skillUIModels = skills.map {
                 skillMapper.mapToUIModel(it, currentRefreshTime = 0, blocked = false)
             }
 
-            _selectedClassName.value = item.name
+            _internalState.update {
+                it.copy(
+                    selectedClassSkills = skillUIModels,
+                    selectedClassName = item.name
+                )
+            }
         }
     }
 
     fun onDismissSkillsBottomSheet() {
-        _selectedClassSkills.value = null
-        _selectedClassName.value = null
+        _internalState.update {
+            it.copy(
+                selectedClassSkills = null,
+                selectedClassName = null
+            )
+        }
     }
 
-    fun onNavigatedToHome() {
-        _navigateToHome.value = false
+    private fun mapDomainToUIModelList(classes: List<ClassSelection>): List<SelectionItemUIModel> {
+        return classes.map { classMapper.mapToUIModel(it) }
     }
-
 }
