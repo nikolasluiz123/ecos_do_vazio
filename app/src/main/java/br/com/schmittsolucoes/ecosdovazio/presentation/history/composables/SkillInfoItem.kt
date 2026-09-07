@@ -41,7 +41,7 @@ fun SkillInfoItem(
     description: String,
     blocked: Boolean,
     modifier: Modifier = Modifier,
-    filterQuality: FilterQuality = FilterQuality.Medium,
+    filterQuality: FilterQuality = FilterQuality.Low,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),

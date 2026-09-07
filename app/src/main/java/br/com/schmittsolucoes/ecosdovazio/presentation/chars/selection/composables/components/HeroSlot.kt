@@ -112,7 +112,7 @@ private fun HeroImage(image: Int) {
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop,
-        filterQuality = FilterQuality.Medium,
+        filterQuality = FilterQuality.Low,
     )
 }
 

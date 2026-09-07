@@ -68,7 +68,7 @@ fun SelectionCard(
                             .weight(1f)
                             .clip(ShapeDefaults.Small),
                         contentScale = ContentScale.Crop,
-                        filterQuality = FilterQuality.Medium,
+                        filterQuality = FilterQuality.Low,
                     )
 
                     ClassSelectionDivider(
