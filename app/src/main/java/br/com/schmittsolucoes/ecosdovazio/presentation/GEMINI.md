@@ -56,8 +56,40 @@ Toda tela é composta por um arquivo com o sufixo `Screen` (ex.: `CharSelectionS
   @Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO)
   @Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES)
   ```
-- **Dados Realistas**: Os dados passados nos previews devem refletir cenários o mais reais possível.
-- **`PreviewData`**: Crie objetos/arquivos com o sufixo `PreviewData` (ex.: `CharSelectionPreviewData.kt`) para centralizar as instâncias de `UIState` e objetos simulados utilizados nosPreviews.
+- **Previews Multi-Dispositivo para Telas (`Screen`)**: Em composables de tela (`<Conceito>Screen.kt`), é **obrigatório** declarar previews especificando diferentes dispositivos e form factors (ex.: `device = Devices.PHONE`, `device = Devices.FOLDABLE`, `device = Devices.TABLET`).
+  - **Importância**: O aplicativo adota layout adaptativo via `WindowSizeClass`. Criar previews com diferentes dispositivos permite validar visualmente a resposta da UI em múltiplos tamanhos de tela (mudança no número de colunas do grid, adaptação do layout, distribuição de espaço e usabilidade em smartphones, dobráveis e tablets) diretamente no Compose Preview do Android Studio, eliminando a necessidade de rodar emuladores para cada tamanho de dispositivo.
+  - **Cálculo de `WindowSizeClass` nos Previews**: Utilize `@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)` e calcule a `WindowSizeClass` dinamicamente com base nas dimensões do container para repassar à tela:
+  ```kotlin
+  @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+  @Preview(
+      name = "Phone - Compact (2 Columns) - Light",
+      device = Devices.PHONE,
+      uiMode = UI_MODE_NIGHT_NO,
+      showBackground = true,
+  )
+  @Preview(
+      name = "Phone - Compact (2 Columns) - Dark",
+      device = Devices.PHONE,
+      uiMode = UI_MODE_NIGHT_YES,
+      showBackground = true,
+  )
+  @Composable
+  private fun CharSkillsScreenPreviewPhone() {
+      val containerSize = LocalWindowInfo.current.containerSize
+      val windowSizeClass = WindowSizeClass.calculateFromSize(
+          DpSize(containerSize.width.dp, containerSize.height.dp),
+      )
+
+      EcosDoVazioTheme {
+          CharSkillsScreen(
+              state = CharSkillsPreviewData.uiStateLoaded,
+              windowSizeClass = windowSizeClass,
+          )
+      }
+  }
+  ```
+- **Dados Realistas**: Os dados passados nos previews devem refletir cenários o mais reais possível (incluindo estados de sucesso, seleção, carregamento e erro).
+- **`PreviewData`**: Crie objetos/arquivos com o sufixo `PreviewData` (ex.: `CharSkillsPreviewData.kt`) para centralizar as instâncias de `UIState` e objetos simulados utilizados nos Previews.
 
 ---
 

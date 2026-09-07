@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.skills.composables
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,9 +22,11 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.pictureTextHighlightBackground
 
@@ -52,7 +56,7 @@ fun CharSkillItem(
             contentDescription = skill.name,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
-            filterQuality = FilterQuality.Medium,
+            filterQuality = FilterQuality.Low,
             colorFilter = if (skill.blocked) {
                 ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
             } else null,
@@ -73,5 +77,27 @@ fun CharSkillItem(
                 textAlign = TextAlign.Center
             )
         }
+    }
+}
+
+@Preview(name = "Light Mode - Unlocked", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode - Unlocked", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun CharSkillItemUnlockedPreview() {
+    EcosDoVazioTheme {
+        CharSkillItem(
+            skill = CharSkillsPreviewData.skillBastion
+        )
+    }
+}
+
+@Preview(name = "Light Mode - Blocked", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode - Blocked", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun CharSkillItemBlockedPreview() {
+    EcosDoVazioTheme {
+        CharSkillItem(
+            skill = CharSkillsPreviewData.skillWhirlwind
+        )
     }
 }

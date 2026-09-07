@@ -1,7 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.skills
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttributes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
@@ -12,7 +11,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetAvailableAttri
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetailsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.CharMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
@@ -20,11 +18,15 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class CharSkillsInternalState(
+    val errorMessage: String? = null,
+    val selectedSkill: CharSkillDetailsUIModel? = null,
+)
 
 @HiltViewModel
 class CharSkillsViewModel @Inject constructor(
@@ -35,32 +37,29 @@ class CharSkillsViewModel @Inject constructor(
     private val incrementAttributeUseCase: IncrementAttributeUseCase,
     private val decrementAttributeUseCase: DecrementAttributeUseCase,
     private val skillMapper: SkillMapper,
-    private val charMapper: CharMapper
+    private val charMapper: CharMapper,
 ) : CommonViewModel() {
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    private val _selectedSkill = MutableStateFlow<CharSkillDetailsUIModel?>(null)
+    private val _internalState = MutableStateFlow(CharSkillsInternalState())
 
     val uiState: StateFlow<CharSkillsUIState> = combine(
-        _errorMessage,
-        _selectedSkill,
+        _internalState,
         charSkillsDetailsQueryUseCase(),
         getAvailableAttributesUseCase(),
-        charAttributesQueryUseCase()
-    ) { errorMessage, selectedSkill, skills, availablePoints, charAttributes ->
+        charAttributesQueryUseCase(),
+    ) { internalState, skills, availablePoints, charAttributes ->
+        val selectedSkill = internalState.selectedSkill
         val selectedSkillAttributes = getSelectedSkillAttributes(selectedSkill, charAttributes, availablePoints)
 
         CharSkillsUIState(
-            errorMessage = errorMessage,
+            errorMessage = internalState.errorMessage,
             skills = mapCharSkillDetailsToUIModel(skills),
             selectedSkill = selectedSkill,
             availablePoints = availablePoints,
-            selectedSkillAttributes = selectedSkillAttributes
+            selectedSkillAttributes = selectedSkillAttributes,
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
-        initialValue = CharSkillsUIState()
+    }.stateInWithCommonError(
+        initialValue = CharSkillsUIState(),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
@@ -68,19 +67,19 @@ class CharSkillsViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     fun onSelectSkill(skill: CharSkillDetailsUIModel) {
-        _selectedSkill.value = skill
+        _internalState.update { it.copy(selectedSkill = skill) }
     }
 
     fun onDismissSkillDetails() {
-        _selectedSkill.value = null
+        _internalState.update { it.copy(selectedSkill = null) }
     }
 
     fun onIncrementAttribute(identifier: AttributeIdentifier) {
@@ -98,9 +97,9 @@ class CharSkillsViewModel @Inject constructor(
     private fun getSelectedSkillAttributes(
         selectedSkill: CharSkillDetailsUIModel?,
         charAttributes: CharAttributes?,
-        availablePoints: Long
+        availablePoints: Long,
     ): List<CharAttributesUIModel> {
-        if (selectedSkill == null || charAttributes == null) return emptyList()
+        if ((selectedSkill == null) || (charAttributes == null)) return emptyList()
 
         val requiredSkillAttributes = selectedSkill.attributes.filter { it.attribute > 0 }
         val requiredSkillAttributeIdentifiers = requiredSkillAttributes.map { it.id }
@@ -118,7 +117,7 @@ class CharSkillsViewModel @Inject constructor(
                 identifiedCharAttribute = charAttribute,
                 progress = progress,
                 canIncrement = availablePoints > 0,
-                canDecrement = charAttribute.attribute.charValue > 0
+                canDecrement = charAttribute.attribute.charValue > 0,
             )
         }
     }

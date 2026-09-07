@@ -11,7 +11,7 @@ Para garantir consistência técnica e conformidade durante a criação e manute
 - [Padrões da Camada de Presentation](app/src/main/java/br/com/schmittsolucoes/ecosdovazio/presentation/GEMINI.md)
   - Organização e divisão de pacotes por conceitos (`composables/`, `components/`, `model/`, `navigation/`).
   - Padrão de telas **Stateful** e **Stateless** com subdivisão em composables menores.
-  - Obrigatoriedade de **Previews** em Light Mode e Dark Mode alimentados por `PreviewData`.
+  - Obrigatoriedade de **Previews** em Light Mode e Dark Mode alimentados por `PreviewData`, com suporte **multi-dispositivo** (`PHONE`, `FOLDABLE`, `TABLET`) para validar layouts adaptativos em telas (`Screen`).
   - Convenções de **ViewModel** estendendo `CommonViewModel`, utilizando `InternalState`, `NavigationEvent`, `ObserveAsEvents` e `stateInWithCommonError`.
   - Padrões visuais com **Material 3 Expressive** e gerenciamento de cores via `Color.kt` e `Theme.kt`.
   - Estrutura de **Navegação** fortemente tipada com `Route`, extensores de `NavGraphBuilder`, `NavController` e integração no `AppNavHost.kt`.
@@ -22,4 +22,4 @@ Para garantir consistência técnica e conformidade durante a criação e manute
 
 1. **Localização de Padrões**: Antes de realizar alterações em um pacote ou criar novas telas/componentes, navegue até a documentação `GEMINI.md` correspondente àquela camada para seguir rigorosamente os padrões do projeto.
 2. **Reuso de Padrões de Estado**: Mantenha a consistência de gerenciamento de estado e navegação sem redefinir abordagens fora das já estabelecidas.
-3. **Manutenção dos Previews**: Ao implementar ou alterar qualquer componente visual, garanta a criação/atualização dos previews para temas claro e escuro.
+3. **Manutenção dos Previews**: Ao implementar ou alterar qualquer componente visual ou tela, garanta a criação/atualização dos previews para temas claro e escuro e, no caso de telas, valide também em múltiplos dispositivos (`PHONE`, `FOLDABLE`, `TABLET`).
