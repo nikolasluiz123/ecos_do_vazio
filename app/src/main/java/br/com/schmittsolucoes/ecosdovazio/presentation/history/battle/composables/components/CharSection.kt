@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
 
@@ -133,12 +135,15 @@ private fun BoxScope.CharInfo(char: BattleCharUIModel, containerWidth: Dp) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CharItemPreview() {
-    CharItem(
-        char = HistoryModeBattlePreviewData.mockChar,
-        onStatusClick = {},
-        modifier = Modifier.height(300.dp)
-    )
+    EcosDoVazioTheme {
+        CharItem(
+            char = HistoryModeBattlePreviewData.mockChar,
+            onStatusClick = {},
+            modifier = Modifier.height(300.dp)
+        )
+    }
 }

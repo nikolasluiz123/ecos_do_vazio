@@ -2,7 +2,6 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.SnackbarManager
@@ -36,7 +35,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkills
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
@@ -51,12 +49,24 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.SkillMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class HistoryModeBattleInternalState(
+    val errorMessage: String? = null,
+    val selectedMobId: String? = null,
+    val selectedSkill: CharSkillUIModel? = null,
+    val charHealth: Long? = null,
+    val mobsHealth: Map<String, Long> = emptyMap(),
+    val mobsActiveStatus: Map<String, List<ActiveStatusUIModel>> = emptyMap(),
+    val charActiveStatus: List<ActiveStatusUIModel> = emptyList(),
+    val skillsRefreshTime: Map<String, Int> = emptyMap(),
+    val actualRound: Long = 1,
+    val shouldPop: Boolean = false,
+    val selectedDot: ActiveStatusUIModel? = null,
+)
 
 @HiltViewModel
 class HistoryModeBattleViewModel @Inject constructor(
@@ -84,100 +94,63 @@ class HistoryModeBattleViewModel @Inject constructor(
     getCharBattleUseCase: GetCharBattleUseCase,
     charDamageSkillsQueryUseCase: CharDamageSkillsQueryUseCase,
     charBuffSkillsQueryUseCase: CharBuffSkillsQueryUseCase,
-    charDebuffSkillsQueryUseCase: CharDebuffSkillsQueryUseCase
+    charDebuffSkillsQueryUseCase: CharDebuffSkillsQueryUseCase,
 ) : CommonViewModel() {
 
     private val route = savedStateHandle.toRoute<HistoryModeBattleRoute>()
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    private val _isLoading = MutableStateFlow(false)
-    private val _selectedMobId = MutableStateFlow<String?>(null)
-    private val _selectedSkill = MutableStateFlow<CharSkillUIModel?>(null)
-    private val _charHealth = MutableStateFlow<Long?>(null)
-    private val _mobsHealth = MutableStateFlow<Map<String, Long>>(emptyMap())
-    private val _mobsActiveStatus = MutableStateFlow<Map<String, List<ActiveStatusUIModel>>>(emptyMap())
-    private val _charActiveStatus = MutableStateFlow<List<ActiveStatusUIModel>>(emptyList())
-    private val _skillsRefreshTime = MutableStateFlow<Map<String, Int>>(emptyMap())
-    private val _actualRound = MutableStateFlow<Long>(1)
-    private val _shouldPop = MutableStateFlow(false)
-    private val _selectedDot = MutableStateFlow<ActiveStatusUIModel?>(null)
+    private val _internalState = MutableStateFlow(HistoryModeBattleInternalState())
 
     private var isPhaseStarted = false
 
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HistoryModeBattleUIState> = combine(
-        _errorMessage,
-        _isLoading,
         mobsFromPhaseQueryUseCase(route.phaseId),
         getCharBattleUseCase(),
         charDamageSkillsQueryUseCase(),
         charBuffSkillsQueryUseCase(),
         charDebuffSkillsQueryUseCase(),
-        _selectedMobId,
-        _selectedSkill,
-        _mobsHealth,
-        _mobsActiveStatus,
-        _charActiveStatus,
-        _skillsRefreshTime,
-        _charHealth,
-        _actualRound,
-        _shouldPop,
-        _selectedDot
+        _internalState,
     ) { flows ->
-        val errorMessage = flows[0] as String?
-        val isLoading = flows[1] as Boolean
-        val mobs = flows[2] as List<BattleMob>
-        val char = flows[3] as BattleChar
-        val damageSkills = flows[4] as List<CharSkill>
-        val buffSkills = flows[5] as List<CharSkill>
-        val debuffSkills = flows[6] as List<CharSkill>
-        val selectedMobId = flows[7] as String?
-        val selectedSkill = flows[8] as CharSkillUIModel?
-        val mobsHealth = flows[9] as Map<String, Long>
-        val mobsActiveStatus = flows[10] as Map<String, List<ActiveStatusUIModel>>
-        val charActiveStatus = flows[11] as List<ActiveStatusUIModel>
-        val skillsRefreshTime = flows[12] as Map<String, Int>
-        val charHealth = flows[13] as Long?
-        val actualRound = flows[14] as Long
-        val shouldPop = flows[15] as Boolean
-        val selectedDot = flows[16] as ActiveStatusUIModel?
+        val mobs = flows[0] as List<BattleMob>
+        val char = flows[1] as BattleChar
+        val damageSkills = flows[2] as List<CharSkill>
+        val buffSkills = flows[3] as List<CharSkill>
+        val debuffSkills = flows[4] as List<CharSkill>
+        val internalState = flows[5] as HistoryModeBattleInternalState
 
-        val uiModelMobs = mapBattleMobsToUIModel(mobs, mobsHealth, mobsActiveStatus, skillsRefreshTime)
-        val selectedMob = uiModelMobs.find { it.phaseMobId == selectedMobId } ?: uiModelMobs.firstOrNull()
+        val uiModelMobs = mapBattleMobsToUIModel(mobs, internalState.mobsHealth, internalState.mobsActiveStatus, internalState.skillsRefreshTime)
+        val selectedMob = uiModelMobs.find { it.phaseMobId == internalState.selectedMobId } ?: uiModelMobs.firstOrNull()
         val mobInfo = selectedMob?.let { battleInfoMapper.mapToDomainInfo(it) }
 
         val actualCharInfo = battleInfoMapper.mapToDomainInfo(
-            mapBattleCharToUIModel(char, charHealth, charActiveStatus)
+            mapBattleCharToUIModel(char, internalState.charHealth, internalState.charActiveStatus),
         )
 
         val uiModelChar = mapBattleCharToUIModel(
             char = char,
-            charHealth = charHealth,
-            charActiveStatus = charActiveStatus,
-            damageSkills = mapCharSkillsToUIModel(char, actualCharInfo, damageSkills, skillsRefreshTime, mobInfo),
-            buffSkills = mapCharSkillsToUIModel(char, actualCharInfo, buffSkills, skillsRefreshTime, mobInfo),
-            debuffSkills = mapCharSkillsToUIModel(char, actualCharInfo, debuffSkills, skillsRefreshTime, mobInfo)
+            charHealth = internalState.charHealth,
+            charActiveStatus = internalState.charActiveStatus,
+            damageSkills = mapCharSkillsToUIModel(char, actualCharInfo, damageSkills, internalState.skillsRefreshTime, mobInfo),
+            buffSkills = mapCharSkillsToUIModel(char, actualCharInfo, buffSkills, internalState.skillsRefreshTime, mobInfo),
+            debuffSkills = mapCharSkillsToUIModel(char, actualCharInfo, debuffSkills, internalState.skillsRefreshTime, mobInfo),
         )
 
         HistoryModeBattleUIState(
             phaseId = route.phaseId,
-            errorMessage = errorMessage,
-            shouldPop = shouldPop,
-            isLoading = isLoading,
+            errorMessage = internalState.errorMessage,
+            shouldPop = internalState.shouldPop,
             mobs = uiModelMobs,
             char = uiModelChar,
             selectedMob = selectedMob,
-            selectedSkill = selectedSkill,
-            selectedActiveStatus = selectedDot,
-            actualRound = actualRound,
-            isEnemyRound = isEnemyRound(actualRound)
+            selectedSkill = internalState.selectedSkill,
+            selectedActiveStatus = internalState.selectedDot,
+            actualRound = internalState.actualRound,
+            isEnemyRound = isEnemyRound(internalState.actualRound),
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
+    }.stateInWithCommonError(
         initialValue = HistoryModeBattleUIState(
             phaseId = route.phaseId,
-            isLoading = true
         )
     )
 
@@ -189,31 +162,31 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     fun onMobClick(mob: BattleMobUIModel) {
-        _selectedMobId.value = mob.phaseMobId
+        _internalState.update { it.copy(selectedMobId = mob.phaseMobId) }
     }
 
     fun onSkillLongClick(skill: CharSkillUIModel) {
-        _selectedSkill.value = skill
+        _internalState.update { it.copy(selectedSkill = skill) }
     }
 
     fun onDismissSkillTooltip() {
-        _selectedSkill.value = null
+        _internalState.update { it.copy(selectedSkill = null) }
     }
 
     fun onStatusClick(dot: ActiveStatusUIModel) {
-        _selectedDot.value = dot
+        _internalState.update { it.copy(selectedDot = dot) }
     }
 
     fun onDismissDotTooltip() {
-        _selectedDot.value = null
+        _internalState.update { it.copy(selectedDot = null) }
     }
 
     fun onSkillClick(skill: CharSkillUIModel) {
@@ -335,35 +308,48 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun registerMobActiveStatus(mob: BattleMobUIModel, newStatus: ActiveStatusUIModel) {
-        val currentActiveStatus = _mobsActiveStatus.value[mob.phaseMobId] ?: emptyList()
+        _internalState.update { state ->
+            val currentActiveStatus = state.mobsActiveStatus[mob.phaseMobId] ?: emptyList()
 
-        if (currentActiveStatus.none { it.skillId == newStatus.skillId }) {
-            _mobsActiveStatus.value = _mobsActiveStatus.value.toMutableMap().apply {
-                put(mob.phaseMobId, currentActiveStatus + newStatus)
+            if (currentActiveStatus.none { it.skillId == newStatus.skillId }) {
+                state.copy(
+                    mobsActiveStatus = state.mobsActiveStatus + (mob.phaseMobId to (currentActiveStatus + newStatus))
+                )
+            } else {
+                state
             }
         }
     }
 
     private fun registerCharActiveStatus(newStatus: ActiveStatusUIModel) {
-        if (_charActiveStatus.value.none { it.skillId == newStatus.skillId }) {
-            _charActiveStatus.value += newStatus
+        _internalState.update { state ->
+            if (state.charActiveStatus.none { it.skillId == newStatus.skillId }) {
+                state.copy(charActiveStatus = state.charActiveStatus + newStatus)
+            } else {
+                state
+            }
         }
     }
 
     private fun updateSkillRefreshTime(skillId: String, refreshTime: Int) {
-        _skillsRefreshTime.value = _skillsRefreshTime.value.toMutableMap().apply {
-            put(skillId, refreshTime)
+        _internalState.update { state ->
+            state.copy(skillsRefreshTime = state.skillsRefreshTime + (skillId to refreshTime))
         }
     }
 
     private fun decrementSkillsRefreshTime() {
-        _skillsRefreshTime.value = _skillsRefreshTime.value.mapValues { (_, time) ->
-            if (time > 0) time - 1 else 0
-        }.filterValues { it > 0 }
+        _internalState.update { state ->
+            val updatedMap = state.skillsRefreshTime.mapValues { (_, time) ->
+                if (time > 0) time - 1 else 0
+            }.filterValues { it > 0 }
+
+            state.copy(skillsRefreshTime = updatedMap)
+        }
     }
 
     private fun updateMobHealth(selectedMob: BattleMobUIModel, newEnemyHealth: Long) {
-        var currentHealths = _mobsHealth.value
+        val currentState = _internalState.value
+        var currentHealths = currentState.mobsHealth
 
         if (currentHealths.isEmpty()) {
             currentHealths = uiState.value.mobs.associate { it.phaseMobId to it.actualHealth }
@@ -373,9 +359,8 @@ class HistoryModeBattleViewModel @Inject constructor(
             put(selectedMob.phaseMobId, newEnemyHealth)
         }
 
-        _mobsHealth.value = updatedHealths
-
-        val currentSelectedId = _selectedMobId.value ?: uiState.value.mobs.firstOrNull()?.phaseMobId
+        val currentSelectedId = currentState.selectedMobId ?: uiState.value.mobs.firstOrNull()?.phaseMobId
+        var newSelectedMobId = currentState.selectedMobId
 
         if (newEnemyHealth <= 0 && selectedMob.phaseMobId == currentSelectedId) {
             val nextMob = uiState.value.mobs.firstOrNull { mob ->
@@ -384,13 +369,20 @@ class HistoryModeBattleViewModel @Inject constructor(
             }
 
             if (nextMob != null) {
-                _selectedMobId.value = nextMob.phaseMobId
+                newSelectedMobId = nextMob.phaseMobId
             }
+        }
+
+        _internalState.update {
+            it.copy(
+                mobsHealth = updatedHealths,
+                selectedMobId = newSelectedMobId
+            )
         }
     }
 
     private fun updateCharHealth(newHealth: Long) {
-        _charHealth.value = newHealth
+        _internalState.update { it.copy(charHealth = newHealth) }
     }
 
     fun onRoundUpdate() {
@@ -415,7 +407,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                     mobs = uiState.value.mobs.map { battleMapper.mapToDomain(it) },
                     onMobUseSkill = ::handleMobSkillResult
                 )
-                
+
                 if (!allMobsIsDead()) {
                     incrementRound()
                 }
@@ -428,7 +420,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private suspend fun tryFinishBattle() {
-        if (_shouldPop.value) return
+        if (_internalState.value.shouldPop) return
 
         val char = uiState.value.char ?: return
 
@@ -452,7 +444,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                 snackbarManager.showSnackbar(message)
             }
 
-            _shouldPop.value = true
+            _internalState.update { it.copy(shouldPop = true) }
         }
     }
 
@@ -464,7 +456,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         val char = uiState.value.char ?: return
         val charInfo = battleInfoMapper.mapToDomainInfo(char)
         val mobsInfo = uiState.value.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
-        
+
         applyMobsDoTDamage(charInfo, mobsInfo)
         applyCharDoTDamage(charInfo, mobsInfo)
     }
@@ -490,7 +482,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun applyMobsBuff(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyMobsBuffUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _mobsActiveStatus.update { currentMap ->
+        _internalState.update { state ->
+            val currentMap = state.mobsActiveStatus
             val newMap = currentMap.toMutableMap()
 
             mobsInfo.keys.forEach { phaseMobId ->
@@ -512,14 +505,15 @@ class HistoryModeBattleViewModel @Inject constructor(
                 newMap[phaseMobId] = currentStatus.filterNot { it is MobActiveStatusUIModel.BuffUIModel } + newBuffs
             }
 
-            newMap
+            state.copy(mobsActiveStatus = newMap)
         }
     }
 
     private fun applyCharBuff(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyCharBuffUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _charActiveStatus.update { currentList ->
+        _internalState.update { state ->
+            val currentList = state.charActiveStatus
             val newBuffs = result.buffs.map { buff ->
                 val char = uiState.value.char!!
                 val skill = char.buffSkills.find { it.id == buff.skillId } ?: return@map null
@@ -532,14 +526,15 @@ class HistoryModeBattleViewModel @Inject constructor(
                 )
             }.filterNotNull()
 
-            currentList.filterNot { it is CharActiveStatusUIModel.BuffUIModel } + newBuffs
+            state.copy(charActiveStatus = currentList.filterNot { it is CharActiveStatusUIModel.BuffUIModel } + newBuffs)
         }
     }
 
     private fun applyMobsDoTDamage(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyMobsDoTUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _mobsActiveStatus.update { currentMap ->
+        _internalState.update { state ->
+            val currentMap = state.mobsActiveStatus
             val newMap = currentMap.toMutableMap()
 
             mobsInfo.keys.forEach { phaseMobId ->
@@ -561,7 +556,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                 newMap[phaseMobId] = currentStatus.filterNot { it is CharActiveStatusUIModel.DoTUIModel } + newDots
             }
 
-            newMap
+            state.copy(mobsActiveStatus = newMap)
         }
 
         result.mobsHealth.forEach { (phaseMobId, newHealth) ->
@@ -576,7 +571,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun applyMobsDebuff(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyMobsDebuffUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _mobsActiveStatus.update { currentMap ->
+        _internalState.update { state ->
+            val currentMap = state.mobsActiveStatus
             val newMap = currentMap.toMutableMap()
 
             mobsInfo.keys.forEach { phaseMobId ->
@@ -598,14 +594,15 @@ class HistoryModeBattleViewModel @Inject constructor(
                 newMap[phaseMobId] = currentStatus.filterNot { it is CharActiveStatusUIModel.DebuffUIModel } + newDebuffs
             }
 
-            newMap
+            state.copy(mobsActiveStatus = newMap)
         }
     }
 
     private fun applyCharDoTDamage(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyCharDoTUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _charActiveStatus.update { currentList ->
+        _internalState.update { state ->
+            val currentList = state.charActiveStatus
             val newDots = result.dots.map { dot ->
                 val mob = uiState.value.mobs.find { it.phaseMobId == dot.sourceId }!!
                 val skill = mob.skills.first { it.id == dot.skillId }
@@ -618,7 +615,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                 )
             }
 
-            currentList.filterNot { it is MobActiveStatusUIModel.DoTUIModel } + newDots
+            state.copy(charActiveStatus = currentList.filterNot { it is MobActiveStatusUIModel.DoTUIModel } + newDots)
         }
 
         if (charInfo.actualHealth != result.charHealth) {
@@ -629,7 +626,8 @@ class HistoryModeBattleViewModel @Inject constructor(
     private fun applyCharDebuff(charInfo: BattleCharInfo, mobsInfo: Map<String, BattleMobInfo>) {
         val result = applyCharDebuffUseCase(battleCharInfo = charInfo, mobs = mobsInfo)
 
-        _charActiveStatus.update { currentList ->
+        _internalState.update { state ->
+            val currentList = state.charActiveStatus
             val newDebuffs = result.debuffs.map { debuff ->
                 val mob = uiState.value.mobs.find { it.phaseMobId == debuff.sourceId }!!
                 val skill = mob.skills.first { it.id == debuff.skillId }
@@ -642,7 +640,7 @@ class HistoryModeBattleViewModel @Inject constructor(
                 )
             }
 
-            currentList.filterNot { it is MobActiveStatusUIModel.DebuffUIModel } + newDebuffs
+            state.copy(charActiveStatus = currentList.filterNot { it is MobActiveStatusUIModel.DebuffUIModel } + newDebuffs)
         }
     }
 
@@ -751,7 +749,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun getSelectedMobOrFirst(state: HistoryModeBattleUIState): BattleMobUIModel? {
-        return state.mobs.firstOrNull { it.phaseMobId == _selectedMobId.value } ?: state.mobs.firstOrNull()
+        return state.mobs.firstOrNull { it.phaseMobId == _internalState.value.selectedMobId } ?: state.mobs.firstOrNull()
     }
 
     private fun getMobById(id: String): BattleMobUIModel? {
@@ -847,21 +845,23 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     private fun incrementRound() {
-        _actualRound.value += 1
+        _internalState.update { it.copy(actualRound = it.actualRound + 1) }
     }
 
     private fun charIsDead(): Boolean {
-        val notLoaded = _charHealth.value == null && uiState.value.char?.actualHealth == null
+        val state = _internalState.value
+        val notLoaded = state.charHealth == null && uiState.value.char?.actualHealth == null
         if (notLoaded) return false
 
-        return (_charHealth.value ?: uiState.value.char?.actualHealth ?: 0) <= 0
+        return (state.charHealth ?: uiState.value.char?.actualHealth ?: 0) <= 0
     }
 
     private fun allMobsIsDead(): Boolean {
-        val notLoaded = _mobsHealth.value.isEmpty() && uiState.value.mobs.all { it.actualHealth <= 0 }
+        val state = _internalState.value
+        val notLoaded = state.mobsHealth.isEmpty() && uiState.value.mobs.all { it.actualHealth <= 0 }
         if (notLoaded) return false
 
-        val mobsHealth = _mobsHealth.value.ifEmpty {
+        val mobsHealth = state.mobsHealth.ifEmpty {
             uiState.value.mobs.associate { it.phaseMobId to it.actualHealth }
         }
 

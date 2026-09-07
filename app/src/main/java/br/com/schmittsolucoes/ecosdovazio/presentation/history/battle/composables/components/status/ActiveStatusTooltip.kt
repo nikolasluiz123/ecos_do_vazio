@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
@@ -90,4 +91,16 @@ private fun StatusInfoRow(text: String) {
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
         modifier = Modifier.padding(vertical = 2.dp)
     )
+}
+
+@Preview(name = "Light Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ActiveStatusTooltipPreview() {
+    br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme {
+        ActiveStatusTooltip(
+            status = br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData.mockCharActiveDot,
+            onDismissRequest = {}
+        )
+    }
 }

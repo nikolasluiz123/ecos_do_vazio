@@ -7,7 +7,6 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Char
 
 data class HistoryModeBattleUIState(
     val phaseId: String = "",
-    val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val shouldPop: Boolean = false,
     val mobs: List<BattleMobUIModel> = emptyList(),
@@ -16,5 +15,5 @@ data class HistoryModeBattleUIState(
     val selectedSkill: CharSkillUIModel? = null,
     val selectedActiveStatus: ActiveStatusUIModel? = null,
     val actualRound: Long = 1,
-    val isEnemyRound: Boolean = false
+    val isEnemyRound: Boolean = false,
 )

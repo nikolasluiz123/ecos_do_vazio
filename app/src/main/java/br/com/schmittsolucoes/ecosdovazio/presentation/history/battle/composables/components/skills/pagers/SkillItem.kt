@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SKILLS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.BattleAsyncImage
@@ -88,6 +89,18 @@ private fun CooldownOverlay(skill: CharSkillUIModel) {
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
+        )
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SkillItemPreview() {
+    br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme {
+        SkillItem(
+            skill = br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData.mockSkillDamage,
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

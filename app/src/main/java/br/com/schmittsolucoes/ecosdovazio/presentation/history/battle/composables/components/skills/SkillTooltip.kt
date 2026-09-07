@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,12 +26,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NegativeStatus
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PositiveStatus
 
@@ -152,5 +156,18 @@ private fun formatSkillDescription(description: String): AnnotatedString {
         if (lastIndex < description.length) {
             append(description.substring(lastIndex))
         }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SkillTooltipPreview() {
+    EcosDoVazioTheme {
+        SkillTooltip(
+            skill = HistoryModeBattlePreviewData.mockSkillDamage,
+            char = HistoryModeBattlePreviewData.mockChar,
+            onDismissRequest = {}
+        )
     }
 }

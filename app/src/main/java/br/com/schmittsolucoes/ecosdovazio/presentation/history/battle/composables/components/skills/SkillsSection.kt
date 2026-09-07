@@ -39,17 +39,17 @@ fun SkillsLazyVerticalGrid(
     modifier: Modifier = Modifier,
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
-    onDismissSkillTooltip: () -> Unit = {}
+    onDismissSkillTooltip: () -> Unit = {},
 ) {
     val pagerState = rememberSkillsPagerState()
     val density = LocalDensity.current
     val exclusionHeightPx = with(density) { 200.dp.toPx() }
 
     AnimatedVisibility(
-        visible = !state.isLoading,
+        visible = state.char != null,
         enter = VerticalGridEnterTransition,
         exit = VerticalGridExitTransition,
-        modifier = modifier
+        modifier = modifier,
     ) {
         SkillsSurface {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -71,11 +71,11 @@ fun SkillsLazyVerticalGrid(
                                 left = 0f,
                                 top = top,
                                 right = width,
-                                bottom = bottom
+                                bottom = bottom,
                             )
                         },
                     onSkillClick = onSkillClick,
-                    onSkillLongClick = onSkillLongClick
+                    onSkillLongClick = onSkillLongClick,
                 )
             }
         }
@@ -101,7 +101,7 @@ fun SkillsLazyHorizontalGrid(
     val pagerState = rememberSkillsPagerState()
 
     AnimatedVisibility(
-        visible = !state.isLoading,
+        visible = state.char != null,
         enter = HorizontalGridEnterTransition,
         exit = HorizontalGridExitTransition,
         modifier = modifier

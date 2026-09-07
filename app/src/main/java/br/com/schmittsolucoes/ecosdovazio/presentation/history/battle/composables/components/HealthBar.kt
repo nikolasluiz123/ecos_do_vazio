@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedEnd
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarRedStart
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HealthBarTrack
@@ -102,13 +104,16 @@ internal fun HealthBar(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun HealthBarPreview() {
-    HealthBar(
-        actualHealth = 75,
-        totalHealth = 100,
-        progress = 0.75f,
-        modifier = Modifier.padding(16.dp)
-    )
+    EcosDoVazioTheme {
+        HealthBar(
+            actualHealth = 75,
+            totalHealth = 100,
+            progress = 0.75f,
+            modifier = Modifier.padding(16.dp)
+        )
+    }
 }

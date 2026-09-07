@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -28,11 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.R
@@ -73,7 +78,7 @@ internal const val WEIGHT_DEFAULT = 1f
 fun HistoryModeBattleScreen(
     viewModel: HistoryModeBattleViewModel,
     windowSizeClass: WindowSizeClass,
-    onPop: () -> Unit
+    onPop: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -96,7 +101,7 @@ fun HistoryModeBattleScreen(
         onDismissDotTooltip = viewModel::onDismissDotTooltip,
         onSkillClick = viewModel::onSkillClick,
         onSkillLongClick = viewModel::onSkillLongClick,
-        onDismissSkillTooltip = viewModel::onDismissSkillTooltip
+        onDismissSkillTooltip = viewModel::onDismissSkillTooltip,
     )
 }
 
@@ -110,7 +115,7 @@ fun HistoryModeBattleScreen(
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
-    onDismissSkillTooltip: () -> Unit = {}
+    onDismissSkillTooltip: () -> Unit = {},
 ) {
     val isExpandedWidth = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
     val isCompactHeight = windowSizeClass?.heightSizeClass == WindowHeightSizeClass.Compact
@@ -121,7 +126,7 @@ fun HistoryModeBattleScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BackgroundGradient),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             if (useSideBySide) {
                 SideBySideLayout(
@@ -134,7 +139,7 @@ fun HistoryModeBattleScreen(
                     onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
-                    onDismissSkillTooltip = onDismissSkillTooltip
+                    onDismissSkillTooltip = onDismissSkillTooltip,
                 )
             } else {
                 StackLayout(
@@ -146,14 +151,14 @@ fun HistoryModeBattleScreen(
                     onDismissDotTooltip = onDismissDotTooltip,
                     onSkillClick = onSkillClick,
                     onSkillLongClick = onSkillLongClick,
-                    onDismissSkillTooltip = onDismissSkillTooltip
+                    onDismissSkillTooltip = onDismissSkillTooltip,
                 )
             }
 
             state.errorMessage?.let { message ->
                 ErrorDialog(
                     message = message,
-                    onDismiss = onDismissErrorDialog
+                    onDismiss = onDismissErrorDialog,
                 )
             }
         }
@@ -171,7 +176,7 @@ internal fun StackLayout(
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
-    onDismissSkillTooltip: () -> Unit = {}
+    onDismissSkillTooltip: () -> Unit = {},
 ) {
     val layoutDirection = LocalLayoutDirection.current
 
@@ -186,9 +191,9 @@ internal fun StackLayout(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = paddingValues.calculateEndPadding(layoutDirection)
+                    end = paddingValues.calculateEndPadding(layoutDirection),
                 ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             EnemySection(
                 state = state,
@@ -196,12 +201,12 @@ internal fun StackLayout(
                 onStatusClick = onStatusClick,
                 onDismissDotTooltip = onDismissDotTooltip,
                 windowSizeClass = windowSizeClass,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             RoundViewer(
                 actualRound = state.actualRound,
-                isEnemyRound = state.isEnemyRound
+                isEnemyRound = state.isEnemyRound,
             )
 
             CharSection(
@@ -209,7 +214,7 @@ internal fun StackLayout(
                 onStatusClick = onStatusClick,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             )
         }
 
@@ -220,7 +225,7 @@ internal fun StackLayout(
                 .weight(0.2f),
             onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
-            onDismissSkillTooltip = onDismissSkillTooltip
+            onDismissSkillTooltip = onDismissSkillTooltip,
         )
     }
 }
@@ -237,13 +242,13 @@ internal fun SideBySideLayout(
     onDismissDotTooltip: () -> Unit = {},
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
-    onDismissSkillTooltip: () -> Unit = {}
+    onDismissSkillTooltip: () -> Unit = {},
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val enemyWeight = getEnemyWeight(isExpandedWidth, state)
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Row(
             modifier = Modifier
@@ -253,7 +258,7 @@ internal fun SideBySideLayout(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = paddingValues.calculateStartPadding(layoutDirection),
-                    end = SIDE_BY_SIDE_SPACING
+                    end = SIDE_BY_SIDE_SPACING,
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -365,40 +370,189 @@ private fun getEnemyWeight(
     }
 }
 
-@Preview(showBackground = true, device = Devices.PHONE)
-@Preview(showBackground = true, device = Devices.PHONE, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Compact - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Compact - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
 @Composable
-private fun HistoryModeBattleScreenStackPreview() {
+private fun HistoryModeBattleScreenPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
     EcosDoVazioTheme {
         HistoryModeBattleScreen(
-            state = HistoryModeBattlePreviewData.uiState
+            state = HistoryModeBattlePreviewData.uiState,
+            windowSizeClass = windowSizeClass,
         )
     }
 }
 
-@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape")
-@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,orientation=landscape", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Foldable - Medium - Light",
+    device = Devices.FOLDABLE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Foldable - Medium - Dark",
+    device = Devices.FOLDABLE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
 @Composable
-private fun HistoryModeBattleScreenSideBySidePreview() {
+private fun HistoryModeBattleScreenPreviewFoldable() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
     EcosDoVazioTheme {
-        Scaffold { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(BackgroundGradient)
-                    .padding(paddingValues)
-            ) {
-                SideBySideLayout(
-                    isExpandedWidth = true,
-                    state = HistoryModeBattlePreviewData.uiState,
-                    onMobClick = {},
-                    onDotClick = {},
-                    onDismissDotTooltip = {},
-                    windowSizeClass = null,
-                    paddingValues = paddingValues
-                )
-            }
-        }
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiState,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Tablet - Expanded - Light",
+    device = Devices.TABLET,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Tablet - Expanded - Dark",
+    device = Devices.TABLET,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryModeBattleScreenPreviewTablet() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiState,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Selected Skill - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Selected Skill - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryModeBattleScreenWithSelectedSkillPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiStateWithSelectedSkill,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Selected Active Status - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Selected Active Status - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryModeBattleScreenWithSelectedStatusPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiStateWithSelectedActiveStatus,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Error State - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Error State - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryModeBattleScreenWithErrorPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiStateWithError,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@Preview(name = "Round Viewer - Player Round - Light", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Round Viewer - Player Round - Dark", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun RoundViewerPlayerPreview() {
+    EcosDoVazioTheme {
+        RoundViewer(actualRound = 1, isEnemyRound = false)
+    }
+}
+
+@Preview(name = "Round Viewer - Enemy Round - Light", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Round Viewer - Enemy Round - Dark", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun RoundViewerEnemyPreview() {
+    EcosDoVazioTheme {
+        RoundViewer(actualRound = 2, isEnemyRound = true)
     }
 }
 

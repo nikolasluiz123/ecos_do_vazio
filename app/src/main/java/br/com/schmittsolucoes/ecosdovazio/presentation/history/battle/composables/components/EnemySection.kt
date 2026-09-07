@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
@@ -69,6 +70,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Batt
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NegativeStatus
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
@@ -355,24 +357,30 @@ private fun BoxWithConstraintsScope.EnemyInfo(mob: BattleMobUIModel, containerWi
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Enemy Item - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Enemy Item - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun EnemyItemPreview() {
-    EnemyItem(
-        mob = HistoryModeBattlePreviewData.mockMobWarrior,
-        modifier = Modifier.height(300.dp)
-    )
+    EcosDoVazioTheme {
+        EnemyItem(
+            mob = HistoryModeBattlePreviewData.mockMobWarrior,
+            modifier = Modifier.height(300.dp)
+        )
+    }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Enemy Section - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Enemy Section - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun EnemySectionPreview() {
-    EnemySection(
-        state = HistoryModeBattlePreviewData.uiState,
-        onMobClick = {},
-        onStatusClick = {},
-        onDismissDotTooltip = {},
-        windowSizeClass = null,
-        modifier = Modifier.height(400.dp)
-    )
+    EcosDoVazioTheme {
+        EnemySection(
+            state = HistoryModeBattlePreviewData.uiState,
+            onMobClick = {},
+            onStatusClick = {},
+            onDismissDotTooltip = {},
+            windowSizeClass = null,
+            modifier = Modifier.height(400.dp)
+        )
+    }
 }

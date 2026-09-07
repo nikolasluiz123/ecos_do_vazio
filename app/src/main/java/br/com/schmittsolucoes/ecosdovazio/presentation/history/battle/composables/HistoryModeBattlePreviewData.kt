@@ -10,7 +10,6 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedMobSkillInfo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleUIState
-import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleMobUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharActiveStatusUIModel
@@ -26,9 +25,9 @@ object HistoryModeBattlePreviewData {
         skillInfo = UsedCharSkillInfo.DamageOverTime(
             refreshTime = 3,
             damage = 10,
-            duration = 3
+            duration = 3,
         ),
-        skillImage = R.drawable.skill_golpe_pesado
+        skillImage = R.drawable.skill_golpe_pesado,
     )
 
     val mockMobActiveDot = MobActiveStatusUIModel.DoTUIModel(
@@ -40,10 +39,10 @@ object HistoryModeBattlePreviewData {
             refreshTime = 3,
             damage = 5,
             duration = 2,
-            skillId = "skill_1"
+            skillId = "skill_1",
         ),
         skillImage = R.drawable.skill_furia_de_batalha,
-        sourceId = "1"
+        sourceId = "1",
     )
 
     val mockMobWarrior = BattleMobUIModel(
@@ -60,7 +59,7 @@ object HistoryModeBattlePreviewData {
         healthProgress = 0.75f,
         level = 5,
         attributes = Mob.Attributes(strength = 10, vitality = 8),
-        activeStatus = listOf(mockCharActiveDot, mockCharActiveDot.copy(skillId = "dot_2", skillName = "Sangramento"))
+        activeStatus = listOf(mockCharActiveDot, mockCharActiveDot.copy(skillId = "dot_2", skillName = "Sangramento")),
     )
 
     val mockMobMage = BattleMobUIModel(
@@ -76,7 +75,7 @@ object HistoryModeBattlePreviewData {
         actualHealth = 80,
         healthProgress = 1f,
         level = 4,
-        attributes = Mob.Attributes(intelligence = 12, vitality = 6)
+        attributes = Mob.Attributes(intelligence = 12, vitality = 6),
     )
 
     val mockMobOrc = BattleMobUIModel(
@@ -92,7 +91,7 @@ object HistoryModeBattlePreviewData {
         actualHealth = 150,
         healthProgress = 1f,
         level = 7,
-        attributes = Mob.Attributes(strength = 18, vitality = 15)
+        attributes = Mob.Attributes(strength = 18, vitality = 15),
     )
 
     val mockMobsList = listOf(mockMobWarrior, mockMobMage, mockMobOrc)
@@ -104,7 +103,7 @@ object HistoryModeBattlePreviewData {
         requiredPhysicalResistance = 0,
         requiredMagicResistance = 0,
         requiredVitality = 0,
-        requiredAgility = 0
+        requiredAgility = 0,
     )
 
     val mockSkillDamage = CharSkillUIModel.CommonDamage(
@@ -117,7 +116,7 @@ object HistoryModeBattlePreviewData {
         attributes = mockSkillAttributes,
         currentRefreshTime = 0,
         blocked = false,
-        damage = 50
+        damage = 50,
     )
 
     val mockSkillBuff = CharSkillUIModel.Buff(
@@ -132,7 +131,7 @@ object HistoryModeBattlePreviewData {
         currentRefreshTime = 0,
         blocked = false,
         multiplier = 1.5,
-        duration = 3
+        duration = 3,
     )
 
     val mockChar = BattleCharUIModel(
@@ -154,11 +153,23 @@ object HistoryModeBattlePreviewData {
         agility = CharAttribute(12, 3, null),
         damageSkills = listOf(mockSkillDamage),
         buffSkills = listOf(mockSkillBuff),
-        activeStatus = listOf(mockMobActiveDot)
+        activeStatus = listOf(mockMobActiveDot),
     )
 
     val uiState = HistoryModeBattleUIState(
         mobs = mockMobsList,
         char = mockChar,
+    )
+
+    val uiStateWithSelectedSkill = uiState.copy(
+        selectedSkill = mockSkillDamage
+    )
+
+    val uiStateWithSelectedActiveStatus = uiState.copy(
+        selectedActiveStatus = mockCharActiveDot
+    )
+
+    val uiStateWithError = uiState.copy(
+        errorMessage = "Ocorreu um erro ao carregar os dados da batalha."
     )
 }
