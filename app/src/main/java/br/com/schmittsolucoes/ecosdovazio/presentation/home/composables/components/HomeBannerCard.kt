@@ -4,7 +4,9 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,7 +36,7 @@ fun HomeBannerCard(
     modifier: Modifier = Modifier,
     titleColor: Color = Highlight,
     borderStroke: BorderStroke? = BorderStroke(1.dp, Highlight.copy(alpha = 0.5f)),
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
         modifier = modifier
@@ -48,7 +50,7 @@ fun HomeBannerCard(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

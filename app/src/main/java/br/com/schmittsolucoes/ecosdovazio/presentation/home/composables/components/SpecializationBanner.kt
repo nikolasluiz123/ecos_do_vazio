@@ -34,6 +34,7 @@ fun SpecializationBanner(
             textAlign = TextAlign.Center
         )
 
+        Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.height(16.dp))
 
         FilledHighlightedElevatedButton(

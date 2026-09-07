@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.home.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -13,6 +14,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeScreen(
+    windowSizeClass: WindowSizeClass,
     onNavigateToSpecializationSelection: () -> Unit = {},
     onNavigateToBattle: (String) -> Unit = {},
     onNavigateToMobsInfo: (String) -> Unit = {}
@@ -21,6 +23,7 @@ fun NavGraphBuilder.homeScreen(
         val viewModel = hiltViewModel<HomeViewModel>()
         HomeScreen(
             viewModel = viewModel,
+            windowSizeClass = windowSizeClass,
             onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
             onNavigateToBattle = onNavigateToBattle,
             onNavigateToMobsInfo = onNavigateToMobsInfo

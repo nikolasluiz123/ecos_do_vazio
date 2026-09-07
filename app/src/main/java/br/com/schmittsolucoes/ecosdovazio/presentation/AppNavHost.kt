@@ -76,6 +76,7 @@ fun AppNavHost(
             startDestination = HomeRoute
         ) {
             homeScreen(
+                windowSizeClass = windowSizeClass,
                 onNavigateToSpecializationSelection = navController::navigateToSpecializationSelection,
                 onNavigateToBattle = navController::navigateToHistoryModeBattle,
                 onNavigateToMobsInfo = navController::navigateToHistoryMobsInfo

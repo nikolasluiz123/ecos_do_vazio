@@ -5,8 +5,10 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -40,7 +42,8 @@ fun HistoryBanner(
 ) {
     Box(modifier = modifier) {
         HomeBannerCard(
-            title = stringResource(id = R.string.history_banner_title)
+            title = stringResource(id = R.string.history_banner_title),
+            modifier = Modifier.fillMaxHeight()
         ) {
             if (model.isCompleted) {
                 CompletedLayout(model)
@@ -92,7 +95,7 @@ private fun CompletedLayout(model: LastUnfinishedHistoryPhaseUIModel) {
 }
 
 @Composable
-private fun ProgressLayout(
+private fun ColumnScope.ProgressLayout(
     model: LastUnfinishedHistoryPhaseUIModel,
     onNavigateToBattle: (String) -> Unit
 ) {
@@ -127,6 +130,7 @@ private fun ProgressLayout(
 
     AppProgressBar(progress = { model.progress })
 
+    Spacer(modifier = Modifier.weight(1f))
     Spacer(modifier = Modifier.height(16.dp))
 
     model.phaseId?.let { phaseId ->
