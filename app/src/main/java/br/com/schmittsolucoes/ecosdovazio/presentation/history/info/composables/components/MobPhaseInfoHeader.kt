@@ -55,7 +55,7 @@ internal fun MobPhaseInfoHeader(
                 model = mobPhaseInfo.mobProfileImage,
                 contentDescription = mobPhaseInfo.mobName,
                 modifier = Modifier.fillMaxSize(),
-                filterQuality = FilterQuality.Medium,
+                filterQuality = FilterQuality.Low,
             )
         }
 
