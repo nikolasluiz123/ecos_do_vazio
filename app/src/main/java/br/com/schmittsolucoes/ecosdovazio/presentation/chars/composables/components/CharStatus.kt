@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,36 +14,43 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.CharPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 
 @Composable
 internal fun CharStatus(
     statusInfo: CharStatusUIModel,
-    windowSizeClass: WindowSizeClass
+    windowSizeClass: WindowSizeClass,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
             text = stringResource(R.string.char_status_title),
             style = MaterialTheme.typography.titleMedium.copy(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
-            )
+                fontFamily = FontFamily.Serif,
+            ),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -68,13 +77,13 @@ internal fun CharStatus(
                 .padding(16.dp),
             maxItemsInEachRow = getMaxItemsEachRow(widthSizeClass),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             statusItems.forEach { (labelRes, value) ->
                 StatusItem(
                     label = stringResource(labelRes),
                     value = value,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
@@ -92,20 +101,48 @@ private fun getMaxItemsEachRow(widthSizeClass: WindowWidthSizeClass): Int {
 private fun StatusItem(
     label: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
             text = label.uppercase(),
             style = MaterialTheme.typography.labelLarge.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            ),
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = Highlight,
-            )
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Light Mode",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Dark Mode",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun CharStatusPreview() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        CharStatus(
+            statusInfo = CharPreviewData.statusInfo,
+            windowSizeClass = windowSizeClass,
         )
     }
 }

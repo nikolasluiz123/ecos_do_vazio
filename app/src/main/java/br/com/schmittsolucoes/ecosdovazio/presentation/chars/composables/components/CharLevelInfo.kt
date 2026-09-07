@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.CharPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharLevelInfoUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
 internal fun CharLevelInfo(
@@ -47,6 +52,17 @@ internal fun CharLevelInfo(
         }
         AppProgressBar(
             progress = { levelInfo.progress }
+        )
+    }
+}
+
+@Preview(name = "Light Mode", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Dark Mode", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun CharLevelInfoPreview() {
+    EcosDoVazioTheme {
+        CharLevelInfo(
+            levelInfo = CharPreviewData.levelInfo
         )
     }
 }

@@ -72,6 +72,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResis
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceFactorUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceMaxUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharPhysicalResistanceUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharStatusDataUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetShowSpecializationBannerUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetTotalPointsCountUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
@@ -527,6 +528,23 @@ object UseCaseModule {
         charRepository = charRepository,
         preferencesRepository = preferencesRepository,
         userRepository = userRepository
+    )
+
+    @Provides
+    fun provideGetCharStatusDataUseCase(
+        getCharHPUseCase: GetCharHPUseCase,
+        getCharBaseDamageUseCase: GetCharBaseDamageUseCase,
+        getCharPhysicalResistanceUseCase: GetCharPhysicalResistanceUseCase,
+        getCharMagicResistanceUseCase: GetCharMagicResistanceUseCase,
+        getCharCriticalChanceUseCase: GetCharCriticalChanceUseCase,
+        getCharDodgeChanceUseCase: GetCharDodgeChanceUseCase
+    ): GetCharStatusDataUseCase = GetCharStatusDataUseCase(
+        getCharHPUseCase = getCharHPUseCase,
+        getCharBaseDamageUseCase = getCharBaseDamageUseCase,
+        getCharPhysicalResistanceUseCase = getCharPhysicalResistanceUseCase,
+        getCharMagicResistanceUseCase = getCharMagicResistanceUseCase,
+        getCharCriticalChanceUseCase = getCharCriticalChanceUseCase,
+        getCharDodgeChanceUseCase = getCharDodgeChanceUseCase
     )
 
     @Provides

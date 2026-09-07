@@ -1,5 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -10,20 +12,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.CharPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 
 @Composable
 internal fun CharAttributes(
@@ -31,7 +40,7 @@ internal fun CharAttributes(
     availablePoints: Long = 0,
     windowSizeClass: WindowSizeClass,
     onIncrementAttribute: (AttributeIdentifier) -> Unit = {},
-    onDecrementAttribute: (AttributeIdentifier) -> Unit = {}
+    onDecrementAttribute: (AttributeIdentifier) -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -152,5 +161,34 @@ private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
         AttributeIdentifier.MAGIC_RESISTANCE -> R.string.char_attribute_magic_resistance
         AttributeIdentifier.VITALITY -> R.string.char_attribute_vitality
         AttributeIdentifier.AGILITY -> R.string.char_attribute_agility
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Light Mode",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Dark Mode",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun CharAttributesPreview() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        CharAttributes(
+            attributes = CharPreviewData.attributesInfo,
+            availablePoints = 3,
+            windowSizeClass = windowSizeClass,
+        )
     }
 }
