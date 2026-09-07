@@ -1,21 +1,16 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.history.CharHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.HistoryPhasesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
-import br.com.schmittsolucoes.ecosdovazio.presentation.STATE_IN_STOP_TIMEOUT_MILLIS
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.HistoryMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,13 +34,7 @@ class HistoryViewModel @Inject constructor(
             errorMessage = errorMessage,
             isLoading = isLoading
         )
-    }.catch { throwable ->
-        onError(throwable)
-        val message = getErrorMessageFrom(throwable)
-        onShowErrorDialog(message)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
+    }.stateInWithCommonError(
         initialValue = HistoryUIState(isLoading = true)
     )
 
