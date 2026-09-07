@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -128,8 +129,21 @@ private fun EnemyHorizontalList(
     onMobClick: (BattleMobUIModel) -> Unit,
     onStatusClick: (ActiveStatusUIModel) -> Unit
 ) {
+    val lazyRowState = rememberLazyListState()
+
+    LaunchedEffect(selectedMob?.phaseMobId) {
+        selectedMob?.let { mob ->
+            val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
+
+            if (index != -1 && index != lazyRowState.firstVisibleItemIndex) {
+                lazyRowState.animateScrollToItem(index)
+            }
+        }
+    }
+
     LazyRow(
         modifier = modifier,
+        state = lazyRowState,
         contentPadding = PaddingValues(start = ITEM_SPACING),
         horizontalArrangement = horizontalArrangement
     ) {
