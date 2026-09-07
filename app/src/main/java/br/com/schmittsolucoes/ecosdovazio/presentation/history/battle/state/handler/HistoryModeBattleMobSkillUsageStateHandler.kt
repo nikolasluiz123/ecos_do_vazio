@@ -6,6 +6,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.Hist
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.getMobById
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.getMobSkill
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.getSelectedMobOrFirst
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.updateSkillRefreshTime
 import javax.inject.Inject
 
 class HistoryModeBattleMobSkillUsageStateHandler @Inject constructor(
@@ -103,8 +104,7 @@ class HistoryModeBattleMobSkillUsageStateHandler @Inject constructor(
             }
         }
 
-        return updateSkillRefreshTime(
-            state = updatedState,
+        return updatedState.updateSkillRefreshTime(
             skillId = result.skillId,
             refreshTime = result.refreshTime,
         )
@@ -156,13 +156,5 @@ class HistoryModeBattleMobSkillUsageStateHandler @Inject constructor(
             skill = skill,
             result = result,
         )
-    }
-
-    private fun updateSkillRefreshTime(
-        state: HistoryModeBattleInternalState,
-        skillId: String,
-        refreshTime: Int,
-    ): HistoryModeBattleInternalState {
-        return state.copy(skillsRefreshTime = state.skillsRefreshTime + (skillId to refreshTime))
     }
 }

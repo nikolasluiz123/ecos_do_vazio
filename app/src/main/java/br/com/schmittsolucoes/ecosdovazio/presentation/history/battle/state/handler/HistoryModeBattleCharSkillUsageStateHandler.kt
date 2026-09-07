@@ -5,7 +5,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSki
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleInternalState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.allMobsIsDead
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.getMobById
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.incrementRound
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.updateSkillRefreshTime
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
 import javax.inject.Inject
 
@@ -51,7 +54,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                     mobToUpdate = selectedMob,
                     newEnemyHealth = result.newEnemyHealth,
                 )
-                updatedState = incrementRound(state = updatedState)
+                updatedState = updatedState.incrementRound()
             }
 
             is CharSkillUsageResult.AreaDamage -> {
@@ -64,7 +67,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                         newEnemyHealth = newHealth,
                     )
                 }
-                updatedState = incrementRound(state = updatedState)
+                updatedState = updatedState.incrementRound()
             }
 
             is CharSkillUsageResult.DamageOverTime -> {
@@ -80,7 +83,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                     skill = skill,
                     result = result,
                 )
-                updatedState = incrementRound(state = updatedState)
+                updatedState = updatedState.incrementRound()
             }
 
             is CharSkillUsageResult.Debuff -> {
@@ -97,8 +100,8 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                     result = result,
                 )
 
-                if (allMobsIsDead(state = updatedState, uiState = uiState)) {
-                    updatedState = incrementRound(state = updatedState)
+                if (uiState.allMobsIsDead(currentState = updatedState)) {
+                    updatedState = updatedState.incrementRound()
                 }
             }
 
@@ -113,7 +116,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                     currentState = updatedState,
                     newHealth = result.newCharHealth,
                 )
-                updatedState = incrementRound(state = updatedState)
+                updatedState = updatedState.incrementRound()
             }
 
             is CharSkillUsageResult.Buff -> {
@@ -125,35 +128,11 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
             }
         }
 
-        updatedState = updateSkillRefreshTime(
-            state = updatedState,
+        updatedState = updatedState.updateSkillRefreshTime(
             skillId = skill.id,
             refreshTime = result.refreshTime,
         )
 
         return CharSkillUsageExecutionResult.Executed(newState = updatedState)
-    }
-
-    private fun updateSkillRefreshTime(
-        state: HistoryModeBattleInternalState,
-        skillId: String,
-        refreshTime: Int,
-    ): HistoryModeBattleInternalState {
-        return state.copy(skillsRefreshTime = state.skillsRefreshTime + (skillId to refreshTime))
-    }
-
-    private fun incrementRound(state: HistoryModeBattleInternalState): HistoryModeBattleInternalState {
-        return state.copy(actualRound = state.actualRound + 1)
-    }
-
-    private fun allMobsIsDead(state: HistoryModeBattleInternalState, uiState: HistoryModeBattleUIState): Boolean {
-        val notLoaded = state.mobsHealth.isEmpty() && uiState.mobs.all { it.actualHealth <= 0 }
-        if (notLoaded) return false
-
-        val mobsHealth = state.mobsHealth.ifEmpty {
-            uiState.mobs.associate { it.phaseMobId to it.actualHealth }
-        }
-
-        return mobsHealth.all { it.value <= 0 }
     }
 }

@@ -5,6 +5,10 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.EndHistoryPhase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.StartHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleInternalState
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.allMobsIsDead
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.charIsDead
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.decrementSkillsRefreshTime
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.incrementRound
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleInfoMapper
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.BattleMapper
 import javax.inject.Inject
@@ -42,7 +46,7 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
             phaseStarted = true
         }
 
-        if (allMobsIsDead(state = currentState, uiState = uiState) || charIsDead(state = currentState, uiState = uiState)) {
+        if (uiState.allMobsIsDead(currentState = currentState) || uiState.charIsDead(currentState = currentState)) {
             val finishState = tryFinishBattle(
                 phaseId = phaseId,
                 currentState = currentState,
@@ -74,11 +78,11 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
                 },
             )
 
-            if (!allMobsIsDead(state = updatedState, uiState = uiState)) {
-                updatedState = incrementRound(state = updatedState)
+            if (!uiState.allMobsIsDead(currentState = updatedState)) {
+                updatedState = updatedState.incrementRound()
             }
         } else {
-            updatedState = decrementSkillsRefreshTime(state = updatedState)
+            updatedState = updatedState.decrementSkillsRefreshTime()
         }
 
         val finishState = tryFinishBattle(
@@ -112,7 +116,7 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
         var finishResult: PhaseFinishResult? = null
 
         if (result.isHistoryFinished) {
-            if (allMobsIsDead(state = currentState, uiState = uiState)) {
+            if (uiState.allMobsIsDead(currentState = currentState)) {
                 finishResult = PhaseFinishResult.Victory(
                     levelUp = result.levelInfo.levelUp,
                     currentLevel = result.levelInfo.currentLevel,
@@ -130,36 +134,6 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
 
     fun isEnemyRound(actualRound: Long): Boolean {
         return actualRound % 2 == 0L
-    }
-
-    private fun incrementRound(state: HistoryModeBattleInternalState): HistoryModeBattleInternalState {
-        return state.copy(actualRound = state.actualRound + 1)
-    }
-
-    private fun decrementSkillsRefreshTime(state: HistoryModeBattleInternalState): HistoryModeBattleInternalState {
-        val updatedMap = state.skillsRefreshTime.mapValues { (_, time) ->
-            if (time > 0) time - 1 else 0
-        }.filterValues { it > 0 }
-
-        return state.copy(skillsRefreshTime = updatedMap)
-    }
-
-    private fun charIsDead(state: HistoryModeBattleInternalState, uiState: HistoryModeBattleUIState): Boolean {
-        val notLoaded = state.charHealth == null && uiState.char?.actualHealth == null
-        if (notLoaded) return false
-
-        return (state.charHealth ?: uiState.char?.actualHealth ?: 0) <= 0
-    }
-
-    private fun allMobsIsDead(state: HistoryModeBattleInternalState, uiState: HistoryModeBattleUIState): Boolean {
-        val notLoaded = state.mobsHealth.isEmpty() && uiState.mobs.all { it.actualHealth <= 0 }
-        if (notLoaded) return false
-
-        val mobsHealth = state.mobsHealth.ifEmpty {
-            uiState.mobs.associate { it.phaseMobId to it.actualHealth }
-        }
-
-        return mobsHealth.all { it.value <= 0 }
     }
 
     private data class FinishBattleResult(

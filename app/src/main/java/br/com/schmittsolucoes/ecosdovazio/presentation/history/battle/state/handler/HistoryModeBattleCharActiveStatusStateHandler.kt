@@ -40,12 +40,15 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedCharSkillInfo.Buff,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skillUIModel = skill) as UsedCharSkillInfo.Buff,
             skillImage = skill.image,
-            skillCategory = skill.skillCategory
+            skillCategory = skill.skillCategory,
         )
 
-        return registerCharActiveStatus(currentState, newStatus)
+        return registerCharActiveStatus(
+            currentState = currentState,
+            newStatus = newStatus,
+        )
     }
 
     fun registerCharDot(
@@ -59,12 +62,15 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedMobSkillInfo.DamageOverTime,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skillUIModel = skill) as UsedMobSkillInfo.DamageOverTime,
             skillImage = skill.image,
-            sourceId = mob.phaseMobId
+            sourceId = mob.phaseMobId,
         )
 
-        return registerCharActiveStatus(currentState, newDot)
+        return registerCharActiveStatus(
+            currentState = currentState,
+            newStatus = newDot,
+        )
     }
 
     fun registerCharDebuff(
@@ -78,13 +84,16 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
             skillName = skill.name,
             skillDescription = skill.description,
             remainingTurns = result.repeat,
-            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skill) as UsedMobSkillInfo.Debuff,
+            skillInfo = battleInfoMapper.mapToUsedSkillInfo(skillUIModel = skill) as UsedMobSkillInfo.Debuff,
             skillImage = skill.image,
             sourceId = mob.phaseMobId,
-            skillCategory = skill.skillCategory
+            skillCategory = skill.skillCategory,
         )
 
-        return registerCharActiveStatus(currentState, newDot)
+        return registerCharActiveStatus(
+            currentState = currentState,
+            newStatus = newDot,
+        )
     }
 
     fun registerCharActiveStatus(
@@ -115,12 +124,12 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
                 charActiveStatus = buff,
                 skillName = skill.name,
                 skillDescription = skill.description,
-                skillImage = skill.image
+                skillImage = skill.image,
             )
         }.filterNotNull()
 
         return currentState.copy(
-            charActiveStatus = currentList.filterNot { it is CharActiveStatusUIModel.BuffUIModel } + newBuffs
+            charActiveStatus = currentList.filterNot { it is CharActiveStatusUIModel.BuffUIModel } + newBuffs,
         )
     }
 
@@ -141,16 +150,19 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
                 mobActiveStatus = dot,
                 skillName = skill.name,
                 skillDescription = skill.description,
-                skillImage = skill.image
+                skillImage = skill.image,
             )
         }
 
         var stateWithDots = currentState.copy(
-            charActiveStatus = currentList.filterNot { it is MobActiveStatusUIModel.DoTUIModel } + newDots
+            charActiveStatus = currentList.filterNot { it is MobActiveStatusUIModel.DoTUIModel } + newDots,
         )
 
         if (charInfo.actualHealth != result.charHealth) {
-            stateWithDots = charHealthStateHandler.updateCharHealth(stateWithDots, result.charHealth)
+            stateWithDots = charHealthStateHandler.updateCharHealth(
+                currentState = stateWithDots,
+                newHealth = result.charHealth,
+            )
         }
 
         return stateWithDots
@@ -173,12 +185,12 @@ class HistoryModeBattleCharActiveStatusStateHandler @Inject constructor(
                 mobActiveStatus = debuff,
                 skillName = skill.name,
                 skillDescription = skill.description,
-                skillImage = skill.image
+                skillImage = skill.image,
             )
         }
 
         return currentState.copy(
-            charActiveStatus = currentList.filterNot { it is MobActiveStatusUIModel.DebuffUIModel } + newDebuffs
+            charActiveStatus = currentList.filterNot { it is CharActiveStatusUIModel.DebuffUIModel } + newDebuffs,
         )
     }
 }
