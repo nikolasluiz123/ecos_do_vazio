@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.HistoryPhaseUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.HistoryPhaseItem
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.HistoryPhaseItemLoading
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.HistoryPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
@@ -32,6 +33,7 @@ private const val COMPACT_COLUMNS = 1
 private const val MEDIUM_COLUMNS = 2
 private const val EXPANDED_COLUMNS = 3
 private const val DEFAULT_COLUMNS = 1
+private const val DEFAULT_LOADING_ITEM_COUNT = 20
 
 @Composable
 fun HistoryPhasesGrid(
@@ -41,6 +43,7 @@ fun HistoryPhasesGrid(
     onInfoClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass? = null,
+    isLoading: Boolean = false,
 ) {
     val columns = when (windowSizeClass?.widthSizeClass) {
         WindowWidthSizeClass.Compact -> COMPACT_COLUMNS
@@ -65,12 +68,18 @@ fun HistoryPhasesGrid(
         state = gridState,
         modifier = modifier.fillMaxSize(),
     ) {
-        items(phases) { phase ->
-            HistoryPhaseItem(
-                phase = phase,
-                onPhaseClick = onPhaseClick,
-                onInfoClick = onInfoClick,
-            )
+        if (isLoading || phases.isEmpty()) {
+            items(DEFAULT_LOADING_ITEM_COUNT) {
+                HistoryPhaseItemLoading()
+            }
+        } else {
+            items(phases) { phase ->
+                HistoryPhaseItem(
+                    phase = phase,
+                    onPhaseClick = onPhaseClick,
+                    onInfoClick = onInfoClick,
+                )
+            }
         }
     }
 }

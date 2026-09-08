@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +51,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PhaseCardBorderColor
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.pictureTextHighlightBackground
 
 private val PhaseImageSize = 200.dp
@@ -106,6 +108,54 @@ internal fun HistoryPhaseItem(
 }
 
 @Composable
+fun HistoryPhaseItemLoading(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .size(PhaseImageSize)
+                .clip(RoundedCornerShape(PhaseImageCornerRadius))
+                .background(PictureSlotGradient)
+                .border(PhaseImageBorderWidth, Color.Transparent, RoundedCornerShape(PhaseImageCornerRadius)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = Highlight,
+                strokeWidth = 2.dp,
+            )
+        }
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            shape = RoundedCornerShape(PhaseCardCornerRadius),
+            border = BorderStroke(PhaseCardBorderWidth, PhaseCardBorderColor),
+            elevation = CardDefaults.cardElevation(defaultElevation = PhaseCardElevation),
+            modifier = Modifier
+                .width(PhaseImageSize + PhaseCardWidthAdjustment)
+                .padding(top = PhaseCardTopPadding)
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    vertical = PhaseCardContentVerticalPadding,
+                    horizontal = PhaseCardContentHorizontalPadding
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier.size(width = 100.dp, height = 48.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun PhaseImage(
     borderColor: Color,
     phase: HistoryPhaseUIModel,
@@ -116,6 +166,7 @@ private fun PhaseImage(
         modifier = Modifier
             .size(PhaseImageSize)
             .clip(RoundedCornerShape(PhaseImageCornerRadius))
+            .background(PictureSlotGradient)
             .border(PhaseImageBorderWidth, borderColor, RoundedCornerShape(PhaseImageCornerRadius))
             .then(if (!phase.isLocked) Modifier.clickable { onPhaseClick(phase.id) } else Modifier),
         contentAlignment = Alignment.Center
@@ -240,5 +291,14 @@ private fun HistoryPhaseItemPreviewDark() {
             onPhaseClick = {},
             onInfoClick = {}
         )
+    }
+}
+
+@Preview(name = "Light Mode - Loading", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Dark Mode - Loading", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun HistoryPhaseItemLoadingPreview() {
+    EcosDoVazioTheme {
+        HistoryPhaseItemLoading()
     }
 }

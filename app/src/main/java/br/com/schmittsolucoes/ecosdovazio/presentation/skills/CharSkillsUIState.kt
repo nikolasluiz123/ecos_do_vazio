@@ -8,5 +8,6 @@ data class CharSkillsUIState(
     val skills: List<CharSkillDetailsUIModel> = emptyList(),
     val selectedSkill: CharSkillDetailsUIModel? = null,
     val availablePoints: Long = 0,
-    val selectedSkillAttributes: List<CharAttributesUIModel> = emptyList()
+    val selectedSkillAttributes: List<CharAttributesUIModel> = emptyList(),
+    val isLoading: Boolean = false,
 )

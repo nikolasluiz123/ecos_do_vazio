@@ -57,9 +57,10 @@ class CharSkillsViewModel @Inject constructor(
             selectedSkill = selectedSkill,
             availablePoints = availablePoints,
             selectedSkillAttributes = selectedSkillAttributes,
+            isLoading = false,
         )
     }.stateInWithCommonError(
-        initialValue = CharSkillsUIState(),
+        initialValue = CharSkillsUIState(isLoading = true),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {

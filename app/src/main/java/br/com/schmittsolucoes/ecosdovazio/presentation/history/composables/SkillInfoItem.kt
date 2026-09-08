@@ -3,6 +3,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.composables
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.extensions.removeDamageFormula
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 
@@ -51,6 +53,7 @@ fun SkillInfoItem(
             modifier = Modifier
                 .size(SKILL_IMAGE_SIZE)
                 .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS))
+                .background(PictureSlotGradient)
                 .border(
                     width = IMAGE_BORDER_WIDTH,
                     color = SkillBattleStrokeColor,

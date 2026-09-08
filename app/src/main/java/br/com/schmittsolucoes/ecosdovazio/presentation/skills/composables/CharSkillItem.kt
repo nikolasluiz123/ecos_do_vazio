@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AppAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.pictureTextHighlightBackground
 
@@ -43,6 +47,7 @@ fun CharSkillItem(
         modifier = modifier
             .aspectRatio(1f)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
             .border(
                 width = SKILLS_BORDER_WIDTH,
                 color = SkillBattleStrokeColor,
@@ -80,6 +85,30 @@ fun CharSkillItem(
     }
 }
 
+@Composable
+fun CharSkillItemLoading(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
+            .border(
+                width = SKILLS_BORDER_WIDTH,
+                color = SkillBattleStrokeColor,
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS),
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(24.dp),
+            color = Highlight,
+            strokeWidth = 1.5.dp,
+        )
+    }
+}
+
 @Preview(name = "Light Mode - Unlocked", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode - Unlocked", uiMode = UI_MODE_NIGHT_YES)
 @Composable
@@ -98,6 +127,17 @@ private fun CharSkillItemBlockedPreview() {
     EcosDoVazioTheme {
         CharSkillItem(
             skill = CharSkillsPreviewData.skillWhirlwind
+        )
+    }
+}
+
+@Preview(name = "Light Mode - Loading", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode - Loading", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun CharSkillItemLoadingPreview() {
+    EcosDoVazioTheme {
+        CharSkillItemLoading(
+            modifier = Modifier.size(80.dp)
         )
     }
 }

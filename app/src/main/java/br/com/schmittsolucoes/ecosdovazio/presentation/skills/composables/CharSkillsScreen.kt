@@ -66,6 +66,7 @@ fun CharSkillsScreen(
                 skills = state.skills,
                 windowSizeClass = windowSizeClass,
                 onSelectSkill = onSelectSkill,
+                isLoading = state.isLoading,
             )
 
             state.selectedSkill?.let { skill ->

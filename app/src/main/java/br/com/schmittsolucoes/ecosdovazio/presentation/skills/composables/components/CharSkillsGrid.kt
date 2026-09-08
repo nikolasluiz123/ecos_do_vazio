@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.composables.CharSkillItem
+import br.com.schmittsolucoes.ecosdovazio.presentation.skills.composables.CharSkillItemLoading
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.composables.CharSkillsPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
@@ -30,6 +31,7 @@ private const val COMPACT_COLUMNS = 2
 private const val MEDIUM_COLUMNS = 3
 private const val EXPANDED_COLUMNS = 5
 private const val DEFAULT_COLUMNS = 1
+private const val DEFAULT_LOADING_ITEM_COUNT = 20
 
 @Composable
 fun CharSkillsGrid(
@@ -37,6 +39,7 @@ fun CharSkillsGrid(
     onSelectSkill: (CharSkillDetailsUIModel) -> Unit,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass? = null,
+    isLoading: Boolean = false,
 ) {
     val columns = when (windowSizeClass?.widthSizeClass) {
         WindowWidthSizeClass.Compact -> COMPACT_COLUMNS
@@ -52,11 +55,17 @@ fun CharSkillsGrid(
         horizontalArrangement = Arrangement.spacedBy(GridHorizontalSpacing),
         modifier = modifier.fillMaxSize(),
     ) {
-        items(skills) { skill ->
-            CharSkillItem(
-                skill = skill,
-                onClick = { onSelectSkill(skill) },
-            )
+        if (isLoading || skills.isEmpty()) {
+            items(DEFAULT_LOADING_ITEM_COUNT) {
+                CharSkillItemLoading()
+            }
+        } else {
+            items(skills) { skill ->
+                CharSkillItem(
+                    skill = skill,
+                    onClick = { onSelectSkill(skill) },
+                )
+            }
         }
     }
 }

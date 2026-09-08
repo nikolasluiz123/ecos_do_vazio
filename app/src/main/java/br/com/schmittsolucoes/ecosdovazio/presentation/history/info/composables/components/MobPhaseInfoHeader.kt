@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.info.composables.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.BattleAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.model.MobPhaseInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 
@@ -44,6 +46,7 @@ internal fun MobPhaseInfoHeader(
             modifier = Modifier
                 .size(PROFILE_IMAGE_SIZE)
                 .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS))
+                .background(PictureSlotGradient)
                 .border(
                     width = IMAGE_BORDER_WIDTH,
                     color = SkillBattleStrokeColor,

@@ -63,7 +63,8 @@ fun HistoryScreen(
                 actualPhaseIndex = state.actualPhaseIndex,
                 windowSizeClass = windowSizeClass,
                 onPhaseClick = onPhaseClick,
-                onInfoClick = onInfoClick
+                onInfoClick = onInfoClick,
+                isLoading = state.isLoading,
             )
 
             state.errorMessage?.let { message ->
