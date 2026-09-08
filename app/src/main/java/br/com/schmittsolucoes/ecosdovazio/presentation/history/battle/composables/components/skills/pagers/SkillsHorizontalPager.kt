@@ -12,6 +12,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.DEFAULT_LOADING_SKILL_COUNT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_PADDING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.GRID_SPACING
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SKILL_ITEM_MIN_SIZE
@@ -32,12 +33,14 @@ fun SkillsHorizontalPager(
         verticalAlignment = Alignment.Top
     ) { page ->
         val skills = getSkillsList(page, state)
+        val isLoading = state.char == null
+        val itemCount = if (isLoading) DEFAULT_LOADING_SKILL_COUNT else skills.size
 
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val columns = calculateFixedAxisCells(
                 availableFixedAxisLimit = maxWidth - (GRID_PADDING * 2),
                 availableScrollAxisLimit = maxHeight - (GRID_PADDING * 2),
-                itemCount = skills.size,
+                itemCount = itemCount,
                 itemMinSize = SKILL_ITEM_MIN_SIZE,
                 spacing = GRID_SPACING
             )
@@ -49,12 +52,18 @@ fun SkillsHorizontalPager(
                 verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(skills) { skill ->
-                    SkillItem(
-                        skill = skill,
-                        onSkillClick = onSkillClick,
-                        onSkillLongClick = onSkillLongClick
-                    )
+                if (isLoading) {
+                    items(DEFAULT_LOADING_SKILL_COUNT) {
+                        SkillItemLoading()
+                    }
+                } else {
+                    items(skills) { skill ->
+                        SkillItem(
+                            skill = skill,
+                            onSkillClick = onSkillClick,
+                            onSkillLongClick = onSkillLongClick
+                        )
+                    }
                 }
             }
         }

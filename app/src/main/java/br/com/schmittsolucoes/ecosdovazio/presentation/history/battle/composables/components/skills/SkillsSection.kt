@@ -1,6 +1,5 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +24,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.Hist
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SurfaceVariantGradient
 
 internal const val SKILLS_ANIMATION_DURATION = 600
+internal const val DEFAULT_LOADING_SKILL_COUNT = 6
 
 internal val SKILL_ITEM_MIN_SIZE = 80.dp
 internal val GRID_SPACING = 8.dp
@@ -45,39 +45,32 @@ fun SkillsLazyVerticalGrid(
     val density = LocalDensity.current
     val exclusionHeightPx = with(density) { 200.dp.toPx() }
 
-    AnimatedVisibility(
-        visible = state.char != null,
-        enter = VerticalGridEnterTransition,
-        exit = VerticalGridExitTransition,
-        modifier = modifier,
-    ) {
-        SkillsSurface {
-            Column(modifier = Modifier.fillMaxSize()) {
-                SkillsHorizontalTabRow(pagerState = pagerState)
+    SkillsSurface(modifier = modifier) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            SkillsHorizontalTabRow(pagerState = pagerState)
 
-                SkillsHorizontalPager(
-                    state = state,
-                    pagerState = pagerState,
-                    modifier = Modifier
-                        .weight(1f)
-                        .systemGestureExclusion { coordinates ->
-                            val height = coordinates.size.height.toFloat()
-                            val width = coordinates.size.width.toFloat()
+            SkillsHorizontalPager(
+                state = state,
+                pagerState = pagerState,
+                modifier = Modifier
+                    .weight(1f)
+                    .systemGestureExclusion { coordinates ->
+                        val height = coordinates.size.height.toFloat()
+                        val width = coordinates.size.width.toFloat()
 
-                            val top = (height - exclusionHeightPx) / 3f
-                            val bottom = top + exclusionHeightPx
+                        val top = (height - exclusionHeightPx) / 3f
+                        val bottom = top + exclusionHeightPx
 
-                            Rect(
-                                left = 0f,
-                                top = top,
-                                right = width,
-                                bottom = bottom,
-                            )
-                        },
-                    onSkillClick = onSkillClick,
-                    onSkillLongClick = onSkillLongClick,
-                )
-            }
+                        Rect(
+                            left = 0f,
+                            top = top,
+                            right = width,
+                            bottom = bottom,
+                        )
+                    },
+                onSkillClick = onSkillClick,
+                onSkillLongClick = onSkillLongClick,
+            )
         }
     }
 
@@ -100,27 +93,20 @@ fun SkillsLazyHorizontalGrid(
 ) {
     val pagerState = rememberSkillsPagerState()
 
-    AnimatedVisibility(
-        visible = state.char != null,
-        enter = HorizontalGridEnterTransition,
-        exit = HorizontalGridExitTransition,
-        modifier = modifier
-    ) {
-        SkillsSurface {
-            Row(modifier = Modifier.fillMaxSize()) {
-                SkillsVerticalTabRow(
-                    pagerState = pagerState,
-                    modifier = Modifier.fillMaxHeight()
-                )
+    SkillsSurface(modifier = modifier) {
+        Row(modifier = Modifier.fillMaxSize()) {
+            SkillsVerticalTabRow(
+                pagerState = pagerState,
+                modifier = Modifier.fillMaxHeight()
+            )
 
-                SkillsVerticalPager(
-                    state = state,
-                    pagerState = pagerState,
-                    modifier = Modifier.weight(1f),
-                    onSkillClick = onSkillClick,
-                    onSkillLongClick = onSkillLongClick
-                )
-            }
+            SkillsVerticalPager(
+                state = state,
+                pagerState = pagerState,
+                modifier = Modifier.weight(1f),
+                onSkillClick = onSkillClick,
+                onSkillLongClick = onSkillLongClick
+            )
         }
     }
 

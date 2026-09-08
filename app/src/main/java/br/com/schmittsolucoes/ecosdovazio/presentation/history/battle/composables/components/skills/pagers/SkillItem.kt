@@ -6,7 +6,9 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +22,13 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SKILLS_BORDER_WIDTH
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.BattleAsyncImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeColor
 
 @Composable
@@ -41,6 +46,7 @@ internal fun SkillItem(
         modifier = modifier
             .aspectRatio(1f)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
             .border(
                 width = SKILLS_BORDER_WIDTH,
                 color = if (applyBorderColor) Color.Unspecified else SkillBattleStrokeColor,
@@ -59,6 +65,30 @@ internal fun SkillItem(
         if (showOverlay) {
             CooldownOverlay(skill)
         }
+    }
+}
+
+@Composable
+internal fun SkillItemLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
+            .border(
+                width = SKILLS_BORDER_WIDTH,
+                color = SkillBattleStrokeColor,
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(24.dp),
+            color = Highlight,
+            strokeWidth = 1.5.dp,
+        )
     }
 }
 
@@ -101,6 +131,17 @@ private fun SkillItemPreview() {
         SkillItem(
             skill = br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.HistoryModeBattlePreviewData.mockSkillDamage,
             modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Preview(name = "Loading Light Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Loading Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SkillItemLoadingPreview() {
+    br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme {
+        SkillItemLoading(
+            modifier = Modifier.size(80.dp)
         )
     }
 }

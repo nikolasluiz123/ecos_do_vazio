@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -71,10 +72,12 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobA
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.NegativeStatus
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PositiveStatus
 
 private const val PULSE_ANIMATION_DURATION = 600
@@ -91,7 +94,20 @@ internal fun EnemySection(
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ITEM_SPACING)
 ) {
-    if (state.mobs.isEmpty()) return
+    if (state.mobs.isEmpty()) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            EnemyItemLoading(
+                modifier = Modifier
+                    .heightIn(max = ITEM_MAX_HEIGHT)
+                    .fillMaxHeight()
+                    .padding(vertical = SECTION_PADDING_VERTICAL)
+            )
+        }
+        return
+    }
 
     val isExpanded = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
 
@@ -258,6 +274,7 @@ private fun EnemyItem(
             modifier = Modifier
                 .aspectRatio(ITEM_ASPECT_RATIO)
                 .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+                .background(PictureSlotGradient)
                 .border(
                     width = CHAR_AND_MOBS_BORDER_WIDTH,
                     color = borderColor,
@@ -276,6 +293,30 @@ private fun EnemyItem(
 
             EnemyInfo(mob, maxWidth)
         }
+    }
+}
+
+@Composable
+private fun EnemyItemLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(ITEM_ASPECT_RATIO)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
+            .border(
+                width = CHAR_AND_MOBS_BORDER_WIDTH,
+                color = CharacterBattleStrokeColor,
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+            )
+            .padding(CHAR_AND_MOBS_BORDER_WIDTH),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = Highlight,
+            strokeWidth = 2.dp,
+        )
     }
 }
 
@@ -364,6 +405,17 @@ private fun EnemyItemPreview() {
     EcosDoVazioTheme {
         EnemyItem(
             mob = HistoryModeBattlePreviewData.mockMobWarrior,
+            modifier = Modifier.height(300.dp)
+        )
+    }
+}
+
+@Preview(name = "Enemy Item Loading - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Enemy Item Loading - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun EnemyItemLoadingPreview() {
+    EcosDoVazioTheme {
+        EnemyItemLoading(
             modifier = Modifier.height(300.dp)
         )
     }

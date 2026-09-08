@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,8 +42,10 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.Acti
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.BattleCharUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.CharacterBattleStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HighlightOnImage
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnImage
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 
 @Composable
 internal fun CharSection(
@@ -50,20 +54,27 @@ internal fun CharSection(
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center
 ) {
-    if (char == null) return
-
     Box(
         modifier = modifier,
         contentAlignment = alignment
     ) {
-        CharItem(
-            char = char,
-            onStatusClick = onStatusClick,
-            modifier = Modifier
-                .heightIn(max = ITEM_MAX_HEIGHT)
-                .fillMaxHeight()
-                .padding(vertical = SECTION_PADDING_VERTICAL)
-        )
+        if (char != null) {
+            CharItem(
+                char = char,
+                onStatusClick = onStatusClick,
+                modifier = Modifier
+                    .heightIn(max = ITEM_MAX_HEIGHT)
+                    .fillMaxHeight()
+                    .padding(vertical = SECTION_PADDING_VERTICAL)
+            )
+        } else {
+            CharItemLoading(
+                modifier = Modifier
+                    .heightIn(max = ITEM_MAX_HEIGHT)
+                    .fillMaxHeight()
+                    .padding(vertical = SECTION_PADDING_VERTICAL)
+            )
+        }
     }
 }
 
@@ -77,6 +88,7 @@ private fun CharItem(
         modifier = modifier
             .aspectRatio(ITEM_ASPECT_RATIO)
             .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
             .border(
                 width = CHAR_AND_MOBS_BORDER_WIDTH,
                 color = CharacterBattleStrokeColor,
@@ -97,6 +109,30 @@ private fun CharItem(
         )
 
         CharInfo(char, maxWidth)
+    }
+}
+
+@Composable
+private fun CharItemLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(ITEM_ASPECT_RATIO)
+            .clip(RoundedCornerShape(ITEM_CORNER_RADIUS))
+            .background(PictureSlotGradient)
+            .border(
+                width = CHAR_AND_MOBS_BORDER_WIDTH,
+                color = CharacterBattleStrokeColor,
+                shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
+            )
+            .padding(CHAR_AND_MOBS_BORDER_WIDTH),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = Highlight,
+            strokeWidth = 2.dp,
+        )
     }
 }
 
@@ -143,6 +179,17 @@ private fun CharItemPreview() {
         CharItem(
             char = HistoryModeBattlePreviewData.mockChar,
             onStatusClick = {},
+            modifier = Modifier.height(300.dp)
+        )
+    }
+}
+
+@Preview(name = "Loading - Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Loading - Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun CharItemLoadingPreview() {
+    EcosDoVazioTheme {
+        CharItemLoading(
             modifier = Modifier.height(300.dp)
         )
     }

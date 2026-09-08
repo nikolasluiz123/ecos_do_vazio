@@ -208,3 +208,21 @@ val SkillBattleStrokeColor: Color
 @get:Composable
 val RoundStrokeColor: Color
     get() = if (isSystemInDarkTheme()) strokeColorDark else strokeColorLight
+
+@get:Composable
+val PictureSlotGradient: Brush
+    get() = if (isSystemInDarkTheme()) {
+        Brush.verticalGradient(
+            colors = listOf(
+                heroSlotBackgroundTopDark,
+                heroSlotBackgroundBottomDark,
+            )
+        )
+    } else {
+        Brush.verticalGradient(
+            colors = listOf(
+                heroSlotBackgroundTopLight,
+                heroSlotBackgroundBottomLight,
+            )
+        )
+    }
