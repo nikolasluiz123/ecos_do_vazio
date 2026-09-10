@@ -18,11 +18,27 @@ import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.CharPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharLevelInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.animateNumericStringProgressBarState
 
 @Composable
 internal fun CharLevelInfo(
     levelInfo: CharLevelInfoUIModel
 ) {
+    val displayCurrentXp = animateNumericStringProgressBarState(
+        targetValue = levelInfo.currentExperience,
+        label = "CurrentXpAnimation"
+    )
+
+    val displayNextXp = animateNumericStringProgressBarState(
+        targetValue = levelInfo.nextLevelExperience,
+        label = "NextXpAnimation"
+    )
+
+    val displayLevel = animateNumericStringProgressBarState(
+        targetValue = levelInfo.level,
+        label = "LevelAnimation"
+    )
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -32,7 +48,7 @@ internal fun CharLevelInfo(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.level_label, levelInfo.level),
+                text = stringResource(R.string.level_label, displayLevel),
                 style = MaterialTheme.typography.labelLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontFamily = FontFamily.Serif
@@ -41,8 +57,8 @@ internal fun CharLevelInfo(
             Text(
                 text = stringResource(
                     R.string.char_xp_label,
-                    levelInfo.currentExperience,
-                    levelInfo.nextLevelExperience
+                    displayCurrentXp,
+                    displayNextXp
                 ),
                 style = MaterialTheme.typography.labelLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

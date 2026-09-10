@@ -33,6 +33,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttribute
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.animateNumericStringProgressBarState
 
 @Composable
 internal fun CharAttributes(
@@ -101,6 +102,11 @@ private fun AttributeItem(
     onIncrement: () -> Unit = {},
     onDecrement: () -> Unit = {}
 ) {
+    val displayValue = animateNumericStringProgressBarState(
+        targetValue = attribute.totalValue,
+        label = "AttributeValueAnimation"
+    )
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom
@@ -122,7 +128,7 @@ private fun AttributeItem(
                     )
                 )
                 Text(
-                    text = attribute.totalValue,
+                    text = displayValue,
                     style = MaterialTheme.typography.labelLarge.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontFamily = FontFamily.Serif

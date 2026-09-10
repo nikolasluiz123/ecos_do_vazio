@@ -2,6 +2,12 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.compon
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -110,12 +116,25 @@ private fun StatusItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
         )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = Highlight,
-            ),
-        )
+        AnimatedContent(
+            targetState = value,
+            transitionSpec = {
+                if (targetState != initialState) {
+                    (slideInVertically { height -> height } + fadeIn()) togetherWith
+                            (slideOutVertically { height -> -height } + fadeOut())
+                } else {
+                    fadeIn() togetherWith fadeOut()
+                }
+            },
+            label = "StatusItemAnimation"
+        ) { targetValue ->
+            Text(
+                text = targetValue,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Highlight,
+                ),
+            )
+        }
     }
 }
 
