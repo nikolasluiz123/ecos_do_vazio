@@ -18,11 +18,11 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.Animatio
 
 @Composable
 fun AppProgressBar(
-    progress: () -> Float,
+    progress: Float,
     modifier: Modifier = Modifier
 ) {
     val animatedProgress by animateFloatAsState(
-        targetValue = progress(),
+        targetValue = progress,
         animationSpec = tween(durationMillis = AnimationConstants.PROGRESS_BAR_DURATION_MS, easing = FastOutSlowInEasing),
         label = "ProgressBarAnimation"
     )
@@ -41,7 +41,7 @@ fun AppProgressBar(
 private fun AppProgressBarPreview() {
     EcosDoVazioTheme {
         AppProgressBar(
-            progress = { 0.6f }
+            progress = 0.6f
         )
     }
 }

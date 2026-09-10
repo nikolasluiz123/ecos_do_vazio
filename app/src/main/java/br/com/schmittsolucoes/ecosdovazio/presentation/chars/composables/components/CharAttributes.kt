@@ -16,6 +16,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -80,12 +81,14 @@ internal fun CharAttributes(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             attributes.forEach { attribute ->
-                AttributeItem(
-                    attribute = attribute,
-                    modifier = Modifier.weight(1f),
-                    onIncrement = { onIncrementAttribute(attribute.identifier) },
-                    onDecrement = { onDecrementAttribute(attribute.identifier) }
-                )
+                key(attribute.identifier) {
+                    AttributeItem(
+                        attribute = attribute,
+                        modifier = Modifier.weight(1f),
+                        onIncrement = { onIncrementAttribute(attribute.identifier) },
+                        onDecrement = { onDecrementAttribute(attribute.identifier) }
+                    )
+                }
             }
 
             repeat(spacersNeeded) {
@@ -102,11 +105,6 @@ private fun AttributeItem(
     onIncrement: () -> Unit = {},
     onDecrement: () -> Unit = {}
 ) {
-    val displayValue = animateNumericStringProgressBarState(
-        targetValue = attribute.totalValue,
-        label = "AttributeValueAnimation"
-    )
-
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom
@@ -115,28 +113,9 @@ private fun AttributeItem(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(getAttributeLabel(attribute.identifier)),
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontFamily = FontFamily.Serif
-                    )
-                )
-                Text(
-                    text = displayValue,
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontFamily = FontFamily.Serif
-                    )
-                )
-            }
+            AttributeTexts(attribute = attribute)
 
-            AppProgressBar(progress = { attribute.progress })
+            AppProgressBar(progress = attribute.progress)
         }
 
         Spacer(modifier = Modifier.size(8.dp))
@@ -158,6 +137,34 @@ private fun AttributeItem(
     }
 }
 
+@Composable
+private fun AttributeTexts(attribute: CharAttributesUIModel) {
+    val displayValue = animateNumericStringProgressBarState(
+        targetValue = attribute.totalValue,
+        label = "AttributeValueAnimation"
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(getAttributeLabel(attribute.identifier)),
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif
+            )
+        )
+        Text(
+            text = displayValue.value,
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif
+            )
+        )
+    }
+}
 private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
     return when (identifier) {
         AttributeIdentifier.STRENGTH -> R.string.char_attribute_strength

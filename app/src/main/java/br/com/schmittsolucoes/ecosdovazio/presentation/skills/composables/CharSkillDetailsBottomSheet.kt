@@ -153,7 +153,7 @@ private fun SkillAttributeAdjustmentItem(
                 )
             }
 
-            AppProgressBar(progress = { attribute.progress })
+            AppProgressBar(progress = attribute.progress)
         }
 
         Spacer(modifier = Modifier.width(16.dp))

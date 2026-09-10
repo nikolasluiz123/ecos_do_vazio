@@ -24,6 +24,19 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.animateN
 internal fun CharLevelInfo(
     levelInfo: CharLevelInfoUIModel
 ) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        LevelInfoTexts(levelInfo = levelInfo)
+        AppProgressBar(
+            progress = levelInfo.progress
+        )
+    }
+}
+
+@Composable
+private fun LevelInfoTexts(levelInfo: CharLevelInfoUIModel) {
     val displayCurrentXp = animateNumericStringProgressBarState(
         targetValue = levelInfo.currentExperience,
         label = "CurrentXpAnimation"
@@ -39,35 +52,27 @@ internal fun CharLevelInfo(
         label = "LevelAnimation"
     )
 
-    Column(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.level_label, displayLevel),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
-                )
+        Text(
+            text = stringResource(R.string.level_label, displayLevel.value),
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif
             )
-            Text(
-                text = stringResource(
-                    R.string.char_xp_label,
-                    displayCurrentXp,
-                    displayNextXp
-                ),
-                style = MaterialTheme.typography.labelLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontFamily = FontFamily.Serif
-                )
+        )
+        Text(
+            text = stringResource(
+                R.string.char_xp_label,
+                displayCurrentXp.value,
+                displayNextXp.value
+            ),
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = FontFamily.Serif
             )
-        }
-        AppProgressBar(
-            progress = { levelInfo.progress }
         )
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,11 +87,13 @@ internal fun CharStatus(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             statusItems.forEach { (labelRes, value) ->
-                StatusItem(
-                    label = stringResource(labelRes),
-                    value = value,
-                    modifier = Modifier.weight(1f),
-                )
+                key(labelRes) {
+                    StatusItem(
+                        label = stringResource(labelRes),
+                        value = value,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
     }

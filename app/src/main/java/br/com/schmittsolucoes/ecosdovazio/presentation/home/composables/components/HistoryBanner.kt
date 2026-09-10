@@ -91,7 +91,7 @@ private fun CompletedLayout(model: LastUnfinishedHistoryPhaseUIModel) {
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    AppProgressBar(progress = { 1f })
+    AppProgressBar(progress = 1f)
 }
 
 @Composable
@@ -128,7 +128,7 @@ private fun ColumnScope.ProgressLayout(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    AppProgressBar(progress = { model.progress })
+    AppProgressBar(progress = model.progress)
 
     Spacer(modifier = Modifier.weight(1f))
     Spacer(modifier = Modifier.height(16.dp))
