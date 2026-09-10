@@ -7,7 +7,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIM
 data class CharUIState(
     val levelInfo: CharLevelInfoUIModel = CharLevelInfoUIModel(),
     val statusInfo: CharStatusUIModel = CharStatusUIModel(),
-    val attributesInfo: List<CharAttributesUIModel>? = null,
+    val attributesInfo: List<CharAttributesUIModel> = emptyList(),
     val availablePoints: Long = 0,
     val errorMessage: String? = null,
 )

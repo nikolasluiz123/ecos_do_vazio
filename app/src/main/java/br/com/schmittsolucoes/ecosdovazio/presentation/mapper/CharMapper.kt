@@ -57,10 +57,10 @@ class CharMapper @Inject constructor(
     }
 
     fun mapAttributesToUIModel(
-        attributes: CharAttributes?,
+        attributes: CharAttributes,
         availablePoints: Long,
-    ): List<CharAttributesUIModel>? {
-        return attributes?.attributes?.map { attr ->
+    ): List<CharAttributesUIModel> {
+        return attributes.attributes.map { attr ->
             val attributeProgress = getAttributeProgress(attributes, attr.attribute.totalValue)
             mapToUIModel(
                 identifiedCharAttribute = attr,

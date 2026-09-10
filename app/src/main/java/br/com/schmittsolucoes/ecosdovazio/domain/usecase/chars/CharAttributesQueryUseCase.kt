@@ -16,18 +16,19 @@ class CharAttributesQueryUseCase(
     private val userRepository: UserRepository,
     private val getTotalPointsCountUseCase: GetTotalPointsCountUseCase
 ) {
-    operator fun invoke(): Flow<CharAttributes?> = flow {
+    operator fun invoke(): Flow<CharAttributes> = flow {
         val userId = userRepository.getFirstUser()?.id
+        val defaultValue = CharAttributes(emptyList(), 0)
 
         if (userId.isNullOrBlank()) {
-            emit(null)
+            emit(defaultValue)
             return@flow
         }
 
         val charId = preferencesRepository.getUserPreferences(userId).first()?.selectedCharId
 
         if (charId.isNullOrBlank()) {
-            emit(null)
+            emit(defaultValue)
             return@flow
         }
 

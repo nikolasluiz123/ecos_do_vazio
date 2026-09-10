@@ -79,15 +79,13 @@ fun CharScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            state.attributesInfo?.let { attributesInfo ->
-                CharAttributes(
-                    attributes = attributesInfo,
-                    availablePoints = state.availablePoints,
-                    windowSizeClass = windowSizeClass,
-                    onIncrementAttribute = onIncrementAttribute,
-                    onDecrementAttribute = onDecrementAttribute,
-                )
-            }
+            CharAttributes(
+                attributes = state.attributesInfo,
+                availablePoints = state.availablePoints,
+                windowSizeClass = windowSizeClass,
+                onIncrementAttribute = onIncrementAttribute,
+                onDecrementAttribute = onDecrementAttribute,
+            )
 
             state.errorMessage?.let { message ->
                 ErrorDialog(
