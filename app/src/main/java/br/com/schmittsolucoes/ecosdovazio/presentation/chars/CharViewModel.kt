@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.chars
 
 import android.content.Context
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharStatus
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.AttributeIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.CharAttributesQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.DecrementAttributeUseCase
@@ -11,6 +12,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharStatusData
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.IncrementAttributeUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserException
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttributesUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.mapper.CharMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -52,7 +54,20 @@ class CharViewModel @Inject constructor(
             attributesInfo = charMapper.mapAttributesToUIModel(attributes, availablePoints),
             availablePoints = availablePoints,
         )
-    }.stateInWithCommonError(initialValue = CharUIState())
+    }.stateInWithCommonError(
+        initialValue = CharUIState(
+            statusInfo = charMapper.mapToUIModel(CharStatus()),
+            attributesInfo = AttributeIdentifier.entries.map { identifier ->
+                CharAttributesUIModel(
+                    identifier = identifier,
+                    totalValue = "0",
+                    progress = 0f,
+                    canIncrement = false,
+                    canDecrement = false,
+                )
+            },
+        )
+    )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
         return when (throwable) {

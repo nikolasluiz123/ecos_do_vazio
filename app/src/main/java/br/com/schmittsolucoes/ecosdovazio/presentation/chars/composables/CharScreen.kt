@@ -68,18 +68,14 @@ fun CharScreen(
                 .padding(16.dp),
         ) {
 
-            state.levelInfo?.let { levelInfo ->
-                CharLevelInfo(levelInfo = levelInfo)
-            }
+            CharLevelInfo(levelInfo = state.levelInfo)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            state.statusInfo?.let { statusInfo ->
-                CharStatus(
-                    statusInfo = statusInfo,
-                    windowSizeClass = windowSizeClass,
-                )
-            }
+            CharStatus(
+                statusInfo = state.statusInfo,
+                windowSizeClass = windowSizeClass,
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
