@@ -2,12 +2,6 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.compon
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +36,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharStatusUIM
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.HeroButtonStrokeColor
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.AnimatedVerticalSlideContent
 
 @Composable
 internal fun CharStatus(
@@ -119,17 +114,9 @@ private fun StatusItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
         )
-        AnimatedContent(
+        AnimatedVerticalSlideContent(
             targetState = value,
-            transitionSpec = {
-                if (targetState != initialState) {
-                    (slideInVertically { height -> height } + fadeIn()) togetherWith
-                            (slideOutVertically { height -> -height } + fadeOut())
-                } else {
-                    fadeIn() togetherWith fadeOut()
-                }
-            },
-            label = "StatusItemAnimation"
+            label = "StatusItemAnimation",
         ) { targetValue ->
             Text(
                 text = targetValue,

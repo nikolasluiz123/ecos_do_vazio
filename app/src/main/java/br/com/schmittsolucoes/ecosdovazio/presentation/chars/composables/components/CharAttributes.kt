@@ -34,7 +34,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.model.CharAttribute
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeDecrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncrementButton
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
-import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.animateNumericStringProgressBarState
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.AnimatedVerticalSlideContent
 
 @Composable
 internal fun CharAttributes(
@@ -139,11 +139,6 @@ private fun AttributeItem(
 
 @Composable
 private fun AttributeTexts(attribute: CharAttributesUIModel) {
-    val displayValue = animateNumericStringProgressBarState(
-        targetValue = attribute.totalValue,
-        label = "AttributeValueAnimation"
-    )
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -156,13 +151,18 @@ private fun AttributeTexts(attribute: CharAttributesUIModel) {
                 fontFamily = FontFamily.Serif
             )
         )
-        Text(
-            text = displayValue.value,
-            style = MaterialTheme.typography.labelLarge.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontFamily = FontFamily.Serif
+        AnimatedVerticalSlideContent(
+            targetState = attribute.totalValue,
+            label = "AttributeValueAnimation"
+        ) { targetValue ->
+            Text(
+                text = targetValue,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontFamily = FontFamily.Serif
+                )
             )
-        )
+        }
     }
 }
 private fun getAttributeLabel(identifier: AttributeIdentifier): Int {
