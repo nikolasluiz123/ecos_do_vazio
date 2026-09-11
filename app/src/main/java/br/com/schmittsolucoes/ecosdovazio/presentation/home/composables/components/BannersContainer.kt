@@ -21,6 +21,10 @@ private const val MEDIUM_COLUMNS = 2
 private const val EXPANDED_COLUMNS = 3
 private const val DEFAULT_COLUMNS = 1
 
+private enum class BannerType {
+    SPECIALIZATION, HISTORY
+}
+
 @Composable
 internal fun BannersContainer(
     state: HomeUIState,
@@ -37,25 +41,13 @@ internal fun BannersContainer(
         else -> DEFAULT_COLUMNS
     }
 
-    val banners = buildList<@Composable (Modifier) -> Unit> {
+    val banners = buildList<BannerType> {
         if (state.showSpecializationBanner) {
-            add { modifier ->
-                SpecializationBanner(
-                    onClickSelectSpecialization = onNavigateToSpecializationSelection,
-                    modifier = modifier,
-                )
-            }
+            add(BannerType.SPECIALIZATION)
         }
 
-        state.lastUnfinishedHistoryPhase?.let { lastUnfinishedHistoryPhase ->
-            add { modifier ->
-                HistoryBanner(
-                    model = lastUnfinishedHistoryPhase,
-                    onNavigateToBattle = onNavigateToBattle,
-                    onNavigateToMobsInfo = onNavigateToMobsInfo,
-                    modifier = modifier,
-                )
-            }
+        if (state.lastUnfinishedHistoryPhase != null) {
+            add(BannerType.HISTORY)
         }
     }
 
@@ -64,16 +56,64 @@ internal fun BannersContainer(
     val effectiveColumns = minOf(banners.size, maxColumns)
 
     if (effectiveColumns <= 1) {
-        CommonColumn(banners = banners, modifier = modifier)
+        CommonColumn(
+            banners = banners,
+            state = state,
+            onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+            onNavigateToBattle = onNavigateToBattle,
+            onNavigateToMobsInfo = onNavigateToMobsInfo,
+            modifier = modifier
+        )
     } else {
-        ChunkedColumn(banners = banners, columns = effectiveColumns, modifier = modifier)
+        ChunkedColumn(
+            banners = banners,
+            columns = effectiveColumns,
+            state = state,
+            onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+            onNavigateToBattle = onNavigateToBattle,
+            onNavigateToMobsInfo = onNavigateToMobsInfo,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun RenderBanner(
+    type: BannerType,
+    state: HomeUIState,
+    onNavigateToSpecializationSelection: () -> Unit,
+    onNavigateToBattle: (String) -> Unit,
+    onNavigateToMobsInfo: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (type) {
+        BannerType.SPECIALIZATION -> {
+            SpecializationBanner(
+                onClickSelectSpecialization = onNavigateToSpecializationSelection,
+                modifier = modifier,
+            )
+        }
+        BannerType.HISTORY -> {
+            state.lastUnfinishedHistoryPhase?.let {
+                HistoryBanner(
+                    model = it,
+                    onNavigateToBattle = onNavigateToBattle,
+                    onNavigateToMobsInfo = onNavigateToMobsInfo,
+                    modifier = modifier,
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun ChunkedColumn(
-    banners: List<@Composable (Modifier) -> Unit>,
+    banners: List<BannerType>,
     columns: Int,
+    state: HomeUIState,
+    onNavigateToSpecializationSelection: () -> Unit,
+    onNavigateToBattle: (String) -> Unit,
+    onNavigateToMobsInfo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val rows = banners.chunked(columns)
@@ -92,11 +132,16 @@ private fun ChunkedColumn(
                     .height(IntrinsicSize.Max),
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
             ) {
-                rowBanners.forEach { banner ->
-                    banner(
-                        Modifier
+                rowBanners.forEach { bannerType ->
+                    RenderBanner(
+                        type = bannerType,
+                        state = state,
+                        onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+                        onNavigateToBattle = onNavigateToBattle,
+                        onNavigateToMobsInfo = onNavigateToMobsInfo,
+                        modifier = Modifier
                             .weight(1f, fill = false)
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
                     )
                 }
             }
@@ -106,7 +151,11 @@ private fun ChunkedColumn(
 
 @Composable
 private fun CommonColumn(
-    banners: List<@Composable (Modifier) -> Unit>,
+    banners: List<BannerType>,
+    state: HomeUIState,
+    onNavigateToSpecializationSelection: () -> Unit,
+    onNavigateToBattle: (String) -> Unit,
+    onNavigateToMobsInfo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -116,8 +165,15 @@ private fun CommonColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        banners.forEach { banner ->
-            banner(Modifier)
+        banners.forEach { bannerType ->
+            RenderBanner(
+                type = bannerType,
+                state = state,
+                onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
+                onNavigateToBattle = onNavigateToBattle,
+                onNavigateToMobsInfo = onNavigateToMobsInfo,
+                modifier = Modifier
+            )
         }
     }
 }

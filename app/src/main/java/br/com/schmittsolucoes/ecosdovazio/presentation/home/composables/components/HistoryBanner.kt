@@ -18,6 +18,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +38,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.components.FilledHighligh
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.model.LastUnfinishedHistoryPhaseUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SecondaryTextColor
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.AnimatedVerticalSlideContent
 
 @Composable
 fun HistoryBanner(
@@ -62,6 +69,14 @@ fun HistoryBanner(
 
 @Composable
 private fun CompletedLayout(model: LastUnfinishedHistoryPhaseUIModel) {
+    var animatedCount by remember { mutableIntStateOf(0) }
+    var animatedProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(model) {
+        animatedCount = model.completedPhasesCount
+        animatedProgress = 1f
+    }
+
     Text(
         text = stringResource(id = R.string.history_banner_completed_description),
         style = MaterialTheme.typography.bodyMedium,
@@ -76,22 +91,28 @@ private fun CompletedLayout(model: LastUnfinishedHistoryPhaseUIModel) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        Text(
-            text = stringResource(
-                id = R.string.history_banner_progress,
-                model.completedPhasesCount,
-                model.totalPhasesCount
-            ),
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontFamily = FontFamily.Serif,
-                color = SecondaryTextColor
-            )
+        val progressText = stringResource(
+            id = R.string.history_banner_progress,
+            animatedCount,
+            model.totalPhasesCount
         )
+        AnimatedVerticalSlideContent(
+            targetState = progressText,
+            label = "HistoryBannerProgressAnimation"
+        ) { targetValue ->
+            Text(
+                text = targetValue,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontFamily = FontFamily.Serif,
+                    color = SecondaryTextColor
+                )
+            )
+        }
     }
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    AppProgressBar(progress = 1f)
+    AppProgressBar(progress = animatedProgress)
 }
 
 @Composable
@@ -99,6 +120,14 @@ private fun ColumnScope.ProgressLayout(
     model: LastUnfinishedHistoryPhaseUIModel,
     onNavigateToBattle: (String) -> Unit
 ) {
+    var animatedCount by remember { mutableIntStateOf(0) }
+    var animatedProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(model) {
+        animatedCount = model.completedPhasesCount
+        animatedProgress = model.progress
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -113,22 +142,28 @@ private fun ColumnScope.ProgressLayout(
             )
         )
 
-        Text(
-            text = stringResource(
-                id = R.string.history_banner_progress,
-                model.completedPhasesCount,
-                model.totalPhasesCount
-            ),
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontFamily = FontFamily.Serif,
-                color = SecondaryTextColor
-            )
+        val progressText = stringResource(
+            id = R.string.history_banner_progress,
+            animatedCount,
+            model.totalPhasesCount
         )
+        AnimatedVerticalSlideContent(
+            targetState = progressText,
+            label = "HistoryBannerProgressAnimation"
+        ) { targetValue ->
+            Text(
+                text = targetValue,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontFamily = FontFamily.Serif,
+                    color = SecondaryTextColor
+                )
+            )
+        }
     }
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    AppProgressBar(progress = model.progress)
+    AppProgressBar(progress = animatedProgress)
 
     Spacer(modifier = Modifier.weight(1f))
     Spacer(modifier = Modifier.height(16.dp))
