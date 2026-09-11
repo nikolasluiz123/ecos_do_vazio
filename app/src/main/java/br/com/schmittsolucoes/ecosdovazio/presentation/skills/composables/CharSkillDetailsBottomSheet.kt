@@ -11,6 +11,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +33,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.components.AttributeIncre
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.extensions.removeDamageFormula
 import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDetailsUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.Highlight
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.animations.AnimatedVerticalSlideContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,6 +130,12 @@ private fun SkillAttributeAdjustmentItem(
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
 ) {
+    var animatedProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(attribute.progress) {
+        animatedProgress = attribute.progress
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -144,16 +156,21 @@ private fun SkillAttributeAdjustmentItem(
                         fontFamily = FontFamily.Serif
                     )
                 )
-                Text(
-                    text = attribute.totalValue,
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontFamily = FontFamily.Serif
+                AnimatedVerticalSlideContent(
+                    targetState = attribute.totalValue,
+                    label = "SkillAttributeValueAnimation"
+                ) { targetValue ->
+                    Text(
+                        text = targetValue,
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontFamily = FontFamily.Serif
+                        )
                     )
-                )
+                }
             }
 
-            AppProgressBar(progress = attribute.progress)
+            AppProgressBar(progress = animatedProgress)
         }
 
         Spacer(modifier = Modifier.width(16.dp))

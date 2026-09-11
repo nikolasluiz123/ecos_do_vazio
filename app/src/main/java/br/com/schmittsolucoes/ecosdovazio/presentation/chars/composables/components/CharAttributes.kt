@@ -16,7 +16,12 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -105,6 +110,12 @@ private fun AttributeItem(
     onIncrement: () -> Unit = {},
     onDecrement: () -> Unit = {}
 ) {
+    var animatedProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(attribute.progress) {
+        animatedProgress = attribute.progress
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom
@@ -115,7 +126,7 @@ private fun AttributeItem(
         ) {
             AttributeTexts(attribute = attribute)
 
-            AppProgressBar(progress = attribute.progress)
+            AppProgressBar(progress = animatedProgress)
         }
 
         Spacer(modifier = Modifier.size(8.dp))
