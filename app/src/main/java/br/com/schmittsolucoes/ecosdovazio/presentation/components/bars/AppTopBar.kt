@@ -4,9 +4,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
@@ -42,17 +46,19 @@ fun AppTopBar(
     visible: Boolean = true,
     onLogout: () -> Unit = { }
 ) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = BarEnterTransition,
-        exit = BarExitTransition
-    ) {
-        Surface(
-            shadowElevation = 4.dp,
-            tonalElevation = 8.dp
+    Column {
+        Spacer(modifier = Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
+        AnimatedVisibility(
+            visible = visible,
+            enter = BarEnterTransition,
+            exit = BarExitTransition
         ) {
-            Column {
+            Surface(
+                shadowElevation = 4.dp,
+                tonalElevation = 8.dp
+            ) {
                 TopAppBar(
+                    windowInsets = WindowInsets(0, 0, 0, 0),
                     title = {
                         TopBarCustomTitle(uiState)
                     },
