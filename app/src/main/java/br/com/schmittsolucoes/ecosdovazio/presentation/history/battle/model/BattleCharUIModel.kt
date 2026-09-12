@@ -24,6 +24,7 @@ data class BattleCharUIModel(
     val damageSkills: List<CharSkillUIModel> = emptyList(),
     val buffSkills: List<CharSkillUIModel> = emptyList(),
     val debuffSkills: List<CharSkillUIModel> = emptyList(),
+    val healSkills: List<CharSkillUIModel> = emptyList(),
     val activeStatus: List<ActiveStatusUIModel> = emptyList(),
     val criticalFailCount: Int = 0
 )

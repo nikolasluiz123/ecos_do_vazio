@@ -33,6 +33,7 @@ internal fun getSkillsList(page: Int, state: HistoryModeBattleUIState): List<Cha
     return when (page) {
         0 -> state.char?.damageSkills ?: emptyList()
         1 -> state.char?.buffSkills ?: emptyList()
-        else -> state.char?.debuffSkills ?: emptyList()
+        2 -> state.char?.debuffSkills ?: emptyList()
+        else -> state.char?.healSkills ?: emptyList()
     }
 }

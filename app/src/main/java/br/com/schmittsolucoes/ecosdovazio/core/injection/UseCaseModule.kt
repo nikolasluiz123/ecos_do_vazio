@@ -36,6 +36,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.CalculateP
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharBattleUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharDamageReductionUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillDamageUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillHealUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.GetCharSkillRawDamageUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.CalculateMobMultipliersUseCase
@@ -65,6 +66,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDamageAttr
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharDodgeChanceUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHPUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHeaderUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharHealAttributePointsUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharLevelInfoUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceFactorUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.chars.GetCharMagicResistanceMaxUseCase
@@ -108,6 +110,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCha
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharHealSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharSkillsDetailsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.ClassSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
@@ -757,6 +760,21 @@ object UseCaseModule {
     )
 
     @Provides
+    fun provideCharHealSkillsQueryUseCase(
+        skillRepository: SkillRepository,
+        userRepository: UserRepository,
+        preferencesRepository: PreferencesRepository,
+        charRepository: CharRepository,
+        languageProvider: LanguageProvider,
+    ): CharHealSkillsQueryUseCase = CharHealSkillsQueryUseCase(
+        skillRepository = skillRepository,
+        userRepository = userRepository,
+        preferencesRepository = preferencesRepository,
+        charRepository = charRepository,
+        languageProvider = languageProvider,
+    )
+
+    @Provides
     fun provideClassSkillsQueryUseCase(
         skillRepository: SkillRepository,
         languageProvider: LanguageProvider,
@@ -831,15 +849,33 @@ object UseCaseModule {
     }
 
     @Provides
+    fun provideGetCharHealAttributePointsUseCase(): GetCharHealAttributePointsUseCase {
+        return GetCharHealAttributePointsUseCase()
+    }
+
+    @Provides
+    fun provideGetCharSkillHealUseCase(
+        getCharHealAttributePointsUseCase: GetCharHealAttributePointsUseCase,
+        calculateRawHealUseCase: CalculateRawHealUseCase
+    ): GetCharSkillHealUseCase {
+        return GetCharSkillHealUseCase(
+            getCharHealAttributePointsUseCase = getCharHealAttributePointsUseCase,
+            calculateRawHealUseCase = calculateRawHealUseCase
+        )
+    }
+
+    @Provides
     fun provideUseCharSkillUseCase(
         getCharSkillDamageUseCase: GetCharSkillDamageUseCase,
         calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
-        calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
+        calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
+        getCharSkillHealUseCase: GetCharSkillHealUseCase
     ): UseCharSkillUseCase {
         return UseCharSkillUseCase(
             getCharSkillDamageUseCase = getCharSkillDamageUseCase,
             calculateCharMultipliersUseCase = calculateCharMultipliersUseCase,
-            calculateMobMultipliersUseCase = calculateMobMultipliersUseCase
+            calculateMobMultipliersUseCase = calculateMobMultipliersUseCase,
+            getCharSkillHealUseCase = getCharSkillHealUseCase
         )
     }
 

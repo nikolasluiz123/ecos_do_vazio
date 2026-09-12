@@ -19,6 +19,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.exceptions.UserExceptio
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharBuffSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDamageSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharDebuffSkillsQueryUseCase
+import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.CharHealSkillsQueryUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.skills.GetCharSkillBlockedUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.CommonViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.ActiveStatusUIModel
@@ -62,6 +63,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     charDamageSkillsQueryUseCase: CharDamageSkillsQueryUseCase,
     charBuffSkillsQueryUseCase: CharBuffSkillsQueryUseCase,
     charDebuffSkillsQueryUseCase: CharDebuffSkillsQueryUseCase,
+    charHealSkillsQueryUseCase: CharHealSkillsQueryUseCase,
 ) : CommonViewModel() {
 
     private val route = savedStateHandle.toRoute<HistoryModeBattleRoute>()
@@ -77,6 +79,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         charDamageSkillsQueryUseCase(),
         charBuffSkillsQueryUseCase(),
         charDebuffSkillsQueryUseCase(),
+        charHealSkillsQueryUseCase(),
         _internalState,
     ) { flows ->
         val mobs = flows[0] as List<BattleMob>
@@ -84,7 +87,8 @@ class HistoryModeBattleViewModel @Inject constructor(
         val damageSkills = flows[2] as List<CharSkill>
         val buffSkills = flows[3] as List<CharSkill>
         val debuffSkills = flows[4] as List<CharSkill>
-        val internalState = flows[5] as HistoryModeBattleInternalState
+        val healSkills = flows[5] as List<CharSkill>
+        val internalState = flows[6] as HistoryModeBattleInternalState
 
         val uiModelMobs = mapBattleMobsToUIModel(mobs, internalState.mobsHealth, internalState.mobsActiveStatus, internalState.skillsRefreshTime)
         val selectedMob = uiModelMobs.find { it.phaseMobId == internalState.selectedMobId } ?: uiModelMobs.firstOrNull()
@@ -98,9 +102,34 @@ class HistoryModeBattleViewModel @Inject constructor(
             char = char,
             charHealth = internalState.charHealth,
             charActiveStatus = internalState.charActiveStatus,
-            damageSkills = mapCharSkillsToUIModel(char, actualCharInfo, damageSkills, internalState.skillsRefreshTime, mobInfo),
-            buffSkills = mapCharSkillsToUIModel(char, actualCharInfo, buffSkills, internalState.skillsRefreshTime, mobInfo),
-            debuffSkills = mapCharSkillsToUIModel(char, actualCharInfo, debuffSkills, internalState.skillsRefreshTime, mobInfo),
+            damageSkills = mapCharSkillsToUIModel(
+                battleChar = char,
+                charInfo = actualCharInfo,
+                skills = damageSkills,
+                skillsRefreshTime = internalState.skillsRefreshTime,
+                mobInfo = mobInfo
+            ),
+            buffSkills = mapCharSkillsToUIModel(
+                battleChar = char,
+                charInfo = actualCharInfo,
+                skills = buffSkills,
+                skillsRefreshTime = internalState.skillsRefreshTime,
+                mobInfo = mobInfo
+            ),
+            debuffSkills = mapCharSkillsToUIModel(
+                battleChar = char,
+                charInfo = actualCharInfo,
+                skills = debuffSkills,
+                skillsRefreshTime = internalState.skillsRefreshTime,
+                mobInfo = mobInfo
+            ),
+            healSkills = mapCharSkillsToUIModel(
+                battleChar = char,
+                charInfo = actualCharInfo,
+                skills = healSkills,
+                skillsRefreshTime = internalState.skillsRefreshTime,
+                mobInfo = mobInfo
+            ),
         )
 
         HistoryModeBattleUIState(
@@ -245,6 +274,7 @@ class HistoryModeBattleViewModel @Inject constructor(
         damageSkills: List<CharSkillUIModel> = emptyList(),
         buffSkills: List<CharSkillUIModel> = emptyList(),
         debuffSkills: List<CharSkillUIModel> = emptyList(),
+        healSkills: List<CharSkillUIModel> = emptyList(),
     ): BattleCharUIModel {
         val actualHealth = charHealth ?: char.actualHealth
 
@@ -255,6 +285,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             damageSkills = damageSkills,
             buffSkills = buffSkills,
             debuffSkills = debuffSkills,
+            healSkills = healSkills,
             activeStatus = charActiveStatus,
         )
 

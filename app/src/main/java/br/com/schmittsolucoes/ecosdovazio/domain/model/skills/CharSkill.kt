@@ -103,4 +103,17 @@ sealed interface CharSkill {
         val duration: Int,
         override val damage: Long = 0
     ) : CharSkill
+
+    data class Heal(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val refreshTime: Int,
+        override val minLevel: Long,
+        override val imageName: String,
+        override val attributes: Attributes,
+        val lifeRestore: Long
+    ) : CharSkill {
+        override val skillCategory: SkillCategory = SkillCategory.HEAL
+    }
 }

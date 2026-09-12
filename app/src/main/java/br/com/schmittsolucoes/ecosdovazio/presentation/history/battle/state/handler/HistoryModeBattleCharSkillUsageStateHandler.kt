@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler
 
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.result.CharSkillUsageResult
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.chars.UseCharSkillUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.CharSkillUIModel
@@ -34,14 +35,19 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
     ): CharSkillUsageExecutionResult {
         if (skill.currentRefreshTime > 0 || skill.blocked) return CharSkillUsageExecutionResult.Ignored
 
-        val selectedMob = uiState.selectedMob ?: return CharSkillUsageExecutionResult.NoSelectedMob
+        val selectedMob = uiState.selectedMob
+
+        if (selectedMob == null && skill.skillCategory != SkillCategory.HEAL) {
+             return CharSkillUsageExecutionResult.NoSelectedMob
+        }
+
         val char = uiState.char ?: return CharSkillUsageExecutionResult.Ignored
 
         val result = useCharSkillUseCase(
             skillInfo = battleInfoMapper.mapToUsedSkillInfo(skillUIModel = skill),
             battleCharInfo = battleInfoMapper.mapToDomainInfo(charUIModel = char),
             mobs = uiState.mobs.map { battleInfoMapper.mapToDomainInfo(mobUIModel = it) },
-            selectedMobId = selectedMob.phaseMobId,
+            selectedMobId = selectedMob?.phaseMobId,
         )
 
         var updatedState = currentState
@@ -51,7 +57,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                 updatedState = mobsHealthStateHandler.updateMobHealth(
                     currentState = updatedState,
                     mobs = uiState.mobs,
-                    mobToUpdate = selectedMob,
+                    mobToUpdate = selectedMob!!,
                     newEnemyHealth = result.newEnemyHealth,
                 )
                 updatedState = updatedState.incrementRound()
@@ -74,7 +80,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                 updatedState = mobsHealthStateHandler.updateMobHealth(
                     currentState = updatedState,
                     mobs = uiState.mobs,
-                    mobToUpdate = selectedMob,
+                    mobToUpdate = selectedMob!!,
                     newEnemyHealth = result.newEnemyHealth,
                 )
                 updatedState = mobsActiveStatusStateHandler.registerMobDot(
@@ -90,7 +96,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                 updatedState = mobsHealthStateHandler.updateMobHealth(
                     currentState = updatedState,
                     mobs = uiState.mobs,
-                    mobToUpdate = selectedMob,
+                    mobToUpdate = selectedMob!!,
                     newEnemyHealth = result.newEnemyHealth,
                 )
                 updatedState = mobsActiveStatusStateHandler.registerMobDebuff(
@@ -109,7 +115,7 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                 updatedState = mobsHealthStateHandler.updateMobHealth(
                     currentState = updatedState,
                     mobs = uiState.mobs,
-                    mobToUpdate = selectedMob,
+                    mobToUpdate = selectedMob!!,
                     newEnemyHealth = result.newEnemyHealth,
                 )
                 updatedState = charHealthStateHandler.updateCharHealth(
@@ -125,6 +131,14 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
                     skill = skill,
                     result = result,
                 )
+            }
+
+            is CharSkillUsageResult.Heal -> {
+                updatedState = charHealthStateHandler.updateCharHealth(
+                    currentState = updatedState,
+                    newHealth = result.newCharHealth,
+                )
+                updatedState = updatedState.incrementRound()
             }
         }
 

@@ -117,4 +117,19 @@ sealed interface CharSkillUIModel {
         val duration: Int,
         override val damage: Long = 0
     ): CharSkillUIModel
+
+    data class Heal(
+        override val id: String,
+        override val name: String,
+        override val description: String,
+        override val refreshTime: Int,
+        override val minLevel: Long,
+        @DrawableRes override val image: Int,
+        override val attributes: CharSkill.Attributes,
+        override val currentRefreshTime: Int,
+        override val blocked: Boolean,
+        val lifeRestore: Long
+    ): CharSkillUIModel {
+        override val skillCategory: SkillCategory = SkillCategory.HEAL
+    }
 }

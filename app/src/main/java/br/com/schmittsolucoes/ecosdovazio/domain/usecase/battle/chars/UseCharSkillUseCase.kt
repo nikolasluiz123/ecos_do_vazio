@@ -14,7 +14,8 @@ import kotlin.math.roundToLong
 class UseCharSkillUseCase(
     private val getCharSkillDamageUseCase: GetCharSkillDamageUseCase,
     private val calculateCharMultipliersUseCase: CalculateCharMultipliersUseCase,
-    private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase
+    private val calculateMobMultipliersUseCase: CalculateMobMultipliersUseCase,
+    private val getCharSkillHealUseCase: GetCharSkillHealUseCase
 ) {
     operator fun invoke(
         skillInfo: UsedCharSkillInfo,
@@ -191,6 +192,20 @@ class UseCharSkillUseCase(
                         throw SkillException.SkillCategoryNotHandled()
                     }
                 }
+            }
+
+            is UsedCharSkillInfo.Heal -> {
+                val healAmount = getCharSkillHealUseCase.executeInternal(
+                    skillInfo = skillInfo,
+                    battleCharInfo = actualCharInfo
+                )
+                val calculatedCharHealth = actualCharInfo.actualHealth + healAmount
+                val newCharHealth = min(calculatedCharHealth, actualCharInfo.totalHealth)
+
+                CharSkillUsageResult.Heal(
+                    newCharHealth = newCharHealth,
+                    refreshTime = skillInfo.refreshTime
+                )
             }
         }
     }

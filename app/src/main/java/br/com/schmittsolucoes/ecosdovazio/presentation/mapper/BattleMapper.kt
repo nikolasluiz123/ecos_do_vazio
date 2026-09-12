@@ -28,6 +28,7 @@ class BattleMapper @Inject constructor(
         damageSkills: List<CharSkillUIModel> = emptyList(),
         buffSkills: List<CharSkillUIModel> = emptyList(),
         debuffSkills: List<CharSkillUIModel> = emptyList(),
+        healSkills: List<CharSkillUIModel> = emptyList(),
         activeStatus: List<ActiveStatusUIModel> = emptyList()
     ): BattleCharUIModel {
         val battleImage = resourcesProvider.getCharBattleImage(char.battleImageName) ?: 0
@@ -52,6 +53,7 @@ class BattleMapper @Inject constructor(
             damageSkills = damageSkills,
             buffSkills = buffSkills,
             debuffSkills = debuffSkills,
+            healSkills = healSkills,
             activeStatus = activeStatus
         )
     }

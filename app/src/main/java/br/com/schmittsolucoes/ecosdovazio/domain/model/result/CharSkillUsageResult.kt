@@ -39,4 +39,9 @@ sealed interface CharSkillUsageResult {
         val skillCategory: SkillCategory,
         override val refreshTime: Int
     ) : CharSkillUsageResult
+
+    data class Heal(
+        val newCharHealth: Long,
+        override val refreshTime: Int
+    ) : CharSkillUsageResult
 }

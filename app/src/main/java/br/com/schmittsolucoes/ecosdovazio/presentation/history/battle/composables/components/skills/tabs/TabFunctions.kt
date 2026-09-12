@@ -14,6 +14,7 @@ internal fun getTabIcons(): List<Int> {
     return listOf(
         R.drawable.ic_damage_24dp,
         R.drawable.ic_buff_24dp,
-        R.drawable.ic_debuff_24dp
+        R.drawable.ic_debuff_24dp,
+        R.drawable.ic_heal_24dp
     )
 }

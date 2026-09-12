@@ -51,4 +51,11 @@ sealed interface UsedCharSkillInfo {
         val multiplier: Double,
         val duration: Int,
     ): UsedCharSkillInfo
+
+    data class Heal(
+        override val refreshTime: Int,
+        val lifeRestore: Long
+    ): UsedCharSkillInfo {
+        override val skillCategory: SkillCategory = SkillCategory.HEAL
+    }
 }

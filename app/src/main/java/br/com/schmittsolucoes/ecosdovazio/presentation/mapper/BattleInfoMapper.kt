@@ -55,6 +55,11 @@ class BattleInfoMapper @Inject constructor(
                 duration = skillUIModel.duration,
                 damage = skillUIModel.damage
             )
+
+            is CharSkillUIModel.Heal -> UsedCharSkillInfo.Heal(
+                refreshTime = skillUIModel.refreshTime,
+                lifeRestore = skillUIModel.lifeRestore
+            )
         }
     }
 

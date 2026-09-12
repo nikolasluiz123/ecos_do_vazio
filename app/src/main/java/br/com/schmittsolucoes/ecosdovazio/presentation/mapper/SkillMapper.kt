@@ -191,6 +191,24 @@ class SkillMapper @Inject constructor(
                 damage = skill.damage,
                 projectedDamageInfo = projectedDamageInfo
             )
+
+            is CharSkill.Heal -> CharSkillUIModel.Heal(
+                id = skill.id,
+                name = skill.name,
+                description = formatDescription(
+                    description = skill.description,
+                    category = skill.skillCategory,
+                    lifeRestore = skill.lifeRestore,
+                    refreshTime = skill.refreshTime
+                ),
+                refreshTime = skill.refreshTime,
+                minLevel = skill.minLevel,
+                image = image,
+                attributes = skill.attributes,
+                currentRefreshTime = currentRefreshTime,
+                blocked = blocked,
+                lifeRestore = skill.lifeRestore
+            )
         }
     }
 

@@ -10,6 +10,7 @@ data class CharSkillTuple(
     val damage: Long?,
     val multiplier: Double?,
     val duration: Int?,
+    val lifeRestore: Long?,
     val refreshTime: Int,
     val minLevel: Long,
     val requiredStrength: Long,
