@@ -41,13 +41,13 @@ fun SkillsLazyVerticalGrid(
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {},
 ) {
-    val pagerState = rememberSkillsPagerState()
+    val pagerState = rememberSkillsPagerState(state)
     val density = LocalDensity.current
     val exclusionHeightPx = with(density) { 200.dp.toPx() }
 
     SkillsSurface(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
-            SkillsHorizontalTabRow(pagerState = pagerState)
+            SkillsHorizontalTabRow(pagerState = pagerState, state = state)
 
             SkillsHorizontalPager(
                 state = state,
@@ -91,12 +91,13 @@ fun SkillsLazyHorizontalGrid(
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {}
 ) {
-    val pagerState = rememberSkillsPagerState()
+    val pagerState = rememberSkillsPagerState(state)
 
     SkillsSurface(modifier = modifier) {
         Row(modifier = Modifier.fillMaxSize()) {
             SkillsVerticalTabRow(
                 pagerState = pagerState,
+                state = state,
                 modifier = Modifier.fillMaxHeight()
             )
 

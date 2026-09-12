@@ -30,10 +30,14 @@ internal fun calculateFixedAxisCells(
 }
 
 internal fun getSkillsList(page: Int, state: HistoryModeBattleUIState): List<CharSkillUIModel> {
-    return when (page) {
-        0 -> state.char?.damageSkills ?: emptyList()
-        1 -> state.char?.buffSkills ?: emptyList()
-        2 -> state.char?.debuffSkills ?: emptyList()
-        else -> state.char?.healSkills ?: emptyList()
-    }
+    val char = state.char ?: return emptyList()
+
+    val availableSkillsLists = listOfNotNull(
+        char.damageSkills.takeIf { it.isNotEmpty() },
+        char.buffSkills.takeIf { it.isNotEmpty() },
+        char.debuffSkills.takeIf { it.isNotEmpty() },
+        char.healSkills.takeIf { it.isNotEmpty() },
+    )
+
+    return availableSkillsLists.getOrNull(page) ?: emptyList()
 }

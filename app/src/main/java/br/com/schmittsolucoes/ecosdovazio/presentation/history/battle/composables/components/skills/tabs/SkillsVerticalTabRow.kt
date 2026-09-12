@@ -28,14 +28,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.TAB_BAR_SIZE
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.TAB_ICON_SIZE
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.HistoryModeBattleUIState
 import kotlinx.coroutines.launch
 
 @Composable
 fun SkillsVerticalTabRow(
     pagerState: PagerState,
+    state: HistoryModeBattleUIState,
     modifier: Modifier = Modifier
 ) {
-    val tabs = getTabIcons()
+    val tabs = getTabIcons(state)
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
