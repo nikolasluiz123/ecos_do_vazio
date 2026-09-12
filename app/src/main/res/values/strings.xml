@@ -169,27 +169,18 @@
 
     <string name="holy_shield_skill_name">Holy Shield</string>
     <string name="holy_shield_skill_description">Absolute defense reducing damage by 20%.</string>
-    <string name="counterattack_skill_name">Counterattack</string>
-    <string name="counterattack_skill_description">Reflects 20% of incoming damage back to the attacker.</string>
-    <string name="bastion_skill_name">Bastion</string>
-    <string name="bastion_skill_description">Increases the Guardian\'s Resistance by 20%.</string>
 
     <string name="brutal_cut_skill_name">Brutal Cut</string>
     <string name="brutal_cut_skill_description">A powerful and violent offensive strike with the weapon dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
-    <string name="bloody_fury_skill_name">Bloody Fury</string>
-    <string name="bloody_fury_skill_description">Increases damage dealt by 15%.</string>
+
     <string name="whirlwind_skill_name">Whirlwind</string>
     <string name="whirlwind_skill_description">Weapon spin causing area damage to multiple enemies.</string>
 
-    <string name="fireball_skill_name">Fireball</string>
-    <string name="fireball_skill_description">Highly destructive classic fire attack.</string>
-    <string name="igneous_explosion_skill_name">Igneous Explosion</string>
-    <string name="igneous_explosion_skill_description">Magical explosion causing intense flames in an area.</string>
     <string name="fire_skin_skill_name">Fire Skin</string>
     <string name="fire_skin_skill_description">Buff that reflects igneous damage upon receiving attacks.</string>
+    <string name="igneous_explosion_skill_name">Igneous Explosion</string>
+    <string name="igneous_explosion_skill_description">Magical explosion causing intense flames in an area.</string>
 
-    <string name="ice_spear_skill_name">Ice Spear</string>
-    <string name="ice_spear_skill_description">Icy projectile that reduces enemy speed.</string>
     <string name="invigorating_heal_skill_name">Invigorating Heal</string>
     <string name="invigorating_heal_skill_description">Aquatic support skill that heals 20 HP.</string>
     <string name="blizzard_skill_name">Blizzard</string>
@@ -204,8 +195,6 @@
 
     <string name="precision_fire_skill_name">Precision Fire</string>
     <string name="precision_fire_skill_description">Attack with a bonus to critical hit chance.</string>
-    <string name="eagle_eye_skill_name">Eagle Eye</string>
-    <string name="eagle_eye_skill_description">Buff that increases critical hit chance by 10%.</string>
     <string name="ground_trap_skill_name">Ground Trap</string>
     <string name="ground_trap_skill_description">Immobilizes the enemy for 2 turns with hunting tactics.</string>
 

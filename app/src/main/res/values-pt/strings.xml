@@ -169,27 +169,18 @@
 
     <string name="holy_shield_skill_name">Escudo Sagrado</string>
     <string name="holy_shield_skill_description">Defesa absoluta que reduz o dano em 20%.</string>
-    <string name="counterattack_skill_name">Contra-ataque</string>
-    <string name="counterattack_skill_description">Reflete 20% do dano recebido de volta para o atacante.</string>
-    <string name="bastion_skill_name">Bastião</string>
-    <string name="bastion_skill_description">Aumenta a Resistência do Guardião em 20%.</string>
 
     <string name="brutal_cut_skill_name">Corte Brutal</string>
     <string name="brutal_cut_skill_description">Um poderoso e violento golpe ofensivo com a arma causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
-    <string name="bloody_fury_skill_name">Fúria Sangrenta</string>
-    <string name="bloody_fury_skill_description">Aumenta o dano causado em 15%.</string>
+
     <string name="whirlwind_skill_name">Redemoinho</string>
     <string name="whirlwind_skill_description">Giro com a arma causando dano em área a múltiplos inimigos.</string>
 
-    <string name="fireball_skill_name">Bola de Fogo</string>
-    <string name="fireball_skill_description">Ataque clássico de fogo altamente destrutivo.</string>
-    <string name="igneous_explosion_skill_name">Explosão Ígnea</string>
-    <string name="igneous_explosion_skill_description">Explosão mágica causando chamas intensas em área.</string>
     <string name="fire_skin_skill_name">Pele de Fogo</string>
     <string name="fire_skin_skill_description">Buff que reflete dano ígneo ao receber ataques.</string>
+    <string name="igneous_explosion_skill_name">Explosão Ígnea</string>
+    <string name="igneous_explosion_skill_description">Explosão mágica causando chamas intensas em área.</string>
 
-    <string name="ice_spear_skill_name">Lança de Gelo</string>
-    <string name="ice_spear_skill_description">Projétil gélido que reduz a velocidade do inimigo.</string>
     <string name="invigorating_heal_skill_name">Cura Revigorante</string>
     <string name="invigorating_heal_skill_description">Habilidade de suporte aquática que cura 20 de HP.</string>
     <string name="blizzard_skill_name">Nevasca</string>
@@ -204,8 +195,6 @@
 
     <string name="precision_fire_skill_name">Disparo de Precisão</string>
     <string name="precision_fire_skill_description">Ataque com bônus na chance de acerto crítico.</string>
-    <string name="eagle_eye_skill_name">Olhar de Águia</string>
-    <string name="eagle_eye_skill_description">Buff que aumenta a chance de acerto crítico em 10%.</string>
     <string name="ground_trap_skill_name">Armadilha de Solo</string>
     <string name="ground_trap_skill_description">Imobiliza o inimigo por 2 turnos com táticas de caça.</string>
 

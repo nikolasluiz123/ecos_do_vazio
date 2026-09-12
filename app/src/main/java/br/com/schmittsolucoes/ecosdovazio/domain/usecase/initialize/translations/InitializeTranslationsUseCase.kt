@@ -172,24 +172,14 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.PIERCING_SHOT_SKILL_DESCRIPTION -> R.string.piercing_shot_skill_description
             TranslationIdentifier.HOLY_SHIELD_SKILL_NAME -> R.string.holy_shield_skill_name
             TranslationIdentifier.HOLY_SHIELD_SKILL_DESCRIPTION -> R.string.holy_shield_skill_description
-            TranslationIdentifier.COUNTERATTACK_SKILL_NAME -> R.string.counterattack_skill_name
-            TranslationIdentifier.COUNTERATTACK_SKILL_DESCRIPTION -> R.string.counterattack_skill_description
-            TranslationIdentifier.BASTION_SKILL_NAME -> R.string.bastion_skill_name
-            TranslationIdentifier.BASTION_SKILL_DESCRIPTION -> R.string.bastion_skill_description
             TranslationIdentifier.BRUTAL_CUT_SKILL_NAME -> R.string.brutal_cut_skill_name
             TranslationIdentifier.BRUTAL_CUT_SKILL_DESCRIPTION -> R.string.brutal_cut_skill_description
-            TranslationIdentifier.BLOODY_FURY_SKILL_NAME -> R.string.bloody_fury_skill_name
-            TranslationIdentifier.BLOODY_FURY_SKILL_DESCRIPTION -> R.string.bloody_fury_skill_description
             TranslationIdentifier.WHIRLWIND_SKILL_NAME -> R.string.whirlwind_skill_name
             TranslationIdentifier.WHIRLWIND_SKILL_DESCRIPTION -> R.string.whirlwind_skill_description
-            TranslationIdentifier.FIREBALL_SKILL_NAME -> R.string.fireball_skill_name
-            TranslationIdentifier.FIREBALL_SKILL_DESCRIPTION -> R.string.fireball_skill_description
-            TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_NAME -> R.string.igneous_explosion_skill_name
-            TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_DESCRIPTION -> R.string.igneous_explosion_skill_description
             TranslationIdentifier.FIRE_SKIN_SKILL_NAME -> R.string.fire_skin_skill_name
             TranslationIdentifier.FIRE_SKIN_SKILL_DESCRIPTION -> R.string.fire_skin_skill_description
-            TranslationIdentifier.ICE_SPEAR_SKILL_NAME -> R.string.ice_spear_skill_name
-            TranslationIdentifier.ICE_SPEAR_SKILL_DESCRIPTION -> R.string.ice_spear_skill_description
+            TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_NAME -> R.string.igneous_explosion_skill_name
+            TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_DESCRIPTION -> R.string.igneous_explosion_skill_description
             TranslationIdentifier.INVIGORATING_HEAL_SKILL_NAME -> R.string.invigorating_heal_skill_name
             TranslationIdentifier.INVIGORATING_HEAL_SKILL_DESCRIPTION -> R.string.invigorating_heal_skill_description
             TranslationIdentifier.BLIZZARD_SKILL_NAME -> R.string.blizzard_skill_name
@@ -202,8 +192,6 @@ class InitializeTranslationsUseCase(
             TranslationIdentifier.FRAG_GRENADE_SKILL_DESCRIPTION -> R.string.frag_grenade_skill_description
             TranslationIdentifier.PRECISION_FIRE_SKILL_NAME -> R.string.precision_fire_skill_name
             TranslationIdentifier.PRECISION_FIRE_SKILL_DESCRIPTION -> R.string.precision_fire_skill_description
-            TranslationIdentifier.EAGLE_EYE_SKILL_NAME -> R.string.eagle_eye_skill_name
-            TranslationIdentifier.EAGLE_EYE_SKILL_DESCRIPTION -> R.string.eagle_eye_skill_description
             TranslationIdentifier.GROUND_TRAP_SKILL_NAME -> R.string.ground_trap_skill_name
             TranslationIdentifier.GROUND_TRAP_SKILL_DESCRIPTION -> R.string.ground_trap_skill_description
             TranslationIdentifier.QUICK_ATTACK_SKILL_NAME -> R.string.quick_attack_skill_name

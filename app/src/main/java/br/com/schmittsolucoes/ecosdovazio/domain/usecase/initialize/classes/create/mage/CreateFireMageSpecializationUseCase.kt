@@ -3,7 +3,6 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_FIRE_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.FIRE_MAGE_SPECIALIZATION_PROFILE_IMAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIREBALL_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FIRE_BLAST_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_SKIN_ON_FIRE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
@@ -36,18 +35,6 @@ class CreateFireMageSpecializationUseCase(
         val skills = listOf(
             Skill(
                 id = identifierProvider.generate(),
-                nameTranslationId = TranslationIdentifier.FIREBALL_SKILL_NAME,
-                descriptionTranslationId = TranslationIdentifier.FIREBALL_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DAMAGE,
-                specializationId = fireMage.id,
-                damage = 45,
-                refreshTime = 3,
-                minLevel = 15,
-                imageName = SKILL_FIREBALL_KEY,
-                attributes = Skill.Attributes(requiredIntelligence = 25) 
-            ),
-            Skill(
-                id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.IGNEOUS_EXPLOSION_SKILL_DESCRIPTION,
                 skillCategory = SkillCategory.DAMAGE,
@@ -56,20 +43,20 @@ class CreateFireMageSpecializationUseCase(
                 refreshTime = 5,
                 minLevel = 16,
                 imageName = SKILL_FIRE_BLAST_KEY,
-                attributes = Skill.Attributes(requiredIntelligence = 26) 
+                attributes = Skill.Attributes(requiredIntelligence = 20, requiredDexterity = 12)
             ),
             Skill(
                 id = identifierProvider.generate(),
                 nameTranslationId = TranslationIdentifier.FIRE_SKIN_SKILL_NAME,
                 descriptionTranslationId = TranslationIdentifier.FIRE_SKIN_SKILL_DESCRIPTION,
-                skillCategory = SkillCategory.DEFENSIVE_BUFF,
+                skillCategory = SkillCategory.OFFENSIVE_BUFF,
                 specializationId = fireMage.id,
-                multiplier = 1.2,
-                duration = 3,
+                multiplier = 0.3,
+                duration = 4,
                 refreshTime = 6,
                 minLevel = 18,
                 imageName = SKILL_SKIN_ON_FIRE_KEY,
-                attributes = Skill.Attributes(requiredIntelligence = 28) 
+                attributes = Skill.Attributes(requiredIntelligence = 22, requiredDexterity = 10)
             )
         )
 

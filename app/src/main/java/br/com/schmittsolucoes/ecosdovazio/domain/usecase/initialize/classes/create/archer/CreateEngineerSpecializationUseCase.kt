@@ -3,8 +3,8 @@ package br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.classes.cre
 import br.com.schmittsolucoes.ecosdovazio.data.provider.BATTLE_IMAGE_ENGINEER_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ENGINEER_SPECIALIZATION_IMAGE_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.ENGINEER_SPECIALIZATION_PROFILE_IMAGE_KEY
-import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_CANNON_SHOT_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_AUTOMATIC_TURRET_KEY
+import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_CANNON_SHOT_KEY
 import br.com.schmittsolucoes.ecosdovazio.data.provider.SKILL_FRAGMENTATION_GRENADE_KEY
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
@@ -44,7 +44,7 @@ class CreateEngineerSpecializationUseCase(
                 refreshTime = 4,
                 minLevel = 15,
                 imageName = SKILL_CANNON_SHOT_KEY,
-                attributes = Skill.Attributes(requiredDexterity = 25) 
+                attributes = Skill.Attributes(requiredDexterity = 20, requiredAgility = 10)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -52,12 +52,12 @@ class CreateEngineerSpecializationUseCase(
                 descriptionTranslationId = TranslationIdentifier.AUTO_TURRET_SKILL_DESCRIPTION,
                 skillCategory = SkillCategory.DAMAGE_OVER_TIME,
                 specializationId = engineer.id,
-                damage = 15,
-                multiplier = 3.0,
-                refreshTime = 5,
+                damage = 20,
+                duration = 6,
+                refreshTime = 8,
                 minLevel = 16,
                 imageName = SKILL_AUTOMATIC_TURRET_KEY,
-                attributes = Skill.Attributes(requiredDexterity = 26) 
+                attributes = Skill.Attributes(requiredDexterity = 20, requiredAgility = 10)
             ),
             Skill(
                 id = identifierProvider.generate(),
@@ -69,7 +69,7 @@ class CreateEngineerSpecializationUseCase(
                 refreshTime = 5,
                 minLevel = 18,
                 imageName = SKILL_FRAGMENTATION_GRENADE_KEY,
-                attributes = Skill.Attributes(requiredDexterity = 28) 
+                attributes = Skill.Attributes(requiredDexterity = 22, requiredAgility = 14)
             )
         )
 

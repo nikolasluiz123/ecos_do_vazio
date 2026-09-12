@@ -10,41 +10,6 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.skills.model.CharSkillDet
 
 object CharSkillsPreviewData {
 
-    val skillBastion = CharSkillDetailsUIModel(
-        id = "1",
-        name = "Bastião",
-        description = "Aumenta a defesa física e mágica em 20% durante 3 turnos.",
-        skillCategory = SkillCategory.DEFENSIVE_BUFF,
-        damage = null,
-        multiplier = null,
-        duration = 3,
-        refreshTime = 4,
-        minLevel = 1,
-        attributes = listOf(
-            IdentifiedSkillAttribute(AttributeIdentifier.STRENGTH, 10),
-            IdentifiedSkillAttribute(AttributeIdentifier.PHYSICAL_RESISTANCE, 15),
-        ),
-        image = R.drawable.skill_bastiao,
-        blocked = false,
-    )
-
-    val skillFireball = CharSkillDetailsUIModel(
-        id = "2",
-        name = "Bola de Fogo",
-        description = "Lança uma esfera de fogo que causa 150 de dano mágico de fogo.",
-        skillCategory = SkillCategory.DAMAGE,
-        damage = 150,
-        multiplier = 1.5,
-        duration = null,
-        refreshTime = 2,
-        minLevel = 1,
-        attributes = listOf(
-            IdentifiedSkillAttribute(AttributeIdentifier.INTELLIGENCE, 12),
-        ),
-        image = R.drawable.skill_bola_de_fogo,
-        blocked = false,
-    )
-
     val skillWhirlwind = CharSkillDetailsUIModel(
         id = "3",
         name = "Redemoinho",
@@ -81,8 +46,6 @@ object CharSkillsPreviewData {
     )
 
     val skillList = listOf(
-        skillBastion,
-        skillFireball,
         skillWhirlwind,
         skillHeal,
     )
@@ -110,7 +73,7 @@ object CharSkillsPreviewData {
 
     val uiStateWithSelectedSkill = CharSkillsUIState(
         skills = skillList,
-        selectedSkill = skillBastion,
+        selectedSkill = skillWhirlwind,
         availablePoints = 3,
         selectedSkillAttributes = selectedSkillAttributes,
     )

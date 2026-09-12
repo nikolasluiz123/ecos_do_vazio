@@ -115,7 +115,7 @@ fun CharSkillItemLoading(
 private fun CharSkillItemUnlockedPreview() {
     EcosDoVazioTheme {
         CharSkillItem(
-            skill = CharSkillsPreviewData.skillBastion
+            skill = CharSkillsPreviewData.skillWhirlwind
         )
     }
 }

@@ -47,30 +47,24 @@ const val FIRE_MAGE_SPECIALIZATION_PROFILE_IMAGE_KEY = "especializacao_mago_fogo
 const val ENGINEER_SPECIALIZATION_PROFILE_IMAGE_KEY = "especializacao_engenheiro_perfil"
 const val BEASTMASTER_SPECIALIZATION_PROFILE_IMAGE_KEY = "especializacao_mestre_feras_perfil"
 
-const val SKILL_BASTION_KEY = "skill_bastiao"
 const val SKILL_BLIZZARD_KEY = "skill_nevasca"
 const val SKILL_WHIRLWIND_KEY = "skill_redemoinho"
 const val SKILL_ARCANE_FOCUS_KEY = "skill_foco_arcano"
-const val SKILL_FIREBALL_KEY = "skill_bola_de_fogo"
 const val SKILL_BRUTAL_SLASH_KEY = "skill_corte_brutal"
 const val SKILL_BRUTAL_RIFT_KEY = "skill_fenda_brutal"
 const val SKILL_HEAVY_STRIKE_KEY = "skill_golpe_pesado"
 const val SKILL_SKIN_ON_FIRE_KEY = "skill_pele_de_foco"
+const val SKILL_FIRE_BLAST_KEY = "skill_explosao_ignea"
 const val SKILL_TACTICAL_RETREAT_KEY = "skill_recuo_tatico"
 const val SKILL_PRECISE_SHOT_KEY = "skill_tiro_preciso"
 const val SKILL_TACTICAL_ADVANCE_KEY = "skill_avanco_tatico"
-const val SKILL_COUNTER_ATTACK_KEY = "skill_contra_ataque"
-const val SKILL_ICE_LANCE_KEY = "skill_lanca_de_gelo"
 const val SKILL_PERFECT_AIM_KEY = "skill_mira_perfeita"
 const val SKILL_ARCANE_MISSILE_KEY = "skill_missil_arcano"
 const val SKILL_RAPID_FIRE_KEY = "skill_disparo_rapido"
 const val SKILL_HOLY_SHIELD_KEY = "skill_escudo_sagrado"
-const val SKILL_FIRE_BLAST_KEY = "skill_explosao_ignea"
-const val SKILL_EAGLE_EYE_KEY = "skill_olhar_de_aguia"
 const val SKILL_SHOCKWAVE_KEY = "skill_onda_de_choque"
 const val SKILL_CANNON_SHOT_KEY = "skill_tiro_de_canhao"
 const val SKILL_ESSENCE_DRAIN_KEY = "skill_drenar_essencia"
-const val SKILL_BLOOD_RAGE_KEY = "skill_furia_sangrenta"
 const val SKILL_BLOOD_STRIKE_KEY = "skill_golpe_sangrento"
 const val SKILL_INVIGORATING_HEAL_KEY = "skill_cura_revigorante"
 const val SKILL_BATTLE_RAGE_KEY = "skill_furia_de_batalha"
@@ -214,30 +208,24 @@ class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
 
     override fun getSkillImage(name: String): Int? {
         return when (name) {
-            SKILL_BASTION_KEY -> R.drawable.skill_bastiao
             SKILL_BLIZZARD_KEY -> R.drawable.skill_nevasca
             SKILL_WHIRLWIND_KEY -> R.drawable.skill_redemoinho
             SKILL_ARCANE_FOCUS_KEY -> R.drawable.skill_foco_arcano
-            SKILL_FIREBALL_KEY -> R.drawable.skill_bola_de_fogo
             SKILL_BRUTAL_SLASH_KEY -> R.drawable.skill_corte_brutal
             SKILL_BRUTAL_RIFT_KEY -> R.drawable.skill_fenda_brutal
             SKILL_HEAVY_STRIKE_KEY -> R.drawable.skill_golpe_pesado
             SKILL_SKIN_ON_FIRE_KEY -> R.drawable.skill_pele_de_foco
+            SKILL_FIRE_BLAST_KEY -> R.drawable.skill_explosao_ignea
             SKILL_TACTICAL_RETREAT_KEY -> R.drawable.skill_recuo_tatico
             SKILL_PRECISE_SHOT_KEY -> R.drawable.skill_tiro_preciso
             SKILL_TACTICAL_ADVANCE_KEY -> R.drawable.skill_avanco_tatico
-            SKILL_COUNTER_ATTACK_KEY -> R.drawable.skill_contra_ataque
-            SKILL_ICE_LANCE_KEY -> R.drawable.skill_lanca_de_gelo
             SKILL_PERFECT_AIM_KEY -> R.drawable.skill_mira_perfeita
             SKILL_ARCANE_MISSILE_KEY -> R.drawable.skill_missil_arcano
             SKILL_RAPID_FIRE_KEY -> R.drawable.skill_disparo_rapido
             SKILL_HOLY_SHIELD_KEY -> R.drawable.skill_escudo_sagrado
-            SKILL_FIRE_BLAST_KEY -> R.drawable.skill_explosao_ignea
-            SKILL_EAGLE_EYE_KEY -> R.drawable.skill_olhar_de_aguia
             SKILL_SHOCKWAVE_KEY -> R.drawable.skill_onda_de_choque
             SKILL_CANNON_SHOT_KEY -> R.drawable.skill_tiro_de_canhao
             SKILL_ESSENCE_DRAIN_KEY -> R.drawable.skill_drenar_essencia
-            SKILL_BLOOD_RAGE_KEY -> R.drawable.skill_furia_sangrenta
             SKILL_BLOOD_STRIKE_KEY -> R.drawable.skill_golpe_sangrento
             SKILL_INVIGORATING_HEAL_KEY -> R.drawable.skill_cura_revigorante
             SKILL_BATTLE_RAGE_KEY -> R.drawable.skill_furia_de_batalha
