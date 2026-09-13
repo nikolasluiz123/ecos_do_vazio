@@ -168,35 +168,35 @@
     <string name="piercing_shot_skill_description">Ignores %7$s of the opponent\'s Resistance only on the first hit, dealing %1$d (%2$d + %3$d - %4$d) damage for %6$d rounds. Available again after %5$d rounds.</string>
 
     <string name="holy_shield_skill_name">Holy Shield</string>
-    <string name="holy_shield_skill_description">Absolute defense reducing damage by 20%.</string>
+    <string name="holy_shield_skill_description">An absolute and impenetrable holy defense that increases Resistance by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
 
     <string name="brutal_cut_skill_name">Brutal Cut</string>
     <string name="brutal_cut_skill_description">A powerful and violent offensive strike with the weapon dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
     <string name="whirlwind_skill_name">Whirlwind</string>
-    <string name="whirlwind_skill_description">Weapon spin causing area damage to multiple enemies.</string>
+    <string name="whirlwind_skill_description">A powerful offensive weapon spin causing %1$d (%2$d + %3$d - %4$d) area damage to multiple enemies. Can be used again after %5$d rounds.</string>
 
     <string name="fire_skin_skill_name">Fire Skin</string>
-    <string name="fire_skin_skill_description">Buff that reflects igneous damage upon receiving attacks.</string>
+    <string name="fire_skin_skill_description">Engulfs the caster in flames, boosting attacks by %1$s for %2$d rounds. Can be used again after %3$d rounds.</string>
     <string name="igneous_explosion_skill_name">Igneous Explosion</string>
-    <string name="igneous_explosion_skill_description">Magical explosion causing intense flames in an area.</string>
+    <string name="igneous_explosion_skill_description">A magical explosion causing intense flames that deals %1$d (%2$d + %3$d - %4$d) magic damage to the enemy. Can be used again after %5$d rounds.</string>
 
     <string name="invigorating_heal_skill_name">Invigorating Heal</string>
-    <string name="invigorating_heal_skill_description">Aquatic support skill that heals 20 HP.</string>
+    <string name="invigorating_heal_skill_description">An aquatic support skill that restores %1$d life to the ally. Can be used again after %2$d rounds.</string>
     <string name="blizzard_skill_name">Blizzard</string>
-    <string name="blizzard_skill_description">Powerful ice storm that freezes enemies.</string>
+    <string name="blizzard_skill_description">A powerful ice storm that deals %1$d (%2$d + %3$d - %4$d) magic area damage to enemies. Can be used again after %5$d rounds.</string>
 
     <string name="cannon_shot_skill_name">Cannon Shot</string>
-    <string name="cannon_shot_skill_description">Extremely high damage technological attack.</string>
+    <string name="cannon_shot_skill_description">A technological attack of extremely high firepower dealing %1$d (%2$d + %3$d - %4$d) damage to the enemy. Can be used again after %5$d rounds.</string>
     <string name="auto_turret_skill_name">Auto Turret</string>
-    <string name="auto_turret_skill_description">Deploys a turret that attacks every turn (DoT).</string>
+    <string name="auto_turret_skill_description">Deploys an automated turret that fires continuously, dealing %1$d (%2$d + %3$d - %4$d) damage every round for %6$d rounds. Can be used again after %5$d rounds.</string>
     <string name="frag_grenade_skill_name">Frag Grenade</string>
-    <string name="frag_grenade_skill_description">Explosive area attack designed by technology.</string>
+    <string name="frag_grenade_skill_description">An explosive attack designed by advanced technology, dealing %1$d (%2$d + %3$d - %4$d) damage to the enemy. Can be used again after %5$d rounds.</string>
 
     <string name="precision_fire_skill_name">Precision Fire</string>
-    <string name="precision_fire_skill_description">Attack with a bonus to critical hit chance.</string>
+    <string name="precision_fire_skill_description">A focused attack with extreme lethality, dealing %1$d (%2$d + %3$d - %4$d) damage to the enemy. Can be used again after %5$d rounds.</string>
     <string name="ground_trap_skill_name">Ground Trap</string>
-    <string name="ground_trap_skill_description">Immobilizes the enemy for 2 turns with hunting tactics.</string>
+    <string name="ground_trap_skill_description">A sneaky hunting tactic that surprises the enemy, ignoring %7$s of their Resistance and dealing %1$d (%2$d + %3$d - %4$d) damage. Can be used again after %5$d rounds.</string>
 
 
     <string name="quick_attack_skill_name">Quick Attack</string>

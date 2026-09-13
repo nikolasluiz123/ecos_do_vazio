@@ -168,35 +168,35 @@
     <string name="piercing_shot_skill_description">Ignora %7$s da Resistência do oponente apenas no primeiro golpe, causando %1$d (%2$d + %3$d - %4$d) de dano por %6$d turnos. Disponível novamente após %5$d turnos.</string>
 
     <string name="holy_shield_skill_name">Escudo Sagrado</string>
-    <string name="holy_shield_skill_description">Defesa absoluta que reduz o dano em 20%.</string>
+    <string name="holy_shield_skill_description">Uma defesa sagrada e absoluta que aumenta a Resistência em %1$s por %2$d turnos. Pode ser utilizada novamente após %3$d turnos.</string>
 
     <string name="brutal_cut_skill_name">Corte Brutal</string>
     <string name="brutal_cut_skill_description">Um poderoso e violento golpe ofensivo com a arma causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser usado novamente após %5$d turnos.</string>
 
     <string name="whirlwind_skill_name">Redemoinho</string>
-    <string name="whirlwind_skill_description">Giro com a arma causando dano em área a múltiplos inimigos.</string>
+    <string name="whirlwind_skill_description">Um poderoso giro ofensivo com a arma, causando %1$d (%2$d + %3$d - %4$d) de dano em área a múltiplos inimigos. Pode ser utilizado novamente após %5$d turnos.</string>
 
     <string name="fire_skin_skill_name">Pele de Fogo</string>
-    <string name="fire_skin_skill_description">Buff que reflete dano ígneo ao receber ataques.</string>
+    <string name="fire_skin_skill_description">Envolve o conjurador em chamas, potencializando os ataques em %1$s por %2$d turnos. Pode ser utilizada novamente após %3$d turnos.</string>
     <string name="igneous_explosion_skill_name">Explosão Ígnea</string>
-    <string name="igneous_explosion_skill_description">Explosão mágica causando chamas intensas em área.</string>
+    <string name="igneous_explosion_skill_description">Uma explosão mágica de chamas intensas que causa %1$d (%2$d + %3$d - %4$d) de dano mágico ao inimigo. Pode ser utilizada novamente após %5$d turnos.</string>
 
     <string name="invigorating_heal_skill_name">Cura Revigorante</string>
-    <string name="invigorating_heal_skill_description">Habilidade de suporte aquática que cura 20 de HP.</string>
+    <string name="invigorating_heal_skill_description">Uma habilidade de suporte aquática que restaura %1$d de vida do aliado. Pode ser utilizada novamente após %2$d turnos.</string>
     <string name="blizzard_skill_name">Nevasca</string>
-    <string name="blizzard_skill_description">Poderosa tempestade de gelo que congela os inimigos.</string>
+    <string name="blizzard_skill_description">Uma poderosa tempestade de gelo que causa %1$d (%2$d + %3$d - %4$d) de dano mágico em área aos inimigos. Pode ser utilizada novamente após %5$d turnos.</string>
 
     <string name="cannon_shot_skill_name">Tiro de Canhão</string>
-    <string name="cannon_shot_skill_description">Ataque tecnológico de altíssimo dano.</string>
+    <string name="cannon_shot_skill_description">Um ataque tecnológico de altíssimo poder de fogo que causa %1$d (%2$d + %3$d - %4$d) de dano ao inimigo. Pode ser utilizado novamente após %5$d turnos.</string>
     <string name="auto_turret_skill_name">Torreta Automática</string>
-    <string name="auto_turret_skill_description">Instala uma torreta que ataca a cada turno (DoT).</string>
+    <string name="auto_turret_skill_description">Instala uma torreta automatizada que atira continuamente, causando %1$d (%2$d + %3$d - %4$d) de dano a cada turno durante %6$d turnos. Pode ser utilizada novamente após %5$d turnos.</string>
     <string name="frag_grenade_skill_name">Granada de Fragmentação</string>
-    <string name="frag_grenade_skill_description">Ataque explosivo em área projetado por tecnologia.</string>
+    <string name="frag_grenade_skill_description">Um ataque explosivo projetado por tecnologia avançada, causando %1$d (%2$d + %3$d - %4$d) de dano ao inimigo. Pode ser utilizado novamente após %5$d turnos.</string>
 
     <string name="precision_fire_skill_name">Disparo de Precisão</string>
-    <string name="precision_fire_skill_description">Ataque com bônus na chance de acerto crítico.</string>
+    <string name="precision_fire_skill_description">Um ataque focado com extrema letalidade, causando %1$d (%2$d + %3$d - %4$d) de dano ao inimigo. Pode ser utilizado novamente após %5$d turnos.</string>
     <string name="ground_trap_skill_name">Armadilha de Solo</string>
-    <string name="ground_trap_skill_description">Imobiliza o inimigo por 2 turnos com táticas de caça.</string>
+    <string name="ground_trap_skill_description">Uma tática de caça sorrateira que surpreende o inimigo ignorando %7$s de sua Resistência, causando %1$d (%2$d + %3$d - %4$d) de dano. Pode ser utilizada novamente após %5$d turnos.</string>
 
     <string name="quick_attack_skill_name">Ataque Rápido</string>
     <string name="quick_attack_skill_description">Um ataque físico ofensivo veloz que causa %1$d (%2$d + %3$d - %4$d) de dano e pode ser usado novamente após %5$d turnos.</string>
