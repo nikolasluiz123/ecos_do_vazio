@@ -107,28 +107,28 @@ class HistoryModeBattleViewModel @Inject constructor(
                 charInfo = actualCharInfo,
                 skills = damageSkills,
                 skillsRefreshTime = internalState.skillsRefreshTime,
-                mobInfo = mobInfo
+                mobInfo = mobInfo,
             ),
             buffSkills = mapCharSkillsToUIModel(
                 battleChar = char,
                 charInfo = actualCharInfo,
                 skills = buffSkills,
                 skillsRefreshTime = internalState.skillsRefreshTime,
-                mobInfo = mobInfo
+                mobInfo = mobInfo,
             ),
             debuffSkills = mapCharSkillsToUIModel(
                 battleChar = char,
                 charInfo = actualCharInfo,
                 skills = debuffSkills,
                 skillsRefreshTime = internalState.skillsRefreshTime,
-                mobInfo = mobInfo
+                mobInfo = mobInfo,
             ),
             healSkills = mapCharSkillsToUIModel(
                 battleChar = char,
                 charInfo = actualCharInfo,
                 skills = healSkills,
                 skillsRefreshTime = internalState.skillsRefreshTime,
-                mobInfo = mobInfo
+                mobInfo = mobInfo,
             ),
         )
 
@@ -143,11 +143,12 @@ class HistoryModeBattleViewModel @Inject constructor(
             selectedActiveStatus = internalState.selectedDot,
             actualRound = internalState.actualRound,
             isEnemyRound = roundStateHandler.isEnemyRound(actualRound = internalState.actualRound),
+            showAbandonDialog = internalState.showAbandonDialog,
         )
     }.stateInWithCommonError(
         initialValue = HistoryModeBattleUIState(
             phaseId = route.phaseId,
-        )
+        ),
     )
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
@@ -163,6 +164,18 @@ class HistoryModeBattleViewModel @Inject constructor(
 
     fun onDismissErrorDialog() {
         _internalState.update { it.copy(errorMessage = null) }
+    }
+
+    fun onShowAbandonDialog() {
+        _internalState.update { it.copy(showAbandonDialog = true) }
+    }
+
+    fun onDismissAbandonDialog() {
+        _internalState.update { it.copy(showAbandonDialog = false) }
+    }
+
+    fun onConfirmAbandonBattle() {
+        _internalState.update { it.copy(showAbandonDialog = false, shouldPop = true) }
     }
 
     fun onMobClick(mob: BattleMobUIModel) {

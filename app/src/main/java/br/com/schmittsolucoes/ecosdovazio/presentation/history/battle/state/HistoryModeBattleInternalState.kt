@@ -15,4 +15,5 @@ data class HistoryModeBattleInternalState(
     val actualRound: Long = 1,
     val shouldPop: Boolean = false,
     val selectedDot: ActiveStatusUIModel? = null,
+    val showAbandonDialog: Boolean = false,
 )

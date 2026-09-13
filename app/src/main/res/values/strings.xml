@@ -253,6 +253,10 @@
     <string name="history_mode_battle_screen_select_mob_message">You must select the Mob you want to attack.</string>
     <string name="history_mode_battle_screen_label_enemy_round">Enemy Turn</string>
     <string name="history_mode_battle_screen_label_player_round">Your Turn</string>
+    <string name="history_mode_battle_abandon_dialog_title">Abandon Battle?</string>
+    <string name="history_mode_battle_abandon_dialog_message">Are you sure you want to abandon the battle? This action will be considered a defeat.</string>
+    <string name="history_mode_battle_abandon_dialog_confirm">Abandon</string>
+    <string name="history_mode_battle_abandon_dialog_cancel">Cancel</string>
     <string name="history_mobs_info_title">Enemies Information</string>
     <string name="history_mobs_info_content_description">Enemies info</string>
     <string name="history_banner_title">History Mode</string>

@@ -252,6 +252,10 @@
     <string name="history_mode_battle_screen_select_mob_message">Você deve selecionar o Mob que deseja atacar.</string>
     <string name="history_mode_battle_screen_label_enemy_round">Turno Inimigo</string>
     <string name="history_mode_battle_screen_label_player_round">Seu Turno</string>
+    <string name="history_mode_battle_abandon_dialog_title">Abandonar Batalha?</string>
+    <string name="history_mode_battle_abandon_dialog_message">Tem certeza de que deseja abandonar a batalha? Esta ação será considerada como uma derrota.</string>
+    <string name="history_mode_battle_abandon_dialog_confirm">Abandonar</string>
+    <string name="history_mode_battle_abandon_dialog_cancel">Cancelar</string>
     <string name="history_mobs_info_title">Informações dos Inimigos</string>
     <string name="history_mobs_info_content_description">Informações dos inimigos</string>
     <string name="history_banner_title">Modo História</string>

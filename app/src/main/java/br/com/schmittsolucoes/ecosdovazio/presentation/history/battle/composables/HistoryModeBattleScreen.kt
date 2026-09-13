@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composabl
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.HistoryModeBattleViewModel
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.AbandonBattleDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.CharSection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.EnemySection
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.skills.SkillsLazyHorizontalGrid
@@ -102,6 +104,9 @@ fun HistoryModeBattleScreen(
         onSkillClick = viewModel::onSkillClick,
         onSkillLongClick = viewModel::onSkillLongClick,
         onDismissSkillTooltip = viewModel::onDismissSkillTooltip,
+        onShowAbandonDialog = viewModel::onShowAbandonDialog,
+        onDismissAbandonDialog = viewModel::onDismissAbandonDialog,
+        onConfirmAbandonBattle = viewModel::onConfirmAbandonBattle,
     )
 }
 
@@ -116,7 +121,14 @@ fun HistoryModeBattleScreen(
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {},
     onDismissSkillTooltip: () -> Unit = {},
+    onShowAbandonDialog: () -> Unit = {},
+    onDismissAbandonDialog: () -> Unit = {},
+    onConfirmAbandonBattle: () -> Unit = {},
 ) {
+    BackHandler {
+        onShowAbandonDialog()
+    }
+
     val isExpandedWidth = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
     val isCompactHeight = windowSizeClass?.heightSizeClass == WindowHeightSizeClass.Compact
     val useSideBySide = isExpandedWidth || isCompactHeight
@@ -161,6 +173,13 @@ fun HistoryModeBattleScreen(
                     onDismiss = onDismissErrorDialog,
                 )
             }
+
+            if (state.showAbandonDialog) {
+                AbandonBattleDialog(
+                    onConfirm = onConfirmAbandonBattle,
+                    onDismiss = onDismissAbandonDialog,
+                )
+            }
         }
     }
 }
@@ -186,7 +205,7 @@ internal fun StackLayout(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.8f)
+                .weight(0.75f)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -222,7 +241,7 @@ internal fun StackLayout(
             state = state,
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.2f),
+                .weight(0.25f),
             onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip,
@@ -253,7 +272,7 @@ internal fun SideBySideLayout(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.8f)
+                .weight(0.76f)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -293,7 +312,7 @@ internal fun SideBySideLayout(
             state = state,
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.2f),
+                .weight(0.25f),
             onSkillClick = onSkillClick,
             onSkillLongClick = onSkillLongClick,
             onDismissSkillTooltip = onDismissSkillTooltip
@@ -533,6 +552,34 @@ private fun HistoryModeBattleScreenWithErrorPreviewPhone() {
     EcosDoVazioTheme {
         HistoryModeBattleScreen(
             state = HistoryModeBattlePreviewData.uiStateWithError,
+            windowSizeClass = windowSizeClass,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(
+    name = "Phone - Abandon Dialog - Light",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_NO,
+    showBackground = true,
+)
+@Preview(
+    name = "Phone - Abandon Dialog - Dark",
+    device = Devices.PHONE,
+    uiMode = UI_MODE_NIGHT_YES,
+    showBackground = true,
+)
+@Composable
+private fun HistoryModeBattleScreenWithAbandonDialogPreviewPhone() {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val windowSizeClass = WindowSizeClass.calculateFromSize(
+        DpSize(containerSize.width.dp, containerSize.height.dp),
+    )
+
+    EcosDoVazioTheme {
+        HistoryModeBattleScreen(
+            state = HistoryModeBattlePreviewData.uiStateWithAbandonDialog,
             windowSizeClass = windowSizeClass,
         )
     }

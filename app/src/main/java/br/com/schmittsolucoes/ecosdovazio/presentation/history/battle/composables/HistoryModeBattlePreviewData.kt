@@ -172,4 +172,8 @@ object HistoryModeBattlePreviewData {
     val uiStateWithError = uiState.copy(
         errorMessage = "Ocorreu um erro ao carregar os dados da batalha."
     )
+
+    val uiStateWithAbandonDialog = uiState.copy(
+        showAbandonDialog = true
+    )
 }
