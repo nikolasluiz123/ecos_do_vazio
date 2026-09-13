@@ -14,7 +14,12 @@ internal fun rememberSkillsPagerState(state: HistoryModeBattleUIState): PagerSta
 }
 
 internal fun getTabIcons(state: HistoryModeBattleUIState): List<Int> {
-    val char = state.char ?: return emptyList()
+    val char = state.char ?: return listOf(
+        R.drawable.ic_damage_24dp,
+        R.drawable.ic_buff_24dp,
+        R.drawable.ic_debuff_24dp,
+        R.drawable.ic_heal_24dp,
+    )
 
     return listOfNotNull(
         R.drawable.ic_damage_24dp.takeIf { char.damageSkills.isNotEmpty() },
