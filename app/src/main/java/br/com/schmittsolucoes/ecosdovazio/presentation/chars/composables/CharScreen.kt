@@ -31,6 +31,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.chars.composables.compone
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.LayoutConstants
 
 @Composable
 fun CharScreen(
@@ -86,6 +87,8 @@ fun CharScreen(
                 onIncrementAttribute = onIncrementAttribute,
                 onDecrementAttribute = onDecrementAttribute,
             )
+
+            Spacer(modifier = Modifier.height(LayoutConstants.MAIN_GRAPH_BOTTOM_SPACER))
 
             state.errorMessage?.let { message ->
                 ErrorDialog(

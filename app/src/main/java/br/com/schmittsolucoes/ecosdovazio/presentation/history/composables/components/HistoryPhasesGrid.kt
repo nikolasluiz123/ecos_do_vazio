@@ -6,8 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -24,6 +27,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.Histo
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.composables.HistoryPreviewData
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.LayoutConstants
 
 private val GridContentPadding = 16.dp
 private val GridVerticalSpacing = 32.dp
@@ -80,6 +84,10 @@ fun HistoryPhasesGrid(
                     onInfoClick = onInfoClick,
                 )
             }
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(modifier = Modifier.height(LayoutConstants.MAIN_GRAPH_BOTTOM_SPACER))
         }
     }
 }

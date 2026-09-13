@@ -3,8 +3,10 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.home.composables
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +28,7 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.home.HomeViewModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.home.composables.components.BannersContainer
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.BackgroundGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
+import br.com.schmittsolucoes.ecosdovazio.presentation.theme.LayoutConstants
 
 @Composable
 fun HomeScreen(
@@ -59,7 +62,7 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
 
     Scaffold { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -73,6 +76,8 @@ fun HomeScreen(
                 onNavigateToBattle = onNavigateToBattle,
                 onNavigateToMobsInfo = onNavigateToMobsInfo
             )
+
+            Spacer(modifier = Modifier.height(LayoutConstants.MAIN_GRAPH_BOTTOM_SPACER))
 
             state.errorMessage?.let { message ->
                 ErrorDialog(
