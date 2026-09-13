@@ -20,12 +20,12 @@ class RunEnemyRoundUseCase(
         val livingMobs = mobs.filter { it.actualHealth > 0 }
 
         livingMobs.forEach { mob ->
-            chooseMobSkillUseCase.executeInternal(mob.skills)?.let { skill ->
+            chooseMobSkillUseCase.executeInternal(skills = mob.skills, liveMobs = livingMobs)?.let { skill ->
                 val usageResult = useMobSkillUseCase.executeInternal(
                     skillInfo = skill.toUsedInfo(),
                     battleMobInfo = mob.toInfo(),
                     battleCharInfo = getCharInfo(),
-                    liveMobs = livingMobs.map { it.toInfo() }
+                    liveMobs = livingMobs.map { it.toInfo() },
                 )
 
                 onMobUseSkill(usageResult)
