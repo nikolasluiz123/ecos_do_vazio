@@ -1,6 +1,7 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.provider
 
 interface ResourcesProvider {
+    fun getCharImage(name: String): Int?
     fun getClassImage(name: String): Int?
     fun getSpecializationImage(name: String): Int?
     fun getCharBattleImage(name: String): Int?

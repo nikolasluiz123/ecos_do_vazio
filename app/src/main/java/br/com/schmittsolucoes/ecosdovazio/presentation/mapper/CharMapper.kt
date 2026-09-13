@@ -22,7 +22,7 @@ class CharMapper @Inject constructor(
         return CharSelectionUIModel(
             id = char.id,
             name = char.name,
-            presentationImage = char.presentationImageName?.let(resourcesProvider::getClassImage),
+            presentationImage = char.presentationImageName?.let(resourcesProvider::getCharImage),
         )
     }
 

@@ -115,6 +115,11 @@ const val FIRE_MAGE_COAT_ARMS_IMAGE_KEY = "brasao_mago_de_fogo"
 const val BEASTMASTER_COAT_ARMS_IMAGE_KEY = "brasao_mestre_das_feras"
 
 class AndroidResourcesProvider @Inject constructor() : ResourcesProvider {
+
+    override fun getCharImage(name: String): Int? {
+        return getSpecializationImage(name) ?: getClassImage(name)
+    }
+
     override fun getClassImage(name: String): Int? {
         return when (name) {
             ARCHER_CLASS_IMAGE_KEY -> R.drawable.classe_arqueiro

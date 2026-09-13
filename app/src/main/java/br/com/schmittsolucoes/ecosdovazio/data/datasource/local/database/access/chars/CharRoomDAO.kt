@@ -26,9 +26,10 @@ interface CharRoomDAO: CharLocalDataSource, RoomLocalDataSource<CharEntity> {
     @Query("""
         select chars.id as id, 
                chars.name as name, 
-               classes.presentation_image_name as presentationImageName 
+               coalesce(specializations.presentation_image_name, classes.presentation_image_name) as presentationImageName 
          from chars
          inner join classes on classes.id = chars.class_id
+         left join specializations on specializations.id = chars.specialization_id
          where chars.user_id = :userId
     """)
     override fun getUserChars(userId: String): Flow<List<CharSelectionTuple>>
