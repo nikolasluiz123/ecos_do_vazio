@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.RoomLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserRoomDAO: UserLocalDataSource, RoomLocalDataSource<UserEntity> {
@@ -13,4 +14,7 @@ interface UserRoomDAO: UserLocalDataSource, RoomLocalDataSource<UserEntity> {
 
     @Query("select * from users limit 1")
     override suspend fun getFirstUser(): UserEntity?
+
+    @Query("select * from users limit 1")
+    override fun getFirstUserObservable(): Flow<UserEntity?>
 }

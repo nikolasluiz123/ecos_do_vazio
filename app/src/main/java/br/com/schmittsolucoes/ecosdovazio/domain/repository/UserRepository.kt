@@ -1,9 +1,11 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.repository
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun insert(user: User)
     suspend fun getExistsUser(): Boolean
     suspend fun getFirstUser(): User?
+    fun getFirstUserObservable(): Flow<User?>
 }

@@ -5,6 +5,8 @@ import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toDomain
 import br.com.schmittsolucoes.ecosdovazio.data.repository.mapper.toEntity
 import br.com.schmittsolucoes.ecosdovazio.domain.model.User
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -20,5 +22,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getFirstUser(): User? {
         return userLocalDataSource.getFirstUser()?.toDomain()
+    }
+
+    override fun getFirstUserObservable(): Flow<User?> {
+        return userLocalDataSource.getFirstUserObservable().map { it?.toDomain() }
     }
 }

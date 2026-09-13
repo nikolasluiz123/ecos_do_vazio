@@ -2,8 +2,10 @@ package br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access
 
 import br.com.schmittsolucoes.ecosdovazio.data.datasource.local.database.access.EntityLocalDataSource
 import br.com.schmittsolucoes.ecosdovazio.data.model.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 interface UserLocalDataSource: EntityLocalDataSource<UserEntity> {
     suspend fun getExistsUser(): Boolean
     suspend fun getFirstUser(): UserEntity?
+    fun getFirstUserObservable(): Flow<UserEntity?>
 }

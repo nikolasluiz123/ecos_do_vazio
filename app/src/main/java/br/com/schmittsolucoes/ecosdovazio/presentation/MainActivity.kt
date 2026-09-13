@@ -37,6 +37,7 @@ import androidx.navigation.navOptions
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.navigateToCharSelection
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.ErrorDialog
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.LoadingOverlay
+import br.com.schmittsolucoes.ecosdovazio.presentation.components.ObserveAsEvents
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.bars.AppBottomBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.components.bars.AppTopBar
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.EcosDoVazioTheme
@@ -72,13 +73,15 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val windowSizeClass = calculateWindowSizeClass(this)
 
-                    LaunchedEffect(Unit) {
-                        viewModel.logoutEvent.collect {
-                            navController.navigateToCharSelection(
-                                navOptions = navOptions {
-                                    popUpTo(0) { inclusive = true }
-                                }
-                            )
+                    ObserveAsEvents(viewModel.navigationEvent) { event ->
+                        when (event) {
+                            AppNavigationEvent.Logout -> {
+                                navController.navigateToCharSelection(
+                                    navOptions = navOptions {
+                                        popUpTo(0) { inclusive = true }
+                                    }
+                                )
+                            }
                         }
                     }
 

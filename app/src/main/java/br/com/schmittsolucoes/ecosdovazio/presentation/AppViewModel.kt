@@ -1,11 +1,9 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation
 
-import android.app.Application
-import androidx.lifecycle.viewModelScope
+import android.content.Context
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.LoadingManager
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.SnackbarManager
-import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharHeader
 import br.com.schmittsolucoes.ecosdovazio.domain.provider.ResourcesProvider
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.PreferencesRepository
 import br.com.schmittsolucoes.ecosdovazio.domain.repository.UserRepository
@@ -15,20 +13,31 @@ import br.com.schmittsolucoes.ecosdovazio.domain.usecase.initialize.InitializeDa
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.preferences.UnselectCharUseCase
 import br.com.schmittsolucoes.ecosdovazio.presentation.chars.selection.navigation.CharSelectionRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+private data class AppInternalState(
+    val isInitializing: Boolean = true,
+    val startDestination: Any = CharSelectionRoute,
+    val errorMessage: String? = null,
+    val isToolbarExpanded: Boolean = true,
+)
+
+sealed interface AppNavigationEvent {
+    data object Logout : AppNavigationEvent
+}
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    private val application: Application,
+    @param:ApplicationContext private val context: Context,
     private val snackbarManager: SnackbarManager,
     private val initializeDatabaseUseCase: InitializeDatabaseUseCase,
     private val userRepository: UserRepository,
@@ -39,46 +48,36 @@ class AppViewModel @Inject constructor(
     loadingManager: LoadingManager,
 ) : CommonViewModel() {
 
-    private val _isInitializing = MutableStateFlow(true)
-    private val _startDestination = MutableStateFlow<Any>(CharSelectionRoute)
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    private val _isToolbarExpanded = MutableStateFlow(true)
+    private val _internalState = MutableStateFlow(AppInternalState())
 
-    private val _logoutEvent = MutableSharedFlow<Unit>()
-    val logoutEvent: SharedFlow<Unit> = _logoutEvent.asSharedFlow()
+    private val _navigationChannel = Channel<AppNavigationEvent>(Channel.BUFFERED)
+    val navigationEvent: Flow<AppNavigationEvent> = _navigationChannel.receiveAsFlow()
 
     val uiState: StateFlow<AppUIState> = combine(
-        _isInitializing,
-        _startDestination,
-        _errorMessage,
+        _internalState,
         loadingManager.isLoading,
         loadingManager.message,
         snackbarManager.message,
-        getCharHeaderUseCase(),
-        _isToolbarExpanded
-    ) { flows ->
+        getCharHeaderUseCase()
+    ) { internalState, isLoading, loadingMessage, snackbarMessage, charHeader ->
         AppUIState(
-            isInitializing = flows[0] as Boolean,
-            startDestination = flows[1] as Any,
-            errorMessage = flows[2] as String?,
-            isLoading = flows[3] as Boolean,
-            loadingMessage = flows[4] as String?,
-            snackbarMessage = flows[5] as String?,
-            charHeader = flows[6] as CharHeader?,
-            profileImageRes = (flows[6] as? CharHeader)?.let { resourcesProvider.getCharProfileImage(it.profileImageName) },
-            isToolbarExpanded = flows[7] as Boolean
+            isInitializing = internalState.isInitializing,
+            startDestination = internalState.startDestination,
+            errorMessage = internalState.errorMessage,
+            isLoading = isLoading,
+            loadingMessage = loadingMessage,
+            snackbarMessage = snackbarMessage,
+            charHeader = charHeader,
+            profileImageRes = charHeader?.let { resourcesProvider.getCharProfileImage(it.profileImageName) },
+            isToolbarExpanded = internalState.isToolbarExpanded
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STATE_IN_STOP_TIMEOUT_MILLIS),
-        initialValue = AppUIState()
-    )
+    }.stateInWithCommonError(initialValue = AppUIState())
 
     init {
         launch {
             initializeDatabaseUseCase()
             checkInitialDestination()
-            _isInitializing.value = false
+            _internalState.update { it.copy(isInitializing = false) }
         }
     }
 
@@ -88,7 +87,7 @@ class AppViewModel @Inject constructor(
             val preferences = preferencesRepository.getUserPreferences(user.id).firstOrNull()
 
             if (preferences?.selectedCharId != null) {
-                _startDestination.value = MainGraph
+                _internalState.update { it.copy(startDestination = MainGraph) }
             }
         } catch (_: Exception) {
             // Se falhar, mantemos o startDestination padrão (CharSelectionRoute)
@@ -97,17 +96,17 @@ class AppViewModel @Inject constructor(
 
     override fun getErrorMessageFrom(throwable: Throwable): String {
         return when (throwable) {
-            is UserException.UserNotFound -> application.getString(R.string.user_error_not_found)
-            else -> application.getString(R.string.error_unexpected)
+            is UserException.UserNotFound -> context.getString(R.string.user_error_not_found)
+            else -> context.getString(R.string.error_unexpected)
         }
     }
 
     override fun onShowErrorDialog(message: String) {
-        _errorMessage.value = message
+        _internalState.update { it.copy(errorMessage = message) }
     }
 
     fun onDismissErrorDialog() {
-        _errorMessage.value = null
+        _internalState.update { it.copy(errorMessage = null) }
     }
 
     fun onDismissSnackbar() {
@@ -115,13 +114,13 @@ class AppViewModel @Inject constructor(
     }
 
     fun toggleToolbarExpanded() {
-        _isToolbarExpanded.value = !_isToolbarExpanded.value
+        _internalState.update { it.copy(isToolbarExpanded = !it.isToolbarExpanded) }
     }
 
     fun logout() {
         launch {
             unselectCharUseCase()
-            _logoutEvent.emit(Unit)
+            _navigationChannel.send(AppNavigationEvent.Logout)
         }
     }
 }

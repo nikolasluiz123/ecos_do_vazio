@@ -13,17 +13,23 @@ import javax.inject.Inject
 class GetCharHeaderUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val charRepository: CharRepository
+    private val charRepository: CharRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<CharHeader?> {
-        return flowOf(Unit).flatMapLatest {
-            val user = userRepository.getFirstUser() ?: return@flatMapLatest flowOf(null)
+        return userRepository.getFirstUserObservable().flatMapLatest { user ->
+            if (user == null) {
+                flowOf(null)
+            } else {
+                preferencesRepository.getUserPreferences(user.id).flatMapLatest { preferences ->
+                    val charId = preferences?.selectedCharId
 
-            preferencesRepository.getUserPreferences(user.id).flatMapLatest { preferences ->
-                preferences?.selectedCharId?.let { charId ->
-                    charRepository.getCharHeader(charId)
-                } ?: flowOf(null)
+                    if (charId != null) {
+                        charRepository.getCharHeader(charId)
+                    } else {
+                        flowOf(null)
+                    }
+                }
             }
         }
     }
