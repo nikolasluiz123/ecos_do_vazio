@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -172,7 +173,7 @@ private fun CommonColumn(
                 onNavigateToSpecializationSelection = onNavigateToSpecializationSelection,
                 onNavigateToBattle = onNavigateToBattle,
                 onNavigateToMobsInfo = onNavigateToMobsInfo,
-                modifier = Modifier
+                modifier = Modifier.widthIn(max = 600.dp)
             )
         }
     }
