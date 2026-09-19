@@ -38,6 +38,7 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
         isPhaseStarted: Boolean,
         currentState: HistoryModeBattleInternalState,
         uiState: HistoryModeBattleUIState,
+        onStateUpdate: (HistoryModeBattleInternalState) -> Unit = {},
     ): RoundUpdateExecutionResult {
         var phaseStarted = isPhaseStarted
 
@@ -69,14 +70,18 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
             runEnemyRoundUseCase(
                 getCharInfo = { battleInfoMapper.mapToDomainInfo(charUIModel = uiState.char!!) },
                 mobs = uiState.mobs.map { battleMapper.mapToDomain(mobUIModel = it) },
-                onMobUseSkill = { result ->
+                onMobUseSkill = { mob, result ->
                     updatedState = mobSkillUsageStateHandler.handleMobSkillResult(
-                        currentState = updatedState,
+                        currentState = updatedState.copy(attackingMobId = mob.phaseMobId),
                         uiState = uiState,
                         result = result,
                     )
+                    onStateUpdate(updatedState)
                 },
             )
+
+            updatedState = updatedState.copy(attackingMobId = null)
+            onStateUpdate(updatedState)
 
             if (!uiState.allMobsIsDead(currentState = updatedState)) {
                 updatedState = updatedState.incrementRound()

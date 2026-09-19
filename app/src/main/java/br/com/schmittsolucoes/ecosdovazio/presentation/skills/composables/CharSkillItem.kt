@@ -41,7 +41,8 @@ private val SKILLS_BORDER_WIDTH = 2.dp
 fun CharSkillItem(
     skill: CharSkillDetailsUIModel,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    isEnemyRound: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -53,7 +54,7 @@ fun CharSkillItem(
                 color = SkillBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
-            .clickable(onClick = onClick),
+            .clickable(enabled = !isEnemyRound, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         AppAsyncImage(
@@ -62,7 +63,7 @@ fun CharSkillItem(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
             filterQuality = FilterQuality.Low,
-            colorFilter = if (skill.blocked) {
+            colorFilter = if (skill.blocked || isEnemyRound) {
                 ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
             } else null,
         )

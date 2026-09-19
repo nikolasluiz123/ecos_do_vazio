@@ -61,6 +61,9 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composable
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_CORNER_RADIUS
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_MAX_HEIGHT
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.ITEM_SPACING
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.PULSE_ALPHA_INITIAL
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.PULSE_ALPHA_TARGET
+import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.PULSE_ANIMATION_DURATION
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.SECTION_PADDING_VERTICAL
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.components.status.ActiveStatusTooltip
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.composables.getLevelStyle
@@ -79,10 +82,6 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OnSurfaceVariantOnI
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.OrangeForDetails
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PictureSlotGradient
 import br.com.schmittsolucoes.ecosdovazio.presentation.theme.PositiveStatus
-
-private const val PULSE_ANIMATION_DURATION = 600
-private const val PULSE_ALPHA_INITIAL = 0.4f
-private const val PULSE_ALPHA_TARGET = 1f
 
 @Composable
 internal fun EnemySection(
@@ -117,6 +116,8 @@ internal fun EnemySection(
             horizontalArrangement = horizontalArrangement,
             mobs = state.mobs,
             selectedMob = state.selectedMob,
+            attackingMobId = state.attackingMobId,
+            isEnemyRound = state.isEnemyRound,
             onMobClick = onMobClick,
             onStatusClick = onStatusClick
         )
@@ -124,6 +125,8 @@ internal fun EnemySection(
         EnemyHorizontalPager(
             mobs = state.mobs,
             selectedMob = state.selectedMob,
+            attackingMobId = state.attackingMobId,
+            isEnemyRound = state.isEnemyRound,
             onMobClick = onMobClick,
             onStatusClick = onStatusClick,
             modifier = modifier
@@ -144,14 +147,18 @@ private fun EnemyHorizontalList(
     horizontalArrangement: Arrangement.Horizontal,
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
+    attackingMobId: String? = null,
+    isEnemyRound: Boolean = false,
     onMobClick: (BattleMobUIModel) -> Unit,
     onStatusClick: (ActiveStatusUIModel) -> Unit
 ) {
     val lazyRowState = rememberLazyListState()
 
-    LaunchedEffect(selectedMob?.phaseMobId) {
-        selectedMob?.let { mob ->
-            val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
+    LaunchedEffect(selectedMob?.phaseMobId, attackingMobId) {
+        val targetMobId = attackingMobId ?: selectedMob?.phaseMobId
+
+        targetMobId?.let { mobId ->
+            val index = mobs.indexOfFirst { it.phaseMobId == mobId }
 
             if (index != -1 && index != lazyRowState.firstVisibleItemIndex) {
                 lazyRowState.animateScrollToItem(index)
@@ -169,6 +176,7 @@ private fun EnemyHorizontalList(
             EnemyItem(
                 mob = mob,
                 isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
+                isEnemyRound = isEnemyRound,
                 onMobClick = onMobClick,
                 onDotClick = onStatusClick,
                 modifier = Modifier
@@ -184,15 +192,19 @@ private fun EnemyHorizontalList(
 private fun EnemyHorizontalPager(
     mobs: List<BattleMobUIModel>,
     selectedMob: BattleMobUIModel?,
+    attackingMobId: String? = null,
+    isEnemyRound: Boolean = false,
     onMobClick: (BattleMobUIModel) -> Unit,
     onStatusClick: (ActiveStatusUIModel) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState { mobs.size }
 
-    LaunchedEffect(selectedMob?.phaseMobId) {
-        selectedMob?.let { mob ->
-            val index = mobs.indexOfFirst { it.phaseMobId == mob.phaseMobId }
+    LaunchedEffect(selectedMob?.phaseMobId, attackingMobId) {
+        val targetMobId = attackingMobId ?: selectedMob?.phaseMobId
+
+        targetMobId?.let { mobId ->
+            val index = mobs.indexOfFirst { it.phaseMobId == mobId }
 
             if (index != -1 && index != pagerState.currentPage) {
                 pagerState.animateScrollToPage(
@@ -217,6 +229,7 @@ private fun EnemyHorizontalPager(
                     EnemyItem(
                         mob = mob,
                         isSelected = mob.phaseMobId == selectedMob?.phaseMobId,
+                        isEnemyRound = isEnemyRound,
                         onMobClick = onMobClick,
                         onDotClick = onStatusClick,
                         modifier = Modifier
@@ -247,6 +260,7 @@ private fun EnemyItem(
     mob: BattleMobUIModel,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
+    isEnemyRound: Boolean = false,
     onMobClick: (BattleMobUIModel) -> Unit = {},
     onDotClick: (ActiveStatusUIModel) -> Unit = {}
 ) {
@@ -261,7 +275,9 @@ private fun EnemyItem(
         label = "Alpha"
     )
 
-    val borderColor = if (isSelected) {
+    val shouldPulseSelection = isSelected && !isEnemyRound
+
+    val borderColor = if (shouldPulseSelection) {
         OrangeForDetails.copy(alpha = alpha)
     } else {
         CharacterBattleStrokeColor

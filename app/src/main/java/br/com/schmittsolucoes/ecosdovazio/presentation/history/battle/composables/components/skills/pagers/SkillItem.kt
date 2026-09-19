@@ -35,11 +35,13 @@ import br.com.schmittsolucoes.ecosdovazio.presentation.theme.SkillBattleStrokeCo
 internal fun SkillItem(
     skill: CharSkillUIModel,
     modifier: Modifier = Modifier,
+    isEnemyRound: Boolean = false,
     onSkillClick: (CharSkillUIModel) -> Unit = {},
     onSkillLongClick: (CharSkillUIModel) -> Unit = {}
 ) {
-    val applyBorderColor = skill.blocked || skill.currentRefreshTime > 0
-    val onTapPermitted = !skill.blocked && skill.currentRefreshTime == 0
+    val isBlockedOrEnemyTurn = skill.blocked || isEnemyRound
+    val applyBorderColor = isBlockedOrEnemyTurn || skill.currentRefreshTime > 0
+    val onTapPermitted = !isBlockedOrEnemyTurn && skill.currentRefreshTime == 0
     val showOverlay = skill.currentRefreshTime > 0
 
     Box(
@@ -52,7 +54,7 @@ internal fun SkillItem(
                 color = if (applyBorderColor) Color.Unspecified else SkillBattleStrokeColor,
                 shape = RoundedCornerShape(ITEM_CORNER_RADIUS)
             )
-            .pointerInput(skill) {
+            .pointerInput(skill, isEnemyRound) {
                 detectTapGestures(
                     onTap = if (onTapPermitted) { { onSkillClick(skill) } } else null,
                     onLongPress = { onSkillLongClick(skill) }
@@ -60,7 +62,7 @@ internal fun SkillItem(
             },
         contentAlignment = Alignment.Center
     ) {
-        SkillImage(skill)
+        SkillImage(skill, isEnemyRound)
 
         if (showOverlay) {
             CooldownOverlay(skill)
@@ -93,13 +95,13 @@ internal fun SkillItemLoading(
 }
 
 @Composable
-private fun SkillImage(skill: CharSkillUIModel) {
+private fun SkillImage(skill: CharSkillUIModel, isEnemyRound: Boolean = false) {
     BattleAsyncImage(
         model = skill.image,
         contentDescription = skill.name,
         modifier = Modifier.fillMaxSize(),
         filterQuality = FilterQuality.Medium,
-        colorFilter = if (skill.blocked) {
+        colorFilter = if (skill.blocked || isEnemyRound) {
             ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
         } else null
     )

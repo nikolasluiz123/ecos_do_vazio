@@ -144,6 +144,7 @@ class HistoryModeBattleViewModel @Inject constructor(
             actualRound = internalState.actualRound,
             isEnemyRound = roundStateHandler.isEnemyRound(actualRound = internalState.actualRound),
             showAbandonDialog = internalState.showAbandonDialog,
+            attackingMobId = internalState.attackingMobId,
         )
     }.stateInWithCommonError(
         initialValue = HistoryModeBattleUIState(
@@ -226,6 +227,9 @@ class HistoryModeBattleViewModel @Inject constructor(
                 isPhaseStarted = isPhaseStarted,
                 currentState = _internalState.value,
                 uiState = uiState.value,
+                onStateUpdate = { newState ->
+                    _internalState.value = newState
+                },
             )
 
             isPhaseStarted = result.isPhaseStarted

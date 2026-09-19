@@ -17,4 +17,5 @@ data class HistoryModeBattleUIState(
     val actualRound: Long = 1,
     val isEnemyRound: Boolean = false,
     val showAbandonDialog: Boolean = false,
+    val attackingMobId: String? = null,
 )

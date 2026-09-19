@@ -60,6 +60,7 @@ fun SkillsHorizontalPager(
                     items(skills) { skill ->
                         SkillItem(
                             skill = skill,
+                            isEnemyRound = state.isEnemyRound,
                             onSkillClick = onSkillClick,
                             onSkillLongClick = onSkillLongClick
                         )

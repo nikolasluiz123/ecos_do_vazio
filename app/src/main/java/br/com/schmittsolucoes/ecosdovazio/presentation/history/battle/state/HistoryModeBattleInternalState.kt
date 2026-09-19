@@ -16,4 +16,5 @@ data class HistoryModeBattleInternalState(
     val shouldPop: Boolean = false,
     val selectedDot: ActiveStatusUIModel? = null,
     val showAbandonDialog: Boolean = false,
+    val attackingMobId: String? = null,
 )

@@ -70,6 +70,10 @@ internal val ROUND_BORDER_WIDTH = 2.dp
 internal val SKILLS_BORDER_WIDTH = 2.dp
 internal val INFO_PADDING = 8.dp
 
+internal const val PULSE_ANIMATION_DURATION = 600
+internal const val PULSE_ALPHA_INITIAL = 0.4f
+internal const val PULSE_ALPHA_TARGET = 1f
+
 internal const val WEIGHT_SINGLE_MOB = 1f
 internal const val WEIGHT_TWO_MOBS = 1.5f
 internal const val WEIGHT_THREE_MOBS = 2f
@@ -230,6 +234,7 @@ internal fun StackLayout(
 
             CharSection(
                 char = state.char,
+                isEnemyRound = state.isEnemyRound,
                 onStatusClick = onStatusClick,
                 modifier = Modifier
                     .weight(1f)
@@ -302,6 +307,7 @@ internal fun SideBySideLayout(
 
             CharSection(
                 char = state.char,
+                isEnemyRound = state.isEnemyRound,
                 onStatusClick = onDotClick,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.CenterStart
