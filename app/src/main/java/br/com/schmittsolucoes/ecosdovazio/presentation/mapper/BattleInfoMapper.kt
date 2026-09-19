@@ -110,7 +110,10 @@ class BattleInfoMapper @Inject constructor(
         }
     }
 
-    fun mapToDomainInfo(charUIModel: BattleCharUIModel): BattleCharInfo {
+    fun mapToDomainInfo(
+        charUIModel: BattleCharUIModel,
+        actualHealth: Long? = null,
+    ): BattleCharInfo {
         return BattleCharInfo(
             classCategory = charUIModel.classCategory,
             offensiveMultiplier = charUIModel.offensiveMultiplier,
@@ -124,21 +127,24 @@ class BattleInfoMapper @Inject constructor(
                 IdentifiedCharAttribute(AttributeIdentifier.VITALITY, charUIModel.vitality),
                 IdentifiedCharAttribute(AttributeIdentifier.AGILITY, charUIModel.agility)
             ),
-            actualHealth = charUIModel.actualHealth,
+            actualHealth = actualHealth ?: charUIModel.actualHealth,
             totalHealth = charUIModel.totalHealth,
             activeStatus = charUIModel.activeStatus.map { battleMapper.mapToDomain(it) },
             criticalFailCount = charUIModel.criticalFailCount
         )
     }
 
-    fun mapToDomainInfo(mobUIModel: BattleMobUIModel): BattleMobInfo {
+    fun mapToDomainInfo(
+        mobUIModel: BattleMobUIModel,
+        actualHealth: Long? = null,
+    ): BattleMobInfo {
         return BattleMobInfo(
             mobCategory = mobUIModel.mobCategory,
             offensiveMultiplier = mobUIModel.offensiveMultiplier,
             defensiveMultiplier = mobUIModel.defensiveMultiplier,
             attributes = mobUIModel.attributes,
             level = mobUIModel.level,
-            actualHealth = mobUIModel.actualHealth,
+            actualHealth = actualHealth ?: mobUIModel.actualHealth,
             totalHealth = mobUIModel.totalHealth,
             skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },
             activeStatus = mobUIModel.activeStatus.map { battleMapper.mapToDomain(it) },

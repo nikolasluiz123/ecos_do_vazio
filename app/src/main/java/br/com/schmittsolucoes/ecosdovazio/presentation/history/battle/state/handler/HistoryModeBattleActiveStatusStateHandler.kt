@@ -16,8 +16,10 @@ class HistoryModeBattleActiveStatusStateHandler @Inject constructor(
         battleInfoMapper: BattleInfoMapper,
     ): HistoryModeBattleInternalState {
         val char = uiState.char ?: return currentState
-        val charInfo = battleInfoMapper.mapToDomainInfo(char)
-        val mobsInfo = uiState.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
+        val charInfo = battleInfoMapper.mapToDomainInfo(char, actualHealth = currentState.charHealth)
+        val mobsInfo = uiState.mobs.associate {
+            it.phaseMobId to battleInfoMapper.mapToDomainInfo(it, actualHealth = currentState.mobsHealth[it.phaseMobId])
+        }
 
         var state = mobsActiveStatusStateHandler.applyMobsDoTDamage(currentState, uiState, charInfo, mobsInfo)
         state = charActiveStatusStateHandler.applyCharDoTDamage(state, uiState, charInfo, mobsInfo)
@@ -31,8 +33,10 @@ class HistoryModeBattleActiveStatusStateHandler @Inject constructor(
         battleInfoMapper: BattleInfoMapper,
     ): HistoryModeBattleInternalState {
         val char = uiState.char ?: return currentState
-        val charInfo = battleInfoMapper.mapToDomainInfo(char)
-        val mobsInfo = uiState.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
+        val charInfo = battleInfoMapper.mapToDomainInfo(char, actualHealth = currentState.charHealth)
+        val mobsInfo = uiState.mobs.associate {
+            it.phaseMobId to battleInfoMapper.mapToDomainInfo(it, actualHealth = currentState.mobsHealth[it.phaseMobId])
+        }
 
         var state = mobsActiveStatusStateHandler.applyMobsDebuff(currentState, uiState, charInfo, mobsInfo)
         state = charActiveStatusStateHandler.applyCharDebuff(state, uiState, charInfo, mobsInfo)
@@ -46,8 +50,10 @@ class HistoryModeBattleActiveStatusStateHandler @Inject constructor(
         battleInfoMapper: BattleInfoMapper,
     ): HistoryModeBattleInternalState {
         val char = uiState.char ?: return currentState
-        val charInfo = battleInfoMapper.mapToDomainInfo(char)
-        val mobsInfo = uiState.mobs.associate { it.phaseMobId to battleInfoMapper.mapToDomainInfo(it) }
+        val charInfo = battleInfoMapper.mapToDomainInfo(char, actualHealth = currentState.charHealth)
+        val mobsInfo = uiState.mobs.associate {
+            it.phaseMobId to battleInfoMapper.mapToDomainInfo(it, actualHealth = currentState.mobsHealth[it.phaseMobId])
+        }
 
         var state = mobsActiveStatusStateHandler.applyMobsBuff(currentState, uiState, charInfo, mobsInfo)
         state = charActiveStatusStateHandler.applyCharBuff(state, uiState, charInfo, mobsInfo)

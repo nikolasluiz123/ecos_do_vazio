@@ -173,7 +173,7 @@ class BattleMapper @Inject constructor(
         }
     }
 
-    fun mapToDomain(mobUIModel: BattleMobUIModel): BattleMob {
+    fun mapToDomain(mobUIModel: BattleMobUIModel, actualHealth: Long? = null): BattleMob {
         return BattleMob(
             mobId = mobUIModel.mobId,
             phaseMobId = mobUIModel.phaseMobId,
@@ -184,7 +184,7 @@ class BattleMapper @Inject constructor(
             level = mobUIModel.level,
             offensiveMultiplier = mobUIModel.offensiveMultiplier,
             defensiveMultiplier = mobUIModel.defensiveMultiplier,
-            actualHealth = mobUIModel.actualHealth,
+            actualHealth = actualHealth ?: mobUIModel.actualHealth,
             totalHealth = mobUIModel.totalHealth,
             attributes = mobUIModel.attributes,
             skills = mobUIModel.skills.map { skillMapper.mapToDomain(it) },

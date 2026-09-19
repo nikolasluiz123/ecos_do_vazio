@@ -45,8 +45,16 @@ class HistoryModeBattleCharSkillUsageStateHandler @Inject constructor(
 
         val result = useCharSkillUseCase(
             skillInfo = battleInfoMapper.mapToUsedSkillInfo(skillUIModel = skill),
-            battleCharInfo = battleInfoMapper.mapToDomainInfo(charUIModel = char),
-            mobs = uiState.mobs.map { battleInfoMapper.mapToDomainInfo(mobUIModel = it) },
+            battleCharInfo = battleInfoMapper.mapToDomainInfo(
+                charUIModel = char,
+                actualHealth = currentState.charHealth,
+            ),
+            mobs = uiState.mobs.map {
+                battleInfoMapper.mapToDomainInfo(
+                    mobUIModel = it,
+                    actualHealth = currentState.mobsHealth[it.phaseMobId],
+                )
+            },
             selectedMobId = selectedMob?.phaseMobId,
         )
 

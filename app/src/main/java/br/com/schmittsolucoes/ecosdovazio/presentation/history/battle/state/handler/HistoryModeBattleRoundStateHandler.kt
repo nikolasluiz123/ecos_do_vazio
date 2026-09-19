@@ -68,8 +68,18 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
 
         if (isEnemyRound(actualRound = uiState.actualRound)) {
             runEnemyRoundUseCase(
-                getCharInfo = { battleInfoMapper.mapToDomainInfo(charUIModel = uiState.char!!) },
-                mobs = uiState.mobs.map { battleMapper.mapToDomain(mobUIModel = it) },
+                getCharInfo = {
+                    battleInfoMapper.mapToDomainInfo(
+                        charUIModel = uiState.char!!,
+                        actualHealth = updatedState.charHealth,
+                    )
+                },
+                mobs = uiState.mobs.map {
+                    battleMapper.mapToDomain(
+                        mobUIModel = it,
+                        actualHealth = updatedState.mobsHealth[it.phaseMobId],
+                    )
+                },
                 onMobUseSkill = { mob, result ->
                     updatedState = mobSkillUsageStateHandler.handleMobSkillResult(
                         currentState = updatedState.copy(attackingMobId = mob.phaseMobId),
@@ -114,8 +124,16 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
 
         val result = endHistoryPhaseUseCase(
             phaseId = phaseId,
-            battleCharInfo = battleInfoMapper.mapToDomainInfo(charUIModel = char),
-            mobs = uiState.mobs.map { battleInfoMapper.mapToDomainInfo(mobUIModel = it) },
+            battleCharInfo = battleInfoMapper.mapToDomainInfo(
+                charUIModel = char,
+                actualHealth = currentState.charHealth,
+            ),
+            mobs = uiState.mobs.map {
+                battleInfoMapper.mapToDomainInfo(
+                    mobUIModel = it,
+                    actualHealth = currentState.mobsHealth[it.phaseMobId],
+                )
+            },
         )
 
         var finishResult: PhaseFinishResult? = null
