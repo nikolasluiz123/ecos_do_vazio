@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import br.com.schmittsolucoes.ecosdovazio.R
+import br.com.schmittsolucoes.ecosdovazio.domain.audio.SkillAudioPlayer
 import br.com.schmittsolucoes.ecosdovazio.domain.manager.SnackbarManager
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleChar
 import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.BattleCharInfo
@@ -57,6 +58,7 @@ class HistoryModeBattleViewModel @Inject constructor(
     private val battleInfoMapper: BattleInfoMapper,
     private val charSkillUsageStateHandler: HistoryModeBattleCharSkillUsageStateHandler,
     private val roundStateHandler: HistoryModeBattleRoundStateHandler,
+    private val skillAudioPlayer: SkillAudioPlayer,
     savedStateHandle: SavedStateHandle,
     mobsFromPhaseQueryUseCase: MobsFromPhaseQueryUseCase,
     getCharBattleUseCase: GetCharBattleUseCase,
@@ -200,23 +202,26 @@ class HistoryModeBattleViewModel @Inject constructor(
     }
 
     fun onSkillClick(skill: CharSkillUIModel) {
-        val result = charSkillUsageStateHandler.executeSkillUsage(
-            currentState = _internalState.value,
-            uiState = uiState.value,
-            skill = skill,
-        )
+        launch {
+            val result = charSkillUsageStateHandler.executeSkillUsage(
+                currentState = _internalState.value,
+                uiState = uiState.value,
+                skill = skill,
+            )
 
-        when (result) {
-            is CharSkillUsageExecutionResult.Executed -> {
-                _internalState.value = result.newState
+            when (result) {
+                is CharSkillUsageExecutionResult.Executed -> {
+                    _internalState.value = result.newState
+                    skillAudioPlayer.playSkillSound(skill.translationIdentifier)
+                }
+
+                is CharSkillUsageExecutionResult.NoSelectedMob -> {
+                    val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
+                    snackbarManager.showSnackbar(message = message)
+                }
+
+                is CharSkillUsageExecutionResult.Ignored -> {}
             }
-
-            is CharSkillUsageExecutionResult.NoSelectedMob -> {
-                val message = context.getString(R.string.history_mode_battle_screen_select_mob_message)
-                snackbarManager.showSnackbar(message = message)
-            }
-
-            is CharSkillUsageExecutionResult.Ignored -> { }
         }
     }
 

@@ -1,5 +1,6 @@
 package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.state.handler
 
+import br.com.schmittsolucoes.ecosdovazio.domain.audio.SkillAudioPlayer
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.battle.mob.RunEnemyRoundUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.EndHistoryPhaseUseCase
 import br.com.schmittsolucoes.ecosdovazio.domain.usecase.history.StartHistoryPhaseUseCase
@@ -27,6 +28,7 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
     private val startHistoryPhaseUseCase: StartHistoryPhaseUseCase,
     private val endHistoryPhaseUseCase: EndHistoryPhaseUseCase,
     private val runEnemyRoundUseCase: RunEnemyRoundUseCase,
+    private val skillAudioPlayer: SkillAudioPlayer,
     private val battleInfoMapper: BattleInfoMapper,
     private val battleMapper: BattleMapper,
     private val activeStatusStateHandler: HistoryModeBattleActiveStatusStateHandler,
@@ -80,13 +82,14 @@ class HistoryModeBattleRoundStateHandler @Inject constructor(
                         actualHealth = updatedState.mobsHealth[it.phaseMobId],
                     )
                 },
-                onMobUseSkill = { mob, result ->
+                onMobUseSkill = { mob, skill, result ->
                     updatedState = mobSkillUsageStateHandler.handleMobSkillResult(
                         currentState = updatedState.copy(attackingMobId = mob.phaseMobId),
                         uiState = uiState,
                         result = result,
                     )
                     onStateUpdate(updatedState)
+                    skillAudioPlayer.playSkillSound(skill.translationIdentifier)
                 },
             )
 

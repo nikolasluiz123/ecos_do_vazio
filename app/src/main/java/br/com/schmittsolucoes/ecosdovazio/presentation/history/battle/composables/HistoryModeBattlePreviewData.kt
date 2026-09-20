@@ -5,6 +5,7 @@ import br.com.schmittsolucoes.ecosdovazio.domain.model.chars.CharAttribute
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.ClassCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.MobCategory
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.mobs.Mob
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.UsedCharSkillInfo
@@ -109,6 +110,7 @@ object HistoryModeBattlePreviewData {
     val mockSkillDamage = CharSkillUIModel.CommonDamage(
         id = "skill_1",
         name = "Golpe Pesado",
+        translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
         description = "Um ataque que causa dano físico massivo.",
         refreshTime = 3,
         minLevel = 1,
@@ -122,6 +124,7 @@ object HistoryModeBattlePreviewData {
     val mockSkillBuff = CharSkillUIModel.Buff(
         id = "skill_2",
         name = "Fúria de Batalha",
+        translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
         description = "Aumenta o dano causado por alguns turnos.",
         skillCategory = SkillCategory.OFFENSIVE_BUFF,
         refreshTime = 5,

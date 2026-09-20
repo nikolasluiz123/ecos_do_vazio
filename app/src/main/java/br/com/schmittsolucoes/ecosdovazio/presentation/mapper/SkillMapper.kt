@@ -65,6 +65,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.CommonDamage -> CharSkillUIModel.CommonDamage(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -85,6 +86,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.AreaDamage -> CharSkillUIModel.AreaDamage(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -105,6 +107,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.DamageOverTime -> CharSkillUIModel.DamageOverTime(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -127,6 +130,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.VampiricDamage -> CharSkillUIModel.VampiricDamage(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -149,6 +153,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.Buff -> CharSkillUIModel.Buff(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -170,6 +175,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.Debuff -> CharSkillUIModel.Debuff(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -195,6 +201,7 @@ class SkillMapper @Inject constructor(
             is CharSkill.Heal -> CharSkillUIModel.Heal(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -222,6 +229,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.CommonDamage -> MobSkillUIModel.CommonDamage(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -239,6 +247,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.DamageOverTime -> MobSkillUIModel.DamageOverTime(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -258,6 +267,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.VampiricDamage -> MobSkillUIModel.VampiricDamage(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -277,6 +287,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.Buff -> MobSkillUIModel.Buff(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -297,6 +308,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.Debuff -> MobSkillUIModel.Debuff(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -317,6 +329,7 @@ class SkillMapper @Inject constructor(
             is MobSkill.Heal -> MobSkillUIModel.Heal(
                 id = skill.id,
                 name = skill.name,
+                translationIdentifier = skill.translationIdentifier,
                 description = formatDescription(
                     description = skill.description,
                     category = skill.skillCategory,
@@ -339,6 +352,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.CommonDamage -> MobSkill.CommonDamage(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 refreshTime = skillUIModel.refreshTime,
@@ -351,6 +365,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.DamageOverTime -> MobSkill.DamageOverTime(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 refreshTime = skillUIModel.refreshTime,
@@ -364,6 +379,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.VampiricDamage -> MobSkill.VampiricDamage(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 refreshTime = skillUIModel.refreshTime,
@@ -377,6 +393,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.Buff -> MobSkill.Buff(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 skillCategory = skillUIModel.skillCategory,
@@ -391,6 +408,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.Debuff -> MobSkill.Debuff(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 skillCategory = skillUIModel.skillCategory,
@@ -405,6 +423,7 @@ class SkillMapper @Inject constructor(
             is MobSkillUIModel.Heal -> MobSkill.Heal(
                 id = skillUIModel.id,
                 name = skillUIModel.name,
+                translationIdentifier = skillUIModel.translationIdentifier,
                 description = skillUIModel.description,
                 imageName = "",
                 refreshTime = skillUIModel.refreshTime,

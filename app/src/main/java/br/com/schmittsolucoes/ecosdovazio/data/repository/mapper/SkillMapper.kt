@@ -76,6 +76,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.DAMAGE -> CharSkill.CommonDamage(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -87,6 +88,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.DAMAGE_OVER_TIME -> CharSkill.DamageOverTime(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -99,6 +101,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.VAMPIRIC_DAMAGE -> CharSkill.VampiricDamage(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -111,6 +114,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.AREA_DAMAGE -> CharSkill.AreaDamage(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -123,6 +127,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.DEFENSIVE_BUFF -> CharSkill.Buff(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
@@ -137,6 +142,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.DEFENSIVE_DEBUFF -> CharSkill.Debuff(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             skillCategory = skillCategory,
             refreshTime = refreshTime,
@@ -151,6 +157,7 @@ fun CharSkillTuple.toDomain(): CharSkill {
         SkillCategory.HEAL -> CharSkill.Heal(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             refreshTime = refreshTime,
             minLevel = minLevel,
@@ -191,6 +198,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DAMAGE -> MobSkill.CommonDamage(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             refreshTime = refreshTime,
@@ -203,6 +211,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DAMAGE_OVER_TIME -> MobSkill.DamageOverTime(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             refreshTime = refreshTime,
@@ -214,6 +223,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.VAMPIRIC_DAMAGE -> MobSkill.VampiricDamage(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             refreshTime = refreshTime,
@@ -226,6 +236,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DEFENSIVE_BUFF -> MobSkill.Buff(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             skillCategory = skillCategory,
@@ -239,6 +250,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.DEFENSIVE_DEBUFF -> MobSkill.Debuff(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             skillCategory = skillCategory,
@@ -251,6 +263,7 @@ fun MobSkillTuple.toDomain(): MobSkill {
         SkillCategory.HEAL, SkillCategory.AREA_HEAL -> MobSkill.Heal(
             id = id,
             name = name,
+            translationIdentifier = translationIdentifier,
             description = description,
             imageName = imageName,
             refreshTime = refreshTime,

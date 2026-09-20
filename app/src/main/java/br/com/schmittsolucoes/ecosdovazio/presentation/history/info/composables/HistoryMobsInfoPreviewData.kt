@@ -2,6 +2,7 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.info.composables
 
 import br.com.schmittsolucoes.ecosdovazio.R
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model.MobSkillUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.model.HistoryPhaseMobInfoUIModel
 import br.com.schmittsolucoes.ecosdovazio.presentation.history.info.model.MobPhaseInfoUIModel
@@ -20,6 +21,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.CommonDamage(
                 id = "gw_1",
                 name = "Ataque Rápido",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Um ataque físico ofensivo veloz que causa 15 (15 + 0 - 0) de dano e pode ser usado novamente após 1 turnos.",
                 image = R.drawable.skill_ataque_rapido,
                 refreshTime = 1,
@@ -31,6 +33,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.CommonDamage(
                 id = "gw_2",
                 name = "Corte Brutal",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Um poderoso e violento golpe ofensivo com a arma causando 20 (20 + 0 - 0) de dano. Pode ser usado novamente após 3 turnos.",
                 image = R.drawable.skill_corte_brutal,
                 refreshTime = 3,
@@ -42,6 +45,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.Buff(
                 id = "gw_3",
                 name = "Instinto Selvagem",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Aumenta instintos ofensivos em 20% por 4 turnos. Pode ser usado novamente após 4 turnos.",
                 image = R.drawable.skill_instinto_selvagem,
                 skillCategory = SkillCategory.OFFENSIVE_BUFF,
@@ -55,6 +59,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.CommonDamage(
                 id = "gw_4",
                 name = "Investida",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Golpe ofensivo frontal descuidado e violento que causa 25 (25 + 0 - 0) de dano. Pode ser usado novamente após 4 turnos.",
                 image = R.drawable.skill_investida,
                 refreshTime = 4,
@@ -78,6 +83,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.CommonDamage(
                 id = "gs_1",
                 name = "Projétil Místico",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Arremessa energia mágica caótica causando 15 (15 + 0 - 0) de dano. Pode ser usado novamente após 1 turnos.",
                 image = R.drawable.skill_projetil_mistico,
                 refreshTime = 1,
@@ -89,6 +95,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.DamageOverTime(
                 id = "gs_2",
                 name = "Maldição",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Magia sombria que drena 5 (5 + 0 - 0) de saúde por 3 turnos. Pode ser usado novamente após 4 turnos.",
                 image = R.drawable.skill_maldicao,
                 refreshTime = 4,
@@ -101,6 +108,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.Buff(
                 id = "gs_3",
                 name = "Escudo de Energia",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Habilidade defensiva que protege contra impactos aumentando a resistência em 10% por 4 turnos. Pode ser usado novamente após 6 turnos.",
                 image = R.drawable.skill_escudo_de_energia,
                 skillCategory = SkillCategory.DEFENSIVE_BUFF,
@@ -114,6 +122,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.VampiricDamage(
                 id = "gs_4",
                 name = "Dreno de Mana",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Ataque mágico que visa drenar a energia vital do alvo causando 20 (20 + 0 - 0) de dano e restaurando 30% da vida do conjurador. Pode ser usado novamente após 4 turnos.",
                 image = R.drawable.skill_dreno_de_mana,
                 refreshTime = 4,
@@ -126,6 +135,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.CommonDamage(
                 id = "gs_5",
                 name = "Explosão Arcana",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Poderoso ataque ofensivo arcano que causa 30 (30 + 0 - 0) de dano. Pode ser usado novamente após 5 turnos.",
                 image = R.drawable.skill_explosao_arcana,
                 refreshTime = 5,
@@ -149,6 +159,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.Heal(
                 id = "gh_1",
                 name = "Toque de Cura",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Uma bênção simples que restaura 20 de vida. Pode ser usado novamente após 3 turnos.",
                 image = R.drawable.skill_toque_de_cura,
                 skillCategory = SkillCategory.HEAL,
@@ -161,6 +172,7 @@ object HistoryMobsInfoPreviewData {
             MobSkillUIModel.Heal(
                 id = "gh_2",
                 name = "Regeneração",
+                translationIdentifier = TranslationIdentifier.HEAVY_STRIKE_SKILL_NAME,
                 description = "Proporciona cura para todos os aliados restaurando 15 de vida. Pode ser usado novamente após 6 turnos.",
                 image = R.drawable.skill_regeneracao,
                 skillCategory = SkillCategory.AREA_HEAL,

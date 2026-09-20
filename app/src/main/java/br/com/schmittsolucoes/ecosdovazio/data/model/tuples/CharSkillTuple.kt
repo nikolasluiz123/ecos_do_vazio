@@ -1,10 +1,12 @@
 package br.com.schmittsolucoes.ecosdovazio.data.model.tuples
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 
 data class CharSkillTuple(
     val id: String,
     val name: String,
+    val translationIdentifier: TranslationIdentifier,
     val description: String,
     val skillCategory: SkillCategory,
     val damage: Long?,

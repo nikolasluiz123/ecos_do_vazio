@@ -2,10 +2,12 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model
 
 import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 
 sealed interface MobSkillUIModel {
     val id: String
     val name: String
+    val translationIdentifier: TranslationIdentifier
     val description: String
     val image: Int
     val skillCategory: SkillCategory
@@ -17,6 +19,7 @@ sealed interface MobSkillUIModel {
     data class CommonDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val refreshTime: Int,
@@ -31,6 +34,7 @@ sealed interface MobSkillUIModel {
     data class DamageOverTime(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val refreshTime: Int,
@@ -46,6 +50,7 @@ sealed interface MobSkillUIModel {
     data class VampiricDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val refreshTime: Int,
@@ -61,6 +66,7 @@ sealed interface MobSkillUIModel {
     data class Buff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val skillCategory: SkillCategory,
@@ -75,6 +81,7 @@ sealed interface MobSkillUIModel {
     data class Debuff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val skillCategory: SkillCategory,
@@ -89,6 +96,7 @@ sealed interface MobSkillUIModel {
     data class Heal(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         @DrawableRes override val image: Int,
         override val refreshTime: Int,

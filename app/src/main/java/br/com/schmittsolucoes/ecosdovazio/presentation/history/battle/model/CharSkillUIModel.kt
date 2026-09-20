@@ -2,12 +2,14 @@ package br.com.schmittsolucoes.ecosdovazio.presentation.history.battle.model
 
 import androidx.annotation.DrawableRes
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.CharSkill
 import br.com.schmittsolucoes.ecosdovazio.domain.model.skills.ProjectedDamageInfo
 
 sealed interface CharSkillUIModel {
     val id: String
     val name: String
+    val translationIdentifier: TranslationIdentifier
     val description: String
     val skillCategory: SkillCategory
     val refreshTime: Int
@@ -23,6 +25,7 @@ sealed interface CharSkillUIModel {
     data class CommonDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -39,6 +42,7 @@ sealed interface CharSkillUIModel {
     data class AreaDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -55,6 +59,7 @@ sealed interface CharSkillUIModel {
     data class DamageOverTime(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -72,6 +77,7 @@ sealed interface CharSkillUIModel {
     data class VampiricDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -89,6 +95,7 @@ sealed interface CharSkillUIModel {
     data class Buff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
@@ -104,6 +111,7 @@ sealed interface CharSkillUIModel {
     data class Debuff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
@@ -121,6 +129,7 @@ sealed interface CharSkillUIModel {
     data class Heal(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,

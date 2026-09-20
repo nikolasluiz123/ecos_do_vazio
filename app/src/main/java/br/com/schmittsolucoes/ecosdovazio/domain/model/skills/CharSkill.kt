@@ -1,10 +1,12 @@
 package br.com.schmittsolucoes.ecosdovazio.domain.model.skills
 
 import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.SkillCategory
+import br.com.schmittsolucoes.ecosdovazio.domain.model.enumeration.TranslationIdentifier
 
 sealed interface CharSkill {
     val id: String
     val name: String
+    val translationIdentifier: TranslationIdentifier
     val description: String
     val skillCategory: SkillCategory
     val refreshTime: Int
@@ -26,6 +28,7 @@ sealed interface CharSkill {
     data class CommonDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -39,6 +42,7 @@ sealed interface CharSkill {
     data class AreaDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -52,6 +56,7 @@ sealed interface CharSkill {
     data class DamageOverTime(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -66,6 +71,7 @@ sealed interface CharSkill {
     data class VampiricDamage(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,
@@ -80,6 +86,7 @@ sealed interface CharSkill {
     data class Buff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
@@ -93,6 +100,7 @@ sealed interface CharSkill {
     data class Debuff(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val skillCategory: SkillCategory,
         override val refreshTime: Int,
@@ -107,6 +115,7 @@ sealed interface CharSkill {
     data class Heal(
         override val id: String,
         override val name: String,
+        override val translationIdentifier: TranslationIdentifier,
         override val description: String,
         override val refreshTime: Int,
         override val minLevel: Long,

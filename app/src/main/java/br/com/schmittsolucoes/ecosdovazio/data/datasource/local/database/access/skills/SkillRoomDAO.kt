@@ -15,6 +15,7 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
     @Query("""
         select skills.id as id,
                coalesce(skill_name.translated_text, skill_name_default.translated_text) as name,
+               skills.name_translation_id as translationIdentifier,
                coalesce(skill_description.translated_text, skill_description_default.translated_text) as description,
                skills.skill_category as skillCategory,
                skills.damage as damage,
@@ -53,6 +54,7 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
     @Query("""
         select skills.id as id,
                coalesce(skill_name.translated_text, skill_name_default.translated_text) as name,
+               skills.name_translation_id as translationIdentifier,
                coalesce(skill_description.translated_text, skill_description_default.translated_text) as description,
                skills.skill_category as skillCategory,
                skills.damage as damage,
@@ -75,6 +77,7 @@ interface SkillRoomDAO : SkillLocalDataSource, RoomLocalDataSource<SkillEntity> 
     @Query("""
         select skills.id as id,
                coalesce(skill_name.translated_text, skill_name_default.translated_text) as name,
+               skills.name_translation_id as translationIdentifier,
                coalesce(skill_description.translated_text, skill_description_default.translated_text) as description,
                skills.skill_category as skillCategory,
                skills.damage as damage,
